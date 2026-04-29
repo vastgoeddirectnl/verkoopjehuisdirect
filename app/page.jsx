@@ -1,5 +1,12 @@
 "use client";
+
 import React, { useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  "https://izoysowkxttkwggazgfl.supabase.co"
+  "sb_publishable__e7ilYxa3-a_aWyoCvrTow_dkqk105H"
+);
 
 export default function VerkoopJeHuisDirect() {
   const [step, setStep] = useState(1);
@@ -25,10 +32,26 @@ export default function VerkoopJeHuisDirect() {
   const submitLead = async (e) => {
     e.preventDefault();
 
-    // Later koppelen aan Supabase / backend.
-    console.log("Nieuwe lead:", form);
-    setSubmitted(true);
-  };
+const submitLead = async (e) => {
+  e.preventDefault();
+
+  const { error } = await supabase.from("leads").insert([
+    {
+      naam: form.naam,
+      telefoon: form.telefoon,
+      postcode: form.postcode,
+      huisnummer: form.huisnummer,
+    },
+  ]);
+
+  if (error) {
+    alert("Er ging iets mis. Probeer opnieuw.");
+    console.error(error);
+    return;
+  }
+
+  setSubmitted(true);
+};
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
@@ -43,7 +66,7 @@ export default function VerkoopJeHuisDirect() {
               <p className="text-xs text-slate-500">verkoopjehuisdirect.nl</p>
             </div>
           </div>
-          <a href="tel:+31000000000" className="hidden md:inline-flex bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold hover:bg-blue-800">
+          <a href="tel:+31681158003" className="hidden md:inline-flex bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold hover:bg-blue-800">
             Bel direct
           </a>
         </div>
