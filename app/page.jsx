@@ -165,7 +165,7 @@ const submitLead = async (e) => {
                     <input name="telefoon" value={form.telefoon} onChange={updateForm} placeholder="Telefoonnummer" className="w-full border border-slate-300 rounded-xl px-4 py-3" required />
                     <div className="flex gap-3">
                       <button type="button" onClick={previousStep} className="w-1/3 border border-slate-300 rounded-xl py-3">Terug</button>
-                      <button type="submit" className="w-2/3 bg-orange-500 text-white rounded-xl py-3 font-bold hover:bg-orange-600">Aanvraag versturen</button>
+                      <form onSubmit={submitLead}> className="w-2/3 bg-orange-500 text-white rounded-xl py-3 font-bold hover:bg-orange-600">Aanvraag versturen</button>
                     </div>
                     <p className="text-xs text-slate-500">Door te verzenden ga je akkoord dat wij contact opnemen over je aanvraag.</p>
                   </div>
