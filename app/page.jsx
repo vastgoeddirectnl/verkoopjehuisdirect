@@ -32,93 +32,91 @@ export default function VerkoopJeHuisDirect() {
   const submitLead = async (e) => {
     e.preventDefault();
 
-const submitLead = async (e) => {
-  e.preventDefault();
+    const { error } = await supabase.from("leads").insert([
+      {
+        naam: form.naam,
+        telefoon: form.telefoon,
+        postcode: form.postcode,
+        huisnummer: form.huisnummer,
+      },
+    ]);
 
-  const { error } = await supabase.from("leads").insert([
-    {
-      naam: form.naam,
-      telefoon: form.telefoon,
-      postcode: form.postcode,
-      huisnummer: form.huisnummer,
-    },
-  ]);
+    if (error) {
+      alert("Er ging iets mis. Probeer opnieuw.");
+      console.error(error);
+      return;
+    }
 
-  if (error) {
-    alert("Er ging iets mis. Probeer opnieuw.");
-    console.error(error);
-    return;
-  }
-
-  setSubmitted(true);
-};
-
-  if (error) {
-    alert("Er ging iets mis. Probeer opnieuw.");
-    console.error(error);
-    return;
-  }
-
-  setSubmitted(true);
-};
+    setSubmitted(true);
+  };
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="h-11 w-11 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-bold">
-              VD
-            </div>
-            <div>
-              <p className="font-bold leading-tight">Vastgoed Direct Nederland</p>
-              <p className="text-xs text-slate-500">verkoopjehuisdirect.nl</p>
-            </div>
+            <img src="/logo.png" alt="Vastgoed Direct Nederland" className="h-14 w-auto rounded-xl" />
           </div>
-          <a href="tel:+31681158003" className="hidden md:inline-flex bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold hover:bg-blue-800">
-            Bel direct
-          </a>
+          <div className="hidden items-center gap-4 md:flex">
+            <a href="mailto:info@verkoopjehuisdirect.nl" className="font-semibold text-slate-700 hover:text-blue-800">info@verkoopjehuisdirect.nl</a>
+            <a href="tel:0681158003" className="font-semibold text-slate-700 hover:text-blue-800">📞 06 81 15 80 03</a>
+            <a href="https://wa.me/31681158003" target="_blank" rel="noopener noreferrer" className="rounded-xl bg-green-500 px-5 py-3 font-bold text-white shadow-lg hover:bg-green-600">WhatsApp</a>
+            <a href="#aanvraag" className="rounded-xl bg-orange-500 px-5 py-3 font-bold text-white shadow-lg hover:bg-orange-600">Gratis bod</a>
+          </div>
         </div>
       </header>
 
-      <section className="bg-gradient-to-br from-blue-800 via-blue-700 to-slate-900 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-2 gap-12 items-center">
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-950 via-blue-800 to-slate-950 text-white">
+        <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-orange-400/20 blur-3xl" />
+        <div className="absolute -bottom-32 -left-20 h-96 w-96 rounded-full bg-blue-400/20 blur-3xl" />
+
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-16 lg:grid-cols-2 lg:py-24">
           <div>
-            <p className="inline-flex bg-white/10 border border-white/20 rounded-full px-4 py-2 text-sm mb-6">
-              Gratis en vrijblijvend bod binnen 24 uur
-            </p>
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
-              Verkoop je huis direct, zonder gedoe.
+            <img src="/logo.png" alt="Vastgoed Direct Nederland" className="mb-8 w-full max-w-xl rounded-3xl bg-white/95 p-4 shadow-2xl" />
+            <div className="mb-6 inline-flex rounded-full border border-orange-300/40 bg-orange-500 px-4 py-2 text-sm font-black text-white shadow-lg">
+              Binnen 24 uur een vrijblijvend bod
+            </div>
+            <h1 className="mb-6 text-4xl font-black leading-tight md:text-6xl">
+              Verkoop uw huis direct — in elke staat.
             </h1>
-            <p className="text-lg text-blue-100 mb-8">
-              Wij kopen woningen in alle condities: verhuurd, beschadigd, verouderd, leegstaand of met achterstallig onderhoud.
+            <p className="mb-8 max-w-xl text-lg leading-8 text-blue-100">
+              Ontvang snel duidelijkheid zonder makelaar, bezichtigingsstress of maanden wachten. Ook bij schade, verhuur, erfenis of achterstallig onderhoud.
             </p>
-            <div className="grid sm:grid-cols-3 gap-4 text-sm">
-              <div className="bg-white/10 rounded-2xl p-4">Geen makelaar nodig</div>
-              <div className="bg-white/10 rounded-2xl p-4">Geen verborgen kosten</div>
-              <div className="bg-white/10 rounded-2xl p-4">Snelle afhandeling</div>
+            <div className="mb-8 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl bg-white/10 p-4 font-bold">✓ Geen makelaarskosten</div>
+              <div className="rounded-2xl bg-white/10 p-4 font-bold">✓ Ook slechte staat</div>
+              <div className="rounded-2xl bg-white/10 p-4 font-bold">✓ Snelle afwikkeling</div>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <a href="#aanvraag" className="inline-flex justify-center rounded-2xl bg-orange-500 px-8 py-4 text-lg font-black text-white shadow-xl hover:bg-orange-600">
+                Ontvang direct een bod
+              </a>
+              <a href="https://wa.me/31681158003" target="_blank" rel="noopener noreferrer" className="inline-flex justify-center rounded-2xl bg-green-500 px-8 py-4 text-lg font-black text-white shadow-xl hover:bg-green-600">
+                WhatsApp direct
+              </a>
             </div>
           </div>
 
-          <div className="bg-white text-slate-900 rounded-3xl shadow-2xl p-6 md:p-8">
+          <section id="aanvraag" className="rounded-[2rem] border-4 border-orange-400 bg-white p-6 text-slate-900 shadow-2xl md:p-8">
             {!submitted ? (
               <form onSubmit={submitLead}>
                 <div className="mb-6">
-                  <p className="text-sm text-blue-700 font-semibold">Stap {step} van 4</p>
-                  <h2 className="text-2xl font-bold">Ontvang een gratis bod</h2>
+                  <p className="mb-2 text-sm font-black uppercase tracking-wide text-orange-500">Stap {step} van 4</p>
+                  <h2 className="text-3xl font-black">Ontvang gratis bod</h2>
+                  <p className="mt-2 text-slate-500">Laat uw gegevens achter. Wij nemen snel contact op.</p>
                 </div>
 
                 {step === 1 && (
                   <div className="space-y-4">
-                    <input name="postcode" value={form.postcode} onChange={updateForm} placeholder="Postcode" className="w-full border border-slate-300 rounded-xl px-4 py-3" required />
-                    <input name="huisnummer" value={form.huisnummer} onChange={updateForm} placeholder="Huisnummer" className="w-full border border-slate-300 rounded-xl px-4 py-3" required />
-                    <button type="button" onClick={nextStep} className="w-full bg-blue-700 text-white rounded-xl py-3 font-semibold hover:bg-blue-800">Volgende</button>
+                    <input name="postcode" value={form.postcode} onChange={updateForm} placeholder="Postcode" className="w-full rounded-xl border border-slate-300 px-4 py-4 outline-none focus:border-blue-700" required />
+                    <input name="huisnummer" value={form.huisnummer} onChange={updateForm} placeholder="Huisnummer" className="w-full rounded-xl border border-slate-300 px-4 py-4 outline-none focus:border-blue-700" required />
+                    <button type="button" onClick={nextStep} className="w-full rounded-xl bg-blue-800 py-4 font-black text-white shadow-lg hover:bg-blue-900">Volgende</button>
                   </div>
                 )}
 
                 {step === 2 && (
                   <div className="space-y-4">
-                    <select name="woningtype" value={form.woningtype} onChange={updateForm} className="w-full border border-slate-300 rounded-xl px-4 py-3" required>
+                    <select name="woningtype" value={form.woningtype} onChange={updateForm} className="w-full rounded-xl border border-slate-300 px-4 py-4" required>
                       <option value="">Type woning</option>
                       <option>Appartement</option>
                       <option>Rijtjeshuis</option>
@@ -126,7 +124,7 @@ const submitLead = async (e) => {
                       <option>Vrijstaande woning</option>
                       <option>Beleggingspand</option>
                     </select>
-                    <select name="staat" value={form.staat} onChange={updateForm} className="w-full border border-slate-300 rounded-xl px-4 py-3" required>
+                    <select name="staat" value={form.staat} onChange={updateForm} className="w-full rounded-xl border border-slate-300 px-4 py-4" required>
                       <option value="">Staat van de woning</option>
                       <option>Goed onderhouden</option>
                       <option>Normaal bewoond</option>
@@ -134,15 +132,15 @@ const submitLead = async (e) => {
                       <option>Slechte staat / schade</option>
                     </select>
                     <div className="flex gap-3">
-                      <button type="button" onClick={previousStep} className="w-1/3 border border-slate-300 rounded-xl py-3">Terug</button>
-                      <button type="button" onClick={nextStep} className="w-2/3 bg-blue-700 text-white rounded-xl py-3 font-semibold hover:bg-blue-800">Volgende</button>
+                      <button type="button" onClick={previousStep} className="w-1/3 rounded-xl border border-slate-300 py-4 font-bold">Terug</button>
+                      <button type="button" onClick={nextStep} className="w-2/3 rounded-xl bg-blue-800 py-4 font-black text-white hover:bg-blue-900">Volgende</button>
                     </div>
                   </div>
                 )}
 
                 {step === 3 && (
                   <div className="space-y-4">
-                    <select name="reden" value={form.reden} onChange={updateForm} className="w-full border border-slate-300 rounded-xl px-4 py-3" required>
+                    <select name="reden" value={form.reden} onChange={updateForm} className="w-full rounded-xl border border-slate-300 px-4 py-4" required>
                       <option value="">Reden van verkoop</option>
                       <option>Snel verkopen</option>
                       <option>Erfenis</option>
@@ -152,90 +150,86 @@ const submitLead = async (e) => {
                       <option>Anders</option>
                     </select>
                     <div className="flex gap-3">
-                      <button type="button" onClick={previousStep} className="w-1/3 border border-slate-300 rounded-xl py-3">Terug</button>
-                      <button type="button" onClick={nextStep} className="w-2/3 bg-blue-700 text-white rounded-xl py-3 font-semibold hover:bg-blue-800">Volgende</button>
+                      <button type="button" onClick={previousStep} className="w-1/3 rounded-xl border border-slate-300 py-4 font-bold">Terug</button>
+                      <button type="button" onClick={nextStep} className="w-2/3 rounded-xl bg-blue-800 py-4 font-black text-white hover:bg-blue-900">Volgende</button>
                     </div>
                   </div>
                 )}
 
                 {step === 4 && (
                   <div className="space-y-4">
-                    <input name="naam" value={form.naam} onChange={updateForm} placeholder="Naam" className="w-full border border-slate-300 rounded-xl px-4 py-3" required />
-                    <input name="email" value={form.email} onChange={updateForm} placeholder="E-mail" type="email" className="w-full border border-slate-300 rounded-xl px-4 py-3" required />
-                    <input name="telefoon" value={form.telefoon} onChange={updateForm} placeholder="Telefoonnummer" className="w-full border border-slate-300 rounded-xl px-4 py-3" required />
+                    <input name="naam" value={form.naam} onChange={updateForm} placeholder="Naam" className="w-full rounded-xl border border-slate-300 px-4 py-4" required />
+                    <input name="email" value={form.email} onChange={updateForm} placeholder="E-mail" type="email" className="w-full rounded-xl border border-slate-300 px-4 py-4" required />
+                    <input name="telefoon" value={form.telefoon} onChange={updateForm} placeholder="Telefoonnummer" className="w-full rounded-xl border border-slate-300 px-4 py-4" required />
                     <div className="flex gap-3">
-                      <button type="button" onClick={previousStep} className="w-1/3 border border-slate-300 rounded-xl py-3">Terug</button>
-                      <form onSubmit={submitLead}> className="w-2/3 bg-orange-500 text-white rounded-xl py-3 font-bold hover:bg-orange-600">Aanvraag versturen</button>
+                      <button type="button" onClick={previousStep} className="w-1/3 rounded-xl border border-slate-300 py-4 font-bold">Terug</button>
+                      <button type="submit" className="w-2/3 rounded-xl bg-orange-500 py-4 font-black text-white shadow-lg hover:bg-orange-600">Aanvraag versturen</button>
                     </div>
-                    <p className="text-xs text-slate-500">Door te verzenden ga je akkoord dat wij contact opnemen over je aanvraag.</p>
+                    <p className="text-xs text-slate-500">We nemen zo snel mogelijk contact met je op over een vrijblijvend bod.</p>
                   </div>
                 )}
               </form>
             ) : (
-              <div className="text-center py-8">
-                <div className="text-5xl mb-4">✅</div>
-                <h2 className="text-2xl font-bold mb-2">Aanvraag ontvangen</h2>
-                <p className="text-slate-600">Wij nemen zo snel mogelijk contact met je op voor een vrijblijvend bod.</p>
+              <div className="py-10 text-center">
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-3xl">✓</div>
+                <h2 className="mb-2 text-3xl font-black">Aanvraag ontvangen</h2>
+                <p className="text-slate-600">Wij nemen zo snel mogelijk contact met je op.</p>
               </div>
             )}
-          </div>
+          </section>
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 py-14 grid md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
-          <h3 className="font-bold text-xl mb-2">Binnen 24 uur bod</h3>
-          <p className="text-slate-600">Snel duidelijkheid zonder lange verkooptrajecten.</p>
-        </div>
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
-          <h3 className="font-bold text-xl mb-2">Elke woningconditie</h3>
-          <p className="text-slate-600">Ook woningen met schade, huurders of renovatieproblemen.</p>
-        </div>
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
-          <h3 className="font-bold text-xl mb-2">Geen verkoopkosten</h3>
-          <p className="text-slate-600">Geen makelaar, geen advertentiekosten en geen verplichtingen.</p>
-        </div>
+      <section className="mx-auto grid max-w-7xl gap-6 px-6 py-12 md:grid-cols-3">
+        <div className="rounded-3xl bg-white p-8 shadow-lg ring-1 ring-slate-200"><p className="text-3xl font-black text-blue-800">24 uur</p><p className="mt-2 font-bold">Gemiddeld snelle reactie</p></div>
+        <div className="rounded-3xl bg-white p-8 shadow-lg ring-1 ring-slate-200"><p className="text-3xl font-black text-blue-800">0%</p><p className="mt-2 font-bold">Geen makelaarskosten</p></div>
+        <div className="rounded-3xl bg-white p-8 shadow-lg ring-1 ring-slate-200"><p className="text-3xl font-black text-blue-800">Elke staat</p><p className="mt-2 font-bold">Ook renovatie of schade</p></div>
       </section>
 
-      <section className="bg-white border-y border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <h2 className="text-3xl font-bold text-center mb-10">Hoe werkt het?</h2>
-          <div className="grid md:grid-cols-5 gap-4">
-            {["Aanvraag", "Woninganalyse", "Vrijblijvend bod", "Akkoord", "Notaris"].map((item, index) => (
-              <div key={item} className="rounded-2xl bg-slate-50 border border-slate-200 p-6 text-center">
-                <div className="mx-auto mb-4 h-10 w-10 rounded-full bg-blue-700 text-white flex items-center justify-center font-bold">{index + 1}</div>
-                <p className="font-semibold">{item}</p>
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-7xl px-6">
+          <h2 className="mb-10 text-center text-4xl font-black">Hoe werkt het?</h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            {["Vul je aanvraag in", "Wij beoordelen je woning", "Ontvang vrijblijvend bod"].map((title, index) => (
+              <div key={title} className="rounded-3xl border border-slate-200 bg-slate-50 p-8 text-center shadow-sm">
+                <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-blue-800 text-xl font-black text-white">{index + 1}</div>
+                <h3 className="mb-3 text-xl font-black">{title}</h3>
+                <p className="text-slate-600">Snel, duidelijk en zonder verplichtingen.</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-center mb-10">Wij kopen onder andere</h2>
-        <div className="grid md:grid-cols-4 gap-5">
-          {["Opknapwoningen", "Verhuurde woningen", "Erfeniswoningen", "Woningen met schade", "Leegstaande huizen", "Beleggingspanden", "Appartementen", "Huizen zonder makelaar"].map((service) => (
-            <div key={service} className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm font-semibold">{service}</div>
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <h2 className="mb-10 text-center text-4xl font-black">Wij kopen onder andere</h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {["Opknapwoningen", "Verhuurde woningen", "Erfeniswoningen", "Woningen met schade", "Leegstaande huizen", "Beleggingspanden", "Appartementen", "Huizen zonder makelaar"].map((item) => (
+            <div key={item} className="rounded-2xl bg-white p-5 font-bold shadow-md ring-1 ring-slate-200">✓ {item}</div>
           ))}
         </div>
       </section>
 
-      <section className="bg-blue-800 text-white">
-        <div className="max-w-4xl mx-auto px-6 py-16 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Wil je snel weten wat jouw woning waard is?</h2>
-          <p className="text-blue-100 mb-8">Start de gratis aanvraag en ontvang snel een vrijblijvend voorstel.</p>
-          <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-2xl font-bold">
-            Gratis bod aanvragen
-          </button>
-        </div>
+      <section className="bg-blue-950 px-6 py-16 text-center text-white">
+        <h2 className="mb-4 text-4xl font-black">Wil je snel duidelijkheid?</h2>
+        <p className="mb-8 text-blue-100">Start vandaag nog je gratis aanvraag.</p>
+        <a href="#aanvraag" className="inline-flex rounded-2xl bg-orange-500 px-8 py-4 text-lg font-black text-white shadow-xl hover:bg-orange-600">Gratis bod aanvragen</a>
       </section>
 
-      <footer className="bg-slate-950 text-slate-300 px-6 py-8">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-4 text-sm">
+      <footer className="bg-slate-950 px-6 py-8 text-slate-300">
+        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-3 text-sm md:flex-row">
           <p>© 2026 Vastgoed Direct Nederland</p>
-          <p>verkoopjehuisdirect.nl · info@verkoopjehuisdirect.nl</p>
+          <p>info@verkoopjehuisdirect.nl · verkoopjehuisdirect.nl</p>
         </div>
       </footer>
+    <a
+        href="https://wa.me/31681158003"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-5 right-5 z-50 rounded-full bg-green-500 px-6 py-4 font-black text-white shadow-2xl hover:bg-green-600"
+      >
+        WhatsApp
+      </a>
     </main>
   );
 }
