@@ -29,12 +29,23 @@ export default function VerkoopJeHuisDirect() {
   const submitLead = async (e) => {
     e.preventDefault();
 
+    const lead = {
+      naam: form.naam,
+      email: form.email,
+      telefoon: form.telefoon,
+      postcode: form.postcode,
+      huisnummer: form.huisnummer,
+      woningtype: form.woningtype,
+      staat: form.staat,
+      reden: form.reden,
+    };
+
     const { error } = await supabase.from("leads").insert([
       {
-        naam: form.naam,
-        telefoon: form.telefoon,
-        postcode: form.postcode,
-        huisnummer: form.huisnummer,
+        naam: lead.naam,
+        telefoon: lead.telefoon,
+        postcode: lead.postcode,
+        huisnummer: lead.huisnummer,
       },
     ]);
 
@@ -42,6 +53,16 @@ export default function VerkoopJeHuisDirect() {
       alert("Er ging iets mis. Probeer opnieuw.");
       console.error(error);
       return;
+    }
+
+    try {
+      await fetch("/api/lead-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(lead),
+      });
+    } catch (mailError) {
+      console.warn("Lead opgeslagen, maar e-mailmelding is niet verzonden:", mailError);
     }
 
     setSubmitted(true);
@@ -341,7 +362,7 @@ export default function VerkoopJeHuisDirect() {
             <div className="card">
               <h3>★★★★★</h3>
               <p>“Binnen korte tijd duidelijkheid gekregen. Fijn dat alles vrijblijvend was.”</p>
-              <p><strong>Particuliere verkoper, Stadskanaal</strong></p>
+              <p><strong>Particuliere verkoper, Groningen</strong></p>
             </div>
             <div className="card">
               <h3>★★★★★</h3>
@@ -351,7 +372,7 @@ export default function VerkoopJeHuisDirect() {
             <div className="card">
               <h3>★★★★★</h3>
               <p>“Onze woning had onderhoud nodig, maar er werd toch serieus meegedacht.”</p>
-              <p><strong>Woningeigenaar, Groningen</strong></p>
+              <p><strong>Particuliere verkoper, Stadskanaal</strong></p>
             </div>
           </div>
         </div>
