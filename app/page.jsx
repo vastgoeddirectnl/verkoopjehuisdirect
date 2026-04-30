@@ -341,7 +341,7 @@ export default function VerkoopJeHuisDirect() {
             <div className="card">
               <h3>★★★★★</h3>
               <p>“Binnen korte tijd duidelijkheid gekregen. Fijn dat alles vrijblijvend was.”</p>
-              <p><strong>Particuliere verkoper, Rotterdam</strong></p>
+              <p><strong>Particuliere verkoper, Stadskanaal</strong></p>
             </div>
             <div className="card">
               <h3>★★★★★</h3>
@@ -351,7 +351,7 @@ export default function VerkoopJeHuisDirect() {
             <div className="card">
               <h3>★★★★★</h3>
               <p>“Onze woning had onderhoud nodig, maar er werd toch serieus meegedacht.”</p>
-              <p><strong>Familieverkoper, Amsterdam</strong></p>
+              <p><strong>Woningeigenaar, Groningen</strong></p>
             </div>
           </div>
         </div>
