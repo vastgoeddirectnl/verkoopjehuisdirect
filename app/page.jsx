@@ -156,6 +156,7 @@ export default function VerkoopJeHuisDirect() {
           </nav>
           <div className="header-actions">
             <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+            <a href="tel:0681158003" className="btn btn-blue">Bel direct</a>
             <a href="#aanvraag" className="btn btn-orange">Gratis bod</a>
           </div>
         </div>
@@ -174,7 +175,10 @@ export default function VerkoopJeHuisDirect() {
             </div>
             <div className="hero-buttons">
               <a href="#aanvraag" className="btn btn-orange">Ontvang gratis bod</a>
-              <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="btn btn-light">Direct WhatsApp gesprek</a>
+              <div>
+                <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="btn btn-light">Direct WhatsApp gesprek</a>
+                <p className="small-note" style={{marginTop:'8px'}}>🟢 Meestal binnen 5 minuten reactie via WhatsApp</p>
+              </div>
             </div>
           </div>
 
@@ -246,6 +250,7 @@ export default function VerkoopJeHuisDirect() {
                       <button type="submit" className="btn btn-orange">Aanvraag versturen</button>
                     </div>
                     <p className="small-note">Wij nemen contact op over uw vrijblijvende aanvraag.</p>
+                    <p className="small-note">⚠️ Vandaag nog beperkt aantal aanvragen mogelijk</p>
                   </div>
                 )}
               </form>
@@ -325,6 +330,42 @@ export default function VerkoopJeHuisDirect() {
         </div>
       </section>
 
+      <section className="section section-white">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow">Ervaringen</p>
+            <h2>Wat verkopers waarderen</h2>
+            <p>Heldere communicatie, snelle reactie en geen verplichtingen.</p>
+          </div>
+          <div className="steps">
+            <div className="card">
+              <h3>★★★★★</h3>
+              <p>“Binnen korte tijd duidelijkheid gekregen. Fijn dat alles vrijblijvend was.”</p>
+              <p><strong>Particuliere verkoper, Rotterdam</strong></p>
+            </div>
+            <div className="card">
+              <h3>★★★★★</h3>
+              <p>“Geen makelaar of bezichtigingen nodig. Het contact verliep snel en duidelijk.”</p>
+              <p><strong>Woningeigenaar, Utrecht</strong></p>
+            </div>
+            <div className="card">
+              <h3>★★★★★</h3>
+              <p>“Onze woning had onderhoud nodig, maar er werd toch serieus meegedacht.”</p>
+              <p><strong>Familieverkoper, Amsterdam</strong></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bar">
+        <div className="container bar-grid">
+          <div>Direct contact</div>
+          <div>Vrijblijvende aanvraag</div>
+          <div>Geen verkoopstress</div>
+          <div>Ook bij spoed</div>
+        </div>
+      </section>
+
       <section id="faq" className="section">
         <div className="container">
           <div className="section-head">
@@ -342,9 +383,10 @@ export default function VerkoopJeHuisDirect() {
       <section className="cta">
         <div className="container">
           <h2>Wilt u snel duidelijkheid?</h2>
-          <p>Vraag gratis een bod aan of stuur direct een WhatsApp bericht.</p>
+          <p>Vraag gratis een bod aan, bel direct of stuur meteen een WhatsApp bericht.</p>
           <div className="cta-buttons">
             <a href="#aanvraag" className="btn btn-orange">Gratis bod aanvragen</a>
+            <a href="tel:0681158003" className="btn btn-light">Bel direct</a>
             <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="btn btn-green">Direct WhatsApp gesprek</a>
           </div>
         </div>
