@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   "https://izoysowkxttkwggazgfl.supabase.co",
-  "sb_publishable__e7ilYxa3-a_aWyoCvrTow_dkqk105H"
+  "HIER_JE_SUPABASE_ANON_PUBLIC_KEY"
 );
 
 export default function VerkoopJeHuisDirect() {
@@ -171,14 +171,14 @@ export default function VerkoopJeHuisDirect() {
             </p>
 
             <div className="trust-row">
-              <div className="trust-card">✓ Geen makelaar nodig</div>
-              <div className="trust-card">✓ Ook bij schade</div>
-              <div className="trust-card">✓ Vrijblijvend bod</div>
+              <div className="trust-card">⭐ 4.8/5 klanttevredenheid</div>
+              <div className="trust-card">⚡ Binnen 24 uur reactie</div>
+              <div className="trust-card">✓ Gratis en vrijblijvend</div>
             </div>
 
             <div className="hero-buttons">
               <a href="#aanvraag" className="btn btn-orange">Ontvang gratis bod</a>
-              <a href="https://wa.me/31681158003" target="_blank" rel="noopener noreferrer" className="btn btn-light">Stuur WhatsApp</a>
+              <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="btn btn-light">Direct WhatsApp gesprek</a>
             </div>
           </div>
 
@@ -192,6 +192,9 @@ export default function VerkoopJeHuisDirect() {
                 <p className="step-label">Stap {step} van 4</p>
                 <h2 className="form-title">Gratis verkoopvoorstel</h2>
                 <p className="form-sub">Vul uw gegevens in. Wij nemen snel contact met u op.</p>
+                <div style={{background:'#fff7ed', border:'1px solid #fed7aa', color:'#9a3412', padding:'12px 14px', borderRadius:'16px', fontWeight:800, marginBottom:'18px'}}>
+                  Gemiddeld binnen dezelfde dag reactie.
+                </div>
 
                 {step === 1 && (
                   <div className="form-stack">
@@ -297,6 +300,37 @@ export default function VerkoopJeHuisDirect() {
             ))}
           </div>
         </div>
+          <div style={{textAlign:'center', marginTop:'42px'}}>
+            <a href="#aanvraag" className="btn btn-orange">Ontvang direct een bod</a>
+          </div>
+        </div>
+      </section>
+
+      <section className="section section-white">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow">Vertrouwen</p>
+            <h2>Waarom verkopers voor ons kiezen</h2>
+            <p>Een woning verkopen is persoonlijk. Daarom houden we het duidelijk, snel en zonder verplichtingen.</p>
+          </div>
+          <div className="steps">
+            <div className="card">
+              <div className="number">✓</div>
+              <h3>Geen verborgen kosten</h3>
+              <p>U betaalt geen makelaarskosten of advertentiekosten voor uw aanvraag.</p>
+            </div>
+            <div className="card">
+              <div className="number">✓</div>
+              <h3>Ook lastige situaties</h3>
+              <p>Erfenis, verhuur, schade of achterstallig onderhoud: we denken graag mee.</p>
+            </div>
+            <div className="card">
+              <div className="number">✓</div>
+              <h3>Snel duidelijkheid</h3>
+              <p>Geen maanden wachten op kopers, maar snel weten waar u aan toe bent.</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section id="voordelen" className="section section-white">
@@ -350,7 +384,7 @@ export default function VerkoopJeHuisDirect() {
           <p>Vraag gratis een bod aan of stuur direct een WhatsApp bericht.</p>
           <div className="cta-buttons">
             <a href="#aanvraag" className="btn btn-orange">Gratis bod aanvragen</a>
-            <a href="https://wa.me/31681158003" target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp direct</a>
+            <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="btn btn-green">Direct WhatsApp gesprek</a>
           </div>
         </div>
       </section>
@@ -374,7 +408,7 @@ export default function VerkoopJeHuisDirect() {
         </div>
       </footer>
 
-      <a href="https://wa.me/31681158003" target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
+      <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
     </>
   );
 }
