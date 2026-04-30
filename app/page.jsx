@@ -52,8 +52,7 @@ export default function VerkoopJeHuisDirect() {
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
           <a href="/" className="flex items-center">
-            <img src="/logo.png" alt="Vastgoed Direct Nederland" className="h-12 w-auto max-w-[230px] object-contain md:h-14" />
-          </a>
+          <img src="/logo.png" alt="Vastgoed Direct Nederland" className="max-h-14 w-auto max-w-[220px] object-contain" />
 
           <nav className="hidden items-center gap-8 text-sm font-semibold text-slate-700 lg:flex">
             <a href="#werkwijze" className="hover:text-[#0A2540]">Werkwijze</a>
@@ -266,7 +265,7 @@ export default function VerkoopJeHuisDirect() {
       <footer className="bg-slate-950 px-5 py-10 text-slate-300">
         <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-3">
           <div>
-            <img src="/logo.png" alt="Vastgoed Direct Nederland" className="mb-4 h-12 w-auto max-w-[240px] rounded-xl bg-white p-2 object-contain" />
+           <img src="/logo.png" alt="Vastgoed Direct Nederland" className="max-h-14 w-auto max-w-[220px] object-contain" />
             <p className="text-sm leading-6 text-slate-400">Vastgoed Direct Nederland helpt woningeigenaren met snelle en duidelijke verkoopmogelijkheden.</p>
           </div>
           <div>
