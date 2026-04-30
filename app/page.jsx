@@ -7,6 +7,16 @@ const supabase = createClient(
   "https://izoysowkxttkwggazgfl.supabase.co",
   "sb_publishable__e7ilYxa3-a_aWyoCvrTow_dkqk105H"
 );
+<div className="flex items-center justify-between px-6 py-4">
+  <img src="/logo.png" className="h-12 md:h-14" />
+
+  <a
+    href="https://wa.me/31681158003"
+    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl font-semibold"
+  >
+    WhatsApp
+  </a>
+</div>
 
 export default function VerkoopJeHuisDirect() {
   const [step, setStep] = useState(1);
