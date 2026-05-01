@@ -176,7 +176,6 @@ export default function VerkoopJeHuisDirect() {
   <a href="#faq">FAQ</a>
   <a href="tel:0681158003">06 81 15 80 03</a>
 </nav>
-          </nav>
           <div className="header-actions">
             <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
             <a href="tel:0681158003" className="btn btn-blue">Bel direct</a>
