@@ -27,7 +27,7 @@ export async function POST(req) {
     };
 
     await resend.emails.send({
-      from: "Vastgoed Direct Nederland <onboarding@resend.dev>",
+      from: "Vastgoed Direct Nederland <info@verkoopjehuisdirect.nl>",
       to: ["info@verkoopjehuisdirect.nl"],
       subject: "Nieuwe woningaanvraag via verkoopjehuisdirect.nl",
       html: `
@@ -46,7 +46,7 @@ export async function POST(req) {
 
     if (body.email) {
       await resend.emails.send({
-        from: "Vastgoed Direct Nederland <onboarding@resend.dev>",
+        from: "Vastgoed Direct Nederland <info@verkoopjehuisdirect.nl>",
         to: [body.email],
         subject: "Uw aanvraag is ontvangen",
         html: `
