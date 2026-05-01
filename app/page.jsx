@@ -198,7 +198,7 @@ export default function VerkoopJeHuisDirect() {
               <a href="#aanvraag" className="btn btn-orange">Ontvang gratis bod</a>
               <div>
                 <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="btn btn-light">Direct WhatsApp gesprek</a>
-                <p className="small-note" style={{marginTop:'8px'}}>🟢 Meestal binnen 5 minuten reactie via WhatsApp</p>
+                <p className="small-note" style={{marginTop:'8px'}}>🟢 Meestal binnen 60 minuten reactie via WhatsApp</p>
               </div>
             </div>
           </div>
@@ -345,7 +345,7 @@ export default function VerkoopJeHuisDirect() {
           <div className="dark-box">
             <h3>Wij kopen onder andere</h3>
             <div className="property-grid">
-              {["Opknapwoningen", "Erfeniswoningen", "Woningen met schade", "Leegstaande huizen", "Beleggingspanden", "Appartementen"].map((item) => <div key={item} className="property">✓ {item}</div>)}
+              {["Opknapwoningen", "Erfenis woningen", "Woningen met schade", "Leegstaande huizen", "Beleggingspanden", "Appartementen"].map((item) => <div key={item} className="property">✓ {item}</div>)}
             </div>
           </div>
         </div>
@@ -367,7 +367,7 @@ export default function VerkoopJeHuisDirect() {
             <div className="card">
               <h3>★★★★★</h3>
               <p>“Geen makelaar of bezichtigingen nodig. Het contact verliep snel en duidelijk.”</p>
-              <p><strong>Woningeigenaar, Utrecht</strong></p>
+              <p><strong>Particuliere verkoper, Utrecht</strong></p>
             </div>
             <div className="card">
               <h3>★★★★★</h3>
