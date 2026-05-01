@@ -169,11 +169,13 @@ export default function VerkoopJeHuisDirect() {
           <a href="/" aria-label="Vastgoed Direct Nederland">
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="logo" />
           </a>
-          <nav className="nav">
-            <a href="#werkwijze">Werkwijze</a>
-            <a href="#voordelen">Voordelen</a>
-            <a href="#faq">FAQ</a>
-            <a href="tel:0681158003">06 81 15 80 03</a>
+        <nav className="nav">
+  <a href="#werkwijze">Werkwijze</a>
+  <a href="/huis-snel-verkopen">Huis snel verkopen</a>
+  <a href="#voordelen">Voordelen</a>
+  <a href="#faq">FAQ</a>
+  <a href="tel:0681158003">06 81 15 80 03</a>
+</nav>
           </nav>
           <div className="header-actions">
             <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
