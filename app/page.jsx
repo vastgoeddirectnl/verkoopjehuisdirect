@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   "https://izoysowkxttkwggazgfl.supabase.co",
-  "HIER_JE_SUPABASE_ANON_PUBLIC_KEY"
+  "sb_publishable__e7ilYxa3-a_aWyoCvrTow_dkqk105H"
 );
 
 const whatsappLink =
@@ -98,7 +98,7 @@ export default function VerkoopJeHuisDirect() {
         .hero { background: radial-gradient(circle at 84% 10%, rgba(255,106,0,.14), transparent 34%), radial-gradient(circle at 8% 88%, rgba(10,37,64,.16), transparent 38%), #fff; }
         .hero-grid { display: grid; grid-template-columns: 1.03fr .97fr; gap: 54px; align-items: center; padding: 70px 0; }
         .badge { display: inline-flex; color: #ff6a00; background: #fff2e8; border: 1px solid #ffd5b8; border-radius: 999px; padding: 10px 16px; font-size: 14px; font-weight: 900; margin-bottom: 22px; }
-        h1 { font-size: clamp(42px, 5.5vw, 72px); line-height: .98; letter-spacing: -2px; margin: 0; color: #0a2540; }
+        h1 { font-size: clamp(38px, 4.6vw, 62px); line-height: .98; letter-spacing: -2px; margin: 0; color: #0a2540; }
         .lead { font-size: 20px; line-height: 1.7; color: #536273; max-width: 680px; margin: 26px 0 0; }
         .trust-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 32px 0; }
         .trust-card { background: #fff; border: 1px solid #e6e2db; border-radius: 20px; padding: 18px; font-weight: 900; box-shadow: 0 8px 22px rgba(10,37,64,.06); }
@@ -211,7 +211,6 @@ export default function VerkoopJeHuisDirect() {
             <a href="/woning-verkopen-zonder-makelaar">Zonder makelaar</a>
             <a href="#mogelijkheden">Mogelijkheden</a>
             <a href="#faq">FAQ</a>
-            <a href="tel:0681158003">06 81 15 80 03</a>
           </nav>
           <div className="header-actions">
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
