@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   "https://izoysowkxttkwggazgfl.supabase.co",
-  "sb_publishable__e7ilYxa3-a_aWyoCvrTow_dkqk105H"
+  "HIER_JE_SUPABASE_ANON_PUBLIC_KEY"
 );
 
 const whatsappLink =
@@ -197,7 +197,6 @@ export default function VerkoopJeHuisDirect() {
             <span>✓ Geen makelaarskosten</span>
             <span>✓ Notariële afwikkeling</span>
           </div>
-          <a href="tel:0681158003">Bel: 06 81 15 80 03</a>
         </div>
       </div>
 
@@ -331,6 +330,18 @@ export default function VerkoopJeHuisDirect() {
         </div>
       </section>
 
+      <section className="section section-white">
+        <div className="container">
+          <div className="section-head" style={{ marginBottom: 0 }}>
+            <p className="eyebrow">Directe verkoopoplossing</p>
+            <h2>Rustig, duidelijk en zonder verkoopstress.</h2>
+            <p>
+              Wilt u uw woning snel verkopen zonder makelaar, bezichtigingen of onzekerheid? Vastgoed Direct Nederland biedt een directe verkoopoplossing met heldere afspraken, notariële afwikkeling en waar mogelijk een snelle overdracht. Ook bij achterstallig onderhoud, verhuur, erfenis, scheiding of leegstand denken wij met u mee.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="bar">
         <div className="container bar-grid">
           <div>Snel duidelijkheid</div>
@@ -349,8 +360,8 @@ export default function VerkoopJeHuisDirect() {
           </div>
           <div className="steps">
             {[
-              ["1", "Aanvraag", "U vult uw adres en contactgegevens in. De aanvraag is gratis en vertrouwelijk."],
-              ["2", "Persoonlijk contact", "Wij bespreken uw woning, uw situatie en wat voor u belangrijk is."],
+              ["1", "Aanvraag", "U vult uw woninggegevens in. De aanvraag is gratis en vertrouwelijk."],
+              ["2", "Persoonlijk contact", "Wij bespreken uw situatie, gewenste snelheid en verkoopmogelijkheden."],
               ["3", "Verkoopvoorstel", "U ontvangt een vrijblijvend voorstel met duidelijke voorwaarden. U beslist zelf of u verder wilt."],
               ["4", "Notariële afwikkeling", "Bij akkoord wordt de overdracht via de notaris geregeld, met afspraken die vooraf helder zijn."],
             ].map(([num, title, text]) => (
@@ -440,7 +451,7 @@ export default function VerkoopJeHuisDirect() {
           <div className="section-head">
             <p className="eyebrow">Ervaringen</p>
             <h2>Wat verkopers belangrijk vinden</h2>
-            
+           
           </div>
           <div className="steps">
             <div className="experience-card">
