@@ -1,0 +1,18 @@
+export default function sitemap() {
+  const baseUrl = "https://www.verkoopjehuisdirect.nl";
+
+  return [
+    {
+      url: baseUrl,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 1,
+    },
+    {
+      url: `${baseUrl}/huis-snel-verkopen`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+  ];
+}
