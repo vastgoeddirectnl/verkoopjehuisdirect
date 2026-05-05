@@ -8,6 +8,12 @@ export default function sitemap() {
       changeFrequency: "weekly",
       priority: 1,
     },
+   {
+  url: `${baseUrl}/huis-verkopen-binnen-24-uur`,
+  lastModified: new Date(),
+  changeFrequency: "weekly",
+  priority: 0.85,
+},
     {
       url: `${baseUrl}/huis-snel-verkopen`,
       lastModified: new Date(),
