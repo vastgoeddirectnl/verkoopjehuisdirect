@@ -8,6 +8,9 @@ const supabase = createClient(
   "sb_publishable__e7ilYxa3-a_aWyoCvrTow_dkqk105H"
 );
 
+const whatsappLink =
+  "https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F";
+
 export default function VerkoopJeHuisDirect() {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
@@ -76,10 +79,13 @@ export default function VerkoopJeHuisDirect() {
         body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: #0a2540; background: #f7f5f0; }
         a { color: inherit; text-decoration: none; }
         .container { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
-        .header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96); border-bottom: 1px solid #e6e2db; }
+        .top-strip { background: #0a2540; color: #fff; font-size: 14px; font-weight: 800; }
+        .top-strip-inner { min-height: 42px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+        .top-points { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96); border-bottom: 1px solid #e6e2db; backdrop-filter: blur(10px); }
         .header-inner { min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
         .logo { display: block; width: 210px; max-width: 100%; height: auto; object-fit: contain; }
-        .nav { display: flex; align-items: center; gap: 28px; font-size: 15px; font-weight: 700; color: #24364a; }
+        .nav { display: flex; align-items: center; gap: 24px; font-size: 15px; font-weight: 800; color: #24364a; }
         .nav a:hover { color: #ff6a00; }
         .header-actions { display: flex; align-items: center; gap: 10px; }
         .btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 14px 22px; font-weight: 900; border: none; cursor: pointer; font-size: 15px; transition: .2s ease; white-space: nowrap; }
@@ -89,14 +95,15 @@ export default function VerkoopJeHuisDirect() {
         .btn-blue:hover { background: #12395d; }
         .btn-green { background: #25d366; color: #fff; }
         .btn-light { background: #fff; color: #0a2540; border: 1px solid #d8d4cc; }
-        .hero { background: radial-gradient(circle at 85% 10%, rgba(255,106,0,.13), transparent 32%), radial-gradient(circle at 10% 90%, rgba(10,37,64,.14), transparent 35%), #fff; }
-        .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 54px; align-items: center; padding: 72px 0; }
+        .hero { background: radial-gradient(circle at 84% 10%, rgba(255,106,0,.14), transparent 34%), radial-gradient(circle at 8% 88%, rgba(10,37,64,.16), transparent 38%), #fff; }
+        .hero-grid { display: grid; grid-template-columns: 1.03fr .97fr; gap: 54px; align-items: center; padding: 70px 0; }
         .badge { display: inline-flex; color: #ff6a00; background: #fff2e8; border: 1px solid #ffd5b8; border-radius: 999px; padding: 10px 16px; font-size: 14px; font-weight: 900; margin-bottom: 22px; }
         h1 { font-size: clamp(42px, 5.5vw, 72px); line-height: .98; letter-spacing: -2px; margin: 0; color: #0a2540; }
         .lead { font-size: 20px; line-height: 1.7; color: #536273; max-width: 680px; margin: 26px 0 0; }
-        .trust-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 32px 0; }
+        .trust-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 32px 0; }
         .trust-card { background: #fff; border: 1px solid #e6e2db; border-radius: 20px; padding: 18px; font-weight: 900; box-shadow: 0 8px 22px rgba(10,37,64,.06); }
-        .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+        .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-start; }
+        .micro-note { font-size: 13px; color: #647386; margin: 9px 0 0; }
         .form-card { background: #fff; border: 1px solid #e6e2db; border-radius: 34px; box-shadow: 0 28px 70px rgba(10,37,64,.16); padding: 32px; }
         .form-logo-wrap { display: flex; justify-content: center; padding-bottom: 22px; margin-bottom: 24px; border-bottom: 1px solid #eee9e2; }
         .form-logo { width: 245px; max-width: 100%; height: auto; display: block; object-fit: contain; }
@@ -113,7 +120,7 @@ export default function VerkoopJeHuisDirect() {
         .bar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 34px 0; text-align: center; font-size: 18px; font-weight: 900; }
         .section { padding: 86px 0; }
         .section-white { background: #fff; }
-        .section-head { max-width: 760px; margin: 0 auto 44px; text-align: center; }
+        .section-head { max-width: 790px; margin: 0 auto 44px; text-align: center; }
         .eyebrow { color: #ff6a00; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; margin: 0 0 10px; }
         h2 { font-size: clamp(34px, 4vw, 54px); line-height: 1.05; letter-spacing: -1px; margin: 0; color: #0a2540; }
         .section-head p { color: #647386; font-size: 18px; line-height: 1.7; }
@@ -130,6 +137,16 @@ export default function VerkoopJeHuisDirect() {
         .dark-box h3 { font-size: 34px; margin: 0 0 22px; color: #fff; }
         .property-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 13px; }
         .property { background: rgba(255,255,255,.1); border-radius: 18px; padding: 16px; font-weight: 800; }
+        .highlight { background: linear-gradient(135deg, #0a2540 0%, #12395d 100%); color: #fff; border-radius: 38px; padding: 46px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; }
+        .highlight h2 { color: #fff; }
+        .highlight p { color: #d7e1ec; line-height: 1.7; font-size: 18px; }
+        .highlight-list { display: grid; gap: 12px; }
+        .highlight-item { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.14); border-radius: 18px; padding: 16px; font-weight: 900; }
+        .scenario-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+        .scenario { background: #fff; border: 1px solid #e6e2db; border-radius: 22px; padding: 22px; font-weight: 900; box-shadow: 0 12px 30px rgba(10,37,64,.06); }
+        .experience-card { background: #fff; border: 1px solid #e6e2db; border-radius: 30px; padding: 30px; box-shadow: 0 18px 44px rgba(10,37,64,.08); }
+        .experience-card strong { display: block; margin-bottom: 10px; font-size: 21px; color: #0a2540; }
+        .experience-card p { color: #647386; line-height: 1.7; margin: 0; }
         .faq { display: grid; gap: 14px; max-width: 900px; margin: 0 auto; }
         .faq-item { background: #fff; border: 1px solid #e6e2db; border-radius: 24px; padding: 24px; }
         .faq-item h3 { margin: 0 0 8px; color: #0a2540; font-size: 20px; }
@@ -146,39 +163,53 @@ export default function VerkoopJeHuisDirect() {
         .whatsapp-float { position: fixed; right: 22px; bottom: 22px; z-index: 60; background: #25d366; color: #fff; border-radius: 999px; padding: 16px 22px; font-weight: 900; box-shadow: 0 16px 40px rgba(37,211,102,.35); }
         .success { text-align: center; padding: 34px 10px; }
         .success-icon { width: 66px; height: 66px; border-radius: 50%; background: #dcfce7; color: #15803d; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 34px; font-weight: 900; }
-        @media (max-width: 980px) {
+        @media (max-width: 1040px) {
           .nav { display: none; }
-          .hero-grid, .two-col { grid-template-columns: 1fr; }
-          .trust-row, .steps, .bar-grid { grid-template-columns: 1fr; }
+          .hero-grid, .two-col, .highlight { grid-template-columns: 1fr; }
+          .steps, .bar-grid { grid-template-columns: 1fr; }
+          .scenario-grid { grid-template-columns: repeat(2, 1fr); }
           .header-inner { height: auto; padding: 12px 0; }
           .logo { width: 175px; }
         }
-        @media (max-width: 560px) {
+        @media (max-width: 640px) {
           .container { width: min(100% - 28px, 1180px); }
-          .header-actions .btn-green { display: none; }
+          .top-strip { display: none; }
+          .header-actions .btn-green, .header-actions .btn-blue { display: none; }
           .hero-grid { padding: 42px 0; }
+          .trust-row, .checks, .property-grid, .footer-grid, .scenario-grid { grid-template-columns: 1fr; }
           .form-card { padding: 22px; border-radius: 26px; }
           .form-actions { grid-template-columns: 1fr; }
-          .checks, .property-grid, .footer-grid { grid-template-columns: 1fr; }
+          .highlight { padding: 28px; border-radius: 28px; }
           .footer-grid { gap: 24px; }
         }
       `}</style>
+
+      <div className="top-strip">
+        <div className="container top-strip-inner">
+          <div className="top-points">
+            <span>✓ Geen financieringsvoorbehoud</span>
+            <span>✓ Geen makelaarskosten</span>
+            <span>✓ Geen notariskosten voor u als verkoper</span>
+          </div>
+          <a href="tel:0681158003">Bel: 06 81 15 80 03</a>
+        </div>
+      </div>
 
       <header className="header">
         <div className="container header-inner">
           <a href="/" aria-label="Vastgoed Direct Nederland">
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="logo" />
           </a>
-       <nav className="nav">
-  <a href="#werkwijze">Werkwijze</a>
-  <a href="/huis-snel-verkopen">Huis snel verkopen</a>
-  <a href="/woning-verkopen-zonder-makelaar">Zonder makelaar</a>
-  <a href="#voordelen">Voordelen</a>
-  <a href="#faq">FAQ</a>
-  <a href="tel:0681158003">06 81 15 80 03</a>
-</nav>
+          <nav className="nav">
+            <a href="#werkwijze">Werkwijze</a>
+            <a href="/huis-snel-verkopen">Huis snel verkopen</a>
+            <a href="/woning-verkopen-zonder-makelaar">Zonder makelaar</a>
+            <a href="#mogelijkheden">Mogelijkheden</a>
+            <a href="#faq">FAQ</a>
+            <a href="tel:0681158003">06 81 15 80 03</a>
+          </nav>
           <div className="header-actions">
-            <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
             <a href="tel:0681158003" className="btn btn-blue">Bel direct</a>
             <a href="#aanvraag" className="btn btn-orange">Gratis bod</a>
           </div>
@@ -188,19 +219,24 @@ export default function VerkoopJeHuisDirect() {
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <div className="badge">Binnen 24 uur reactie · Gratis en vrijblijvend</div>
-            <h1>Verkoop uw woning snel, zeker en zonder gedoe.</h1>
-            <p className="lead">Vastgoed Direct Nederland koopt woningen in elke staat. Geen makelaar, geen eindeloze bezichtigingen en snel duidelijkheid over uw verkoopmogelijkheden.</p>
+            <div className="badge">Directe verkoop · Zonder makelaar · In overleg snel passeren</div>
+            <h1>Uw huis verkopen zonder gedoe? Ontvang snel een passend bod.</h1>
+            <p className="lead">
+              Vastgoed Direct Nederland helpt woningeigenaren die rust, snelheid en zekerheid zoeken. Ook bij achterstallig onderhoud, verhuur, erfenis, scheiding of leegstand denken wij mee over een duidelijke verkoopoplossing.
+            </p>
+
             <div className="trust-row">
-              <div className="trust-card">⭐ 4.8/5 klanttevredenheid</div>
-              <div className="trust-card">⚡ Binnen 24 uur reactie</div>
-              <div className="trust-card">✓ Gratis en vrijblijvend</div>
+              <div className="trust-card">✓ Heldere communicatie</div>
+              <div className="trust-card">✓ Geen financieringsvoorbehoud</div>
+              <div className="trust-card">✓ Geen makelaarskosten</div>
+              <div className="trust-card">✓ Notariskosten voor onze rekening</div>
             </div>
+
             <div className="hero-buttons">
               <a href="#aanvraag" className="btn btn-orange">Ontvang gratis bod</a>
               <div>
-                <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="btn btn-light">Direct WhatsApp gesprek</a>
-                <p className="small-note" style={{marginTop:'8px'}}>🟢 Meestal binnen 60 minuten reactie via WhatsApp</p>
+                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">Direct WhatsApp gesprek</a>
+                <p className="micro-note">🟢 Meestal snel reactie via WhatsApp</p>
               </div>
             </div>
           </div>
@@ -212,9 +248,9 @@ export default function VerkoopJeHuisDirect() {
             {!submitted ? (
               <form onSubmit={submitLead}>
                 <p className="step-label">Stap {step} van 4</p>
-                <h2 className="form-title">Gratis verkoopvoorstel</h2>
-                <p className="form-sub">Vul uw gegevens in. Wij nemen snel contact met u op.</p>
-                <div className="notice">Gemiddeld binnen dezelfde dag reactie.</div>
+                <h2 className="form-title">Vrijblijvend bod aanvragen</h2>
+                <p className="form-sub">Vul uw gegevens in. Wij nemen contact met u op om uw situatie rustig te bespreken.</p>
+                <div className="notice">Uw aanvraag is gratis, vertrouwelijk en verplicht u tot niets.</div>
 
                 {step === 1 && (
                   <div className="form-stack">
@@ -232,6 +268,7 @@ export default function VerkoopJeHuisDirect() {
                       <option>Twee-onder-een-kap</option>
                       <option>Vrijstaande woning</option>
                       <option>Beleggingspand</option>
+                      <option>Verhuurde woning</option>
                     </select>
                     <select name="staat" value={form.staat} onChange={updateForm} className="field" required>
                       <option value="">Staat van de woning</option>
@@ -255,6 +292,7 @@ export default function VerkoopJeHuisDirect() {
                       <option>Scheiding</option>
                       <option>Financiële situatie</option>
                       <option>Verhuurde woning verkopen</option>
+                      <option>Leegstand</option>
                       <option>Anders</option>
                     </select>
                     <div className="form-actions">
@@ -272,8 +310,7 @@ export default function VerkoopJeHuisDirect() {
                       <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
                       <button type="submit" className="btn btn-orange">Aanvraag versturen</button>
                     </div>
-                    <p className="small-note">Wij nemen contact op over uw vrijblijvende aanvraag.</p>
-                    <p className="small-note">⚠️ Vandaag nog beperkt aantal aanvragen mogelijk</p>
+                    <p className="small-note">Wij gebruiken uw gegevens alleen om contact op te nemen over uw aanvraag.</p>
                   </div>
                 )}
               </form>
@@ -290,8 +327,8 @@ export default function VerkoopJeHuisDirect() {
 
       <section className="bar">
         <div className="container bar-grid">
-          <div>Binnen 24 uur reactie</div>
-          <div>Geen makelaarskosten</div>
+          <div>Directe zekerheid</div>
+          <div>Geen bouwkundige keuring nodig</div>
           <div>Ook slechte staat</div>
           <div>Vrijblijvend voorstel</div>
         </div>
@@ -302,10 +339,14 @@ export default function VerkoopJeHuisDirect() {
           <div className="section-head">
             <p className="eyebrow">Simpel proces</p>
             <h2>Zo werkt direct verkopen</h2>
-            <p>Geen lange verkooptrajecten, geen open huizen en geen onzekerheid over kopers.</p>
+            <p>Geen verkoopstress, geen tientallen kijkers en geen onzekerheid door financieringsvoorbehoud.</p>
           </div>
           <div className="steps">
-            {[["1", "Aanvraag", "U laat kort uw woninggegevens en contactgegevens achter."], ["2", "Contact", "Wij bespreken uw situatie en beoordelen uw woning."], ["3", "Voorstel", "U ontvangt een vrijblijvend voorstel en beslist zelf."]].map(([num, title, text]) => (
+            {[
+              ["1", "Aanvraag", "U vult uw adres en contactgegevens in. De aanvraag is gratis en vertrouwelijk."],
+              ["2", "Persoonlijk contact", "Wij bespreken uw woning, uw situatie en wat voor u belangrijk is."],
+              ["3", "Vrijblijvend voorstel", "U ontvangt duidelijkheid over de mogelijkheden. U beslist zelf of u verder wilt."],
+            ].map(([num, title, text]) => (
               <div key={title} className="card">
                 <div className="number">{num}</div>
                 <h3>{title}</h3>
@@ -320,16 +361,43 @@ export default function VerkoopJeHuisDirect() {
       </section>
 
       <section className="section section-white">
+        <div className="container highlight">
+          <div>
+            <p className="eyebrow">Meer zekerheid bij verkoop</p>
+            <h2>Geen makelaarskosten, geen notariskosten en in overleg een snelle aanbetaling.</h2>
+            <p>
+              Bij een passende verkoop nemen wij de standaard notariskosten voor onze rekening. In sommige situaties is een directe aanbetaling of voorschot op de koopsom bespreekbaar, zodat u sneller financiële ruimte heeft.
+            </p>
+          </div>
+          <div className="highlight-list">
+            <div className="highlight-item">✓ Geen courtage of makelaarskosten</div>
+            <div className="highlight-item">✓ Standaard notariskosten voor onze rekening</div>
+            <div className="highlight-item">✓ Directe aanbetaling mogelijk in overleg</div>
+            <div className="highlight-item">✓ Flexibele overdrachtsdatum bespreekbaar</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="mogelijkheden" className="section">
         <div className="container">
           <div className="section-head">
-            <p className="eyebrow">Vertrouwen</p>
-            <h2>Waarom verkopers voor ons kiezen</h2>
-            <p>Een woning verkopen is persoonlijk. Daarom houden we het duidelijk, snel en zonder verplichtingen.</p>
+            <p className="eyebrow">Voor wie is dit geschikt?</p>
+            <h2>Wij helpen vooral verkopers die snel duidelijkheid willen.</h2>
+            <p>Elke situatie is anders. Daarom kijken wij niet alleen naar de woning, maar ook naar uw gewenste tempo, overdrachtsdatum en persoonlijke situatie.</p>
           </div>
-          <div className="steps">
-            <div className="card"><div className="number">✓</div><h3>Geen verborgen kosten</h3><p>U betaalt geen makelaarskosten of advertentiekosten voor uw aanvraag.</p></div>
-            <div className="card"><div className="number">✓</div><h3>Ook lastige situaties</h3><p>Erfenis, verhuur, schade of achterstallig onderhoud: we denken graag mee.</p></div>
-            <div className="card"><div className="number">✓</div><h3>Snel duidelijkheid</h3><p>Geen maanden wachten op kopers, maar snel weten waar u aan toe bent.</p></div>
+          <div className="scenario-grid">
+            {[
+              "Erfeniswoning",
+              "Scheiding of uit elkaar",
+              "Verhuurde woning",
+              "Achterstallig onderhoud",
+              "Leegstaande woning",
+              "Financiële druk",
+              "Opknapwoning",
+              "Snel verhuizen",
+            ].map((item) => (
+              <div key={item} className="scenario">✓ {item}</div>
+            ))}
           </div>
         </div>
       </section>
@@ -338,79 +406,95 @@ export default function VerkoopJeHuisDirect() {
         <div className="container two-col">
           <div>
             <p className="eyebrow">Waarom direct verkopen?</p>
-            <h2>Rust, snelheid en duidelijkheid.</h2>
-            <p className="lead">Soms wilt u niet maanden wachten op een koper. Wij helpen eigenaren die snel willen schakelen en zonder traditionele verkoopstress duidelijkheid willen.</p>
+            <h2>Rust, snelheid en duidelijke afspraken.</h2>
+            <p className="lead">Een traditioneel verkooptraject past niet bij iedere situatie. Soms wilt u geen open huis, geen lange onderhandelingen en geen risico dat een koper afhaakt door financiering.</p>
             <div className="checks">
-              {["Geen verkoopstyling nodig", "Geen open huis", "Ook verhuurde woningen", "Direct contact"].map((item) => <div key={item} className="check">✓ {item}</div>)}
+              <div className="check">✓ Geen verkoopstyling nodig</div>
+              <div className="check">✓ Geen open huis</div>
+              <div className="check">✓ Ook verhuurde woningen</div>
+              <div className="check">✓ Direct contact</div>
+              <div className="check">✓ Geen financieringsvoorbehoud</div>
+              <div className="check">✓ Flexibele overdracht</div>
             </div>
           </div>
           <div className="dark-box">
-            <h3>Wij kopen onder andere</h3>
+            <h3>Wij kijken onder andere naar</h3>
             <div className="property-grid">
-              {["Opknapwoningen", "Erfenis woningen", "Woningen met schade", "Leegstaande huizen", "Beleggingspanden", "Appartementen"].map((item) => <div key={item} className="property">✓ {item}</div>)}
+              {["Opknapwoningen", "Erfeniswoningen", "Woningen met schade", "Leegstaande huizen", "Beleggingspanden", "Appartementen", "Verhuurde woningen", "Eengezinswoningen"].map((item) => (
+                <div key={item} className="property">✓ {item}</div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      <section className="section section-white">
+      <section className="section">
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">Ervaringen</p>
-            <h2>Wat verkopers waarderen</h2>
-            <p>Heldere communicatie, snelle reactie en geen verplichtingen.</p>
+            <h2>Wat verkopers belangrijk vinden</h2>
+            <p>Zodra er echte klantreviews beschikbaar zijn, kunt u deze sectie vervangen door geverifieerde ervaringen.</p>
           </div>
           <div className="steps">
-            <div className="card">
-              <h3>★★★★★</h3>
-              <p>“Binnen korte tijd duidelijkheid gekregen. Fijn dat alles vrijblijvend was.”</p>
-              <p><strong>Particuliere verkoper, Groningen</strong></p>
+            <div className="experience-card">
+              <strong>Rust in een drukke periode</strong>
+              <p>Voor veel verkopers is het belangrijk dat er snel duidelijkheid komt zonder lange verkoopvoorbereiding.</p>
             </div>
-            <div className="card">
-              <h3>★★★★★</h3>
-              <p>“Geen makelaar of bezichtigingen nodig. Het contact verliep snel en duidelijk.”</p>
-              <p><strong>Particuliere verkoper, Utrecht</strong></p>
+            <div className="experience-card">
+              <strong>Geen onbekenden over de vloer</strong>
+              <p>Geen open huis en geen reeks bezichtigingen kan prettig zijn bij verhuur, schade of persoonlijke omstandigheden.</p>
             </div>
-            <div className="card">
-              <h3>★★★★★</h3>
-              <p>“Onze woning had onderhoud nodig, maar er werd toch serieus meegedacht.”</p>
-              <p><strong>Particuliere verkoper, Stadskanaal</strong></p>
+            <div className="experience-card">
+              <strong>Afspraken die helder zijn</strong>
+              <p>Wij leggen duidelijk uit wat mogelijk is, welke stappen volgen en welke overdrachtsdatum past bij uw situatie.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bar">
-        <div className="container bar-grid">
-          <div>Direct contact</div>
-          <div>Vrijblijvende aanvraag</div>
-          <div>Geen verkoopstress</div>
-          <div>Ook bij spoed</div>
-        </div>
-      </section>
-
-      <section id="faq" className="section">
+      <section id="faq" className="section section-white">
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">FAQ</p>
             <h2>Veelgestelde vragen</h2>
           </div>
           <div className="faq">
-            {[["Is de aanvraag gratis?", "Ja, de aanvraag is volledig gratis en vrijblijvend."], ["Kopen jullie ook huizen in slechte staat?", "Ja, ook woningen met schade, achterstallig onderhoud of renovatiebehoefte."], ["Heb ik een makelaar nodig?", "Nee, u kunt rechtstreeks een aanvraag doen via de website."], ["Hoe snel nemen jullie contact op?", "Wij proberen zo snel mogelijk te reageren, vaak dezelfde dag."]].map(([q, a]) => (
-              <div key={q} className="faq-item"><h3>{q}</h3><p>{a}</p></div>
-            ))}
+            <div className="faq-item">
+              <h3>Is de aanvraag gratis?</h3>
+              <p>Ja, de aanvraag is volledig gratis en vrijblijvend. U zit nergens aan vast.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Betaal ik notariskosten?</h3>
+              <p>Bij een passende verkoop nemen wij de standaard notariskosten voor onze rekening. Eventuele afwijkende afspraken bespreken we vooraf helder met u.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Is een directe aanbetaling mogelijk?</h3>
+              <p>In sommige situaties is een directe aanbetaling of voorschot bespreekbaar. Dit hangt af van de woning, afspraken en notariële mogelijkheden.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Kopen jullie ook huizen in slechte staat?</h3>
+              <p>Ja, ook woningen met schade, achterstallig onderhoud of renovatiebehoefte kunnen worden aangemeld.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Heb ik een makelaar nodig?</h3>
+              <p>Nee, u kunt rechtstreeks een aanvraag doen via de website. Daardoor voorkomt u makelaarskosten en een lang verkooptraject.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Kan ik zelf de overdrachtsdatum bepalen?</h3>
+              <p>De overdrachtsdatum stemmen we samen af. Een snelle overdracht is mogelijk, maar ook een latere overdracht kan bespreekbaar zijn.</p>
+            </div>
           </div>
         </div>
       </section>
 
       <section className="cta">
         <div className="container">
-          <h2>Wilt u snel duidelijkheid?</h2>
-          <p>Vraag gratis een bod aan, bel direct of stuur meteen een WhatsApp bericht.</p>
+          <h2>Wilt u weten wat er mogelijk is?</h2>
+          <p>Vraag gratis een bod aan, bel direct of stuur meteen een WhatsApp bericht. U ontvangt duidelijkheid zonder verplichtingen.</p>
           <div className="cta-buttons">
             <a href="#aanvraag" className="btn btn-orange">Gratis bod aanvragen</a>
             <a href="tel:0681158003" className="btn btn-light">Bel direct</a>
-            <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="btn btn-green">Direct WhatsApp gesprek</a>
+            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">Direct WhatsApp gesprek</a>
           </div>
         </div>
       </section>
@@ -434,7 +518,7 @@ export default function VerkoopJeHuisDirect() {
         </div>
       </footer>
 
-      <a href="https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F" target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
+      <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
     </main>
   );
 }
