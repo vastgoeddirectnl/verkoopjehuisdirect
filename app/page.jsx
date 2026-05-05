@@ -450,7 +450,6 @@ export default function VerkoopJeHuisDirect() {
           <div className="section-head">
             <p className="eyebrow">Ervaringen</p>
             <h2>Wat verkopers belangrijk vinden</h2>
-           
           </div>
           <div className="steps">
             <div className="experience-card">
@@ -530,7 +529,8 @@ export default function VerkoopJeHuisDirect() {
           <div>
             <h3>Website</h3>
             <p>verkoopjehuisdirect.nl</p>
-            <p>© 2026 Vastgoed Direct Nederland</p>
+            <p><a href="/privacyverklaring">Privacyverklaring</a></p>
+            <p>© 2025 Vastgoed Direct Nederland</p>
           </div>
         </div>
       </footer>
