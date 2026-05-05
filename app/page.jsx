@@ -169,9 +169,10 @@ export default function VerkoopJeHuisDirect() {
           <a href="/" aria-label="Vastgoed Direct Nederland">
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="logo" />
           </a>
-        <nav className="nav">
+       <nav className="nav">
   <a href="#werkwijze">Werkwijze</a>
   <a href="/huis-snel-verkopen">Huis snel verkopen</a>
+  <a href="/woning-verkopen-zonder-makelaar">Zonder makelaar</a>
   <a href="#voordelen">Voordelen</a>
   <a href="#faq">FAQ</a>
   <a href="tel:0681158003">06 81 15 80 03</a>
