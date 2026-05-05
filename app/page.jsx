@@ -226,7 +226,8 @@ export default function VerkoopJeHuisDirect() {
             <div className="badge">Verkoopoplossing op maat · Zonder makelaar · Notarieel geregeld</div>
             <h1>Uw woning snel verkopen? Ontvang een helder verkoopvoorstel zonder gedoe.</h1>
             <p className="lead">
-              Vastgoed Direct Nederland helpt woningeigenaren die snel duidelijkheid willen. Wij bieden een directe verkoopoplossing voor woningen in uiteenlopende situaties, zoals achterstallig onderhoud, verhuur, erfenis, scheiding of leegstand.
+              Vastgoed Direct Nederland helpt woningeigenaren die snel duidelijkheid willen.
+              Wij bieden een directe verkoopoplossing voor woningen in uiteenlopende situaties, zoals achterstallig onderhoud, verhuur, erfenis, scheiding of leegstand.
             </p>
 
             <div className="trust-row">
