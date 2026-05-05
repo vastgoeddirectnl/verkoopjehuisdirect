@@ -468,6 +468,25 @@ export default function VerkoopJeHuisDirect() {
         </div>
       </section>
 
+      <section className="section section-white">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow">Populaire onderwerpen</p>
+            <h2>Meer informatie over snel verkopen</h2>
+            <p>Bekijk welke verkoopoplossing het beste past bij uw situatie.</p>
+          </div>
+
+          <div className="scenario-grid">
+            <a className="scenario" href="/huis-snel-verkopen">Huis snel verkopen</a>
+            <a className="scenario" href="/woning-verkopen-zonder-makelaar">Woning verkopen zonder makelaar</a>
+            <a className="scenario" href="/huis-verkopen-binnen-24-uur">Huis verkopen binnen 24 uur</a>
+            <a className="scenario" href="/opknapwoning-verkopen">Opknapwoning verkopen</a>
+            <a className="scenario" href="/huis-verkopen-bij-erfenis">Huis verkopen bij erfenis</a>
+            <a className="scenario" href="/verhuurde-woning-verkopen">Verhuurde woning verkopen</a>
+          </div>
+        </div>
+      </section>
+
       <section id="faq" className="section section-white">
         <div className="container">
           <div className="section-head">
