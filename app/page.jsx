@@ -433,7 +433,7 @@ export default function VerkoopJeHuisDirect() {
           <div className="section-head">
             <p className="eyebrow">Ervaringen</p>
             <h2>Wat verkopers belangrijk vinden</h2>
-            <p>Zodra er echte klantreviews beschikbaar zijn, kunt u deze sectie vervangen door geverifieerde ervaringen.</p>
+            
           </div>
           <div className="steps">
             <div className="experience-card">
