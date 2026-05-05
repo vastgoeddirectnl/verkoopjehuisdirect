@@ -21,6 +21,24 @@ export default function sitemap() {
       priority: 0.9,
     },
     {
+  url: `${baseUrl}/opknapwoning-verkopen`,
+  lastModified: new Date(),
+  changeFrequency: "weekly",
+  priority: 0.82,
+},
+{
+  url: `${baseUrl}/huis-verkopen-bij-erfenis`,
+  lastModified: new Date(),
+  changeFrequency: "weekly",
+  priority: 0.82,
+},
+{
+  url: `${baseUrl}/verhuurde-woning-verkopen`,
+  lastModified: new Date(),
+  changeFrequency: "weekly",
+  priority: 0.82,
+},
+    {
       url: `${baseUrl}/woning-verkopen-zonder-makelaar`,
       lastModified: new Date(),
       changeFrequency: "weekly",
