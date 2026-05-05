@@ -124,7 +124,7 @@ export default function VerkoopJeHuisDirect() {
         .eyebrow { color: #ff6a00; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; margin: 0 0 10px; }
         h2 { font-size: clamp(34px, 4vw, 54px); line-height: 1.05; letter-spacing: -1px; margin: 0; color: #0a2540; }
         .section-head p { color: #647386; font-size: 18px; line-height: 1.7; }
-        .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 22px; }
         .card { background: #fff; border: 1px solid #e6e2db; border-radius: 30px; padding: 30px; box-shadow: 0 18px 44px rgba(10,37,64,.08); }
         .number { width: 56px; height: 56px; border-radius: 18px; background: #ff6a00; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; margin-bottom: 22px; }
         .card h3 { margin: 0 0 12px; font-size: 25px; color: #0a2540; }
@@ -164,32 +164,38 @@ export default function VerkoopJeHuisDirect() {
         .success { text-align: center; padding: 34px 10px; }
         .success-icon { width: 66px; height: 66px; border-radius: 50%; background: #dcfce7; color: #15803d; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 34px; font-weight: 900; }
         @media (max-width: 1040px) {
-          .nav { display: none; }
           .hero-grid, .two-col, .highlight { grid-template-columns: 1fr; }
           .steps, .bar-grid { grid-template-columns: 1fr; }
           .scenario-grid { grid-template-columns: repeat(2, 1fr); }
-          .header-inner { height: auto; padding: 12px 0; }
+          .header-inner { min-height: auto; padding: 12px 0; flex-wrap: wrap; }
           .logo { width: 175px; }
+          .nav { order: 3; width: 100%; display: flex; overflow-x: auto; gap: 16px; padding: 8px 0 4px; white-space: nowrap; scrollbar-width: none; }
+          .nav::-webkit-scrollbar { display: none; }
         }
         @media (max-width: 640px) {
           .container { width: min(100% - 28px, 1180px); }
-          .top-strip { display: none; }
+          .top-strip { display: block; }
+          .top-strip-inner { min-height: auto; padding: 9px 0; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
+          .top-strip-inner::-webkit-scrollbar { display: none; }
+          .top-points { flex-wrap: nowrap; gap: 16px; min-width: max-content; }
           .header-actions .btn-green, .header-actions .btn-blue { display: none; }
+          .header-actions .btn-orange { padding: 12px 16px; font-size: 14px; }
           .hero-grid { padding: 42px 0; }
           .trust-row, .checks, .property-grid, .footer-grid, .scenario-grid { grid-template-columns: 1fr; }
           .form-card { padding: 22px; border-radius: 26px; }
           .form-actions { grid-template-columns: 1fr; }
           .highlight { padding: 28px; border-radius: 28px; }
           .footer-grid { gap: 24px; }
+          .whatsapp-float { right: 14px; bottom: 14px; padding: 14px 18px; }
         }
       `}</style>
 
       <div className="top-strip">
         <div className="container top-strip-inner">
           <div className="top-points">
-            <span>✓ Geen financieringsvoorbehoud</span>
+            <span>✓ Heldere verkoopoplossing</span>
             <span>✓ Geen makelaarskosten</span>
-            <span>✓ Geen notariskosten voor u als verkoper</span>
+            <span>✓ Notariële afwikkeling</span>
           </div>
           <a href="tel:0681158003">Bel: 06 81 15 80 03</a>
         </div>
@@ -219,17 +225,17 @@ export default function VerkoopJeHuisDirect() {
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <div className="badge">Directe verkoop · Zonder makelaar · In overleg snel passeren</div>
-            <h1>Uw huis verkopen zonder gedoe? Ontvang snel een passend bod.</h1>
+            <div className="badge">Verkoopoplossing op maat · Zonder makelaar · Notarieel geregeld</div>
+            <h1>Uw woning snel verkopen? Ontvang een helder verkoopvoorstel zonder gedoe.</h1>
             <p className="lead">
-              Vastgoed Direct Nederland helpt woningeigenaren die rust, snelheid en zekerheid zoeken. Ook bij achterstallig onderhoud, verhuur, erfenis, scheiding of leegstand denken wij mee over een duidelijke verkoopoplossing.
+              Vastgoed Direct Nederland helpt woningeigenaren die snel duidelijkheid willen. Wij bieden een directe verkoopoplossing voor woningen in uiteenlopende situaties, zoals achterstallig onderhoud, verhuur, erfenis, scheiding of leegstand.
             </p>
 
             <div className="trust-row">
               <div className="trust-card">✓ Heldere communicatie</div>
-              <div className="trust-card">✓ Geen financieringsvoorbehoud</div>
               <div className="trust-card">✓ Geen makelaarskosten</div>
-              <div className="trust-card">✓ Notariskosten voor onze rekening</div>
+              <div className="trust-card">✓ Notariële afwikkeling</div>
+              <div className="trust-card">✓ Verkoopoplossing op maat</div>
             </div>
 
             <div className="hero-buttons">
@@ -327,8 +333,8 @@ export default function VerkoopJeHuisDirect() {
 
       <section className="bar">
         <div className="container bar-grid">
-          <div>Directe zekerheid</div>
-          <div>Geen bouwkundige keuring nodig</div>
+          <div>Snel duidelijkheid</div>
+          <div>Geen verkoopstress</div>
           <div>Ook slechte staat</div>
           <div>Vrijblijvend voorstel</div>
         </div>
@@ -339,13 +345,14 @@ export default function VerkoopJeHuisDirect() {
           <div className="section-head">
             <p className="eyebrow">Simpel proces</p>
             <h2>Zo werkt direct verkopen</h2>
-            <p>Geen verkoopstress, geen tientallen kijkers en geen onzekerheid door financieringsvoorbehoud.</p>
+            <p>Geen verkoopstress, geen tientallen kijkers en duidelijke afspraken over de notariële afwikkeling.</p>
           </div>
           <div className="steps">
             {[
               ["1", "Aanvraag", "U vult uw adres en contactgegevens in. De aanvraag is gratis en vertrouwelijk."],
               ["2", "Persoonlijk contact", "Wij bespreken uw woning, uw situatie en wat voor u belangrijk is."],
-              ["3", "Vrijblijvend voorstel", "U ontvangt duidelijkheid over de mogelijkheden. U beslist zelf of u verder wilt."],
+              ["3", "Verkoopvoorstel", "U ontvangt een vrijblijvend voorstel met duidelijke voorwaarden. U beslist zelf of u verder wilt."],
+              ["4", "Notariële afwikkeling", "Bij akkoord wordt de overdracht via de notaris geregeld, met afspraken die vooraf helder zijn."],
             ].map(([num, title, text]) => (
               <div key={title} className="card">
                 <div className="number">{num}</div>
@@ -364,15 +371,15 @@ export default function VerkoopJeHuisDirect() {
         <div className="container highlight">
           <div>
             <p className="eyebrow">Meer zekerheid bij verkoop</p>
-            <h2>Geen makelaarskosten, geen notariskosten en in overleg een snelle aanbetaling.</h2>
+            <h2>Geen makelaarskosten, notariële afwikkeling en in overleg een aanbetaling mogelijk.</h2>
             <p>
-              Bij een passende verkoop nemen wij de standaard notariskosten voor onze rekening. In sommige situaties is een directe aanbetaling of voorschot op de koopsom bespreekbaar, zodat u sneller financiële ruimte heeft.
+              Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening. In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd.
             </p>
           </div>
           <div className="highlight-list">
             <div className="highlight-item">✓ Geen courtage of makelaarskosten</div>
-            <div className="highlight-item">✓ Standaard notariskosten voor onze rekening</div>
-            <div className="highlight-item">✓ Directe aanbetaling mogelijk in overleg</div>
+            <div className="highlight-item">✓ Standaard notariskosten levering voor onze rekening</div>
+            <div className="highlight-item">✓ Aanbetaling mogelijk als dit notarieel past</div>
             <div className="highlight-item">✓ Flexibele overdrachtsdatum bespreekbaar</div>
           </div>
         </div>
@@ -407,13 +414,13 @@ export default function VerkoopJeHuisDirect() {
           <div>
             <p className="eyebrow">Waarom direct verkopen?</p>
             <h2>Rust, snelheid en duidelijke afspraken.</h2>
-            <p className="lead">Een traditioneel verkooptraject past niet bij iedere situatie. Soms wilt u geen open huis, geen lange onderhandelingen en geen risico dat een koper afhaakt door financiering.</p>
+            <p className="lead">Een traditioneel verkooptraject past niet bij iedere situatie. Soms wilt u geen open huis, geen lange onderhandelingen en vooral snel weten waar u aan toe bent.</p>
             <div className="checks">
               <div className="check">✓ Geen verkoopstyling nodig</div>
               <div className="check">✓ Geen open huis</div>
               <div className="check">✓ Ook verhuurde woningen</div>
               <div className="check">✓ Direct contact</div>
-              <div className="check">✓ Geen financieringsvoorbehoud</div>
+              <div className="check">✓ Duidelijke voorwaarden vooraf</div>
               <div className="check">✓ Flexibele overdracht</div>
             </div>
           </div>
@@ -465,11 +472,11 @@ export default function VerkoopJeHuisDirect() {
             </div>
             <div className="faq-item">
               <h3>Betaal ik notariskosten?</h3>
-              <p>Bij een passende verkoop nemen wij de standaard notariskosten voor onze rekening. Eventuele afwijkende afspraken bespreken we vooraf helder met u.</p>
+              <p>Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening. Eventuele afwijkende kosten of bijzondere afspraken bespreken we vooraf helder met u.</p>
             </div>
             <div className="faq-item">
-              <h3>Is een directe aanbetaling mogelijk?</h3>
-              <p>In sommige situaties is een directe aanbetaling of voorschot bespreekbaar. Dit hangt af van de woning, afspraken en notariële mogelijkheden.</p>
+              <h3>Is een aanbetaling mogelijk?</h3>
+              <p>In sommige situaties is een aanbetaling of voorschot bespreekbaar. Dit hangt af van de woning, de gemaakte afspraken en wat juridisch en notarieel goed kan worden vastgelegd.</p>
             </div>
             <div className="faq-item">
               <h3>Kopen jullie ook huizen in slechte staat?</h3>
@@ -490,7 +497,7 @@ export default function VerkoopJeHuisDirect() {
       <section className="cta">
         <div className="container">
           <h2>Wilt u weten wat er mogelijk is?</h2>
-          <p>Vraag gratis een bod aan, bel direct of stuur meteen een WhatsApp bericht. U ontvangt duidelijkheid zonder verplichtingen.</p>
+          <p>Vraag gratis een verkoopvoorstel aan, bel direct of stuur meteen een WhatsApp bericht. U ontvangt duidelijkheid zonder verplichtingen.</p>
           <div className="cta-buttons">
             <a href="#aanvraag" className="btn btn-orange">Gratis bod aanvragen</a>
             <a href="tel:0681158003" className="btn btn-light">Bel direct</a>
