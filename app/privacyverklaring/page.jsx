@@ -126,7 +126,7 @@ export default function Privacyverklaring() {
         >
           <p><strong>Vastgoed Direct Nederland</strong></p>
           <p>E-mail: info@verkoopjehuisdirect.nl</p>
-          <p>Telefoon: 06 81 15 80 03</p>
+          <p>Telefoon: 06 12 23 80 51</p>
           <p>Website: www.verkoopjehuisdirect.nl</p>
         </div>
 
