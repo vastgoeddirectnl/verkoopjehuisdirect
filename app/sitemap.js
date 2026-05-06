@@ -14,6 +14,12 @@ export default function sitemap() {
   changeFrequency: "weekly",
   priority: 0.85,
 },
+   {
+  url: `${baseUrl}/huis-direct-verkopen`,
+  lastModified: new Date(),
+  changeFrequency: "weekly",
+  priority: 0.86,
+},
     {
       url: `${baseUrl}/huis-snel-verkopen`,
       lastModified: new Date(),
