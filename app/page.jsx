@@ -9,7 +9,7 @@ const supabase = createClient(
 );
 
 const whatsappLink =
-  "https://wa.me/31681158003?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F";
+  "https://wa.me/31612238051?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F";
 
 export default function VerkoopJeHuisDirect() {
   const [step, setStep] = useState(1);
@@ -214,7 +214,7 @@ export default function VerkoopJeHuisDirect() {
           </nav>
           <div className="header-actions">
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
-            <a href="tel:0681158003" className="btn btn-blue">Bel direct</a>
+            <a href="tel:0612238051" className="btn btn-blue">Bel direct</a>
             <a href="#aanvraag" className="btn btn-orange">Gratis bod</a>
           </div>
         </div>
@@ -532,7 +532,7 @@ export default function VerkoopJeHuisDirect() {
           <p>Vraag gratis een verkoopvoorstel aan, bel direct of stuur meteen een WhatsApp bericht. U ontvangt duidelijkheid zonder verplichtingen.</p>
           <div className="cta-buttons">
             <a href="#aanvraag" className="btn btn-orange">Gratis bod aanvragen</a>
-            <a href="tel:0681158003" className="btn btn-light">Bel direct</a>
+            <a href="tel:0612238051" className="btn btn-light">Bel direct</a>
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">Direct WhatsApp gesprek</a>
           </div>
         </div>
@@ -547,7 +547,7 @@ export default function VerkoopJeHuisDirect() {
           <div>
             <h3>Contact</h3>
             <p>info@verkoopjehuisdirect.nl</p>
-            <p>06 81 15 80 03</p>
+            <p>06 12 23 80 51</p>
           </div>
           <div>
             <h3>Website</h3>
