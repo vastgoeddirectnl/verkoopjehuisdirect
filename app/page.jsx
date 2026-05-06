@@ -32,25 +32,29 @@ export default function VerkoopJeHuisDirect() {
   const submitLead = async (e) => {
     e.preventDefault();
 
-    const lead = {
-      naam: form.naam,
-      email: form.email,
-      telefoon: form.telefoon,
-      postcode: form.postcode,
-      huisnummer: form.huisnummer,
-      woningtype: form.woningtype,
-      staat: form.staat,
-      reden: form.reden,
-    };
+const lead = {
+  naam: form.naam,
+  email: form.email,
+  telefoon: form.telefoon,
+  postcode: form.postcode,
+  huisnummer: form.huisnummer,
+  woningtype: form.woningtype,
+  staat: form.staat,
+  reden: form.reden,
+  pagina: window.location.pathname,
+  bron: document.referrer || "direct",
+};
 
-    const { error } = await supabase.from("leads").insert([
-      {
-        naam: lead.naam,
-        telefoon: lead.telefoon,
-        postcode: lead.postcode,
-        huisnummer: lead.huisnummer,
-      },
-    ]);
+const { error } = await supabase.from("leads").insert([
+  {
+    naam: lead.naam,
+    telefoon: lead.telefoon,
+    postcode: lead.postcode,
+    huisnummer: lead.huisnummer,
+    pagina: lead.pagina,
+    bron: lead.bron,
+  },
+]);
 
     if (error) {
       alert("Er ging iets mis. Probeer opnieuw.");
