@@ -56,7 +56,7 @@ export async function POST(req) {
           <p>Wij nemen zo snel mogelijk contact met u op voor een vrijblijvend verkoopvoorstel.</p>
           <p>Met vriendelijke groet,</p>
           <p><strong>Vastgoed Direct Nederland</strong></p>
-          <p>info@verkoopjehuisdirect.nl<br />06 81 15 80 03</p>
+          <p>info@verkoopjehuisdirect.nl<br />06 12 23 80 51</p>
         `,
       });
     }
