@@ -33,6 +33,12 @@ export default function sitemap() {
   priority: 0.82,
 },
 {
+  url: `${baseUrl}/huis-verkopen-groningen`,
+  lastModified: new Date(),
+  changeFrequency: "weekly",
+  priority: 0.82,
+},
+    {
   url: `${baseUrl}/huis-verkopen-bij-erfenis`,
   lastModified: new Date(),
   changeFrequency: "weekly",
