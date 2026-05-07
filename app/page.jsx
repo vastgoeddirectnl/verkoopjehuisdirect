@@ -11,6 +11,99 @@ const supabase = createClient(
 const whatsappLink =
   "https://wa.me/31612238051?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F";
 
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: "Vastgoed Direct Nederland",
+  url: "https://www.verkoopjehuisdirect.nl",
+  logo: "https://www.verkoopjehuisdirect.nl/logo.png",
+  image: "https://www.verkoopjehuisdirect.nl/logo.png",
+  telephone: "+31612238051",
+  email: "info@verkoopjehuisdirect.nl",
+  description:
+    "Vastgoed Direct Nederland helpt woningeigenaren die hun woning snel, duidelijk en zonder verkoopstress willen verkopen. Wij bieden een directe verkoopoplossing voor woningen in uiteenlopende situaties, zoals achterstallig onderhoud, leegstand, verhuur, erfenis, scheiding of financiële druk.",
+  areaServed: ["Groningen", "Drenthe", "Friesland", "Overijssel", "Nederland"],
+  priceRange: "Vrijblijvend verkoopvoorstel",
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+31612238051",
+    contactType: "customer service",
+    areaServed: "NL",
+    availableLanguage: ["Dutch"],
+  },
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Kan ik mijn woning verkopen zonder makelaar?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Moet mijn woning verkoopklaar zijn?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Nee, ook woningen met achterstallig onderhoud, schade, leegstand of renovatiebehoefte kunnen worden aangemeld.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Betaal ik makelaarskosten?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Nee, u betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Betaal ik notariskosten?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening. Eventuele afwijkende kosten of bijzondere afspraken bespreken we vooraf duidelijk.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is een aanbetaling mogelijk?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Kan ik verkopen zonder bezichtigingen?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Ja, in veel situaties is dat mogelijk. Wij bespreken de verkoopmogelijkheden zonder traditioneel bezichtigingstraject of open huis.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Moet ik mijn woning eerst opruimen of leegmaken?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Niet altijd. Dit hangt af van de situatie en de gewenste oplevering. Ook oplevering in huidige staat of in overleg kan bespreekbaar zijn.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Kan ik contact opnemen als ik nog twijfel?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Ja, een aanvraag is vrijblijvend. U kunt eerst rustig bespreken wat mogelijk is voordat u ergens een beslissing over neemt.",
+      },
+    },
+  ],
+};
+
 export default function VerkoopJeHuisDirect() {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
@@ -32,29 +125,25 @@ export default function VerkoopJeHuisDirect() {
   const submitLead = async (e) => {
     e.preventDefault();
 
-const lead = {
-  naam: form.naam,
-  email: form.email,
-  telefoon: form.telefoon,
-  postcode: form.postcode,
-  huisnummer: form.huisnummer,
-  woningtype: form.woningtype,
-  staat: form.staat,
-  reden: form.reden,
-  pagina: window.location.pathname,
-  bron: document.referrer || "direct",
-};
+    const lead = {
+      naam: form.naam,
+      email: form.email,
+      telefoon: form.telefoon,
+      postcode: form.postcode,
+      huisnummer: form.huisnummer,
+      woningtype: form.woningtype,
+      staat: form.staat,
+      reden: form.reden,
+    };
 
-const { error } = await supabase.from("leads").insert([
-  {
-    naam: lead.naam,
-    telefoon: lead.telefoon,
-    postcode: lead.postcode,
-    huisnummer: lead.huisnummer,
-    pagina: lead.pagina,
-    bron: lead.bron,
-  },
-]);
+    const { error } = await supabase.from("leads").insert([
+      {
+        naam: lead.naam,
+        telefoon: lead.telefoon,
+        postcode: lead.postcode,
+        huisnummer: lead.huisnummer,
+      },
+    ]);
 
     if (error) {
       alert("Er ging iets mis. Probeer opnieuw.");
@@ -77,6 +166,14 @@ const { error } = await supabase.from("leads").insert([
 
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <style jsx global>{`
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
@@ -454,7 +551,6 @@ const { error } = await supabase.from("leads").insert([
           <div className="section-head">
             <p className="eyebrow">Ervaringen</p>
             <h2>Wat verkopers belangrijk vinden</h2>
-            
           </div>
           <div className="steps">
             <div className="experience-card">
@@ -549,6 +645,22 @@ const { error } = await supabase.from("leads").insert([
             <div className="faq-item">
               <h3>Kan ik zelf de overdrachtsdatum bepalen?</h3>
               <p>De overdrachtsdatum stemmen we samen af. Een snelle overdracht is mogelijk, maar ook een latere overdracht kan bespreekbaar zijn.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Kan ik verkopen zonder bezichtigingen?</h3>
+              <p>Ja, in veel situaties is dat mogelijk. Wij bespreken de verkoopmogelijkheden zonder traditioneel bezichtigingstraject of open huis.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Moet ik mijn woning eerst opruimen of leegmaken?</h3>
+              <p>Niet altijd. Dit hangt af van de situatie en de gewenste oplevering. Ook oplevering in huidige staat of in overleg kan bespreekbaar zijn.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Kan ik contact opnemen als ik nog twijfel?</h3>
+              <p>Ja, een aanvraag is vrijblijvend. U kunt eerst rustig bespreken wat mogelijk is voordat u ergens een beslissing over neemt.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Voor welke regio’s kan ik een aanvraag doen?</h3>
+              <p>U kunt een aanvraag doen voor woningen in Nederland. Wij richten ons in eerste instantie vooral op Groningen, Drenthe, Friesland en Overijssel.</p>
             </div>
           </div>
         </div>
