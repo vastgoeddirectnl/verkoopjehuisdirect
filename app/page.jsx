@@ -325,7 +325,11 @@ export default function VerkoopJeHuisDirect() {
         <div className="container hero-grid">
           <div>
             <div className="badge">Verkoopoplossing op maat · Zonder makelaar · Notarieel geregeld</div>
-            <h1>Uw woning snel verkopen? Ontvang een helder verkoopvoorstel zonder gedoe.</h1>
+            <h1>
+  Uw woning snel verkopen?
+  <br />
+  Ontvang een helder verkoopvoorstel zonder gedoe.
+</h1>
             <p className="lead">
               Vastgoed Direct Nederland helpt woningeigenaren die snel duidelijkheid willen. Wij bieden een directe verkoopoplossing voor woningen in uiteenlopende situaties, zoals achterstallig onderhoud, verhuur, erfenis, scheiding of leegstand.
             </p>
@@ -604,14 +608,15 @@ export default function VerkoopJeHuisDirect() {
             <p>Bekijk welke verkoopoplossing het beste past bij uw situatie.</p>
           </div>
 
-          <div className="scenario-grid">
-            <a className="scenario" href="/huis-snel-verkopen">Huis snel verkopen</a>
-            <a className="scenario" href="/woning-verkopen-zonder-makelaar">Woning verkopen zonder makelaar</a>
-            <a className="scenario" href="/huis-verkopen-binnen-24-uur">Huis verkopen binnen 24 uur</a>
-            <a className="scenario" href="/opknapwoning-verkopen">Opknapwoning verkopen</a>
-            <a className="scenario" href="/huis-verkopen-bij-erfenis">Huis verkopen bij erfenis</a>
-            <a className="scenario" href="/verhuurde-woning-verkopen">Verhuurde woning verkopen</a>
-          </div>
+         <div className="scenario-grid">
+  <a className="scenario" href="/huis-direct-verkopen">Huis direct verkopen</a>
+  <a className="scenario" href="/huis-snel-verkopen">Huis snel verkopen</a>
+  <a className="scenario" href="/woning-verkopen-zonder-makelaar">Woning verkopen zonder makelaar</a>
+  <a className="scenario" href="/huis-verkopen-binnen-24-uur">Huis verkopen binnen 24 uur</a>
+  <a className="scenario" href="/opknapwoning-verkopen">Opknapwoning verkopen</a>
+  <a className="scenario" href="/huis-verkopen-bij-erfenis">Huis verkopen bij erfenis</a>
+  <a className="scenario" href="/verhuurde-woning-verkopen">Verhuurde woning verkopen</a>
+</div>
         </div>
       </section>
 
