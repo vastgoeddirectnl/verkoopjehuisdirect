@@ -144,14 +144,16 @@ const lead = {
     "direct",
 };
 
-    const { error } = await supabase.from("leads").insert([
-      {
-        naam: lead.naam,
-        telefoon: lead.telefoon,
-        postcode: lead.postcode,
-        huisnummer: lead.huisnummer,
-      },
-    ]);
+const { error } = await supabase.from("leads").insert([
+  {
+    naam: lead.naam,
+    telefoon: lead.telefoon,
+    postcode: lead.postcode,
+    huisnummer: lead.huisnummer,
+    pagina: lead.pagina,
+    bron: lead.bron,
+  },
+]);
 
     if (error) {
       alert("Er ging iets mis. Probeer opnieuw.");
