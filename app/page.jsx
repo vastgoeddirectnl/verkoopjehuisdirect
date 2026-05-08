@@ -125,16 +125,24 @@ export default function VerkoopJeHuisDirect() {
   const submitLead = async (e) => {
     e.preventDefault();
 
-    const lead = {
-      naam: form.naam,
-      email: form.email,
-      telefoon: form.telefoon,
-      postcode: form.postcode,
-      huisnummer: form.huisnummer,
-      woningtype: form.woningtype,
-      staat: form.staat,
-      reden: form.reden,
-    };
+  const params = new URLSearchParams(window.location.search);
+
+const lead = {
+  naam: form.naam,
+  email: form.email,
+  telefoon: form.telefoon,
+  postcode: form.postcode,
+  huisnummer: form.huisnummer,
+  woningtype: form.woningtype,
+  staat: form.staat,
+  reden: form.reden,
+  pagina: window.location.pathname,
+  bron:
+    params.get("utm_source") ||
+    params.get("source") ||
+    document.referrer ||
+    "direct",
+};
 
     const { error } = await supabase.from("leads").insert([
       {
