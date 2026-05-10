@@ -85,29 +85,11 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "Kan ik mijn huis direct verkopen als het verhuurd is?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text:
-          "Een verhuurde woning verkopen is in veel situaties mogelijk, maar vraagt om duidelijke afspraken over de huursituatie. Wij bespreken graag wat mogelijk is.",
-      },
-    },
-    {
-      "@type": "Question",
       name: "Is direct verkopen geschikt bij een opknapwoning?",
       acceptedAnswer: {
         "@type": "Answer",
         text:
           "Ja, ook woningen met achterstallig onderhoud, schade of renovatiebehoefte kunnen worden aangemeld.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Hoe snel krijg ik duidelijkheid?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text:
-          "Na uw aanvraag nemen wij contact met u op om uw situatie te bespreken. Daarna ontvangt u duidelijkheid over de verkoopmogelijkheden en eventuele vervolgstappen.",
       },
     },
   ],
@@ -454,19 +436,9 @@ export default function HuisDirectVerkopen() {
           In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd.
         </p>
 
-        <h3 style={styles.h3}>Kan ik mijn huis direct verkopen als het verhuurd is?</h3>
-        <p style={styles.p}>
-          Een verhuurde woning verkopen is in veel situaties mogelijk, maar vraagt om duidelijke afspraken over de huursituatie. Wij bespreken graag wat mogelijk is.
-        </p>
-
         <h3 style={styles.h3}>Is direct verkopen geschikt bij een opknapwoning?</h3>
         <p style={styles.p}>
           Ja, ook woningen met achterstallig onderhoud, schade of renovatiebehoefte kunnen worden aangemeld.
-        </p>
-
-        <h3 style={styles.h3}>Hoe snel krijg ik duidelijkheid?</h3>
-        <p style={styles.p}>
-          Na uw aanvraag nemen wij contact met u op om uw situatie te bespreken. Daarna ontvangt u duidelijkheid over de verkoopmogelijkheden en eventuele vervolgstappen.
         </p>
 
         <h2 style={styles.h2}>Meer informatie</h2>
@@ -494,3 +466,6 @@ export default function HuisDirectVerkopen() {
     </main>
   );
 }
+```
+
+
