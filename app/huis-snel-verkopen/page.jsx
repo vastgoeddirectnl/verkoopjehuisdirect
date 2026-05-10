@@ -1,7 +1,7 @@
 export const metadata = {
-  title: "Huis snel verkopen? Vrijblijvend verkoopvoorstel | Vastgoed Direct Nederland",
+  title: "Huis snel verkopen? Vrijblijvend voorstel zonder makelaar"
   description:
-    "Wilt u uw huis snel verkopen zonder makelaar, bezichtigingen of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan bij Vastgoed Direct Nederland.",
+    "Wilt u uw huis snel verkopen zonder makelaar, bezichtigingen of verkoopstress? Ontvang snel duidelijkheid met een vrijblijvend verkoopvoorstel.",
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/huis-snel-verkopen",
   },
@@ -290,6 +290,16 @@ export default function HuisSnelVerkopen() {
           Soms wilt u juist snel weten waar u aan toe bent. Bijvoorbeeld omdat de woning leegstaat, onderhoud nodig heeft, onderdeel is van een erfenis, verhuurd is of omdat u persoonlijke of financiële rust zoekt.
         </p>
 
+        <h2 style={styles.h2}>Snel huis verkopen zonder makelaar</h2>
+        <p style={styles.p}>
+          Wanneer u uw huis snel wilt verkopen, kan een makelaarstraject te lang of te onzeker voelen. Bij Vastgoed Direct Nederland kunt u rechtstreeks een aanvraag doen. U hoeft geen open huis te organiseren, geen verkoopstyling te regelen en geen courtage te betalen. U ontvangt duidelijkheid over een mogelijke verkoopoplossing die past bij uw situatie.
+        </p>
+
+        <h2 style={styles.h2}>Huis verkopen binnen 1 week: wat is realistisch?</h2>
+        <p style={styles.p}>
+          Soms zoeken woningeigenaren naar een verkoop binnen 1 week. In de praktijk hangt de snelheid altijd af van de woning, eigendomssituatie, documenten, afspraken en notariële planning. Wel kunnen wij vaak snel duidelijkheid geven over de mogelijkheden en de stappen die nodig zijn voor een passende verkoop.
+        </p>
+
         <div style={styles.grid}>
           <div style={styles.item}>✓ Snel duidelijkheid</div>
           <div style={styles.item}>✓ Geen makelaarskosten</div>
@@ -315,7 +325,7 @@ export default function HuisSnelVerkopen() {
           <li>U wilt een flexibele overdrachtsdatum bespreken</li>
         </ul>
 
-        <h2 style={styles.h2}>Snel verkopen zonder woning verkoopklaar te maken</h2>
+        <h2 style={styles.h2}>Snel woning verkopen in huidige staat</h2>
         <p style={styles.p}>
           Bij een reguliere verkoop wordt vaak verwacht dat een woning netjes, opgeruimd en verkoopklaar is. Dat kan tijd en geld kosten. Bij een directe verkoopoplossing hoeft dat niet altijd. Ook woningen in huidige staat, met schade of renovatiebehoefte kunnen worden aangemeld.
         </p>
@@ -408,6 +418,16 @@ export default function HuisSnelVerkopen() {
         <h3 style={styles.h3}>Hoe snel kan de overdracht plaatsvinden?</h3>
         <p style={styles.p}>
           Een snelle overdracht is in overleg mogelijk. De exacte planning hangt af van de woning, gemaakte afspraken en notariële mogelijkheden.
+        </p>
+
+        <h3 style={styles.h3}>Kan ik mijn huis verkopen binnen 1 week?</h3>
+        <p style={styles.p}>
+          In sommige situaties kan snel schakelen mogelijk zijn, maar een definitieve overdracht hangt altijd af van de afspraken, documenten en notariële planning. Wij geven u eerst duidelijkheid over wat realistisch is.
+        </p>
+
+        <h3 style={styles.h3}>Kan ik snel verkopen bij leegstand, erfenis of onderhoud?</h3>
+        <p style={styles.p}>
+          Ja, juist in situaties zoals leegstand, erfenis, achterstallig onderhoud of verhuur kan een directe verkoopoplossing interessant zijn.
         </p>
 
         <h3 style={styles.h3}>Is de aanvraag vrijblijvend?</h3>
