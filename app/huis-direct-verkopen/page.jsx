@@ -1,12 +1,12 @@
 export const metadata = {
-  title: "Huis direct verkopen? Vrijblijvend verkoopvoorstel | Vastgoed Direct Nederland",
+  title: "Huis direct verkopen? Vrijblijvend voorstel zonder makelaar",
   description:
-    "Wilt u uw huis direct verkopen zonder makelaar, bezichtigingen of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan bij Vastgoed Direct Nederland.",
+    "Wilt u uw huis direct verkopen zonder makelaar, bezichtigingen of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/huis-direct-verkopen",
   },
   openGraph: {
-    title: "Huis direct verkopen? Vrijblijvend verkoopvoorstel",
+    title: "Huis direct verkopen? Vrijblijvend voorstel zonder makelaar",
     description:
       "Ontvang snel duidelijkheid over een directe verkoopoplossing voor uw woning. Zonder makelaar, zonder open huis en met heldere afspraken.",
     url: "https://www.verkoopjehuisdirect.nl/huis-direct-verkopen",
@@ -22,11 +22,29 @@ const faqSchema = {
   mainEntity: [
     {
       "@type": "Question",
+      name: "Wat betekent direct huis verkopen?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text:
+          "Direct huis verkopen betekent dat u zonder traditioneel makelaarstraject een vrijblijvend verkoopvoorstel aanvraagt. U krijgt duidelijkheid over de mogelijkheden, voorwaarden en vervolgstappen.",
+      },
+    },
+    {
+      "@type": "Question",
       name: "Kan ik mijn huis direct verkopen zonder makelaar?",
       acceptedAnswer: {
         "@type": "Answer",
         text:
           "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Kan ik direct mijn woning verkopen zonder bezichtigingen?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text:
+          "In veel situaties is een traditioneel bezichtigingstraject of open huis niet nodig. Wij bespreken de woning en uw situatie rechtstreeks met u.",
       },
     },
     {
@@ -72,6 +90,15 @@ const faqSchema = {
         "@type": "Answer",
         text:
           "Een verhuurde woning verkopen is in veel situaties mogelijk, maar vraagt om duidelijke afspraken over de huursituatie. Wij bespreken graag wat mogelijk is.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is direct verkopen geschikt bij een opknapwoning?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text:
+          "Ja, ook woningen met achterstallig onderhoud, schade of renovatiebehoefte kunnen worden aangemeld.",
       },
     },
     {
@@ -282,12 +309,12 @@ export default function HuisDirectVerkopen() {
           </p>
         </div>
 
-        <h2 style={styles.h2}>Wanneer is uw huis direct verkopen interessant?</h2>
+        <h2 style={styles.h2}>Direct huis verkopen: wanneer is dat interessant?</h2>
         <p style={styles.p}>
-          Een woning verkopen via de traditionele route kan veel tijd kosten. Denk aan verkoopfoto&apos;s, bezichtigingen, onderhandelingen, makelaarskosten en onzekerheid over de uiteindelijke koper. Niet iedere situatie leent zich daarvoor.
+          Direct huis verkopen is vooral interessant wanneer u snel duidelijkheid wilt, geen makelaar wilt inschakelen en geen langdurig traject met bezichtigingen, onderhandelingen en verkoopvoorbereiding wilt doorlopen.
         </p>
         <p style={styles.p}>
-          Direct verkopen kan interessant zijn wanneer u snel duidelijkheid wilt, geen verkoopstress wilt ervaren of geen extra kosten wilt maken voor verkoopstyling, herstelwerk of een langdurig verkooptraject.
+          Dit kan bijvoorbeeld spelen bij leegstand, een erfeniswoning, scheiding, financiële druk, verhuur of een woning met achterstallig onderhoud. Ook als u nog twijfelt, kunt u vrijblijvend bespreken wat mogelijk is.
         </p>
 
         <div style={styles.grid}>
@@ -299,9 +326,17 @@ export default function HuisDirectVerkopen() {
           <div style={styles.item}>✓ Vrijblijvend voorstel</div>
         </div>
 
-        <h2 style={styles.h2}>Voor welke situaties is direct verkopen geschikt?</h2>
+        <h2 style={styles.h2}>Direct woning verkopen zonder traditioneel verkooptraject</h2>
         <p style={styles.p}>
-          Direct verkopen past vooral bij situaties waarin snelheid, rust en duidelijke afspraken belangrijk zijn. Bijvoorbeeld bij een erfeniswoning, scheiding, financiële druk, leegstand, verhuur of een woning met achterstallig onderhoud.
+          Bij een traditionele verkoop wordt een woning vaak eerst verkoopklaar gemaakt. Daarna volgen foto&apos;s, bezichtigingen, onderhandelingen en wachttijd. Als u vooral rust en duidelijkheid wilt, kan een directe verkoopoplossing beter passen.
+        </p>
+        <p style={styles.p}>
+          Bij Vastgoed Direct Nederland vraagt u rechtstreeks een verkoopvoorstel aan. U hoeft geen open huis te organiseren en u betaalt geen makelaarscourtage. De afspraken worden bij akkoord helder vastgelegd en via de notaris afgehandeld.
+        </p>
+
+        <h2 style={styles.h2}>Direct uw huis verkopen met duidelijke voorwaarden</h2>
+        <p style={styles.p}>
+          Wij kijken niet alleen naar het bodbedrag, maar ook naar de gewenste snelheid, oplevering, notariële afwikkeling en eventuele bijzondere afspraken. Zo weet u vooraf waar u aan toe bent.
         </p>
 
         <ul style={styles.list}>
@@ -384,9 +419,19 @@ export default function HuisDirectVerkopen() {
 
         <h2 style={styles.h2}>Veelgestelde vragen over huis direct verkopen</h2>
 
+        <h3 style={styles.h3}>Wat betekent direct huis verkopen?</h3>
+        <p style={styles.p}>
+          Direct huis verkopen betekent dat u zonder traditioneel makelaarstraject een verkoopvoorstel aanvraagt. U krijgt duidelijkheid over de mogelijkheden, voorwaarden en vervolgstappen.
+        </p>
+
         <h3 style={styles.h3}>Kan ik mijn huis direct verkopen zonder makelaar?</h3>
         <p style={styles.p}>
           Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar.
+        </p>
+
+        <h3 style={styles.h3}>Kan ik direct mijn woning verkopen zonder bezichtigingen?</h3>
+        <p style={styles.p}>
+          In veel situaties is een traditioneel bezichtigingstraject niet nodig. Wij bespreken de woning en uw situatie rechtstreeks met u.
         </p>
 
         <h3 style={styles.h3}>Moet mijn woning verkoopklaar zijn?</h3>
@@ -412,6 +457,11 @@ export default function HuisDirectVerkopen() {
         <h3 style={styles.h3}>Kan ik mijn huis direct verkopen als het verhuurd is?</h3>
         <p style={styles.p}>
           Een verhuurde woning verkopen is in veel situaties mogelijk, maar vraagt om duidelijke afspraken over de huursituatie. Wij bespreken graag wat mogelijk is.
+        </p>
+
+        <h3 style={styles.h3}>Is direct verkopen geschikt bij een opknapwoning?</h3>
+        <p style={styles.p}>
+          Ja, ook woningen met achterstallig onderhoud, schade of renovatiebehoefte kunnen worden aangemeld.
         </p>
 
         <h3 style={styles.h3}>Hoe snel krijg ik duidelijkheid?</h3>
