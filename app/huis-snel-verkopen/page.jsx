@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Huis snel verkopen? Vrijblijvend voorstel zonder makelaar"
+  title: "Huis snel verkopen? Vrijblijvend voorstel zonder makelaar",
   description:
     "Wilt u uw huis snel verkopen zonder makelaar, bezichtigingen of verkoopstress? Ontvang snel duidelijkheid met een vrijblijvend verkoopvoorstel.",
   alternates: {
