@@ -466,6 +466,3 @@ export default function HuisDirectVerkopen() {
     </main>
   );
 }
-```
-
-
