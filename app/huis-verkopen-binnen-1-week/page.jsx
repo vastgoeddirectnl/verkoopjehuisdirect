@@ -1,4 +1,35 @@
 import SeoLandingPage from "../components/SeoLandingPage";
+
+export const metadata = {
+  title: "Huis verkopen binnen 1 week? Vrijblijvend voorstel",
+  description:
+    "Wilt u uw huis verkopen binnen 1 week of snel duidelijkheid? Vraag vrijblijvend een verkoopvoorstel aan zonder makelaar of verkoopstress.",
+  alternates: {
+    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-binnen-1-week",
+  },
+  openGraph: {
+    title: "Huis verkopen binnen 1 week? Vrijblijvend voorstel",
+    description:
+      "Snel duidelijkheid over de verkoopmogelijkheden van uw woning. Zonder makelaar, zonder open huis en met heldere afspraken.",
+    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-binnen-1-week",
+    siteName: "Vastgoed Direct Nederland",
+    locale: "nl_NL",
+    type: "website",
+  },
+};
+
+const page = {
+  slug: "/huis-verkopen-binnen-1-week",
+  breadcrumb: "Huis verkopen binnen 1 week",
+  eyebrow: "Huis verkopen binnen 1 week",
+  h1: "Huis verkopen binnen 1 week? Snel duidelijkheid zonder makelaar",
+  lead:
+    "Wilt u uw huis verkopen binnen 1 week of zo snel mogelijk duidelijkheid krijgen? Vastgoed Direct Nederland helpt woningeigenaren met een directe verkoopoplossing, heldere voorwaarden en notariële afwikkeling.",
+  shortAnswer:
+    "Een woning verkopen binnen 1 week is niet altijd gegarandeerd, maar snel duidelijkheid is vaak wel mogelijk. Wij bespreken uw situatie, controleren de belangrijkste gegevens en geven aan wat realistisch is voor uw woning.",
+  benefits: [
+    "Snel duidelijkheid",
+    "Geen makelaarskosten",
     "Geen open huis nodig",
     "Vrijblijvend voorstel",
     "Opleverdatum in overleg",
