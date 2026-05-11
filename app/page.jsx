@@ -93,14 +93,6 @@ const faqSchema = {
         text: "Niet altijd. Dit hangt af van de situatie en de gewenste oplevering. Ook oplevering in huidige staat of in overleg kan bespreekbaar zijn.",
       },
     },
-    {
-      "@type": "Question",
-      name: "Kan ik contact opnemen als ik nog twijfel?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Ja, een aanvraag is vrijblijvend. U kunt eerst rustig bespreken wat mogelijk is voordat u ergens een beslissing over neemt.",
-      },
-    },
   ],
 };
 
@@ -125,35 +117,35 @@ export default function VerkoopJeHuisDirect() {
   const submitLead = async (e) => {
     e.preventDefault();
 
-  const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
 
-const lead = {
-  naam: form.naam,
-  email: form.email,
-  telefoon: form.telefoon,
-  postcode: form.postcode,
-  huisnummer: form.huisnummer,
-  woningtype: form.woningtype,
-  staat: form.staat,
-  reden: form.reden,
-  pagina: window.location.pathname,
-  bron:
-    params.get("utm_source") ||
-    params.get("source") ||
-    document.referrer ||
-    "direct",
-};
+    const lead = {
+      naam: form.naam,
+      email: form.email,
+      telefoon: form.telefoon,
+      postcode: form.postcode,
+      huisnummer: form.huisnummer,
+      woningtype: form.woningtype,
+      staat: form.staat,
+      reden: form.reden,
+      pagina: window.location.pathname,
+      bron:
+        params.get("utm_source") ||
+        params.get("source") ||
+        document.referrer ||
+        "direct",
+    };
 
-const { error } = await supabase.from("leads").insert([
-  {
-    naam: lead.naam,
-    telefoon: lead.telefoon,
-    postcode: lead.postcode,
-    huisnummer: lead.huisnummer,
-    pagina: lead.pagina,
-    bron: lead.bron,
-  },
-]);
+    const { error } = await supabase.from("leads").insert([
+      {
+        naam: lead.naam,
+        telefoon: lead.telefoon,
+        postcode: lead.postcode,
+        huisnummer: lead.huisnummer,
+        pagina: lead.pagina,
+        bron: lead.bron,
+      },
+    ]);
 
     if (error) {
       alert("Er ging iets mis. Probeer opnieuw.");
@@ -184,6 +176,7 @@ const { error } = await supabase.from("leads").insert([
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+
       <style jsx global>{`
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
@@ -191,8 +184,8 @@ const { error } = await supabase.from("leads").insert([
         a { color: inherit; text-decoration: none; }
         .container { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
         .top-strip { background: #0a2540; color: #fff; font-size: 14px; font-weight: 800; }
-        .top-strip-inner { min-height: 42px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-        .top-points { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .top-strip-inner { min-height: 42px; display: flex; align-items: center; justify-content: center; gap: 16px; }
+        .top-points { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
         .header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96); border-bottom: 1px solid #e6e2db; backdrop-filter: blur(10px); }
         .header-inner { min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
         .logo { display: block; width: 210px; max-width: 100%; height: auto; object-fit: contain; }
@@ -255,6 +248,7 @@ const { error } = await supabase.from("leads").insert([
         .highlight-item { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.14); border-radius: 18px; padding: 16px; font-weight: 900; }
         .scenario-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
         .scenario { background: #fff; border: 1px solid #e6e2db; border-radius: 22px; padding: 22px; font-weight: 900; box-shadow: 0 12px 30px rgba(10,37,64,.06); }
+        .scenario:hover { border-color: #ff6a00; transform: translateY(-1px); }
         .experience-card { background: #fff; border: 1px solid #e6e2db; border-radius: 30px; padding: 30px; box-shadow: 0 18px 44px rgba(10,37,64,.08); }
         .experience-card strong { display: block; margin-bottom: 10px; font-size: 21px; color: #0a2540; }
         .experience-card p { color: #647386; line-height: 1.7; margin: 0; }
@@ -267,10 +261,11 @@ const { error } = await supabase.from("leads").insert([
         .cta p { color: #c7d2df; font-size: 19px; line-height: 1.7; }
         .cta-buttons { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
         .footer { background: #071827; color: #cbd5e1; padding: 46px 0; }
-        .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 34px; }
+        .footer-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 34px; }
         .footer-logo { width: 220px; max-width: 100%; height: auto; background: #fff; border-radius: 14px; padding: 8px; object-fit: contain; }
         .footer h3 { color: #fff; margin: 0 0 12px; }
         .footer p { margin: 6px 0; color: #b8c3d0; }
+        .footer a:hover { color: #fff; }
         .whatsapp-float { position: fixed; right: 22px; bottom: 22px; z-index: 60; background: #25d366; color: #fff; border-radius: 999px; padding: 16px 22px; font-weight: 900; box-shadow: 0 16px 40px rgba(37,211,102,.35); }
         .success { text-align: center; padding: 34px 10px; }
         .success-icon { width: 66px; height: 66px; border-radius: 50%; background: #dcfce7; color: #15803d; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 34px; font-weight: 900; }
@@ -318,6 +313,7 @@ const { error } = await supabase.from("leads").insert([
           </a>
           <nav className="nav">
             <a href="#werkwijze">Werkwijze</a>
+            <a href="/huis-direct-verkopen">Huis direct verkopen</a>
             <a href="/huis-snel-verkopen">Huis snel verkopen</a>
             <a href="/woning-verkopen-zonder-makelaar">Zonder makelaar</a>
             <a href="#mogelijkheden">Mogelijkheden</a>
@@ -336,19 +332,19 @@ const { error } = await supabase.from("leads").insert([
           <div>
             <div className="badge">Verkoopoplossing op maat · Zonder makelaar · Notarieel geregeld</div>
             <h1>
-  Uw woning snel verkopen?
-  <br />
-  Ontvang een helder verkoopvoorstel zonder gedoe.
-</h1>
+              Uw woning snel verkopen?
+              <br />
+              Ontvang een helder verkoopvoorstel zonder gedoe.
+            </h1>
             <p className="lead">
               Vastgoed Direct Nederland helpt woningeigenaren die snel duidelijkheid willen. Wij bieden een directe verkoopoplossing voor woningen in uiteenlopende situaties, zoals achterstallig onderhoud, verhuur, erfenis, scheiding of leegstand.
             </p>
 
             <div className="trust-row">
-              <div className="trust-card">✓ Heldere communicatie</div>
+              <div className="trust-card">✓ Vrijblijvend verkoopvoorstel</div>
               <div className="trust-card">✓ Geen makelaarskosten</div>
+              <div className="trust-card">✓ Geen open huis nodig</div>
               <div className="trust-card">✓ Notariële afwikkeling</div>
-              <div className="trust-card">✓ Verkoopoplossing op maat</div>
             </div>
 
             <div className="hero-buttons">
@@ -465,6 +461,29 @@ const { error } = await supabase.from("leads").insert([
         </div>
       </section>
 
+      <section className="section section-white">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow">Voor welke woningen?</p>
+            <h2>Ook als uw woning niet verkoopklaar is.</h2>
+            <p>
+              Niet iedere woning past goed in een traditioneel verkooptraject. Ook bij onderhoud, verhuur, leegstand of persoonlijke omstandigheden denken wij mee over een passende verkoopoplossing.
+            </p>
+          </div>
+
+          <div className="scenario-grid">
+            <div className="scenario">✓ Opknapwoning</div>
+            <div className="scenario">✓ Erfeniswoning</div>
+            <div className="scenario">✓ Verhuurde woning</div>
+            <div className="scenario">✓ Leegstaande woning</div>
+            <div className="scenario">✓ Woning met schade</div>
+            <div className="scenario">✓ Achterstallig onderhoud</div>
+            <div className="scenario">✓ Scheiding of financiële druk</div>
+            <div className="scenario">✓ Snel verhuizen</div>
+          </div>
+        </div>
+      </section>
+
       <section id="werkwijze" className="section">
         <div className="container">
           <div className="section-head">
@@ -474,10 +493,10 @@ const { error } = await supabase.from("leads").insert([
           </div>
           <div className="steps">
             {[
-              ["1", "Aanvraag", "U vult uw woninggegevens in. De aanvraag is gratis en vertrouwelijk."],
+              ["1", "Aanvraag", "U vult uw woninggegevens in. De aanvraag is gratis en vrijblijvend."],
               ["2", "Persoonlijk contact", "Wij bespreken uw situatie, gewenste snelheid en verkoopmogelijkheden."],
-              ["3", "Verkoopvoorstel", "U ontvangt een vrijblijvend voorstel met duidelijke voorwaarden. U beslist zelf of u verder wilt."],
-              ["4", "Notariële afwikkeling", "Bij akkoord wordt de overdracht via de notaris geregeld, met afspraken die vooraf helder zijn."],
+              ["3", "Verkoopvoorstel", "U ontvangt een helder voorstel met duidelijke voorwaarden."],
+              ["4", "Notariële afwikkeling", "Bij akkoord worden de afspraken vastgelegd en via de notaris geregeld."],
             ].map(([num, title, text]) => (
               <div key={title} className="card">
                 <div className="number">{num}</div>
@@ -561,6 +580,27 @@ const { error } = await supabase.from("leads").insert([
       </section>
 
       <section className="section">
+        <div className="container highlight">
+          <div>
+            <p className="eyebrow">Waarom direct verkopen?</p>
+            <h2>Snel duidelijkheid zonder verkoopstress.</h2>
+            <p>
+              Een traditioneel verkooptraject past niet bij iedere situatie. Soms wilt u geen open huis, geen lange onderhandelingen en geen extra kosten voor makelaar, verkoopstyling of herstelwerk.
+            </p>
+          </div>
+
+          <div className="highlight-list">
+            <div className="highlight-item">✓ Geen makelaarskosten</div>
+            <div className="highlight-item">✓ Geen tientallen bezichtigingen</div>
+            <div className="highlight-item">✓ Woning hoeft niet perfect te zijn</div>
+            <div className="highlight-item">✓ Opleverdatum in overleg</div>
+            <div className="highlight-item">✓ Notariële afwikkeling</div>
+            <div className="highlight-item">✓ Vrijblijvend voorstel</div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section section-white">
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">Ervaringen</p>
@@ -618,15 +658,16 @@ const { error } = await supabase.from("leads").insert([
             <p>Bekijk welke verkoopoplossing het beste past bij uw situatie.</p>
           </div>
 
-         <div className="scenario-grid">
-  <a className="scenario" href="/huis-direct-verkopen">Huis direct verkopen</a>
-  <a className="scenario" href="/huis-snel-verkopen">Huis snel verkopen</a>
-  <a className="scenario" href="/woning-verkopen-zonder-makelaar">Woning verkopen zonder makelaar</a>
-  <a className="scenario" href="/huis-verkopen-binnen-24-uur">Huis verkopen binnen 24 uur</a>
-  <a className="scenario" href="/opknapwoning-verkopen">Opknapwoning verkopen</a>
-  <a className="scenario" href="/huis-verkopen-bij-erfenis">Huis verkopen bij erfenis</a>
-  <a className="scenario" href="/verhuurde-woning-verkopen">Verhuurde woning verkopen</a>
-</div>
+          <div className="scenario-grid">
+            <a className="scenario" href="/huis-direct-verkopen">Huis direct verkopen</a>
+            <a className="scenario" href="/huis-snel-verkopen">Huis snel verkopen</a>
+            <a className="scenario" href="/woning-verkopen-zonder-makelaar">Woning verkopen zonder makelaar</a>
+            <a className="scenario" href="/huis-verkopen-binnen-24-uur">Huis verkopen binnen 24 uur</a>
+            <a className="scenario" href="/opknapwoning-verkopen">Opknapwoning verkopen</a>
+            <a className="scenario" href="/huis-verkopen-bij-erfenis">Huis verkopen bij erfenis</a>
+            <a className="scenario" href="/verhuurde-woning-verkopen">Verhuurde woning verkopen</a>
+            <a className="scenario" href="/huis-verkopen-groningen">Huis verkopen in Groningen</a>
+          </div>
         </div>
       </section>
 
@@ -651,7 +692,7 @@ const { error } = await supabase.from("leads").insert([
             </div>
             <div className="faq-item">
               <h3>Kopen jullie ook huizen in slechte staat?</h3>
-              <p>Ja, ook woningen met schade, achterstallig onderhoud of renovatiebehoefte kunnen worden aangemeld.</p>
+              <p>Ook woningen met schade, achterstallig onderhoud of renovatiebehoefte kunnen worden aangemeld.</p>
             </div>
             <div className="faq-item">
               <h3>Heb ik een makelaar nodig?</h3>
@@ -703,6 +744,15 @@ const { error } = await supabase.from("leads").insert([
             <h3>Contact</h3>
             <p>info@verkoopjehuisdirect.nl</p>
             <p>06 12 23 80 51</p>
+          </div>
+          <div>
+            <h3>Populaire diensten</h3>
+            <p><a href="/huis-direct-verkopen">Huis direct verkopen</a></p>
+            <p><a href="/huis-snel-verkopen">Huis snel verkopen</a></p>
+            <p><a href="/woning-verkopen-zonder-makelaar">Zonder makelaar verkopen</a></p>
+            <p><a href="/opknapwoning-verkopen">Opknapwoning verkopen</a></p>
+            <p><a href="/huis-verkopen-bij-erfenis">Huis verkopen bij erfenis</a></p>
+            <p><a href="/verhuurde-woning-verkopen">Verhuurde woning verkopen</a></p>
           </div>
           <div>
             <h3>Website</h3>
