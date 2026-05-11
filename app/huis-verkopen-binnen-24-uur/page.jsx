@@ -1,4 +1,30 @@
 import SeoLandingPage from "../components/SeoLandingPage";
+
+export const metadata = {
+  title: "Huis verkopen binnen 24 uur? Snel duidelijkheid",
+  description:
+    "Wilt u snel duidelijkheid over uw woningverkoop? Vraag vrijblijvend een verkoopvoorstel aan zonder makelaar, open huis of verkoopstress.",
+  alternates: {
+    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-binnen-24-uur",
+  },
+  openGraph: {
+    title: "Huis verkopen binnen 24 uur? Snel duidelijkheid",
+    description:
+      "Vraag vrijblijvend een verkoopvoorstel aan en ontdek wat mogelijk is voor uw woning.",
+    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-binnen-24-uur",
+    siteName: "Vastgoed Direct Nederland",
+    locale: "nl_NL",
+    type: "website",
+  },
+};
+
+const page = {
+  slug: "/huis-verkopen-binnen-24-uur",
+  breadcrumb: "Huis verkopen binnen 24 uur",
+  eyebrow: "Huis verkopen binnen 24 uur",
+  h1: "Huis verkopen binnen 24 uur? Vraag snel duidelijkheid aan",
+  lead:
+    "Wilt u snel duidelijkheid over de verkoopmogelijkheden van uw woning? Vastgoed Direct Nederland helpt woningeigenaren met een directe verkoopoplossing, zonder traditioneel makelaarstraject.",
   shortAnswer:
     "Binnen 24 uur verkopen is niet altijd realistisch als definitieve overdracht, maar snel duidelijkheid krijgen over uw mogelijkheden kan vaak wel. U vraagt gratis en vrijblijvend een verkoopvoorstel aan.",
   benefits: [
@@ -41,6 +67,13 @@ import SeoLandingPage from "../components/SeoLandingPage";
       title: "Geen makelaar of open huis nodig",
       paragraphs: [
         "U hoeft geen makelaar in te schakelen, geen open huis te organiseren en uw woning niet altijd eerst verkoopklaar te maken. Dat kan veel tijd, kosten en stress besparen.",
+      ],
+    },
+    {
+      title: "Kosten, notariskosten en aanbetaling",
+      paragraphs: [
+        "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
+        "In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd.",
       ],
     },
   ],
