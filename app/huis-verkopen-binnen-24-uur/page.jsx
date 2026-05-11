@@ -1,136 +1,88 @@
-export const metadata = {
-  title: "Huis verkopen binnen 24 uur? Snel duidelijkheid | Vastgoed Direct Nederland",
-  description:
-    "Wilt u uw huis verkopen binnen 24 uur of snel duidelijkheid over uw woning? Vraag gratis en vrijblijvend een bod aan zonder makelaar of verkoopstress.",
+import SeoLandingPage from "../components/SeoLandingPage";
+  shortAnswer:
+    "Binnen 24 uur verkopen is niet altijd realistisch als definitieve overdracht, maar snel duidelijkheid krijgen over uw mogelijkheden kan vaak wel. U vraagt gratis en vrijblijvend een verkoopvoorstel aan.",
+  benefits: [
+    "Snel reactie",
+    "Vrijblijvend voorstel",
+    "Geen makelaarskosten",
+    "Geen open huis nodig",
+    "Ook bij onderhoud of schade",
+    "Notariële afwikkeling",
+  ],
+  sections: [
+    {
+      title: "Wat betekent huis verkopen binnen 24 uur?",
+      paragraphs: [
+        "Veel verkopers zoeken naar snelheid, maar een woning juridisch overdragen binnen 24 uur is niet altijd haalbaar. Documenten, eigendomssituatie en notariële planning spelen daarbij een belangrijke rol.",
+        "Wat wél vaak mogelijk is: snel contact, snel duidelijkheid en een eerste inschatting van de verkoopmogelijkheden.",
+      ],
+    },
+    {
+      title: "Wanneer is snelle duidelijkheid belangrijk?",
+      bullets: [
+        "Bij leegstand of dubbele lasten",
+        "Bij een erfeniswoning",
+        "Bij scheiding of financiële druk",
+        "Bij een woning met achterstallig onderhoud",
+        "Bij verhuur of lastige verkoopomstandigheden",
+        "Als u geen traditioneel verkooptraject wilt",
+      ],
+    },
+    {
+      title: "Hoe werkt het?",
+      steps: [
+        "U vult uw woninggegevens in.",
+        "Wij nemen contact met u op om uw situatie te bespreken.",
+        "U ontvangt duidelijkheid over een mogelijke verkoopoplossing.",
+        "Bij akkoord wordt de overdracht via de notaris geregeld.",
+      ],
+    },
+    {
+      title: "Geen makelaar of open huis nodig",
+      paragraphs: [
+        "U hoeft geen makelaar in te schakelen, geen open huis te organiseren en uw woning niet altijd eerst verkoopklaar te maken. Dat kan veel tijd, kosten en stress besparen.",
+      ],
+    },
+  ],
+  comparisonRows: [
+    ["Snelheid", "Vaak afhankelijk van bezichtigingen en koper", "Snelle duidelijkheid mogelijk"],
+    ["Makelaarskosten", "Vaak courtage of vast tarief", "Geen makelaarskosten"],
+    ["Bezichtigingen", "Vaak meerdere", "Niet standaard nodig"],
+    ["Woning voorbereiden", "Vaak gewenst", "Niet noodzakelijk vooraf"],
+    ["Opleverdatum", "Afhankelijk van koper", "In overleg bespreekbaar"],
+  ],
+  faqs: [
+    {
+      question: "Kan ik mijn huis echt binnen 24 uur verkopen?",
+      answer:
+        "Een definitieve overdracht binnen 24 uur is meestal niet realistisch, omdat notariële en juridische stappen nodig zijn. Wel kunnen wij vaak snel duidelijkheid geven over de mogelijkheden.",
+    },
+    {
+      question: "Kan ik binnen 24 uur reactie krijgen?",
+      answer:
+        "Wij proberen snel te reageren op aanvragen. De exacte reactietijd kan afhangen van het moment van aanvraag en de beschikbare informatie.",
+    },
+    {
+      question: "Kan dit zonder makelaar?",
+      answer:
+        "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar.",
+    },
+    {
+      question: "Kan ik ook een woning met schade aanmelden?",
+      answer:
+        "Ja, ook woningen met schade, achterstallig onderhoud of renovatiebehoefte kunnen worden aangemeld.",
+    },
+    {
+      question: "Is de aanvraag vrijblijvend?",
+      answer:
+        "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast.",
+    },
+  ],
+  ctaTitle: "Wilt u snel duidelijkheid over uw woning?",
+  ctaText:
+    "Vraag vrijblijvend een verkoopvoorstel aan en ontdek wat mogelijk is zonder makelaar of verkoopstress.",
 };
 
 export default function HuisVerkopenBinnen24Uur() {
-  return (
-    <main style={{ fontFamily: "Arial, sans-serif", background: "#f7f5f0", color: "#0a2540" }}>
-      <section style={{ maxWidth: "920px", margin: "0 auto", padding: "70px 20px" }}>
-        <a href="/">
-          <img
-            src="/logo.png"
-            alt="Vastgoed Direct Nederland"
-            style={{ width: "240px", maxWidth: "100%", marginBottom: "40px" }}
-          />
-        </a>
-
-        <p style={{ color: "#ff6a00", fontWeight: "900", textTransform: "uppercase" }}>
-          Huis verkopen binnen 24 uur
-        </p>
-
-        <h1 style={{ fontSize: "48px", lineHeight: "1.05", marginBottom: "22px" }}>
-          Huis verkopen binnen 24 uur? Ontvang snel duidelijkheid
-        </h1>
-
-        <p style={{ fontSize: "20px", lineHeight: "1.7", color: "#536273" }}>
-          Wilt u uw huis snel verkopen en niet weken of maanden wachten op een koper?
-          Vastgoed Direct Nederland helpt woningeigenaren die snel willen schakelen en binnen korte tijd duidelijkheid willen.
-        </p>
-
-        <a
-          href="/#aanvraag"
-          style={{
-            display: "inline-block",
-            marginTop: "30px",
-            background: "#ff6a00",
-            color: "white",
-            padding: "16px 28px",
-            borderRadius: "999px",
-            fontWeight: "900",
-            textDecoration: "none",
-          }}
-        >
-          Vraag gratis bod aan
-        </a>
-
-        <hr style={{ margin: "55px 0", border: "none", borderTop: "1px solid #ddd" }} />
-
-        <h2>Waarom snel uw huis verkopen?</h2>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Soms is snelheid belangrijker dan een lang verkooptraject. Bijvoorbeeld bij een erfenis,
-          scheiding, verhuizing, financiële situatie, leegstand of een woning met achterstallig onderhoud.
-        </p>
-
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Via een traditionele makelaar duurt het vaak langer voordat u duidelijkheid heeft. U krijgt te maken
-          met foto&apos;s, bezichtigingen, onderhandelingen en onzekerheid over de uiteindelijke verkoop.
-          Bij directe verkoop weet u sneller waar u aan toe bent.
-        </p>
-
-        <h2>Voordelen van direct verkopen</h2>
-        <ul style={{ lineHeight: "2", fontSize: "18px" }}>
-          <li>Binnen korte tijd reactie op uw aanvraag</li>
-          <li>Geen makelaar nodig</li>
-          <li>Geen makelaarskosten</li>
-          <li>Geen open huis of bezichtigingen</li>
-          <li>Ook mogelijk bij schade of achterstallig onderhoud</li>
-          <li>Gratis en vrijblijvend verkoopvoorstel</li>
-        </ul>
-
-        <h2>Voor welke woningen?</h2>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Wij kijken naar verschillende soorten woningen: appartementen, rijtjeshuizen, vrijstaande woningen,
-          verhuurde woningen, opknapwoningen en woningen die snel verkocht moeten worden.
-        </p>
-
-        <h2>Hoe werkt huis verkopen binnen 24 uur?</h2>
-        <ol style={{ lineHeight: "2", fontSize: "18px" }}>
-          <li>U vult het aanvraagformulier in.</li>
-          <li>Wij nemen snel contact met u op.</li>
-          <li>We bespreken uw woning en situatie.</li>
-          <li>U ontvangt een vrijblijvend voorstel.</li>
-        </ol>
-
-        <h2>Veelgestelde vragen</h2>
-
-        <h3>Kan ik echt binnen 24 uur duidelijkheid krijgen?</h3>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Wij proberen zo snel mogelijk te reageren. Vaak kunnen wij binnen korte tijd aangeven wat de mogelijkheden zijn.
-        </p>
-
-        <h3>Moet mijn woning verkoopklaar zijn?</h3>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Nee. Ook woningen met schade, onderhoud of renovatiebehoefte kunnen worden aangemeld.
-        </p>
-
-        <h3>Is het bod verplicht?</h3>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Nee, uw aanvraag is gratis en vrijblijvend. U beslist zelf of u verder wilt.
-        </p>
-
-        <div
-          style={{
-            marginTop: "45px",
-            padding: "32px",
-            background: "#0a2540",
-            color: "white",
-            borderRadius: "28px",
-          }}
-        >
-          <h2 style={{ color: "white", marginTop: 0 }}>Wilt u snel uw huis verkopen?</h2>
-          <p style={{ fontSize: "18px", lineHeight: "1.7" }}>
-            Vul uw gegevens in en ontvang snel duidelijkheid over uw verkoopmogelijkheden.
-          </p>
-
-          <a
-            href="/#aanvraag"
-            style={{
-              display: "inline-block",
-              marginTop: "15px",
-              background: "#ff6a00",
-              color: "white",
-              padding: "16px 28px",
-              borderRadius: "999px",
-              fontWeight: "900",
-              textDecoration: "none",
-            }}
-          >
-            Start gratis aanvraag
-          </a>
-        </div>
-      </section>
-    </main>
-  );
+  return <SeoLandingPage page={page} />;
 }
