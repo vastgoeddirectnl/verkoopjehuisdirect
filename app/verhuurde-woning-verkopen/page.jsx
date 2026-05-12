@@ -1,94 +1,136 @@
+import SeoLandingPage from "../components/SeoLandingPage";
+
 export const metadata = {
-  title: "Verhuurde woning verkopen? Vrijblijvend voorstel | Vastgoed Direct Nederland",
+  title: "Verhuurde woning verkopen? Vrijblijvend voorstel",
   description:
-    "Wilt u een verhuurde woning verkopen? Ontvang vrijblijvend een verkoopvoorstel zonder traditioneel verkooptraject.",
+    "Wilt u een verhuurde woning verkopen zonder makelaar? Vraag vrijblijvend een verkoopvoorstel aan met duidelijke afspraken over de huursituatie.",
+  alternates: {
+    canonical: "https://www.verkoopjehuisdirect.nl/verhuurde-woning-verkopen",
+  },
+  openGraph: {
+    title: "Verhuurde woning verkopen? Vrijblijvend voorstel",
+    description:
+      "Een verhuurde woning verkopen vraagt om duidelijke afspraken. Vraag vrijblijvend een verkoopvoorstel aan.",
+    url: "https://www.verkoopjehuisdirect.nl/verhuurde-woning-verkopen",
+    siteName: "Vastgoed Direct Nederland",
+    locale: "nl_NL",
+    type: "website",
+  },
+};
+
+const page = {
+  slug: "/verhuurde-woning-verkopen",
+  breadcrumb: "Verhuurde woning verkopen",
+  eyebrow: "Verhuurde woning verkopen",
+  h1: "Verhuurde woning verkopen met duidelijke afspraken",
+  lead:
+    "Wilt u een verhuurde woning verkopen zonder traditioneel verkooptraject? Vastgoed Direct Nederland denkt mee over een passende verkoopoplossing met aandacht voor de huursituatie, voorwaarden en notariële afwikkeling.",
+  shortAnswer:
+    "Een verhuurde woning verkopen is mogelijk, maar vraagt om duidelijke afspraken over huurcontract, huurprijs, huurders en juridische/notariële aandachtspunten. U kunt vrijblijvend bespreken wat mogelijk is.",
+  benefits: [
+    "Verhuurde woning bespreekbaar",
+    "Geen makelaarskosten",
+    "Geen open huis nodig",
+    "Duidelijke voorwaarden",
+    "Notariële afwikkeling",
+    "Vrijblijvend voorstel",
+  ],
+  sections: [
+    {
+      title: "Waarom een verhuurde woning verkopen?",
+      paragraphs: [
+        "Een verhuurde woning verkopen kan interessant zijn wanneer u wilt stoppen met verhuren, vermogen wilt vrijmaken of geen beheer en onderhoud meer wilt dragen.",
+        "Een verhuurde woning vraagt wel om zorgvuldige beoordeling van de huursituatie. Daarom bespreken wij vooraf de belangrijkste gegevens, voorwaarden en mogelijke vervolgstappen.",
+      ],
+    },
+    {
+      title: "Welke gegevens zijn belangrijk?",
+      bullets: [
+        "Is er een schriftelijk huurcontract?",
+        "Wat is de maandelijkse huurprijs?",
+        "Hoe lang woont de huurder er?",
+        "Zijn er betalingsachterstanden?",
+        "Zijn er afspraken over servicekosten of borg?",
+        "Wat is de staat van de woning?",
+        "Zijn er bijzondere afspraken met de huurder?",
+      ],
+    },
+    {
+      title: "Moet de huurder eruit?",
+      paragraphs: [
+        "Dat hangt af van de situatie. Een verhuurde woning kan soms met huurder worden verkocht. Dit vraagt wel om duidelijke juridische en notariële beoordeling.",
+        "Wij doen daarom geen harde algemene belofte over het beëindigen van huur. We kijken naar de bestaande afspraken, het huurcontract en wat juridisch mogelijk is.",
+      ],
+    },
+    {
+      title: "Verkopen zonder open huis of veel bezichtigingen",
+      paragraphs: [
+        "Bij een verhuurde woning kunnen bezichtigingen gevoelig liggen. Een traditioneel verkooptraject met veel kijkers is daarom niet altijd wenselijk.",
+        "Bij een directe verkoopoplossing bespreken we de woning en huursituatie gericht, zonder standaard open huis of onnodige onrust voor huurder en eigenaar.",
+      ],
+    },
+    {
+      title: "Hoe werkt het?",
+      steps: [
+        "U meldt de verhuurde woning vrijblijvend aan.",
+        "Wij bespreken de huurgegevens, woning en gewenste snelheid.",
+        "U ontvangt een verkoopvoorstel met duidelijke voorwaarden.",
+        "Bij akkoord wordt de overdracht via de notaris geregeld.",
+      ],
+    },
+    {
+      title: "Kosten, notariskosten en aanbetaling",
+      paragraphs: [
+        "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
+        "In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd.",
+      ],
+    },
+  ],
+  comparisonRows: [
+    ["Huursituatie", "Kan verkoop complexer maken", "Wordt gericht besproken"],
+    ["Bezichtigingen", "Vaak lastig met huurder", "Niet standaard nodig"],
+    ["Makelaarskosten", "Vaak courtage of vast tarief", "Geen makelaarskosten"],
+    ["Documenten", "Afhankelijk van traject", "Vooraf duidelijk bespreken"],
+    ["Opleverdatum", "Afhankelijk van koper en huursituatie", "In overleg bespreekbaar"],
+    ["Notariële afwikkeling", "Afhankelijk van afspraken", "Bij akkoord via notaris"],
+  ],
+  faqs: [
+    {
+      question: "Kan ik een verhuurde woning verkopen?",
+      answer:
+        "Ja, een verhuurde woning verkopen is in veel situaties mogelijk, maar vraagt om duidelijke afspraken over de huursituatie.",
+    },
+    {
+      question: "Moet de huurder eruit?",
+      answer:
+        "Niet altijd. Dit hangt af van de situatie, het huurcontract en de afspraken. De mogelijkheden worden zorgvuldig besproken.",
+    },
+    {
+      question: "Welke gegevens zijn belangrijk bij een verhuurde woning?",
+      answer:
+        "Onder andere het huurcontract, de huurprijs, borg, betalingsstatus, looptijd, afspraken met de huurder en staat van de woning zijn belangrijk.",
+    },
+    {
+      question: "Kan ik een verhuurde woning verkopen zonder makelaar?",
+      answer:
+        "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar.",
+    },
+    {
+      question: "Kan een verhuurde woning zonder bezichtigingen worden verkocht?",
+      answer:
+        "In veel situaties is een traditioneel bezichtigingstraject of open huis niet nodig. Dit bespreken we op basis van de woning en huursituatie.",
+    },
+    {
+      question: "Is de aanvraag vrijblijvend?",
+      answer:
+        "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast.",
+    },
+  ],
+  ctaTitle: "Wilt u een verhuurde woning verkopen?",
+  ctaText:
+    "Vraag vrijblijvend een verkoopvoorstel aan en bespreek de mogelijkheden rond huur, overdracht en voorwaarden.",
 };
 
 export default function VerhuurdeWoningVerkopen() {
-  return (
-    <main style={{ fontFamily: "Arial, sans-serif", background: "#f7f5f0", color: "#0a2540" }}>
-      <section style={{ maxWidth: "920px", margin: "0 auto", padding: "70px 20px" }}>
-        <a href="/">
-          <img src="/logo.png" alt="Vastgoed Direct Nederland" style={{ width: "230px", maxWidth: "100%", marginBottom: "40px" }} />
-        </a>
-
-        <p style={{ color: "#ff6a00", fontWeight: "900", textTransform: "uppercase" }}>
-          Verhuurde woning verkopen
-        </p>
-
-        <h1 style={{ fontSize: "46px", lineHeight: "1.05", marginBottom: "22px" }}>
-          Verhuurde woning verkopen zonder verkoopstress
-        </h1>
-
-        <p style={{ fontSize: "20px", lineHeight: "1.7", color: "#536273" }}>
-          Wilt u een verhuurde woning verkopen? Vastgoed Direct Nederland helpt eigenaren die snel duidelijkheid willen over de verkoopmogelijkheden van hun verhuurde woning.
-        </p>
-
-        <a href="/#aanvraag" style={{ display: "inline-block", marginTop: "30px", background: "#ff6a00", color: "white", padding: "16px 28px", borderRadius: "999px", fontWeight: "900", textDecoration: "none" }}>
-          Vraag gratis verkoopvoorstel aan
-        </a>
-
-        <hr style={{ margin: "55px 0", border: "none", borderTop: "1px solid #ddd" }} />
-
-        <h2>Een verhuurde woning verkopen vraagt om duidelijke afspraken</h2>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Een verhuurde woning verkopen kan ingewikkelder zijn dan een leegstaande woning. Er zijn huurders, huurafspraken, onderhoud, privacy en juridische aandachtspunten. Daarom is het belangrijk dat de verkoop zorgvuldig en duidelijk wordt besproken.
-        </p>
-
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Wij kijken naar de situatie van de woning, de verhuur en uw gewenste oplossing. Zo krijgt u snel inzicht in wat mogelijk is.
-        </p>
-
-        <h2>Waarom een verhuurde woning direct verkopen?</h2>
-        <ul style={{ lineHeight: "2", fontSize: "18px" }}>
-          <li>Geen traditioneel verkooptraject nodig</li>
-          <li>Geen makelaarskosten</li>
-          <li>Geen onnodige bezichtigingen</li>
-          <li>Verkoopoplossing op maat</li>
-          <li>Heldere afspraken vooraf</li>
-          <li>Notariële afwikkeling</li>
-        </ul>
-
-        <h2>Voor welke situaties?</h2>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Dit kan interessant zijn wanneer u wilt stoppen met verhuur, vastgoed wilt herstructureren, onderhoud wilt vermijden of sneller financiële duidelijkheid wilt.
-        </p>
-
-        <h2>Hoe werkt het?</h2>
-        <ol style={{ lineHeight: "2", fontSize: "18px" }}>
-          <li>U vult uw woninggegevens in.</li>
-          <li>Wij bespreken de verhuursituatie en uw wensen.</li>
-          <li>U ontvangt een vrijblijvend verkoopvoorstel.</li>
-          <li>Bij akkoord wordt de overdracht via de notaris geregeld.</li>
-        </ol>
-
-        <h2>Veelgestelde vragen</h2>
-
-        <h3>Kan ik een woning verkopen terwijl deze verhuurd is?</h3>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Ja, dat kan in veel situaties. De exacte mogelijkheden hangen af van de huursituatie en afspraken.
-        </p>
-
-        <h3>Moet de huurder eruit?</h3>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Niet altijd. Dit hangt af van de situatie. Wij bespreken graag wat mogelijk is.
-        </p>
-
-        <h3>Is de aanvraag vrijblijvend?</h3>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Ja. Uw aanvraag is gratis en vrijblijvend.
-        </p>
-
-        <div style={{ marginTop: "45px", padding: "32px", background: "#0a2540", color: "white", borderRadius: "28px" }}>
-          <h2 style={{ color: "white", marginTop: 0 }}>Wilt u uw verhuurde woning verkopen?</h2>
-          <p style={{ fontSize: "18px", lineHeight: "1.7" }}>
-            Vraag vrijblijvend een verkoopvoorstel aan en ontdek wat er mogelijk is.
-          </p>
-          <a href="/#aanvraag" style={{ display: "inline-block", marginTop: "15px", background: "#ff6a00", color: "white", padding: "16px 28px", borderRadius: "999px", fontWeight: "900", textDecoration: "none" }}>
-            Start gratis aanvraag
-          </a>
-        </div>
-      </section>
-    </main>
-  );
+  return <SeoLandingPage page={page} />;
 }
