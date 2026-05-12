@@ -667,6 +667,7 @@ export default function VerkoopJeHuisDirect() {
             <a className="scenario" href="/huis-verkopen-bij-erfenis">Huis verkopen bij erfenis</a>
             <a className="scenario" href="/verhuurde-woning-verkopen">Verhuurde woning verkopen</a>
             <a className="scenario" href="/huis-verkopen-groningen">Huis verkopen in Groningen</a>
+            <a className="scenario" href="/huis-verkopen-binnen-1-week">Huis verkopen binnen 1 week</a>
           </div>
         </div>
       </section>
