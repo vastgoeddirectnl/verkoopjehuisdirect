@@ -1,94 +1,129 @@
+import SeoLandingPage from "../components/SeoLandingPage";
+
 export const metadata = {
-  title: "Opknapwoning verkopen? Snel en zonder makelaar | Vastgoed Direct Nederland",
+  title: "Opknapwoning verkopen? Zonder renovatie of makelaar",
   description:
-    "Wilt u een opknapwoning verkopen zonder makelaar, bezichtigingen of renovatie? Vraag vrijblijvend een verkoopvoorstel aan.",
+    "Wilt u een opknapwoning verkopen zonder eerst te renoveren? Vraag vrijblijvend een verkoopvoorstel aan bij Vastgoed Direct Nederland.",
+  alternates: {
+    canonical: "https://www.verkoopjehuisdirect.nl/opknapwoning-verkopen",
+  },
+  openGraph: {
+    title: "Opknapwoning verkopen? Zonder renovatie of makelaar",
+    description:
+      "Ook woningen met achterstallig onderhoud, schade of renovatiebehoefte kunnen worden aangemeld.",
+    url: "https://www.verkoopjehuisdirect.nl/opknapwoning-verkopen",
+    siteName: "Vastgoed Direct Nederland",
+    locale: "nl_NL",
+    type: "website",
+  },
+};
+
+const page = {
+  slug: "/opknapwoning-verkopen",
+  breadcrumb: "Opknapwoning verkopen",
+  eyebrow: "Opknapwoning verkopen",
+  h1: "Opknapwoning verkopen zonder renovatie of verkoopstress",
+  lead:
+    "Wilt u een opknapwoning verkopen zonder eerst te verbouwen, herstellen of verkoopklaar te maken? Vastgoed Direct Nederland helpt met een directe verkoopoplossing en duidelijke voorwaarden.",
+  shortAnswer:
+    "U hoeft een opknapwoning niet eerst te renoveren voordat u een verkoopvoorstel aanvraagt. Ook woningen met schade, achterstallig onderhoud of renovatiebehoefte kunnen worden aangemeld.",
+  benefits: [
+    "Geen renovatie vooraf nodig",
+    "Geen makelaarskosten",
+    "Geen open huis nodig",
+    "Ook bij schade of onderhoud",
+    "Oplevering in overleg",
+    "Vrijblijvend voorstel",
+  ],
+  sections: [
+    {
+      title: "Waarom een opknapwoning direct verkopen?",
+      paragraphs: [
+        "Een opknapwoning verkoopklaar maken kan veel tijd en geld kosten. Denk aan schilderwerk, opruimen, herstel van schade, verouderde installaties of andere verbeteringen voordat een makelaar de woning goed kan presenteren.",
+        "Als u die kosten of inspanning niet wilt maken, kan een directe verkoopoplossing interessant zijn. U krijgt duidelijkheid zonder eerst te renoveren of verkoopklaar te maken.",
+      ],
+    },
+    {
+      title: "Welke woningen kunnen worden aangemeld?",
+      bullets: [
+        "Woningen met achterstallig onderhoud",
+        "Woningen met schade",
+        "Verouderde woningen",
+        "Leegstaande woningen",
+        "Erfeniswoningen die opgeknapt moeten worden",
+        "Woningen met verouderde installaties",
+        "Woningen die lastig verkoopklaar te maken zijn",
+      ],
+    },
+    {
+      title: "Oplevering in huidige staat",
+      paragraphs: [
+        "In veel situaties kan oplevering in huidige staat bespreekbaar zijn. Dat betekent dat u niet altijd hoeft te verbouwen, leeg te halen of perfect te presenteren voordat u duidelijkheid krijgt over de verkoopmogelijkheden.",
+        "De exacte afspraken hangen af van de woning, de staat, uw wensen en wat juridisch en notarieel goed kan worden vastgelegd.",
+      ],
+    },
+    {
+      title: "Hoe werkt het?",
+      steps: [
+        "U meldt de opknapwoning vrijblijvend aan.",
+        "Wij bespreken de staat van de woning en uw gewenste snelheid.",
+        "U ontvangt een verkoopvoorstel met duidelijke voorwaarden.",
+        "Bij akkoord wordt de overdracht via de notaris geregeld.",
+      ],
+    },
+    {
+      title: "Kosten, notariskosten en aanbetaling",
+      paragraphs: [
+        "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
+        "In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd.",
+      ],
+    },
+  ],
+  comparisonRows: [
+    ["Renovatie vooraf", "Vaak gewenst", "Niet noodzakelijk vooraf"],
+    ["Makelaarskosten", "Vaak courtage of vast tarief", "Geen makelaarskosten"],
+    ["Bezichtigingen", "Vaak meerdere", "Niet standaard nodig"],
+    ["Verkoopstyling", "Vaak gewenst", "Niet noodzakelijk"],
+    ["Oplevering", "Vaak verkoopklaar", "In huidige staat bespreekbaar"],
+    ["Notariële afwikkeling", "Afhankelijk van afspraken", "Bij akkoord via de notaris"],
+  ],
+  faqs: [
+    {
+      question: "Kan ik een opknapwoning verkopen zonder renovatie?",
+      answer:
+        "Ja, u hoeft uw woning niet eerst te renoveren. Ook woningen met achterstallig onderhoud, schade of renovatiebehoefte kunnen worden aangemeld.",
+    },
+    {
+      question: "Moet ik eerst herstelwerk uitvoeren?",
+      answer:
+        "Nee, dat is niet altijd nodig. Wij bespreken de staat van de woning en kijken naar een passende verkoopoplossing.",
+    },
+    {
+      question: "Kan ik verkopen zonder makelaar?",
+      answer:
+        "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar.",
+    },
+    {
+      question: "Is oplevering in huidige staat mogelijk?",
+      answer:
+        "In veel situaties is oplevering in huidige staat bespreekbaar, afhankelijk van de woning en de gemaakte afspraken.",
+    },
+    {
+      question: "Kan ik een opknapwoning verkopen bij erfenis of leegstand?",
+      answer:
+        "Ja, ook bij erfenis, leegstand of persoonlijke omstandigheden kunt u vrijblijvend bespreken wat mogelijk is.",
+    },
+    {
+      question: "Is de aanvraag vrijblijvend?",
+      answer:
+        "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast.",
+    },
+  ],
+  ctaTitle: "Wilt u uw opknapwoning verkopen?",
+  ctaText:
+    "Vraag vrijblijvend een verkoopvoorstel aan zonder eerst te renoveren of verkoopklaar te maken.",
 };
 
 export default function OpknapwoningVerkopen() {
-  return (
-    <main style={{ fontFamily: "Arial, sans-serif", background: "#f7f5f0", color: "#0a2540" }}>
-      <section style={{ maxWidth: "920px", margin: "0 auto", padding: "70px 20px" }}>
-        <a href="/">
-          <img src="/logo.png" alt="Vastgoed Direct Nederland" style={{ width: "230px", maxWidth: "100%", marginBottom: "40px" }} />
-        </a>
-
-        <p style={{ color: "#ff6a00", fontWeight: "900", textTransform: "uppercase" }}>
-          Opknapwoning verkopen
-        </p>
-
-        <h1 style={{ fontSize: "46px", lineHeight: "1.05", marginBottom: "22px" }}>
-          Opknapwoning verkopen zonder renovatie of verkoopstress
-        </h1>
-
-        <p style={{ fontSize: "20px", lineHeight: "1.7", color: "#536273" }}>
-          Heeft uw woning achterstallig onderhoud, schade of renovatie nodig? Vastgoed Direct Nederland helpt woningeigenaren die hun opknapwoning snel en zonder makelaar willen verkopen.
-        </p>
-
-        <a href="/#aanvraag" style={{ display: "inline-block", marginTop: "30px", background: "#ff6a00", color: "white", padding: "16px 28px", borderRadius: "999px", fontWeight: "900", textDecoration: "none" }}>
-          Vraag gratis verkoopvoorstel aan
-        </a>
-
-        <hr style={{ margin: "55px 0", border: "none", borderTop: "1px solid #ddd" }} />
-
-        <h2>Uw woning hoeft niet verkoopklaar te zijn</h2>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Bij een traditionele verkoop wordt vaak verwacht dat een woning netjes, schoon en verkoopklaar is. Bij een opknapwoning kan dat lastig zijn. Denk aan achterstallig onderhoud, oude installaties, lekkage, verouderde keuken of badkamer, schade of een woning die al langere tijd leegstaat.
-        </p>
-
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Wij kijken juist naar de mogelijkheden van de woning. U hoeft dus niet eerst te verbouwen, schilderen of investeren voordat u een aanvraag doet.
-        </p>
-
-        <h2>Waarom een opknapwoning direct verkopen?</h2>
-        <ul style={{ lineHeight: "2", fontSize: "18px" }}>
-          <li>Geen renovatiekosten vooraf</li>
-          <li>Geen makelaar nodig</li>
-          <li>Geen open huis of bezichtigingen</li>
-          <li>Ook mogelijk bij schade of achterstallig onderhoud</li>
-          <li>Vrijblijvend verkoopvoorstel</li>
-          <li>Notariële afwikkeling met duidelijke afspraken</li>
-        </ul>
-
-        <h2>Voor welke situaties?</h2>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Deze oplossing kan geschikt zijn bij een woning die verouderd is, onderhoud nodig heeft, leegstaat, onderdeel is van een erfenis of wanneer u geen tijd of geld wilt investeren in renovatie.
-        </p>
-
-        <h2>Hoe werkt het?</h2>
-        <ol style={{ lineHeight: "2", fontSize: "18px" }}>
-          <li>U vult uw woninggegevens in.</li>
-          <li>Wij bespreken uw situatie en verkoopmogelijkheden.</li>
-          <li>U ontvangt een vrijblijvend verkoopvoorstel.</li>
-          <li>Bij akkoord wordt de overdracht notarieel geregeld.</li>
-        </ol>
-
-        <h2>Veelgestelde vragen</h2>
-
-        <h3>Moet ik eerst verbouwen?</h3>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Nee. U kunt ook een woning aanmelden die nog gerenoveerd moet worden.
-        </p>
-
-        <h3>Kan ik verkopen zonder makelaar?</h3>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Ja. U kunt rechtstreeks een aanvraag doen zonder traditioneel verkooptraject.
-        </p>
-
-        <h3>Is de aanvraag verplicht?</h3>
-        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Nee. De aanvraag is gratis en vrijblijvend.
-        </p>
-
-        <div style={{ marginTop: "45px", padding: "32px", background: "#0a2540", color: "white", borderRadius: "28px" }}>
-          <h2 style={{ color: "white", marginTop: 0 }}>Wilt u uw opknapwoning verkopen?</h2>
-          <p style={{ fontSize: "18px", lineHeight: "1.7" }}>
-            Vraag vrijblijvend een verkoopvoorstel aan en ontdek wat er mogelijk is.
-          </p>
-          <a href="/#aanvraag" style={{ display: "inline-block", marginTop: "15px", background: "#ff6a00", color: "white", padding: "16px 28px", borderRadius: "999px", fontWeight: "900", textDecoration: "none" }}>
-            Start gratis aanvraag
-          </a>
-        </div>
-      </section>
-    </main>
-  );
+  return <SeoLandingPage page={page} />;
 }
