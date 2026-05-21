@@ -10,6 +10,11 @@ const internalLinks = [
   ["/huis-verkopen-bij-erfenis", "Huis verkopen bij erfenis"],
   ["/verhuurde-woning-verkopen", "Verhuurde woning verkopen"],
   ["/huis-verkopen-groningen", "Huis verkopen in Groningen"],
+["/huis-verkopen-zonder-bezichtigingen", "Huis verkopen zonder bezichtigingen"],
+["/huis-verkopen-bij-scheiding", "Huis verkopen bij scheiding"],
+["/leegstaand-huis-verkopen", "Leegstaand huis verkopen"],
+["/huis-verkopen-met-achterstallig-onderhoud", "Huis verkopen met achterstallig onderhoud"],
+["/huis-verkopen-aan-opkoper", "Huis verkopen aan opkoper"],
 ];
 
 const styles = {
