@@ -261,7 +261,7 @@ export default function HomeClient() {
         .cta p { color: #c7d2df; font-size: 19px; line-height: 1.7; }
         .cta-buttons { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
         .footer { background: #071827; color: #cbd5e1; padding: 46px 0; }
-        .footer-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 34px; }
+        .footer-grid { display: grid; grid-template-columns: 1.2fr .9fr 1.1fr 1.1fr 1.1fr; gap: 30px; }
         .footer-logo { width: 220px; max-width: 100%; height: auto; background: #fff; border-radius: 14px; padding: 8px; object-fit: contain; }
         .footer h3 { color: #fff; margin: 0 0 12px; }
         .footer p { margin: 6px 0; color: #b8c3d0; }
@@ -663,11 +663,19 @@ export default function HomeClient() {
             <a className="scenario" href="/huis-snel-verkopen">Huis snel verkopen</a>
             <a className="scenario" href="/woning-verkopen-zonder-makelaar">Woning verkopen zonder makelaar</a>
             <a className="scenario" href="/huis-verkopen-binnen-24-uur">Huis verkopen binnen 24 uur</a>
+            <a className="scenario" href="/huis-verkopen-binnen-1-week">Huis verkopen binnen 1 week</a>
+            <a className="scenario" href="/huis-verkopen-zonder-bezichtigingen">Huis verkopen zonder bezichtigingen</a>
+            <a className="scenario" href="/huis-verkopen-bij-scheiding">Huis verkopen bij scheiding</a>
+            <a className="scenario" href="/leegstaand-huis-verkopen">Leegstaand huis verkopen</a>
+            <a className="scenario" href="/huis-verkopen-met-achterstallig-onderhoud">Huis verkopen met achterstallig onderhoud</a>
+            <a className="scenario" href="/huis-verkopen-aan-opkoper">Huis verkopen aan opkoper</a>
             <a className="scenario" href="/opknapwoning-verkopen">Opknapwoning verkopen</a>
             <a className="scenario" href="/huis-verkopen-bij-erfenis">Huis verkopen bij erfenis</a>
             <a className="scenario" href="/verhuurde-woning-verkopen">Verhuurde woning verkopen</a>
             <a className="scenario" href="/huis-verkopen-groningen">Huis verkopen in Groningen</a>
-            <a className="scenario" href="/huis-verkopen-binnen-1-week">Huis verkopen binnen 1 week</a>
+            <a className="scenario" href="/woning-verkopen-friesland">Woning verkopen in Friesland</a>
+            <a className="scenario" href="/woning-verkopen-drenthe">Woning verkopen in Drenthe</a>
+            <a className="scenario" href="/woning-verkopen-overijssel">Woning verkopen in Overijssel</a>
           </div>
         </div>
       </section>
@@ -741,23 +749,41 @@ export default function HomeClient() {
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="footer-logo" />
             <p>Vastgoed Direct Nederland helpt woningeigenaren met snelle en duidelijke verkoopmogelijkheden.</p>
           </div>
+
           <div>
             <h3>Contact</h3>
             <p>info@verkoopjehuisdirect.nl</p>
             <p>06 12 23 80 51</p>
+            <p><a href="tel:0612238051">Bel direct</a></p>
           </div>
+
           <div>
             <h3>Populaire diensten</h3>
             <p><a href="/huis-direct-verkopen">Huis direct verkopen</a></p>
             <p><a href="/huis-snel-verkopen">Huis snel verkopen</a></p>
             <p><a href="/woning-verkopen-zonder-makelaar">Zonder makelaar verkopen</a></p>
+            <p><a href="/huis-verkopen-binnen-24-uur">Huis verkopen binnen 24 uur</a></p>
+            <p><a href="/huis-verkopen-binnen-1-week">Huis verkopen binnen 1 week</a></p>
+            <p><a href="/huis-verkopen-zonder-bezichtigingen">Zonder bezichtigingen verkopen</a></p>
+            <p><a href="/huis-verkopen-aan-opkoper">Huis verkopen aan opkoper</a></p>
+          </div>
+
+          <div>
+            <h3>Situaties</h3>
             <p><a href="/opknapwoning-verkopen">Opknapwoning verkopen</a></p>
             <p><a href="/huis-verkopen-bij-erfenis">Huis verkopen bij erfenis</a></p>
             <p><a href="/verhuurde-woning-verkopen">Verhuurde woning verkopen</a></p>
+            <p><a href="/huis-verkopen-bij-scheiding">Huis verkopen bij scheiding</a></p>
+            <p><a href="/leegstaand-huis-verkopen">Leegstaand huis verkopen</a></p>
+            <p><a href="/huis-verkopen-met-achterstallig-onderhoud">Achterstallig onderhoud</a></p>
           </div>
+
           <div>
-            <h3>Website</h3>
-            <p>verkoopjehuisdirect.nl</p>
+            <h3>Regio's</h3>
+            <p><a href="/huis-verkopen-groningen">Huis verkopen in Groningen</a></p>
+            <p><a href="/woning-verkopen-friesland">Woning verkopen in Friesland</a></p>
+            <p><a href="/woning-verkopen-drenthe">Woning verkopen in Drenthe</a></p>
+            <p><a href="/woning-verkopen-overijssel">Woning verkopen in Overijssel</a></p>
             <p><a href="/privacyverklaring">Privacyverklaring</a></p>
             <p>© 2025 Vastgoed Direct Nederland</p>
           </div>
