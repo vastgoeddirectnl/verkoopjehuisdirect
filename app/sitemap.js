@@ -56,6 +56,36 @@ export default function sitemap() {
   changeFrequency: "weekly",
   priority: 0.82,
 },
+{
+  url: `${baseUrl}/huis-verkopen-zonder-bezichtigingen`,
+  lastModified: new Date(),
+  changeFrequency: "weekly",
+  priority: 0.82,
+},
+{
+  url: `${baseUrl}/huis-verkopen-bij-scheiding`,
+  lastModified: new Date(),
+  changeFrequency: "weekly",
+  priority: 0.82,
+},
+{
+  url: `${baseUrl}/leegstaand-huis-verkopen`,
+  lastModified: new Date(),
+  changeFrequency: "weekly",
+  priority: 0.82,
+},
+{
+  url: `${baseUrl}/huis-verkopen-met-achterstallig-onderhoud`,
+  lastModified: new Date(),
+  changeFrequency: "weekly",
+  priority: 0.82,
+},
+{
+  url: `${baseUrl}/huis-verkopen-aan-opkoper`,
+  lastModified: new Date(),
+  changeFrequency: "weekly",
+  priority: 0.82,
+}, 
     {
       url: `${baseUrl}/woning-verkopen-zonder-makelaar`,
       lastModified: new Date(),
