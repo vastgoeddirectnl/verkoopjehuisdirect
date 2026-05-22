@@ -87,12 +87,6 @@ export default function sitemap() {
   priority: 0.82,
 }, 
 {
-  url: `${baseUrl}/huis-verkopen-groningen`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.78,
-},
-{
   url: `${baseUrl}/woning-verkopen-friesland`,
   lastModified: new Date(),
   changeFrequency: "weekly",
