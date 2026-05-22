@@ -15,7 +15,6 @@ const internalLinks = [
 ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen"],
 ["/huis-verkopen-met-achterstallig-onderhoud", "Huis verkopen met achterstallig onderhoud"],
 ["/huis-verkopen-aan-opkoper", "Huis verkopen aan opkoper"],
-["/huis-verkopen-groningen", "Huis verkopen in Groningen"],
 ["/woning-verkopen-friesland", "Woning verkopen in Friesland"],
 ["/woning-verkopen-drenthe", "Woning verkopen in Drenthe"],
 ["/woning-verkopen-overijssel", "Woning verkopen in Overijssel"],  
