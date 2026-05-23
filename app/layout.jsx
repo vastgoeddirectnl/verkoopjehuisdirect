@@ -1,3 +1,5 @@
+import "./globals.css";
+
 export const metadata = {
   title: {
     default: "Vastgoed Direct Nederland | Huis snel verkopen zonder makelaar",
