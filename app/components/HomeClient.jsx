@@ -294,6 +294,172 @@ export default function HomeClient() {
           .footer-grid { gap: 24px; }
           .whatsapp-float { right: 14px; bottom: 14px; padding: 14px 18px; }
         }
+
+
+        /* Mobiele optimalisatie op basis van visuele controle */
+        @media (max-width: 640px) {
+          .top-strip {
+            display: none;
+          }
+
+          .header {
+            position: relative;
+            top: auto;
+            box-shadow: 0 2px 12px rgba(10,37,64,.06);
+          }
+
+          .header-inner {
+            padding: 18px 0 8px;
+            gap: 12px;
+            align-items: center;
+          }
+
+          .logo {
+            width: 190px;
+          }
+
+          .header-actions .btn-orange {
+            padding: 12px 18px;
+            font-size: 14px;
+            box-shadow: 0 8px 18px rgba(255,106,0,.22);
+          }
+
+          .nav {
+            order: 3;
+            width: 100%;
+            font-size: 15px;
+            gap: 18px;
+            padding: 14px 0 10px;
+            border-top: 1px solid #f0eee9;
+          }
+
+          .badge {
+            width: 100%;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.35;
+            border-radius: 24px;
+            padding: 12px 16px;
+          }
+
+          h1 {
+            font-size: clamp(38px, 11.5vw, 52px);
+            line-height: 1.04;
+            letter-spacing: -1.2px;
+          }
+
+          .lead {
+            font-size: 20px;
+            line-height: 1.62;
+          }
+
+          .hero-grid {
+            padding: 36px 0 46px;
+            gap: 34px;
+          }
+
+          .trust-row {
+            gap: 12px;
+            margin: 28px 0;
+          }
+
+          .trust-card {
+            padding: 18px 20px;
+            border-radius: 22px;
+            font-size: 17px;
+          }
+
+          .hero-buttons {
+            gap: 14px;
+          }
+
+          .hero-buttons .btn,
+          .cta-buttons .btn {
+            width: 100%;
+            max-width: 100%;
+          }
+
+          .form-card {
+            margin-top: 4px;
+          }
+
+          .form-title {
+            font-size: 32px;
+          }
+
+          .field {
+            min-height: 64px;
+          }
+
+          .whatsapp-float {
+            right: 12px;
+            bottom: 12px;
+            padding: 12px 16px;
+            font-size: 16px;
+            box-shadow: 0 12px 30px rgba(37,211,102,.32);
+          }
+
+          .cta {
+            padding: 72px 0 128px;
+          }
+
+          .footer {
+            padding: 46px 0 120px;
+          }
+
+          .footer-logo {
+            width: 100%;
+            max-width: 260px;
+            padding: 10px;
+          }
+
+          .footer p {
+            font-size: 18px;
+            line-height: 1.45;
+          }
+        }
+
+
+
+        /* Mobiele optimalisatie populaire onderwerpen */
+        @media (max-width: 640px) {
+          .popular-section .scenario-grid {
+            display: flex;
+            overflow-x: auto;
+            gap: 14px;
+            padding: 4px 2px 14px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+          }
+
+          .popular-section .scenario-grid::-webkit-scrollbar {
+            display: none;
+          }
+
+          .popular-section .scenario {
+            min-width: 78%;
+            scroll-snap-align: start;
+          }
+        }
+
+
+
+        /* Mobiele footer rustiger houden */
+        @media (max-width: 640px) {
+          .footer-grid {
+            gap: 30px;
+          }
+
+          .footer h3 {
+            margin-top: 4px;
+            margin-bottom: 10px;
+          }
+
+          .footer p {
+            margin: 7px 0;
+          }
+        }
+
       `}</style>
 
       <div className="top-strip">
@@ -322,7 +488,7 @@ export default function HomeClient() {
           <div className="header-actions">
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
             <a href="tel:0612238051" className="btn btn-blue">Bel direct</a>
-            <a href="#aanvraag" className="btn btn-orange">Gratis bod</a>
+            <a href="#aanvraag" className="btn btn-orange">Vrijblijvend voorstel</a>
           </div>
         </div>
       </header>
@@ -348,7 +514,7 @@ export default function HomeClient() {
             </div>
 
             <div className="hero-buttons">
-              <a href="#aanvraag" className="btn btn-orange">Ontvang gratis bod</a>
+              <a href="#aanvraag" className="btn btn-orange">Vrijblijvend verkoopvoorstel aanvragen</a>
               <div>
                 <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">Direct WhatsApp gesprek</a>
                 <p className="micro-note">🟢 Meestal snel reactie via WhatsApp</p>
@@ -363,7 +529,7 @@ export default function HomeClient() {
             {!submitted ? (
               <form onSubmit={submitLead}>
                 <p className="step-label">Stap {step} van 4</p>
-                <h2 className="form-title">Vrijblijvend bod aanvragen</h2>
+                <h2 className="form-title">Vrijblijvend verkoopvoorstel aanvragen</h2>
                 <p className="form-sub">Vul uw gegevens in. Wij nemen contact met u op om uw situatie rustig te bespreken.</p>
                 <div className="notice">Uw aanvraag is gratis, vertrouwelijk en verplicht u tot niets.</div>
 
@@ -506,7 +672,7 @@ export default function HomeClient() {
             ))}
           </div>
           <div className="center-cta">
-            <a href="#aanvraag" className="btn btn-orange">Ontvang direct een bod</a>
+            <a href="#aanvraag" className="btn btn-orange">Vrijblijvend verkoopvoorstel aanvragen</a>
           </div>
         </div>
       </section>
@@ -579,27 +745,6 @@ export default function HomeClient() {
         </div>
       </section>
 
-      <section className="section">
-        <div className="container highlight">
-          <div>
-            <p className="eyebrow">Waarom direct verkopen?</p>
-            <h2>Snel duidelijkheid zonder verkoopstress.</h2>
-            <p>
-              Een traditioneel verkooptraject past niet bij iedere situatie. Soms wilt u geen open huis, geen lange onderhandelingen en geen extra kosten voor makelaar, verkoopstyling of herstelwerk.
-            </p>
-          </div>
-
-          <div className="highlight-list">
-            <div className="highlight-item">✓ Geen makelaarskosten</div>
-            <div className="highlight-item">✓ Geen tientallen bezichtigingen</div>
-            <div className="highlight-item">✓ Woning hoeft niet perfect te zijn</div>
-            <div className="highlight-item">✓ Opleverdatum in overleg</div>
-            <div className="highlight-item">✓ Notariële afwikkeling</div>
-            <div className="highlight-item">✓ Vrijblijvend voorstel</div>
-          </div>
-        </div>
-      </section>
-
       <section className="section section-white">
         <div className="container">
           <div className="section-head">
@@ -650,7 +795,7 @@ export default function HomeClient() {
         </div>
       </section>
 
-      <section className="section section-white">
+      <section className="section section-white popular-section">
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">Populaire onderwerpen</p>
@@ -736,7 +881,7 @@ export default function HomeClient() {
           <h2>Wilt u weten wat er mogelijk is?</h2>
           <p>Vraag gratis een verkoopvoorstel aan, bel direct of stuur meteen een WhatsApp bericht. U ontvangt duidelijkheid zonder verplichtingen.</p>
           <div className="cta-buttons">
-            <a href="#aanvraag" className="btn btn-orange">Gratis bod aanvragen</a>
+            <a href="#aanvraag" className="btn btn-orange">Vrijblijvend verkoopvoorstel aanvragen</a>
             <a href="tel:0612238051" className="btn btn-light">Bel direct</a>
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">Direct WhatsApp gesprek</a>
           </div>
