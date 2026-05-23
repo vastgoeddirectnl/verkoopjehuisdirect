@@ -460,6 +460,96 @@ export default function HomeClient() {
           }
         }
 
+
+
+        /* Desktop optimalisatie op basis van visuele controle */
+        @media (min-width: 1041px) {
+          .container {
+            width: min(1260px, calc(100% - 56px));
+          }
+
+          .header-inner {
+            min-height: 78px;
+            gap: 18px;
+          }
+
+          .logo {
+            width: 185px;
+          }
+
+          .nav {
+            flex: 1;
+            justify-content: center;
+            gap: 20px;
+            font-size: 15px;
+          }
+
+          .nav a {
+            white-space: nowrap;
+            line-height: 1.15;
+          }
+
+          .header-actions {
+            flex-shrink: 0;
+            gap: 8px;
+          }
+
+          .header-actions .btn {
+            padding: 13px 19px;
+            font-size: 14px;
+          }
+
+          .hero-grid {
+            grid-template-columns: minmax(0, 1fr) minmax(420px, 0.86fr);
+            align-items: start;
+            gap: 64px;
+            padding: 64px 0 72px;
+          }
+
+          .hero .lead {
+            max-width: 640px;
+          }
+
+          .form-card {
+            margin-top: 34px;
+            padding: 30px;
+          }
+
+          .form-logo {
+            width: 220px;
+          }
+
+          .form-title {
+            font-size: 30px;
+          }
+
+          .trust-row {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            max-width: 640px;
+          }
+
+          .whatsapp-float {
+            right: 28px;
+            bottom: 28px;
+          }
+        }
+
+        @media (min-width: 1041px) and (max-width: 1180px) {
+          .logo {
+            width: 160px;
+          }
+
+          .nav {
+            gap: 14px;
+            font-size: 14px;
+          }
+
+          .header-actions .btn {
+            padding: 12px 15px;
+            font-size: 13px;
+          }
+        }
+
       `}</style>
 
       <div className="top-strip">
@@ -479,8 +569,8 @@ export default function HomeClient() {
           </a>
           <nav className="nav">
             <a href="#werkwijze">Werkwijze</a>
-            <a href="/huis-direct-verkopen">Huis direct verkopen</a>
-            <a href="/huis-snel-verkopen">Huis snel verkopen</a>
+            <a href="/huis-direct-verkopen">Direct verkopen</a>
+            <a href="/huis-snel-verkopen">Snel verkopen</a>
             <a href="/woning-verkopen-zonder-makelaar">Zonder makelaar</a>
             <a href="#mogelijkheden">Mogelijkheden</a>
             <a href="#faq">FAQ</a>
