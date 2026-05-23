@@ -1,21 +1,35 @@
 export const metadata = {
-  title: "Huis snel verkopen? Binnen 24 uur bod | Vastgoed Direct Nederland",
+  title: {
+    default: "Vastgoed Direct Nederland | Huis snel verkopen zonder makelaar",
+    template: "%s | Vastgoed Direct Nederland",
+  },
   description:
-    "Verkoop uw huis snel en zonder makelaar. Ontvang binnen 24 uur een vrijblijvend bod. Geen kosten, directe verkoop en ook woningen in slechte staat.",
+    "Wilt u uw woning snel verkopen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   keywords: [
     "huis snel verkopen",
+    "huis direct verkopen",
     "woning verkopen zonder makelaar",
     "huis verkopen binnen 24 uur",
+    "huis verkopen binnen 1 week",
     "direct huis verkopen",
     "woning snel verkopen",
-    "huis verkopen zonder kosten",
     "opknapwoning verkopen",
     "verhuurde woning verkopen",
+    "huis verkopen bij erfenis",
   ],
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   openGraph: {
-    title: "Huis snel verkopen? Binnen 24 uur bod",
+    title: "Vastgoed Direct Nederland | Huis snel verkopen zonder makelaar",
     description:
-      "Verkoop uw huis snel, direct en zonder makelaar via Vastgoed Direct Nederland.",
+      "Vraag vrijblijvend een helder verkoopvoorstel aan. Geen makelaarskosten, geen open huis nodig en notariële afwikkeling.",
     url: "https://www.verkoopjehuisdirect.nl",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
