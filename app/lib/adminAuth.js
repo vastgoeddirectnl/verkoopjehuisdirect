@@ -1,66 +1,33 @@
 import { cookies } from "next/headers";
 import crypto from "crypto";
 
-const COOKIE_NAME = "vdn_admin_session";
-
-function getSecret() {
-  return process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_PASSWORD || "";
-}
+const COOKIE = "vdn_admin_session";
+const secret = () => process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_PASSWORD || "";
 
 export function createAdminToken() {
-  const secret = getSecret();
-
-  if (!secret) {
-    throw new Error("ADMIN_SESSION_SECRET or ADMIN_PASSWORD is missing.");
-  }
-
-  const issuedAt = Date.now().toString();
-  const signature = crypto
-    .createHmac("sha256", secret)
-    .update(issuedAt)
-    .digest("hex");
-
-  return `${issuedAt}.${signature}`;
+  const issued = Date.now().toString();
+  const sig = crypto.createHmac("sha256", secret()).update(issued).digest("hex");
+  return `${issued}.${sig}`;
 }
 
 export function verifyAdminToken(token) {
-  if (!token) return false;
-
-  const secret = getSecret();
-  if (!secret) return false;
-
-  const [issuedAt, signature] = token.split(".");
-  if (!issuedAt || !signature) return false;
-
-  const expectedSignature = crypto
-    .createHmac("sha256", secret)
-    .update(issuedAt)
-    .digest("hex");
-
+  if (!token || !secret()) return false;
+  const [issued, sig] = token.split(".");
+  if (!issued || !sig) return false;
+  const expected = crypto.createHmac("sha256", secret()).update(issued).digest("hex");
   try {
-    const validSignature = crypto.timingSafeEqual(
-      Buffer.from(signature),
-      Buffer.from(expectedSignature)
-    );
-
-    if (!validSignature) return false;
+    if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return false;
   } catch {
     return false;
   }
-
-  const maxAgeMs = 1000 * 60 * 60 * 12;
-  const age = Date.now() - Number(issuedAt);
-
-  return Number.isFinite(age) && age >= 0 && age < maxAgeMs;
+  return Date.now() - Number(issued) < 1000 * 60 * 60 * 12;
 }
 
 export async function isAdminAuthenticated() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get(COOKIE_NAME)?.value;
-
-  return verifyAdminToken(token);
+  const store = await cookies();
+  return verifyAdminToken(store.get(COOKIE)?.value);
 }
 
-export function getAdminCookieName() {
-  return COOKIE_NAME;
+export function adminCookieName() {
+  return COOKIE;
 }

@@ -1,18 +1,8 @@
 import { NextResponse } from "next/server";
-import { getAdminCookieName } from "../../../lib/adminAuth";
+import { adminCookieName } from "../../../lib/adminAuth";
 
 export async function POST() {
-  const response = NextResponse.json({ ok: true });
-
-  response.cookies.set({
-    name: getAdminCookieName(),
-    value: "",
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 0,
-  });
-
-  return response;
+  const res = NextResponse.json({ ok: true });
+  res.cookies.set({ name: adminCookieName(), value: "", path: "/", maxAge: 0 });
+  return res;
 }
