@@ -2,13 +2,13 @@ import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
   title: "Huis verkopen in Groningen? Vrijblijvend voorstel",
-  description: "Wilt u uw huis verkopen in Groningen zonder makelaar of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
+  description: "Huis of woning verkopen in Groningen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-groningen",
   },
   openGraph: {
     title: "Huis verkopen in Groningen? Vrijblijvend voorstel",
-    description: "Snel duidelijkheid over uw woning in Groningen. Zonder makelaar, zonder open huis en met heldere afspraken.",
+    description: "Huis of woning verkopen in Groningen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
     url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-groningen",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
@@ -21,22 +21,36 @@ const page = {
   "breadcrumb": "Huis verkopen in Groningen",
   "eyebrow": "Huis verkopen Groningen",
   "h1": "Huis verkopen in Groningen zonder makelaar of verkoopstress",
-  "lead": "Wilt u uw woning in Groningen snel verkopen en duidelijkheid krijgen zonder traditioneel verkooptraject? Vastgoed Direct Nederland helpt woningeigenaren met een directe verkoopoplossing, heldere afspraken en notariële afwikkeling.",
-  "shortAnswer": "U kunt uw huis in Groningen vrijblijvend aanmelden voor een verkoopvoorstel. Dit kan ook bij leegstand, achterstallig onderhoud, verhuur, erfenis of wanneer u snel duidelijkheid wilt.",
+  "lead": "Wilt u uw huis of woning in Groningen snel verkopen en duidelijkheid krijgen zonder traditioneel verkooptraject? Vastgoed Direct Nederland helpt woningeigenaren met een directe verkoopoplossing, heldere afspraken en notariële afwikkeling.",
+  "shortAnswer": "U kunt uw huis in Groningen vrijblijvend aanmelden voor een verkoopvoorstel. Ook wanneer u zoekt naar woning snel verkopen Groningen, huis snel verkopen Groningen of huis verkopen zonder makelaar Groningen, kunt u rustig bespreken wat mogelijk is.",
   "benefits": [
     "Huis verkopen in Groningen",
+    "Woning snel verkopen Groningen",
     "Geen makelaarskosten",
     "Geen open huis nodig",
-    "Ook bij onderhoud of leegstand",
     "Vrijblijvend voorstel",
     "Notariële afwikkeling"
   ],
   "sections": [
     {
-      "title": "Wanneer is direct verkopen in Groningen interessant?",
+      "title": "Huis verkopen in Groningen: wanneer is direct verkopen interessant?",
       "paragraphs": [
-        "Een woning verkopen via de traditionele route kan tijd kosten. In sommige situaties wilt u liever snel duidelijkheid, zonder open huis, makelaarskosten of lange onderhandelingen.",
-        "Dat kan bijvoorbeeld spelen bij leegstand, achterstallig onderhoud, een erfeniswoning, verhuur, scheiding, financiële druk of wanneer u de woning niet eerst verkoopklaar wilt maken."
+        "Een huis verkopen in Groningen via de traditionele route kan tijd kosten. In sommige situaties wilt u liever snel duidelijkheid, zonder open huis, makelaarskosten of lange onderhandelingen.",
+        "Dat kan bijvoorbeeld spelen bij leegstand, achterstallig onderhoud, een erfeniswoning, verhuur, scheiding of financiële druk."
+      ]
+    },
+    {
+      "title": "Woning snel verkopen in Groningen",
+      "paragraphs": [
+        "Zoekt u op woning snel verkopen Groningen of huis snel verkopen Groningen? Dan wilt u waarschijnlijk vooral snel weten waar u aan toe bent.",
+        "Wij geven geen onrealistische garanties, maar kijken wel snel en zorgvuldig naar uw woning, situatie en gewenste overdrachtsmoment."
+      ]
+    },
+    {
+      "title": "Verkopen zonder makelaar in Groningen",
+      "paragraphs": [
+        "U hoeft niet altijd een traditioneel verkooptraject met makelaar te starten. U kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen.",
+        "Dat kan prettig zijn wanneer u geen open huis wilt, geen courtage wilt betalen of geen lange periode met bezichtigingen en onzekerheid wilt doorlopen."
       ]
     },
     {
@@ -48,21 +62,7 @@ const page = {
         "Verhuurde woningen",
         "Erfeniswoningen",
         "Leegstaande woningen",
-        "Woningen met achterstallig onderhoud",
-        "Woningen waarbij snel duidelijkheid nodig is"
-      ]
-    },
-    {
-      "title": "Verkopen zonder makelaar in Groningen",
-      "paragraphs": [
-        "U hoeft niet altijd een traditioneel verkooptraject met makelaar te starten. Bij Vastgoed Direct Nederland kunt u rechtstreeks een vrijblijvend verkoopvoorstel aanvragen.",
-        "Dat kan prettig zijn wanneer u geen open huis wilt, geen courtage wilt betalen of geen lange periode met bezichtigingen en onzekerheid wilt doorlopen."
-      ]
-    },
-    {
-      "title": "Ook bij opknapwoning, erfenis of verhuur",
-      "paragraphs": [
-        "Niet iedere woning is direct verkoopklaar. Ook woningen met onderhoud, schade, leegstand of verhuur kunnen worden aangemeld. We bespreken rustig wat mogelijk is en welke voorwaarden daarbij horen."
+        "Woningen met achterstallig onderhoud"
       ]
     },
     {
@@ -94,11 +94,6 @@ const page = {
       "Niet standaard nodig"
     ],
     [
-      "Onderhoud",
-      "Kan verkoop lastiger maken",
-      "Ook deze woningen kunnen worden aangemeld"
-    ],
-    [
       "Snelheid",
       "Kan weken of maanden duren",
       "Snelle duidelijkheid mogelijk"
@@ -116,31 +111,27 @@ const page = {
   ],
   "faqs": [
     {
-      "question": "Kan ik mijn woning in Groningen verkopen zonder makelaar?",
+      "question": "Kan ik mijn huis in Groningen verkopen zonder makelaar?",
       "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar."
+    },
+    {
+      "question": "Kan ik mijn woning snel verkopen in Groningen?",
+      "answer": "Snelle duidelijkheid is vaak mogelijk. De exacte overdrachtsdatum hangt af van de woning, documenten, afspraken en notariële mogelijkheden."
     },
     {
       "question": "Kan ik ook een opknapwoning in Groningen aanmelden?",
       "answer": "Ja, ook woningen met achterstallig onderhoud, schade, leegstand of renovatiebehoefte kunnen worden aangemeld."
     },
     {
-      "question": "Is een snelle overdracht mogelijk?",
-      "answer": "Een snelle overdracht is in overleg mogelijk. De exacte planning hangt af van de woning, afspraken en notariële mogelijkheden."
-    },
-    {
       "question": "Betaal ik makelaarskosten?",
       "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
-    },
-    {
-      "question": "Kan ik een verhuurde woning in Groningen verkopen?",
-      "answer": "Een verhuurde woning verkopen is in veel situaties mogelijk, maar vraagt om duidelijke afspraken over de huursituatie. Wij bespreken graag wat mogelijk is."
     },
     {
       "question": "Is de aanvraag vrijblijvend?",
       "answer": "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
     }
   ],
-  "ctaTitle": "Wilt u uw woning in Groningen verkopen?",
+  "ctaTitle": "Wilt u uw huis in Groningen verkopen?",
   "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden."
 };
 
