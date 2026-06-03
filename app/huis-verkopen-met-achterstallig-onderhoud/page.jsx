@@ -2,13 +2,13 @@ import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
   title: "Huis verkopen met achterstallig onderhoud?",
-  description: "Wilt u een huis verkopen met achterstallig onderhoud zonder eerst te renoveren? Vraag vrijblijvend een verkoopvoorstel aan.",
+  description: "Huis verkopen met achterstallig onderhoud, schade of verouderde staat zonder eerst te renoveren? Vraag vrijblijvend een verkoopvoorstel aan.",
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-met-achterstallig-onderhoud",
   },
   openGraph: {
     title: "Huis verkopen met achterstallig onderhoud?",
-    description: "Ook woningen met achterstallig onderhoud kunnen worden aangemeld. Vraag vrijblijvend een verkoopvoorstel aan.",
+    description: "Huis verkopen met achterstallig onderhoud, schade of verouderde staat zonder eerst te renoveren? Vraag vrijblijvend een verkoopvoorstel aan.",
     url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-met-achterstallig-onderhoud",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
@@ -21,22 +21,29 @@ const page = {
   "breadcrumb": "Huis verkopen met achterstallig onderhoud",
   "eyebrow": "Achterstallig onderhoud",
   "h1": "Huis verkopen met achterstallig onderhoud zonder eerst te renoveren",
-  "lead": "Wilt u een woning verkopen met achterstallig onderhoud, verouderde installaties of renovatiebehoefte? Vastgoed Direct Nederland helpt met een vrijblijvende verkoopoplossing zonder dat u eerst grote kosten hoeft te maken.",
-  "shortAnswer": "U hoeft een huis met achterstallig onderhoud niet altijd eerst te renoveren voordat u duidelijkheid krijgt. U kunt vrijblijvend een verkoopvoorstel aanvragen, ook als de woning niet verkoopklaar is.",
+  "lead": "Wilt u een woning verkopen met achterstallig onderhoud, verouderde installaties, schade of renovatiebehoefte? Vastgoed Direct Nederland helpt met een vrijblijvende verkoopoplossing zonder dat u eerst grote kosten hoeft te maken.",
+  "shortAnswer": "U hoeft een huis met achterstallig onderhoud niet altijd eerst te renoveren voordat u duidelijkheid krijgt. Ook een verouderd huis, beschadigde woning of opknapwoning kan vrijblijvend worden aangemeld.",
   "benefits": [
+    "Achterstallig onderhoud",
     "Geen renovatie vooraf nodig",
     "Ook bij slechte staat",
     "Geen makelaarskosten",
     "Geen open huis nodig",
-    "Vrijblijvend voorstel",
     "Oplevering in overleg"
   ],
   "sections": [
     {
-      "title": "Waarom verkopen zonder eerst te renoveren?",
+      "title": "Huis verkopen met achterstallig onderhoud",
       "paragraphs": [
         "Achterstallig onderhoud kan een traditionele verkoop lastiger maken. Kopers kunnen afhaken of extra onderhandelen, terwijl u eerst kosten moet maken voor herstel, presentatie of verkoopstyling.",
         "Als u niet wilt investeren in renovatie of herstelwerk, kan een directe verkoopoplossing interessant zijn."
+      ]
+    },
+    {
+      "title": "Verouderd huis verkopen zonder renovatie",
+      "paragraphs": [
+        "Een verouderd huis verkopen zonder renovatie is in veel situaties bespreekbaar. Denk aan een woning met oude keuken, badkamer, installaties, schilderwerk of onderhoudspunten.",
+        "Wij kijken naar de huidige staat en bespreken welke verkoopoplossing past zonder dat u vooraf grote kosten hoeft te maken."
       ]
     },
     {
@@ -47,8 +54,7 @@ const page = {
         "Woningen met lekkage of schade",
         "Woningen met verouderde installaties",
         "Opknapwoningen",
-        "Erfeniswoningen met onderhoud",
-        "Woningen die niet verkoopklaar zijn"
+        "Erfeniswoningen met onderhoud"
       ]
     },
     {
@@ -77,21 +83,6 @@ const page = {
   ],
   "comparisonRows": [
     [
-      "Onderhoud",
-      "Kan verkoop vertragen",
-      "Ook deze woningen kunnen worden aangemeld"
-    ],
-    [
-      "Renovatie vooraf",
-      "Vaak gewenst",
-      "Niet noodzakelijk vooraf"
-    ],
-    [
-      "Oplevering",
-      "Vaak verkoopklaar",
-      "In huidige staat bespreekbaar"
-    ],
-    [
       "Makelaarskosten",
       "Vaak courtage of vast tarief",
       "Geen makelaarskosten"
@@ -114,7 +105,7 @@ const page = {
     [
       "Notariële afwikkeling",
       "Afhankelijk van afspraken",
-      "Bij akkoord via de notaris"
+      "Bij akkoord via notaris"
     ]
   ],
   "faqs": [
@@ -123,20 +114,16 @@ const page = {
       "answer": "Ja, ook woningen met achterstallig onderhoud, schade of renovatiebehoefte kunnen worden aangemeld."
     },
     {
-      "question": "Moet ik eerst renoveren?",
-      "answer": "Nee, dat is niet altijd nodig. Wij bespreken de staat van de woning en kijken naar een passende verkoopoplossing."
+      "question": "Kan ik een verouderd huis verkopen zonder renovatie?",
+      "answer": "Ja, dat kan in veel situaties bespreekbaar zijn. U hoeft niet altijd eerst te renoveren om een voorstel aan te vragen."
+    },
+    {
+      "question": "Kan ik verkopen zonder makelaar?",
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar."
     },
     {
       "question": "Is oplevering in huidige staat mogelijk?",
       "answer": "In veel situaties is oplevering in huidige staat bespreekbaar, afhankelijk van de woning en de gemaakte afspraken."
-    },
-    {
-      "question": "Kan dit zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar."
-    },
-    {
-      "question": "Betaal ik makelaarskosten?",
-      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
     },
     {
       "question": "Is de aanvraag vrijblijvend?",
