@@ -641,6 +641,106 @@ export default function HomeClient() {
           }
         }
 
+
+
+        /* Laatste correctie: groter logo en nettere FAQ */
+        @media (min-width: 1041px) {
+          .logo {
+            width: 255px;
+          }
+
+          .header-inner {
+            min-height: 88px;
+            gap: 16px;
+          }
+
+          .nav {
+            gap: 16px;
+            font-size: 15px;
+          }
+
+          .header-actions .btn {
+            padding: 12px 17px;
+            font-size: 14px;
+          }
+
+          #faq .faq {
+            max-width: 980px;
+            grid-template-columns: 1fr;
+            gap: 12px;
+          }
+
+          #faq .faq-item {
+            padding: 18px 22px;
+            border-radius: 18px;
+            display: grid;
+            grid-template-columns: minmax(240px, 0.42fr) 1fr;
+            gap: 20px;
+            align-items: start;
+          }
+
+          #faq .faq-item h3 {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.25;
+          }
+
+          #faq .faq-item p {
+            line-height: 1.55;
+          }
+        }
+
+        @media (min-width: 1041px) and (max-width: 1180px) {
+          .logo {
+            width: 215px;
+          }
+
+          .nav {
+            gap: 12px;
+            font-size: 14px;
+          }
+
+          .header-actions .btn {
+            padding: 11px 14px;
+            font-size: 13px;
+          }
+        }
+
+        @media (max-width: 700px) {
+          #faq .faq-item {
+            display: block;
+          }
+
+          #faq .faq-item h3 {
+            margin-bottom: 8px;
+          }
+        }
+
+
+
+        /* Logo naast Werkwijze groter maken */
+        @media (min-width: 1041px) {
+          .logo {
+            width: 285px;
+          }
+
+          .header-inner {
+            min-height: 92px;
+          }
+        }
+
+        @media (min-width: 1041px) and (max-width: 1180px) {
+          .logo {
+            width: 235px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .logo {
+            width: 205px;
+          }
+        }
+
       `}</style>
 
       <div className="top-strip">
