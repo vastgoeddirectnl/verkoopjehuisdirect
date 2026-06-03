@@ -550,6 +550,97 @@ export default function HomeClient() {
           }
         }
 
+
+
+        /* Desktop polish na visuele controle */
+        @media (min-width: 1041px) {
+          .logo {
+            width: 215px;
+          }
+
+          .header-inner {
+            min-height: 76px;
+            gap: 16px;
+          }
+
+          .nav {
+            gap: 18px;
+          }
+
+          .hero-grid {
+            padding: 58px 0 64px;
+            gap: 58px;
+          }
+
+          .form-card {
+            margin-top: 18px;
+            box-shadow: 0 26px 70px rgba(10, 37, 64, 0.13);
+          }
+
+          .form-logo {
+            width: 240px;
+          }
+
+          .section {
+            padding: 74px 0;
+          }
+
+          .section-head {
+            margin-bottom: 36px;
+          }
+
+          .popular-section {
+            padding-top: 70px;
+            padding-bottom: 76px;
+          }
+
+          .popular-section .scenario-grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 13px;
+          }
+
+          .popular-section .scenario {
+            padding: 18px 19px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+          }
+
+          #faq .faq {
+            max-width: 1120px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            align-items: start;
+          }
+
+          #faq .faq-item {
+            padding: 20px 22px;
+          }
+
+          .whatsapp-float {
+            right: 24px;
+            bottom: 24px;
+            padding: 13px 19px;
+            font-size: 15px;
+            box-shadow: 0 12px 32px rgba(37, 211, 102, 0.28);
+          }
+        }
+
+        @media (min-width: 1041px) and (max-width: 1180px) {
+          .logo {
+            width: 178px;
+          }
+
+          .popular-section .scenario-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+          }
+        }
+
+        @media (min-width: 1181px) and (max-width: 1360px) {
+          .popular-section .scenario-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+          }
+        }
+
       `}</style>
 
       <div className="top-strip">
@@ -894,21 +985,22 @@ export default function HomeClient() {
           </div>
 
           <div className="scenario-grid">
+            <a className="scenario" href="/leegstaand-huis-verkopen">Leegstaand huis verkopen</a>
+            <a className="scenario" href="/opknapwoning-verkopen">Opknapwoning verkopen</a>
+            <a className="scenario" href="/huis-verkopen-met-achterstallig-onderhoud">Huis verkopen met achterstallig onderhoud</a>
+            <a className="scenario" href="/huis-verkopen-groningen">Huis verkopen in Groningen</a>
+            <a className="scenario" href="/woning-verkopen-friesland">Woning verkopen in Friesland</a>
+
             <a className="scenario" href="/huis-direct-verkopen">Huis direct verkopen</a>
             <a className="scenario" href="/huis-snel-verkopen">Huis snel verkopen</a>
             <a className="scenario" href="/woning-verkopen-zonder-makelaar">Woning verkopen zonder makelaar</a>
             <a className="scenario" href="/huis-verkopen-binnen-24-uur">Huis verkopen binnen 24 uur</a>
             <a className="scenario" href="/huis-verkopen-binnen-1-week">Huis verkopen binnen 1 week</a>
+            <a className="scenario" href="/huis-verkopen-aan-opkoper">Huis verkopen aan opkoper</a>
             <a className="scenario" href="/huis-verkopen-zonder-bezichtigingen">Huis verkopen zonder bezichtigingen</a>
             <a className="scenario" href="/huis-verkopen-bij-scheiding">Huis verkopen bij scheiding</a>
-            <a className="scenario" href="/leegstaand-huis-verkopen">Leegstaand huis verkopen</a>
-            <a className="scenario" href="/huis-verkopen-met-achterstallig-onderhoud">Huis verkopen met achterstallig onderhoud</a>
-            <a className="scenario" href="/huis-verkopen-aan-opkoper">Huis verkopen aan opkoper</a>
-            <a className="scenario" href="/opknapwoning-verkopen">Opknapwoning verkopen</a>
             <a className="scenario" href="/huis-verkopen-bij-erfenis">Huis verkopen bij erfenis</a>
             <a className="scenario" href="/verhuurde-woning-verkopen">Verhuurde woning verkopen</a>
-            <a className="scenario" href="/huis-verkopen-groningen">Huis verkopen in Groningen</a>
-            <a className="scenario" href="/woning-verkopen-friesland">Woning verkopen in Friesland</a>
             <a className="scenario" href="/woning-verkopen-drenthe">Woning verkopen in Drenthe</a>
             <a className="scenario" href="/woning-verkopen-overijssel">Woning verkopen in Overijssel</a>
           </div>
