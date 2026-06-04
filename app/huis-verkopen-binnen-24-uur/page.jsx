@@ -1,16 +1,14 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen binnen 24 uur? Snel duidelijkheid",
-  description:
-    "Wilt u snel duidelijkheid over uw woningverkoop? Vraag vrijblijvend een verkoopvoorstel aan zonder makelaar, open huis of verkoopstress.",
+  title: "Huis verkopen binnen 24 uur",
+  description: "Huis verkopen binnen 24 uur of snel duidelijkheid over uw mogelijkheden? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-binnen-24-uur",
   },
   openGraph: {
-    title: "Huis verkopen binnen 24 uur? Snel duidelijkheid",
-    description:
-      "Vraag vrijblijvend een verkoopvoorstel aan en ontdek wat mogelijk is voor uw woning.",
+    title: "Huis verkopen binnen 24 uur",
+    description: "Huis verkopen binnen 24 uur of snel duidelijkheid over uw mogelijkheden? Vraag vrijblijvend een helder verkoopvoorstel aan.",
     url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-binnen-24-uur",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
@@ -19,103 +17,120 @@ export const metadata = {
 };
 
 const page = {
-  slug: "/huis-verkopen-binnen-24-uur",
-  breadcrumb: "Huis verkopen binnen 24 uur",
-  eyebrow: "Huis verkopen binnen 24 uur",
-  h1: "Huis verkopen binnen 24 uur? Vraag snel duidelijkheid aan",
-  lead:
-    "Wilt u snel duidelijkheid over de verkoopmogelijkheden van uw woning? Vastgoed Direct Nederland helpt woningeigenaren met een directe verkoopoplossing, zonder traditioneel makelaarstraject.",
-  shortAnswer:
-    "Binnen 24 uur verkopen is niet altijd realistisch als definitieve overdracht, maar snel duidelijkheid krijgen over uw mogelijkheden kan vaak wel. U vraagt gratis en vrijblijvend een verkoopvoorstel aan.",
-  benefits: [
-    "Snel reactie",
-    "Vrijblijvend voorstel",
+  "slug": "/huis-verkopen-binnen-24-uur",
+  "breadcrumb": "Huis verkopen binnen 24 uur",
+  "eyebrow": "Huis verkopen binnen 24 uur",
+  "h1": "Huis verkopen binnen 24 uur: snel duidelijkheid",
+  "lead": "Wilt u snel weten wat er mogelijk is met uw woning? Wij bekijken uw aanvraag zorgvuldig en geven zo snel mogelijk duidelijkheid.",
+  "shortAnswer": "Huis verkopen binnen 24 uur of snel duidelijkheid over uw mogelijkheden? U kunt vrijblijvend een helder verkoopvoorstel aan.",
+  "benefits": [
+    "Huis verkopen binnen 24 uur",
     "Geen makelaarskosten",
     "Geen open huis nodig",
-    "Ook bij onderhoud of schade",
-    "Notariële afwikkeling",
+    "Vrijblijvend verkoopvoorstel",
+    "Duidelijke voorwaarden",
+    "Notariële afwikkeling"
   ],
-  sections: [
+  "sections": [
     {
-      title: "Wat betekent huis verkopen binnen 24 uur?",
-      paragraphs: [
-        "Veel verkopers zoeken naar snelheid, maar een woning juridisch overdragen binnen 24 uur is niet altijd haalbaar. Documenten, eigendomssituatie en notariële planning spelen daarbij een belangrijke rol.",
-        "Wat wél vaak mogelijk is: snel contact, snel duidelijkheid en een eerste inschatting van de verkoopmogelijkheden.",
-      ],
+      "title": "Huis verkopen binnen 24 uur: wanneer is dit interessant?",
+      "paragraphs": [
+        "Wilt u snel weten wat er mogelijk is met uw woning? Wij bekijken uw aanvraag zorgvuldig en geven zo snel mogelijk duidelijkheid.",
+        "Een directe verkoopoplossing kan passend zijn wanneer u snel duidelijkheid wilt, geen lang verkooptraject wilt of de woning niet eerst verkoopklaar wilt maken."
+      ]
     },
     {
-      title: "Wanneer is snelle duidelijkheid belangrijk?",
-      bullets: [
-        "Bij leegstand of dubbele lasten",
-        "Bij een erfeniswoning",
-        "Bij scheiding of financiële druk",
-        "Bij een woning met achterstallig onderhoud",
-        "Bij verhuur of lastige verkoopomstandigheden",
-        "Als u geen traditioneel verkooptraject wilt",
-      ],
+      "title": "Zonder traditioneel verkooptraject",
+      "paragraphs": [
+        "U hoeft niet altijd te kiezen voor een verkooptraject met meerdere bezichtigingen, open huis of lange onderhandelingen.",
+        "Bij Vastgoed Direct Nederland vraagt u vrijblijvend een helder verkoopvoorstel aan. Daarna beslist u rustig of het voorstel bij uw situatie past."
+      ]
     },
     {
-      title: "Hoe werkt het?",
-      steps: [
+      "title": "Voor welke situaties?",
+      "bullets": [
+        "Huis verkopen binnen 24 uur",
+        "Leegstand",
+        "Achterstallig onderhoud",
+        "Opknapwoning",
+        "Erfenis",
+        "Scheiding",
+        "Verhuur",
+        "Snel duidelijkheid gewenst"
+      ]
+    },
+    {
+      "title": "Hoe werkt het?",
+      "steps": [
         "U vult uw woninggegevens in.",
-        "Wij nemen contact met u op om uw situatie te bespreken.",
-        "U ontvangt duidelijkheid over een mogelijke verkoopoplossing.",
-        "Bij akkoord wordt de overdracht via de notaris geregeld.",
-      ],
+        "Wij bespreken uw situatie en gewenste snelheid.",
+        "U ontvangt een vrijblijvend verkoopvoorstel.",
+        "Bij akkoord wordt de overdracht via de notaris geregeld."
+      ]
     },
     {
-      title: "Geen makelaar of open huis nodig",
-      paragraphs: [
-        "U hoeft geen makelaar in te schakelen, geen open huis te organiseren en uw woning niet altijd eerst verkoopklaar te maken. Dat kan veel tijd, kosten en stress besparen.",
-      ],
-    },
-    {
-      title: "Kosten, notariskosten en aanbetaling",
-      paragraphs: [
+      "title": "Kosten en afwikkeling",
+      "paragraphs": [
         "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
-        "In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd.",
-      ],
-    },
+        "Een aanbetaling of voorschot kan in sommige situaties bespreekbaar zijn, mits dit juridisch en notarieel goed wordt vastgelegd."
+      ]
+    }
   ],
-  comparisonRows: [
-    ["Snelheid", "Vaak afhankelijk van bezichtigingen en koper", "Snelle duidelijkheid mogelijk"],
-    ["Makelaarskosten", "Vaak courtage of vast tarief", "Geen makelaarskosten"],
-    ["Bezichtigingen", "Vaak meerdere", "Niet standaard nodig"],
-    ["Woning voorbereiden", "Vaak gewenst", "Niet noodzakelijk vooraf"],
-    ["Opleverdatum", "Afhankelijk van koper", "In overleg bespreekbaar"],
+  "comparisonRows": [
+    [
+      "Makelaarskosten",
+      "Vaak courtage of vast tarief",
+      "Geen makelaarskosten"
+    ],
+    [
+      "Bezichtigingen",
+      "Vaak meerdere kijkers",
+      "Niet standaard nodig"
+    ],
+    [
+      "Snelheid",
+      "Kan weken of maanden duren",
+      "Snelle duidelijkheid mogelijk"
+    ],
+    [
+      "Onderhoud",
+      "Kan verkoop lastiger maken",
+      "Ook deze woningen kunnen worden aangemeld"
+    ],
+    [
+      "Opleverdatum",
+      "Afhankelijk van koper",
+      "In overleg bespreekbaar"
+    ],
+    [
+      "Afwikkeling",
+      "Afhankelijk van afspraken",
+      "Bij akkoord via de notaris"
+    ]
   ],
-  faqs: [
+  "faqs": [
     {
-      question: "Kan ik mijn huis echt binnen 24 uur verkopen?",
-      answer:
-        "Een definitieve overdracht binnen 24 uur is meestal niet realistisch, omdat notariële en juridische stappen nodig zijn. Wel kunnen wij vaak snel duidelijkheid geven over de mogelijkheden.",
+      "question": "Kan ik mijn huis verkopen binnen 24 uur zonder makelaar regelen?",
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
     },
     {
-      question: "Kan ik binnen 24 uur reactie krijgen?",
-      answer:
-        "Wij proberen snel te reageren op aanvragen. De exacte reactietijd kan afhangen van het moment van aanvraag en de beschikbare informatie.",
+      "question": "Is de aanvraag vrijblijvend?",
+      "answer": "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
     },
     {
-      question: "Kan dit zonder makelaar?",
-      answer:
-        "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar.",
+      "question": "Moet de woning verkoopklaar zijn?",
+      "answer": "Niet altijd. Ook woningen met onderhoud, leegstand of renovatiebehoefte kunnen worden aangemeld."
     },
     {
-      question: "Kan ik ook een woning met schade aanmelden?",
-      answer:
-        "Ja, ook woningen met schade, achterstallig onderhoud of renovatiebehoefte kunnen worden aangemeld.",
-    },
-    {
-      question: "Is de aanvraag vrijblijvend?",
-      answer:
-        "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast.",
-    },
+      "question": "Betaal ik makelaarskosten?",
+      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
+    }
   ],
-  ctaTitle: "Wilt u snel duidelijkheid over uw woning?",
-  ctaText:
-    "Vraag vrijblijvend een verkoopvoorstel aan en ontdek wat mogelijk is zonder makelaar of verkoopstress.",
+  "ctaTitle": "Wilt u huis verkopen binnen 24 uur?",
+  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden.",
+  "keywords": "huis verkopen binnen 24 uur, snel bod woning, snel duidelijkheid"
 };
 
-export default function HuisVerkopenBinnen24Uur() {
+export default function HuisVerkopenBinnen24UurPage() {
   return <SeoLandingPage page={page} />;
 }
