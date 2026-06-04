@@ -1,13 +1,13 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Woning verkopen in Friesland? Vrijblijvend voorstel",
+  title: "Woning verkopen Friesland",
   description: "Woning of huis verkopen in Friesland zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/woning-verkopen-friesland",
   },
   openGraph: {
-    title: "Woning verkopen in Friesland? Vrijblijvend voorstel",
+    title: "Woning verkopen Friesland",
     description: "Woning of huis verkopen in Friesland zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
     url: "https://www.verkoopjehuisdirect.nl/woning-verkopen-friesland",
     siteName: "Vastgoed Direct Nederland",
@@ -18,67 +18,60 @@ export const metadata = {
 
 const page = {
   "slug": "/woning-verkopen-friesland",
-  "breadcrumb": "Woning verkopen in Friesland",
+  "breadcrumb": "Woning verkopen Friesland",
   "eyebrow": "Woning verkopen Friesland",
   "h1": "Woning verkopen in Friesland zonder makelaar of verkoopstress",
-  "lead": "Wilt u uw woning of huis in Friesland verkopen en snel duidelijkheid krijgen zonder traditioneel verkooptraject? Vastgoed Direct Nederland helpt woningeigenaren met een vrijblijvende verkoopoplossing, heldere voorwaarden en notariële afwikkeling.",
-  "shortAnswer": "U kunt uw woning in Friesland vrijblijvend aanmelden voor een verkoopvoorstel. Ook wanneer u zoekt naar huis verkopen in Friesland, woning snel verkopen Friesland of verkopen zonder makelaar in Friesland, kunt u rustig bespreken wat mogelijk is.",
+  "lead": "Wilt u uw woning of huis in Friesland verkopen en snel duidelijkheid krijgen zonder lang traditioneel verkooptraject?",
+  "shortAnswer": "Vraag vrijblijvend een verkoopvoorstel aan voor uw woning in Friesland. Ook bij leegstand, onderhoud, verhuur, erfenis of scheiding kunt u rustig bespreken wat mogelijk is.",
   "benefits": [
-    "Woning verkopen in Friesland",
-    "Huis verkopen in Friesland",
+    "Woning verkopen Friesland",
+    "Huis verkopen Friesland",
     "Geen makelaarskosten",
     "Geen open huis nodig",
-    "Ook bij onderhoud of leegstand",
+    "Vrijblijvend verkoopvoorstel",
     "Notariële afwikkeling"
   ],
   "sections": [
     {
-      "title": "Woning verkopen in Friesland: wanneer is direct verkopen interessant?",
+      "title": "Woning verkopen Friesland: snel duidelijkheid",
       "paragraphs": [
-        "Een woning verkopen via de traditionele route kan tijd kosten. In sommige situaties wilt u liever snel duidelijkheid, zonder open huis, makelaarskosten of lange onderhandelingen.",
-        "Dat kan bijvoorbeeld spelen bij leegstand, achterstallig onderhoud, een erfeniswoning, verhuur, scheiding, financiële druk of wanneer u de woning niet eerst verkoopklaar wilt maken."
-      ]
-    },
-    {
-      "title": "Huis verkopen in Friesland zonder traditioneel verkooptraject",
-      "paragraphs": [
-        "Ook wanneer u zoekt naar huis verkopen in Friesland, woning snel verkopen in Friesland of verkopen zonder makelaar in Friesland, kunt u vrijblijvend een voorstel aanvragen.",
-        "Wij bespreken rustig uw situatie en kijken naar een passende verkoopoplossing met heldere voorwaarden."
-      ]
-    },
-    {
-      "title": "Voor welke woningen in Friesland?",
-      "bullets": [
-        "Rijtjeshuizen en eengezinswoningen",
-        "Appartementen",
-        "Opknapwoningen",
-        "Verhuurde woningen",
-        "Erfeniswoningen",
-        "Leegstaande woningen",
-        "Woningen met achterstallig onderhoud"
+        "Wilt u uw woning of huis in Friesland verkopen zonder lang traditioneel verkooptraject? Vastgoed Direct Nederland helpt woningeigenaren met een rustige en duidelijke verkoopoplossing.",
+        "U vraagt vrijblijvend een verkoopvoorstel aan. Daarna bespreken wij uw situatie, de woning en de gewenste overdracht."
       ]
     },
     {
       "title": "Verkopen zonder makelaar in Friesland",
       "paragraphs": [
-        "U hoeft niet altijd een traditioneel verkooptraject met makelaar te starten. Bij Vastgoed Direct Nederland kunt u rechtstreeks een vrijblijvend verkoopvoorstel aanvragen.",
-        "Dat kan prettig zijn wanneer u geen open huis wilt, geen courtage wilt betalen of geen lange periode met bezichtigingen en onzekerheid wilt doorlopen."
+        "Een woning verkopen in Friesland hoeft niet altijd via een traditioneel makelaarstraject. Als u geen open huis, bezichtigingsrondes of makelaarskosten wilt, kunt u rechtstreeks een voorstel aanvragen.",
+        "De aanvraag is vrijblijvend. U bepaalt zelf of het voorstel past bij uw situatie."
+      ]
+    },
+    {
+      "title": "Ook bij bijzondere situaties in Friesland",
+      "bullets": [
+        "Leegstaande woning",
+        "Opknapwoning",
+        "Woning met achterstallig onderhoud",
+        "Erfeniswoning",
+        "Verhuurde woning",
+        "Woning bij scheiding",
+        "Woning waarbij snel duidelijkheid gewenst is"
       ]
     },
     {
       "title": "Hoe werkt het?",
       "steps": [
-        "U vult uw woninggegevens in via het formulier.",
-        "Wij nemen contact met u op om uw situatie en gewenste snelheid te bespreken.",
+        "U vult de woninggegevens in.",
+        "Wij nemen contact met u op om de situatie rustig te bespreken.",
         "U ontvangt een vrijblijvend verkoopvoorstel met duidelijke voorwaarden.",
         "Bij akkoord wordt de overdracht via de notaris geregeld."
       ]
     },
     {
-      "title": "Kosten, notariskosten en aanbetaling",
+      "title": "Kosten en afwikkeling",
       "paragraphs": [
         "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
-        "In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd."
+        "Een aanbetaling of voorschot kan in sommige situaties bespreekbaar zijn, mits dit juridisch en notarieel goed wordt vastgelegd."
       ]
     }
   ],
@@ -99,42 +92,44 @@ const page = {
       "Snelle duidelijkheid mogelijk"
     ],
     [
+      "Onderhoud",
+      "Kan verkoop lastiger maken",
+      "Ook deze woningen kunnen worden aangemeld"
+    ],
+    [
       "Opleverdatum",
       "Afhankelijk van koper",
       "In overleg bespreekbaar"
     ],
     [
-      "Notariële afwikkeling",
+      "Afwikkeling",
       "Afhankelijk van afspraken",
-      "Bij akkoord via notaris"
+      "Bij akkoord via de notaris"
     ]
   ],
   "faqs": [
     {
       "question": "Kan ik mijn woning in Friesland verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar."
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
     },
     {
       "question": "Kan ik mijn huis in Friesland snel verkopen?",
-      "answer": "Snelle duidelijkheid is vaak mogelijk. De exacte planning hangt af van de woning, afspraken en notariële mogelijkheden."
-    },
-    {
-      "question": "Kan ik ook een opknapwoning in Friesland aanmelden?",
-      "answer": "Ja, ook woningen met achterstallig onderhoud, schade, leegstand of renovatiebehoefte kunnen worden aangemeld."
-    },
-    {
-      "question": "Betaal ik makelaarskosten?",
-      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
+      "answer": "Snelle duidelijkheid is vaak mogelijk. De exacte planning hangt af van de woning, documenten, afspraken en notariële mogelijkheden."
     },
     {
       "question": "Is de aanvraag vrijblijvend?",
       "answer": "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
+    },
+    {
+      "question": "Betaal ik makelaarskosten?",
+      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
     }
   ],
-  "ctaTitle": "Wilt u uw woning in Friesland verkopen?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden."
+  "ctaTitle": "Wilt u woning verkopen friesland?",
+  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden.",
+  "keywords": "woning verkopen Friesland, huis verkopen Friesland, woning snel verkopen Friesland"
 };
 
-export default function WoningVerkopenFriesland() {
+export default function WoningVerkopenFrieslandPage() {
   return <SeoLandingPage page={page} />;
 }
