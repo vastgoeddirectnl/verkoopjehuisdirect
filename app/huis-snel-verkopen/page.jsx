@@ -1,11 +1,11 @@
 export const metadata = {
-  title: "Huis snel verkopen",
-  description:
-    "Wilt u uw huis snel verkopen zonder makelaar, open huis of lange verkoopperiode? Vraag 
-    vrijblijvend een helder verkoopvoorstel aan.",
-  alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-snel-verkopen",
-  },
+title: "Huis snel verkopen",
+description: "Wilt u uw huis snel verkopen zonder makelaar, open huis of lange verkoopperiode? Vraag
+vrijblijvend een helder verkoopvoorstel aan.",
+alternates: {
+canonical: "https://www.verkoopjehuisdirect.nl/huis-snel-verkopen",
+},
+};
   openGraph: {
     title: "Huis snel verkopen? Vrijblijvend verkoopvoorstel",
     description:
