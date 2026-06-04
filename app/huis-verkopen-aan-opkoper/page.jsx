@@ -1,14 +1,14 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen aan opkoper? Vrijblijvend voorstel",
-  description: "Wilt u uw huis verkopen aan een opkoper of directe koper? Vraag vrijblijvend een verkoopvoorstel aan zonder makelaar.",
+  title: "Huis verkopen aan opkoper",
+  description: "Huis verkopen aan een opkoper zonder makelaar of lange verkoopperiode? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-aan-opkoper",
   },
   openGraph: {
-    title: "Huis verkopen aan opkoper? Vrijblijvend voorstel",
-    description: "Vraag vrijblijvend een verkoopvoorstel aan als u uw woning zonder traditioneel verkooptraject wilt verkopen.",
+    title: "Huis verkopen aan opkoper",
+    description: "Huis verkopen aan een opkoper zonder makelaar of lange verkoopperiode? Vraag vrijblijvend een helder verkoopvoorstel aan.",
     url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-aan-opkoper",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
@@ -20,72 +20,63 @@ const page = {
   "slug": "/huis-verkopen-aan-opkoper",
   "breadcrumb": "Huis verkopen aan opkoper",
   "eyebrow": "Huis verkopen aan opkoper",
-  "h1": "Huis verkopen aan een opkoper of directe koper",
-  "lead": "Wilt u uw huis verkopen aan een opkoper of directe koper zonder traditioneel verkooptraject? Vastgoed Direct Nederland helpt met een vrijblijvende verkoopoplossing, heldere voorwaarden en notariële afwikkeling.",
-  "shortAnswer": "Een huis verkopen aan een opkoper betekent dat u niet het volledige traject met makelaar, open huis en particuliere bezichtigingen hoeft te doorlopen. U vraagt vrijblijvend een verkoopvoorstel aan en bespreekt wat mogelijk is.",
+  "h1": "Huis verkopen aan opkoper zonder lang verkooptraject",
+  "lead": "Wilt u uw huis verkopen aan een opkoper en snel duidelijkheid krijgen over de voorwaarden en overdracht?",
+  "shortAnswer": "Huis verkopen aan een opkoper zonder makelaar of lange verkoopperiode? U kunt vrijblijvend een helder verkoopvoorstel aan.",
   "benefits": [
-    "Vrijblijvend verkoopvoorstel",
+    "Huis verkopen aan opkoper",
     "Geen makelaarskosten",
     "Geen open huis nodig",
+    "Vrijblijvend verkoopvoorstel",
     "Duidelijke voorwaarden",
-    "Opleverdatum in overleg",
     "Notariële afwikkeling"
   ],
   "sections": [
     {
-      "title": "Waarom verkopen aan een opkoper?",
+      "title": "Huis verkopen aan opkoper: wanneer is dit interessant?",
       "paragraphs": [
-        "Sommige verkopers willen geen maandenlang verkooptraject met bezichtigingen, onderhandelingen en financieringsonzekerheid. Een directe verkoopoplossing kan dan meer rust en snelheid geven.",
-        "Dit kan interessant zijn bij leegstand, achterstallig onderhoud, verhuur, erfenis, scheiding of wanneer u vooral snel duidelijkheid wilt."
+        "Wilt u uw huis verkopen aan een opkoper en snel duidelijkheid krijgen over de voorwaarden en overdracht?",
+        "Een directe verkoopoplossing kan passend zijn wanneer u snel duidelijkheid wilt, geen lang verkooptraject wilt of de woning niet eerst verkoopklaar wilt maken."
       ]
     },
     {
-      "title": "Let niet alleen op het bod",
+      "title": "Zonder traditioneel verkooptraject",
       "paragraphs": [
-        "Bij verkoop aan een opkoper of directe koper is het belangrijk om niet alleen naar het bedrag te kijken. Ook voorwaarden, kosten, opleverdatum, privacy en notariële afwikkeling tellen mee.",
-        "Daarom werken wij met heldere voorwaarden en een vrijblijvend voorstel, zodat u rustig kunt beoordelen of het past."
+        "U hoeft niet altijd te kiezen voor een verkooptraject met meerdere bezichtigingen, open huis of lange onderhandelingen.",
+        "Bij Vastgoed Direct Nederland vraagt u vrijblijvend een helder verkoopvoorstel aan. Daarna beslist u rustig of het voorstel bij uw situatie past."
       ]
     },
     {
       "title": "Voor welke situaties?",
       "bullets": [
-        "Huis snel verkopen",
-        "Woning verkopen zonder makelaar",
-        "Opknapwoning verkopen",
-        "Leegstaand huis verkopen",
-        "Verhuurde woning verkopen",
-        "Geërfd huis verkopen",
-        "Woning verkopen zonder bezichtigingen"
+        "Huis verkopen aan opkoper",
+        "Leegstand",
+        "Achterstallig onderhoud",
+        "Opknapwoning",
+        "Erfenis",
+        "Scheiding",
+        "Verhuur",
+        "Snel duidelijkheid gewenst"
       ]
     },
     {
       "title": "Hoe werkt het?",
       "steps": [
-        "U vult uw woninggegevens in via het formulier.",
-        "Wij bespreken uw situatie, woning en gewenste snelheid.",
-        "U ontvangt een vrijblijvend verkoopvoorstel met duidelijke voorwaarden.",
+        "U vult uw woninggegevens in.",
+        "Wij bespreken uw situatie en gewenste snelheid.",
+        "U ontvangt een vrijblijvend verkoopvoorstel.",
         "Bij akkoord wordt de overdracht via de notaris geregeld."
       ]
     },
     {
-      "title": "Kosten, notaris en aanbetaling",
+      "title": "Kosten en afwikkeling",
       "paragraphs": [
         "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
-        "In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd."
+        "Een aanbetaling of voorschot kan in sommige situaties bespreekbaar zijn, mits dit juridisch en notarieel goed wordt vastgelegd."
       ]
     }
   ],
   "comparisonRows": [
-    [
-      "Verkooproute",
-      "Traditioneel via makelaar",
-      "Rechtstreeks verkoopvoorstel"
-    ],
-    [
-      "Voorwaarden",
-      "Afhankelijk van koper",
-      "Vooraf duidelijk bespreken"
-    ],
     [
       "Makelaarskosten",
       "Vaak courtage of vast tarief",
@@ -102,46 +93,44 @@ const page = {
       "Snelle duidelijkheid mogelijk"
     ],
     [
+      "Onderhoud",
+      "Kan verkoop lastiger maken",
+      "Ook deze woningen kunnen worden aangemeld"
+    ],
+    [
       "Opleverdatum",
       "Afhankelijk van koper",
       "In overleg bespreekbaar"
     ],
     [
-      "Notariële afwikkeling",
+      "Afwikkeling",
       "Afhankelijk van afspraken",
       "Bij akkoord via de notaris"
     ]
   ],
   "faqs": [
     {
-      "question": "Kan ik mijn huis verkopen aan een opkoper?",
-      "answer": "U kunt vrijblijvend een verkoopvoorstel aanvragen als u uw woning zonder traditioneel verkooptraject wilt verkopen."
-    },
-    {
-      "question": "Is verkopen aan een opkoper altijd sneller?",
-      "answer": "Snel duidelijkheid is vaak mogelijk, maar de exacte planning hangt af van de woning, documenten, afspraken en notariële mogelijkheden."
-    },
-    {
-      "question": "Moet mijn woning verkoopklaar zijn?",
-      "answer": "Nee, ook woningen met achterstallig onderhoud, schade, leegstand of renovatiebehoefte kunnen worden aangemeld."
-    },
-    {
-      "question": "Kan dit zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar."
-    },
-    {
-      "question": "Betaal ik makelaarskosten?",
-      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
+      "question": "Kan ik mijn huis verkopen aan opkoper zonder makelaar regelen?",
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
     },
     {
       "question": "Is de aanvraag vrijblijvend?",
       "answer": "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
+    },
+    {
+      "question": "Moet de woning verkoopklaar zijn?",
+      "answer": "Niet altijd. Ook woningen met onderhoud, leegstand of renovatiebehoefte kunnen worden aangemeld."
+    },
+    {
+      "question": "Betaal ik makelaarskosten?",
+      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
     }
   ],
-  "ctaTitle": "Wilt u uw huis verkopen aan een opkoper?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en vergelijk rustig de voorwaarden, kosten en mogelijkheden."
+  "ctaTitle": "Wilt u huis verkopen aan opkoper?",
+  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden.",
+  "keywords": "huis verkopen aan opkoper, woning verkopen aan opkoper, vastgoed opkoper"
 };
 
-export default function HuisVerkopenAanOpkoper() {
+export default function HuisVerkopenAanOpkoperPage() {
   return <SeoLandingPage page={page} />;
 }
