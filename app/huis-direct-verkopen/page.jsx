@@ -1,11 +1,10 @@
 export const metadata = {
-title: "Huis direct verkopen",
-description: "Huis direct verkopen zonder makelaar of verkoopstress? Vraag vrijblijvend een helder
-verkoopvoorstel aan via Vastgoed Direct Nederland.",
-alternates: {
-canonical: "https://www.verkoopjehuisdirect.nl/huis-direct-verkopen",
-},
-};
+  title: "Huis direct verkopen? Vrijblijvend voorstel zonder makelaar",
+  description:
+    "Wilt u uw huis direct verkopen zonder makelaar, bezichtigingen of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
+  alternates: {
+    canonical: "https://www.verkoopjehuisdirect.nl/huis-direct-verkopen",
+  },
   openGraph: {
     title: "Huis direct verkopen? Vrijblijvend voorstel zonder makelaar",
     description:
