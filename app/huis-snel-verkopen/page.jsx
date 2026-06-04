@@ -1,7 +1,8 @@
 export const metadata = {
-  title: "Huis snel verkopen? Vrijblijvend voorstel zonder makelaar",
+  title: "Huis snel verkopen",
   description:
-    "Wilt u uw huis snel verkopen zonder makelaar, bezichtigingen of verkoopstress? Ontvang snel duidelijkheid met een vrijblijvend verkoopvoorstel.",
+    "Wilt u uw huis snel verkopen zonder makelaar, open huis of lange verkoopperiode? Vraag 
+    vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/huis-snel-verkopen",
   },
