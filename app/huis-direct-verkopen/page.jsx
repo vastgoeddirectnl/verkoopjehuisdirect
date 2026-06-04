@@ -5,7 +5,6 @@
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/huis-direct-verkopen",
   },
-  },
   openGraph: {
     title: "Huis direct verkopen? Vrijblijvend voorstel zonder makelaar",
     description:
