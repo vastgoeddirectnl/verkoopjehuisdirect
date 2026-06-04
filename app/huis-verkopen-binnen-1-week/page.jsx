@@ -1,16 +1,14 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen binnen 1 week? Vrijblijvend voorstel",
-  description:
-    "Wilt u uw huis verkopen binnen 1 week of snel duidelijkheid? Vraag vrijblijvend een verkoopvoorstel aan zonder makelaar of verkoopstress.",
+  title: "Huis verkopen binnen 1 week",
+  description: "Huis verkopen binnen 1 week of snel duidelijkheid over uw verkoopmogelijkheden? Vraag vrijblijvend een voorstel aan.",
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-binnen-1-week",
   },
   openGraph: {
-    title: "Huis verkopen binnen 1 week? Vrijblijvend voorstel",
-    description:
-      "Snel duidelijkheid over de verkoopmogelijkheden van uw woning. Zonder makelaar, zonder open huis en met heldere afspraken.",
+    title: "Huis verkopen binnen 1 week",
+    description: "Huis verkopen binnen 1 week of snel duidelijkheid over uw verkoopmogelijkheden? Vraag vrijblijvend een voorstel aan.",
     url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-binnen-1-week",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
@@ -19,106 +17,120 @@ export const metadata = {
 };
 
 const page = {
-  slug: "/huis-verkopen-binnen-1-week",
-  breadcrumb: "Huis verkopen binnen 1 week",
-  eyebrow: "Huis verkopen binnen 1 week",
-  h1: "Huis verkopen binnen 1 week? Snel duidelijkheid zonder makelaar",
-  lead:
-    "Wilt u uw huis verkopen binnen 1 week of zo snel mogelijk duidelijkheid krijgen? Vastgoed Direct Nederland helpt woningeigenaren met een directe verkoopoplossing, heldere voorwaarden en notariële afwikkeling.",
-  shortAnswer:
-    "Een woning verkopen binnen 1 week is niet altijd gegarandeerd, maar snel duidelijkheid is vaak wel mogelijk. Wij bespreken uw situatie, controleren de belangrijkste gegevens en geven aan wat realistisch is voor uw woning.",
-  benefits: [
-    "Snel duidelijkheid",
+  "slug": "/huis-verkopen-binnen-1-week",
+  "breadcrumb": "Huis verkopen binnen 1 week",
+  "eyebrow": "Huis verkopen binnen 1 week",
+  "h1": "Huis verkopen binnen 1 week: duidelijkheid en rust",
+  "lead": "Wilt u uw huis binnen korte tijd verkopen of snel duidelijkheid krijgen? Vastgoed Direct Nederland bespreekt rustig wat mogelijk is.",
+  "shortAnswer": "Huis verkopen binnen 1 week of snel duidelijkheid over uw verkoopmogelijkheden? U kunt vrijblijvend een voorstel aan.",
+  "benefits": [
+    "Huis verkopen binnen 1 week",
     "Geen makelaarskosten",
     "Geen open huis nodig",
-    "Vrijblijvend voorstel",
-    "Opleverdatum in overleg",
-    "Notariële afwikkeling",
+    "Vrijblijvend verkoopvoorstel",
+    "Duidelijke voorwaarden",
+    "Notariële afwikkeling"
   ],
-  sections: [
+  "sections": [
     {
-      title: "Wanneer is verkopen binnen 1 week interessant?",
-      paragraphs: [
-        "Soms wilt u niet maanden wachten op bezichtigingen, onderhandelingen en financieringsonzekerheid. Bijvoorbeeld bij leegstand, dubbele lasten, een erfeniswoning, scheiding, financiële druk of een woning die onderhoud nodig heeft.",
-        "In zulke situaties kan een directe verkoopoplossing helpen om snel duidelijkheid te krijgen over de mogelijkheden, zonder traditioneel verkooptraject met makelaar.",
-      ],
+      "title": "Huis verkopen binnen 1 week: wanneer is dit interessant?",
+      "paragraphs": [
+        "Wilt u uw huis binnen korte tijd verkopen of snel duidelijkheid krijgen? Vastgoed Direct Nederland bespreekt rustig wat mogelijk is.",
+        "Een directe verkoopoplossing kan passend zijn wanneer u snel duidelijkheid wilt, geen lang verkooptraject wilt of de woning niet eerst verkoopklaar wilt maken."
+      ]
     },
     {
-      title: "Wat is realistisch binnen 1 week?",
-      paragraphs: [
-        "Binnen 1 week kan vaak al duidelijk worden of een verkoopoplossing passend is. Een definitieve overdracht hangt altijd af van documenten, eigendomssituatie, afspraken en notariële planning.",
-        "Wij gebruiken daarom geen harde garanties, maar geven wel snel en helder aan wat mogelijk is voor uw woning.",
-      ],
+      "title": "Zonder traditioneel verkooptraject",
+      "paragraphs": [
+        "U hoeft niet altijd te kiezen voor een verkooptraject met meerdere bezichtigingen, open huis of lange onderhandelingen.",
+        "Bij Vastgoed Direct Nederland vraagt u vrijblijvend een helder verkoopvoorstel aan. Daarna beslist u rustig of het voorstel bij uw situatie past."
+      ]
     },
     {
-      title: "Voor welke woningen?",
-      bullets: [
-        "Leegstaande woningen",
-        "Erfeniswoningen",
-        "Opknapwoningen",
-        "Woningen met achterstallig onderhoud",
-        "Verhuurde woningen",
-        "Woningen bij scheiding of financiële druk",
-        "Woningen waarbij snel duidelijkheid nodig is",
-      ],
+      "title": "Voor welke situaties?",
+      "bullets": [
+        "Huis verkopen binnen 1 week",
+        "Leegstand",
+        "Achterstallig onderhoud",
+        "Opknapwoning",
+        "Erfenis",
+        "Scheiding",
+        "Verhuur",
+        "Snel duidelijkheid gewenst"
+      ]
     },
     {
-      title: "Hoe werkt het?",
-      steps: [
-        "U vult uw woninggegevens in via het formulier.",
-        "Wij nemen contact met u op om uw situatie en gewenste snelheid te bespreken.",
-        "U ontvangt een vrijblijvend verkoopvoorstel met duidelijke voorwaarden.",
-        "Bij akkoord worden de afspraken vastgelegd en wordt de overdracht via de notaris geregeld.",
-      ],
+      "title": "Hoe werkt het?",
+      "steps": [
+        "U vult uw woninggegevens in.",
+        "Wij bespreken uw situatie en gewenste snelheid.",
+        "U ontvangt een vrijblijvend verkoopvoorstel.",
+        "Bij akkoord wordt de overdracht via de notaris geregeld."
+      ]
     },
     {
-      title: "Kosten, notariskosten en aanbetaling",
-      paragraphs: [
+      "title": "Kosten en afwikkeling",
+      "paragraphs": [
         "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
-        "In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd.",
-      ],
-    },
+        "Een aanbetaling of voorschot kan in sommige situaties bespreekbaar zijn, mits dit juridisch en notarieel goed wordt vastgelegd."
+      ]
+    }
   ],
-  comparisonRows: [
-    ["Snelheid", "Kan weken of maanden duren", "Snelle duidelijkheid mogelijk"],
-    ["Makelaarskosten", "Vaak courtage of vast tarief", "Geen makelaarskosten"],
-    ["Bezichtigingen", "Vaak meerdere kijkers", "Niet standaard nodig"],
-    ["Woning verkoopklaar maken", "Vaak gewenst", "Niet noodzakelijk vooraf"],
-    ["Opleverdatum", "Afhankelijk van koper", "In overleg bespreekbaar"],
-    ["Privacy", "Openbare presentatie kan nodig zijn", "Rustige, vertrouwelijke behandeling"],
+  "comparisonRows": [
+    [
+      "Makelaarskosten",
+      "Vaak courtage of vast tarief",
+      "Geen makelaarskosten"
+    ],
+    [
+      "Bezichtigingen",
+      "Vaak meerdere kijkers",
+      "Niet standaard nodig"
+    ],
+    [
+      "Snelheid",
+      "Kan weken of maanden duren",
+      "Snelle duidelijkheid mogelijk"
+    ],
+    [
+      "Onderhoud",
+      "Kan verkoop lastiger maken",
+      "Ook deze woningen kunnen worden aangemeld"
+    ],
+    [
+      "Opleverdatum",
+      "Afhankelijk van koper",
+      "In overleg bespreekbaar"
+    ],
+    [
+      "Afwikkeling",
+      "Afhankelijk van afspraken",
+      "Bij akkoord via de notaris"
+    ]
   ],
-  faqs: [
+  "faqs": [
     {
-      question: "Kan ik mijn huis verkopen binnen 1 week?",
-      answer:
-        "Snel schakelen is in sommige situaties mogelijk, maar een definitieve overdracht hangt altijd af van de woning, documenten, afspraken en notariële planning.",
+      "question": "Kan ik mijn huis verkopen binnen 1 week zonder makelaar regelen?",
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
     },
     {
-      question: "Krijg ik binnen 1 week een bod?",
-      answer:
-        "Wij proberen snel duidelijkheid te geven over de mogelijkheden. Na uw aanvraag nemen wij contact met u op om uw situatie te bespreken.",
+      "question": "Is de aanvraag vrijblijvend?",
+      "answer": "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
     },
     {
-      question: "Kan dit zonder makelaar?",
-      answer:
-        "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar.",
+      "question": "Moet de woning verkoopklaar zijn?",
+      "answer": "Niet altijd. Ook woningen met onderhoud, leegstand of renovatiebehoefte kunnen worden aangemeld."
     },
     {
-      question: "Moet mijn woning verkoopklaar zijn?",
-      answer:
-        "Nee, ook woningen met achterstallig onderhoud, schade, leegstand of renovatiebehoefte kunnen worden aangemeld.",
-    },
-    {
-      question: "Is de aanvraag vrijblijvend?",
-      answer:
-        "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast.",
-    },
+      "question": "Betaal ik makelaarskosten?",
+      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
+    }
   ],
-  ctaTitle: "Wilt u uw huis binnen 1 week verkopen of snel duidelijkheid?",
-  ctaText:
-    "Vraag vrijblijvend een verkoopvoorstel aan en ontdek wat realistisch is voor uw woning en situatie.",
+  "ctaTitle": "Wilt u huis verkopen binnen 1 week?",
+  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden.",
+  "keywords": "huis verkopen binnen 1 week, snel huis verkopen, snelle verkoop"
 };
 
-export default function HuisVerkopenBinnenEenWeek() {
+export default function HuisVerkopenBinnen1WeekPage() {
   return <SeoLandingPage page={page} />;
 }
