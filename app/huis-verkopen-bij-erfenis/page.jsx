@@ -1,16 +1,14 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen bij erfenis? Vrijblijvend voorstel",
-  description:
-    "Een geërfd huis verkopen zonder makelaar of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
+  title: "Huis verkopen bij erfenis",
+  description: "Huis verkopen bij erfenis of nalatenschap? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-bij-erfenis",
   },
   openGraph: {
-    title: "Huis verkopen bij erfenis? Vrijblijvend voorstel",
-    description:
-      "Vraag vrijblijvend een verkoopvoorstel aan voor een erfeniswoning. Ook bij leegstand, onderhoud of meerdere erfgenamen.",
+    title: "Huis verkopen bij erfenis",
+    description: "Huis verkopen bij erfenis of nalatenschap? Vraag vrijblijvend een helder verkoopvoorstel aan.",
     url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-bij-erfenis",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
@@ -19,118 +17,120 @@ export const metadata = {
 };
 
 const page = {
-  slug: "/huis-verkopen-bij-erfenis",
-  breadcrumb: "Huis verkopen bij erfenis",
-  eyebrow: "Huis verkopen bij erfenis",
-  h1: "Geërfd huis verkopen zonder makelaar of verkoopstress",
-  lead:
-    "Een huis verkopen bij erfenis kan emotioneel en praktisch ingewikkeld zijn. Vastgoed Direct Nederland helpt met een rustige, duidelijke en vrijblijvende verkoopoplossing.",
-  shortAnswer:
-    "Een geërfd huis verkopen kan ook zonder traditioneel makelaarstraject. U vraagt vrijblijvend een verkoopvoorstel aan en bespreekt rustig wat mogelijk is, ook als de woning leegstaat, onderhoud nodig heeft of nog moet worden opgeruimd.",
-  benefits: [
-    "Rustige aanpak",
+  "slug": "/huis-verkopen-bij-erfenis",
+  "breadcrumb": "Huis verkopen bij erfenis",
+  "eyebrow": "Huis verkopen bij erfenis",
+  "h1": "Huis verkopen bij erfenis of nalatenschap",
+  "lead": "Een erfeniswoning verkopen kan veel vragen oproepen. Wij helpen met een rustige aanpak en een vrijblijvend verkoopvoorstel.",
+  "shortAnswer": "Huis verkopen bij erfenis of nalatenschap? U kunt vrijblijvend een helder verkoopvoorstel aan.",
+  "benefits": [
+    "Huis verkopen bij erfenis",
     "Geen makelaarskosten",
-    "Ook bij leegstand",
-    "Ook bij onderhoud",
-    "Oplevering in overleg",
-    "Notariële afwikkeling",
+    "Geen open huis nodig",
+    "Vrijblijvend verkoopvoorstel",
+    "Duidelijke voorwaarden",
+    "Notariële afwikkeling"
   ],
-  sections: [
+  "sections": [
     {
-      title: "Waarom een erfeniswoning direct verkopen?",
-      paragraphs: [
-        "Bij een erfeniswoning spelen vaak meerdere zaken tegelijk: leegstand, onderhoud, opruimen, meerdere erfgenamen of de wens om snel duidelijkheid te krijgen.",
-        "Een traditioneel verkooptraject met makelaar, bezichtigingen en verkoopvoorbereiding past dan niet altijd. Een directe verkoopoplossing kan rust en overzicht geven.",
-      ],
+      "title": "Huis verkopen bij erfenis: wanneer is dit interessant?",
+      "paragraphs": [
+        "Een erfeniswoning verkopen kan veel vragen oproepen. Wij helpen met een rustige aanpak en een vrijblijvend verkoopvoorstel.",
+        "Een directe verkoopoplossing kan passend zijn wanneer u snel duidelijkheid wilt, geen lang verkooptraject wilt of de woning niet eerst verkoopklaar wilt maken."
+      ]
     },
     {
-      title: "Ook als de woning nog niet leeg of verkoopklaar is",
-      paragraphs: [
-        "Een erfeniswoning hoeft niet altijd eerst volledig leeg, opgeknapt of verkoopklaar te zijn. Afhankelijk van de situatie kan oplevering in huidige staat of in overleg bespreekbaar zijn.",
-        "Dat kan prettig zijn wanneer de woning nog spullen bevat, onderhoud nodig heeft of wanneer erfgenamen eerst duidelijkheid willen over de verkoopmogelijkheden.",
-      ],
+      "title": "Zonder traditioneel verkooptraject",
+      "paragraphs": [
+        "U hoeft niet altijd te kiezen voor een verkooptraject met meerdere bezichtigingen, open huis of lange onderhandelingen.",
+        "Bij Vastgoed Direct Nederland vraagt u vrijblijvend een helder verkoopvoorstel aan. Daarna beslist u rustig of het voorstel bij uw situatie past."
+      ]
     },
     {
-      title: "Situaties waarin wij kunnen meedenken",
-      bullets: [
-        "Geërfde woning die leegstaat",
-        "Woning met achterstallig onderhoud",
-        "Woning die nog moet worden opgeruimd",
-        "Meerdere erfgenamen",
-        "Woning die snel duidelijkheid vraagt",
-        "Erfeniswoning zonder traditioneel verkooptraject verkopen",
-        "Woning waarbij privacy en rust belangrijk zijn",
-      ],
+      "title": "Voor welke situaties?",
+      "bullets": [
+        "Huis verkopen bij erfenis",
+        "Leegstand",
+        "Achterstallig onderhoud",
+        "Opknapwoning",
+        "Erfenis",
+        "Scheiding",
+        "Verhuur",
+        "Snel duidelijkheid gewenst"
+      ]
     },
     {
-      title: "Meerdere erfgenamen of bijzondere situatie?",
-      paragraphs: [
-        "Als er meerdere erfgenamen zijn, is het belangrijk dat afspraken duidelijk en zorgvuldig worden vastgelegd. Wij bespreken rustig wat mogelijk is en welke informatie nodig is om een passend voorstel te kunnen doen.",
-        "Een definitieve verkoop komt alleen tot stand wanneer de juiste betrokkenen akkoord zijn en afspraken juridisch en notarieel goed kunnen worden vastgelegd.",
-      ],
+      "title": "Hoe werkt het?",
+      "steps": [
+        "U vult uw woninggegevens in.",
+        "Wij bespreken uw situatie en gewenste snelheid.",
+        "U ontvangt een vrijblijvend verkoopvoorstel.",
+        "Bij akkoord wordt de overdracht via de notaris geregeld."
+      ]
     },
     {
-      title: "Hoe werkt het?",
-      steps: [
-        "U meldt de woning vrijblijvend aan.",
-        "Wij bespreken de situatie, erfgenamen en gewenste snelheid.",
-        "U ontvangt een verkoopvoorstel met duidelijke voorwaarden.",
-        "Bij akkoord wordt de overdracht via de notaris geregeld.",
-      ],
-    },
-    {
-      title: "Kosten, notariskosten en aanbetaling",
-      paragraphs: [
+      "title": "Kosten en afwikkeling",
+      "paragraphs": [
         "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
-        "In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd.",
-      ],
-    },
+        "Een aanbetaling of voorschot kan in sommige situaties bespreekbaar zijn, mits dit juridisch en notarieel goed wordt vastgelegd."
+      ]
+    }
   ],
-  comparisonRows: [
-    ["Makelaar", "Vaak traditioneel traject", "Niet nodig voor aanvraag"],
-    ["Bezichtigingen", "Vaak meerdere", "Niet standaard nodig"],
-    ["Opruimen / verkoopklaar", "Vaak gewenst", "In overleg bespreekbaar"],
-    ["Snelheid", "Kan weken of maanden duren", "Snelle duidelijkheid mogelijk"],
-    ["Notariële afwikkeling", "Afhankelijk van afspraken", "Bij akkoord via notaris"],
-    ["Privacy", "Openbare verkoop kan nodig zijn", "Rustige, vertrouwelijke behandeling"],
+  "comparisonRows": [
+    [
+      "Makelaarskosten",
+      "Vaak courtage of vast tarief",
+      "Geen makelaarskosten"
+    ],
+    [
+      "Bezichtigingen",
+      "Vaak meerdere kijkers",
+      "Niet standaard nodig"
+    ],
+    [
+      "Snelheid",
+      "Kan weken of maanden duren",
+      "Snelle duidelijkheid mogelijk"
+    ],
+    [
+      "Onderhoud",
+      "Kan verkoop lastiger maken",
+      "Ook deze woningen kunnen worden aangemeld"
+    ],
+    [
+      "Opleverdatum",
+      "Afhankelijk van koper",
+      "In overleg bespreekbaar"
+    ],
+    [
+      "Afwikkeling",
+      "Afhankelijk van afspraken",
+      "Bij akkoord via de notaris"
+    ]
   ],
-  faqs: [
+  "faqs": [
     {
-      question: "Kan ik een geërfd huis verkopen zonder makelaar?",
-      answer:
-        "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar.",
+      "question": "Kan ik mijn huis verkopen bij erfenis zonder makelaar regelen?",
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
     },
     {
-      question: "Wat als er meerdere erfgenamen zijn?",
-      answer:
-        "Dan is het belangrijk dat de afspraken goed worden afgestemd en juridisch/notarieel correct worden vastgelegd. Wij bespreken rustig wat mogelijk is.",
+      "question": "Is de aanvraag vrijblijvend?",
+      "answer": "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
     },
     {
-      question: "Moet de woning eerst leeg zijn?",
-      answer:
-        "Niet altijd. Oplevering in huidige staat of in overleg kan bespreekbaar zijn, afhankelijk van de situatie en gemaakte afspraken.",
+      "question": "Moet de woning verkoopklaar zijn?",
+      "answer": "Niet altijd. Ook woningen met onderhoud, leegstand of renovatiebehoefte kunnen worden aangemeld."
     },
     {
-      question: "Kan een erfeniswoning met achterstallig onderhoud worden aangemeld?",
-      answer:
-        "Ja, ook woningen met achterstallig onderhoud, schade of renovatiebehoefte kunnen worden aangemeld.",
-    },
-    {
-      question: "Kan ik snel duidelijkheid krijgen over een erfeniswoning?",
-      answer:
-        "Wij proberen snel duidelijkheid te geven over de verkoopmogelijkheden. De exacte snelheid hangt af van de woning, documenten, erfgenamen en notariële mogelijkheden.",
-    },
-    {
-      question: "Is de aanvraag vrijblijvend?",
-      answer:
-        "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast.",
-    },
+      "question": "Betaal ik makelaarskosten?",
+      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
+    }
   ],
-  ctaTitle: "Wilt u een geërfd huis verkopen?",
-  ctaText:
-    "Vraag vrijblijvend een verkoopvoorstel aan en bespreek rustig wat mogelijk is voor de woning en de erfgenamen.",
+  "ctaTitle": "Wilt u huis verkopen bij erfenis?",
+  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden.",
+  "keywords": "huis verkopen bij erfenis, erfeniswoning verkopen, woning nalatenschap verkopen"
 };
 
-export default function HuisVerkopenBijErfenis() {
+export default function HuisVerkopenBijErfenisPage() {
   return <SeoLandingPage page={page} />;
 }
