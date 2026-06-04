@@ -1,14 +1,14 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Woning verkopen in Overijssel? Vrijblijvend voorstel",
-  description: "Wilt u uw woning verkopen in Overijssel zonder makelaar of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
+  title: "Woning verkopen Overijssel",
+  description: "Woning of huis verkopen in Overijssel zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/woning-verkopen-overijssel",
   },
   openGraph: {
-    title: "Woning verkopen in Overijssel? Vrijblijvend voorstel",
-    description: "Snel duidelijkheid over uw woning in Overijssel. Zonder makelaar, zonder open huis en met heldere afspraken.",
+    title: "Woning verkopen Overijssel",
+    description: "Woning of huis verkopen in Overijssel zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
     url: "https://www.verkoopjehuisdirect.nl/woning-verkopen-overijssel",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
@@ -18,67 +18,60 @@ export const metadata = {
 
 const page = {
   "slug": "/woning-verkopen-overijssel",
-  "breadcrumb": "Woning verkopen in Overijssel",
+  "breadcrumb": "Woning verkopen Overijssel",
   "eyebrow": "Woning verkopen Overijssel",
   "h1": "Woning verkopen in Overijssel zonder makelaar of verkoopstress",
-  "lead": "Wilt u uw woning in Overijssel verkopen en snel duidelijkheid krijgen zonder traditioneel verkooptraject? Vastgoed Direct Nederland helpt woningeigenaren met een vrijblijvende verkoopoplossing, heldere voorwaarden en notariële afwikkeling.",
-  "shortAnswer": "U kunt uw woning in Overijssel vrijblijvend aanmelden voor een verkoopvoorstel. Dit kan ook bij leegstand, achterstallig onderhoud, verhuur, erfenis of wanneer u snel duidelijkheid wilt zonder makelaar.",
+  "lead": "Wilt u uw woning of huis in Overijssel verkopen en snel duidelijkheid krijgen zonder lang traditioneel verkooptraject?",
+  "shortAnswer": "Vraag vrijblijvend een verkoopvoorstel aan voor uw woning in Overijssel. Ook bij leegstand, onderhoud, verhuur, erfenis of scheiding kunt u rustig bespreken wat mogelijk is.",
   "benefits": [
-    "Woning verkopen in Overijssel",
+    "Woning verkopen Overijssel",
+    "Huis verkopen Overijssel",
     "Geen makelaarskosten",
     "Geen open huis nodig",
-    "Ook bij onderhoud of leegstand",
-    "Vrijblijvend voorstel",
+    "Vrijblijvend verkoopvoorstel",
     "Notariële afwikkeling"
   ],
   "sections": [
     {
-      "title": "Wanneer is direct verkopen in Overijssel interessant?",
+      "title": "Woning verkopen Overijssel: snel duidelijkheid",
       "paragraphs": [
-        "Een woning verkopen via de traditionele route kan tijd kosten. In sommige situaties wilt u liever snel duidelijkheid, zonder open huis, makelaarskosten of lange onderhandelingen.",
-        "Dat kan bijvoorbeeld spelen bij leegstand, achterstallig onderhoud, een erfeniswoning, verhuur, scheiding, financiële druk of wanneer u de woning niet eerst verkoopklaar wilt maken."
-      ]
-    },
-    {
-      "title": "Voor welke woningen in Overijssel?",
-      "bullets": [
-        "Rijtjeshuizen en eengezinswoningen",
-        "Appartementen",
-        "Opknapwoningen",
-        "Verhuurde woningen",
-        "Erfeniswoningen",
-        "Leegstaande woningen",
-        "Woningen met achterstallig onderhoud",
-        "Woningen waarbij snel duidelijkheid nodig is"
+        "Wilt u uw woning of huis in Overijssel verkopen zonder lang traditioneel verkooptraject? Vastgoed Direct Nederland helpt woningeigenaren met een rustige en duidelijke verkoopoplossing.",
+        "U vraagt vrijblijvend een verkoopvoorstel aan. Daarna bespreken wij uw situatie, de woning en de gewenste overdracht."
       ]
     },
     {
       "title": "Verkopen zonder makelaar in Overijssel",
       "paragraphs": [
-        "U hoeft niet altijd een traditioneel verkooptraject met makelaar te starten. Bij Vastgoed Direct Nederland kunt u rechtstreeks een vrijblijvend verkoopvoorstel aanvragen.",
-        "Dat kan prettig zijn wanneer u geen open huis wilt, geen courtage wilt betalen of geen lange periode met bezichtigingen en onzekerheid wilt doorlopen."
+        "Een woning verkopen in Overijssel hoeft niet altijd via een traditioneel makelaarstraject. Als u geen open huis, bezichtigingsrondes of makelaarskosten wilt, kunt u rechtstreeks een voorstel aanvragen.",
+        "De aanvraag is vrijblijvend. U bepaalt zelf of het voorstel past bij uw situatie."
       ]
     },
     {
-      "title": "Ook bij opknapwoning, erfenis of verhuur",
-      "paragraphs": [
-        "Niet iedere woning is direct verkoopklaar. Ook woningen met onderhoud, schade, leegstand of verhuur kunnen worden aangemeld. We bespreken rustig wat mogelijk is en welke voorwaarden daarbij horen."
+      "title": "Ook bij bijzondere situaties in Overijssel",
+      "bullets": [
+        "Leegstaande woning",
+        "Opknapwoning",
+        "Woning met achterstallig onderhoud",
+        "Erfeniswoning",
+        "Verhuurde woning",
+        "Woning bij scheiding",
+        "Woning waarbij snel duidelijkheid gewenst is"
       ]
     },
     {
       "title": "Hoe werkt het?",
       "steps": [
-        "U vult uw woninggegevens in via het formulier.",
-        "Wij nemen contact met u op om uw situatie en gewenste snelheid te bespreken.",
+        "U vult de woninggegevens in.",
+        "Wij nemen contact met u op om de situatie rustig te bespreken.",
         "U ontvangt een vrijblijvend verkoopvoorstel met duidelijke voorwaarden.",
         "Bij akkoord wordt de overdracht via de notaris geregeld."
       ]
     },
     {
-      "title": "Kosten, notariskosten en aanbetaling",
+      "title": "Kosten en afwikkeling",
       "paragraphs": [
         "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
-        "In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd."
+        "Een aanbetaling of voorschot kan in sommige situaties bespreekbaar zijn, mits dit juridisch en notarieel goed wordt vastgelegd."
       ]
     }
   ],
@@ -94,14 +87,14 @@ const page = {
       "Niet standaard nodig"
     ],
     [
-      "Onderhoud",
-      "Kan verkoop lastiger maken",
-      "Ook deze woningen kunnen worden aangemeld"
-    ],
-    [
       "Snelheid",
       "Kan weken of maanden duren",
       "Snelle duidelijkheid mogelijk"
+    ],
+    [
+      "Onderhoud",
+      "Kan verkoop lastiger maken",
+      "Ook deze woningen kunnen worden aangemeld"
     ],
     [
       "Opleverdatum",
@@ -109,41 +102,34 @@ const page = {
       "In overleg bespreekbaar"
     ],
     [
-      "Notariële afwikkeling",
+      "Afwikkeling",
       "Afhankelijk van afspraken",
-      "Bij akkoord via notaris"
+      "Bij akkoord via de notaris"
     ]
   ],
   "faqs": [
     {
       "question": "Kan ik mijn woning in Overijssel verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar."
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
     },
     {
-      "question": "Kan ik ook een opknapwoning in Overijssel aanmelden?",
-      "answer": "Ja, ook woningen met achterstallig onderhoud, schade, leegstand of renovatiebehoefte kunnen worden aangemeld."
-    },
-    {
-      "question": "Is een snelle overdracht mogelijk?",
-      "answer": "Een snelle overdracht is in overleg mogelijk. De exacte planning hangt af van de woning, afspraken en notariële mogelijkheden."
-    },
-    {
-      "question": "Betaal ik makelaarskosten?",
-      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
-    },
-    {
-      "question": "Kan ik een verhuurde woning in Overijssel verkopen?",
-      "answer": "Een verhuurde woning verkopen is in veel situaties mogelijk, maar vraagt om duidelijke afspraken over de huursituatie. Wij bespreken graag wat mogelijk is."
+      "question": "Kan ik mijn huis in Overijssel snel verkopen?",
+      "answer": "Snelle duidelijkheid is vaak mogelijk. De exacte planning hangt af van de woning, documenten, afspraken en notariële mogelijkheden."
     },
     {
       "question": "Is de aanvraag vrijblijvend?",
       "answer": "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
+    },
+    {
+      "question": "Betaal ik makelaarskosten?",
+      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
     }
   ],
-  "ctaTitle": "Wilt u uw woning in Overijssel verkopen?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden."
+  "ctaTitle": "Wilt u woning verkopen overijssel?",
+  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden.",
+  "keywords": "woning verkopen Overijssel, huis verkopen Overijssel, woning snel verkopen Overijssel"
 };
 
-export default function WoningVerkopenOverijssel() {
+export default function WoningVerkopenOverijsselPage() {
   return <SeoLandingPage page={page} />;
 }
