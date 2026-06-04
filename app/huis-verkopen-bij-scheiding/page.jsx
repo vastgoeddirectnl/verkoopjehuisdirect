@@ -1,14 +1,14 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen bij scheiding? Rustig en vrijblijvend",
-  description: "Moet de woning verkocht worden bij scheiding of relatiebreuk? Vraag vrijblijvend een verkoopvoorstel aan met duidelijke voorwaarden.",
+  title: "Huis verkopen bij scheiding",
+  description: "Huis verkopen bij scheiding? Vraag vrijblijvend een helder verkoopvoorstel aan en krijg duidelijkheid zonder verkoopstress.",
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-bij-scheiding",
   },
   openGraph: {
-    title: "Huis verkopen bij scheiding? Rustig en vrijblijvend",
-    description: "Bij scheiding of relatiebreuk kan snelle duidelijkheid belangrijk zijn. Vraag vrijblijvend een verkoopvoorstel aan.",
+    title: "Huis verkopen bij scheiding",
+    description: "Huis verkopen bij scheiding? Vraag vrijblijvend een helder verkoopvoorstel aan en krijg duidelijkheid zonder verkoopstress.",
     url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-bij-scheiding",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
@@ -20,72 +20,63 @@ const page = {
   "slug": "/huis-verkopen-bij-scheiding",
   "breadcrumb": "Huis verkopen bij scheiding",
   "eyebrow": "Huis verkopen bij scheiding",
-  "h1": "Huis verkopen bij scheiding of relatiebreuk",
-  "lead": "Bij een scheiding of relatiebreuk kan de verkoop van de woning gevoelig en ingewikkeld zijn. Vastgoed Direct Nederland helpt met een rustige, vrijblijvende aanpak en duidelijke voorwaarden.",
-  "shortAnswer": "Een huis verkopen bij scheiding vraagt om duidelijkheid, zorgvuldige afspraken en rust. U kunt vrijblijvend bespreken wat mogelijk is, zonder direct een traditioneel verkooptraject met makelaar te starten.",
+  "h1": "Huis verkopen bij scheiding met duidelijke afspraken",
+  "lead": "Bij een scheiding kan woningverkoop extra gevoelig zijn. Vastgoed Direct Nederland helpt met rust, duidelijkheid en een vrijblijvend verkoopvoorstel.",
+  "shortAnswer": "Huis verkopen bij scheiding? U kunt vrijblijvend een helder verkoopvoorstel aan en krijg duidelijkheid zonder verkoopstress.",
   "benefits": [
-    "Rustige aanpak",
-    "Vrijblijvend voorstel",
+    "Huis verkopen bij scheiding",
     "Geen makelaarskosten",
+    "Geen open huis nodig",
+    "Vrijblijvend verkoopvoorstel",
     "Duidelijke voorwaarden",
-    "Opleverdatum in overleg",
     "Notariële afwikkeling"
   ],
   "sections": [
     {
-      "title": "Waarom snel duidelijkheid belangrijk kan zijn",
+      "title": "Huis verkopen bij scheiding: wanneer is dit interessant?",
       "paragraphs": [
-        "Bij een scheiding of relatiebreuk spelen vaak meerdere belangen tegelijk. Denk aan dubbele lasten, afspraken over eigendom, woonruimte, emoties en de wens om een hoofdstuk goed af te sluiten.",
-        "Een langdurig verkooptraject met bezichtigingen en onderhandelingen past dan niet altijd. Een vrijblijvend verkoopvoorstel kan helpen om overzicht te krijgen."
+        "Bij een scheiding kan woningverkoop extra gevoelig zijn. Vastgoed Direct Nederland helpt met rust, duidelijkheid en een vrijblijvend verkoopvoorstel.",
+        "Een directe verkoopoplossing kan passend zijn wanneer u snel duidelijkheid wilt, geen lang verkooptraject wilt of de woning niet eerst verkoopklaar wilt maken."
       ]
     },
     {
-      "title": "Situaties waarin wij kunnen meedenken",
+      "title": "Zonder traditioneel verkooptraject",
+      "paragraphs": [
+        "U hoeft niet altijd te kiezen voor een verkooptraject met meerdere bezichtigingen, open huis of lange onderhandelingen.",
+        "Bij Vastgoed Direct Nederland vraagt u vrijblijvend een helder verkoopvoorstel aan. Daarna beslist u rustig of het voorstel bij uw situatie past."
+      ]
+    },
+    {
+      "title": "Voor welke situaties?",
       "bullets": [
-        "Woning verkopen na relatiebreuk",
-        "Woning verkopen bij scheiding",
-        "Een van beide partners wil niet blijven wonen",
-        "Dubbele lasten of financiële druk",
-        "Woning is nog bewoond",
-        "Woning moet snel of juist in overleg worden overgedragen",
-        "Er is behoefte aan rustige en duidelijke communicatie"
-      ]
-    },
-    {
-      "title": "Afspraken zorgvuldig vastleggen",
-      "paragraphs": [
-        "Bij een verkoop in verband met scheiding is het belangrijk dat afspraken helder zijn. Denk aan wie mag verkopen, welke documenten nodig zijn en hoe de overdracht juridisch en notarieel wordt geregeld.",
-        "Wij doen geen juridisch advies, maar zorgen bij akkoord wel voor een duidelijke notariële route en transparante voorwaarden."
+        "Huis verkopen bij scheiding",
+        "Leegstand",
+        "Achterstallig onderhoud",
+        "Opknapwoning",
+        "Erfenis",
+        "Scheiding",
+        "Verhuur",
+        "Snel duidelijkheid gewenst"
       ]
     },
     {
       "title": "Hoe werkt het?",
       "steps": [
-        "U meldt de woning vrijblijvend aan.",
-        "Wij bespreken de situatie, gewenste snelheid en praktische mogelijkheden.",
-        "U ontvangt een verkoopvoorstel met duidelijke voorwaarden.",
+        "U vult uw woninggegevens in.",
+        "Wij bespreken uw situatie en gewenste snelheid.",
+        "U ontvangt een vrijblijvend verkoopvoorstel.",
         "Bij akkoord wordt de overdracht via de notaris geregeld."
       ]
     },
     {
-      "title": "Kosten, notaris en aanbetaling",
+      "title": "Kosten en afwikkeling",
       "paragraphs": [
         "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
-        "In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd."
+        "Een aanbetaling of voorschot kan in sommige situaties bespreekbaar zijn, mits dit juridisch en notarieel goed wordt vastgelegd."
       ]
     }
   ],
   "comparisonRows": [
-    [
-      "Privacy",
-      "Openbare verkoop kan nodig zijn",
-      "Rustige en vertrouwelijke aanpak"
-    ],
-    [
-      "Afspraken",
-      "Afhankelijk van koper en traject",
-      "Vooraf duidelijk bespreken"
-    ],
     [
       "Makelaarskosten",
       "Vaak courtage of vast tarief",
@@ -102,46 +93,44 @@ const page = {
       "Snelle duidelijkheid mogelijk"
     ],
     [
+      "Onderhoud",
+      "Kan verkoop lastiger maken",
+      "Ook deze woningen kunnen worden aangemeld"
+    ],
+    [
       "Opleverdatum",
       "Afhankelijk van koper",
       "In overleg bespreekbaar"
     ],
     [
-      "Notariële afwikkeling",
+      "Afwikkeling",
       "Afhankelijk van afspraken",
       "Bij akkoord via de notaris"
     ]
   ],
   "faqs": [
     {
-      "question": "Kan ik mijn huis verkopen bij scheiding?",
-      "answer": "Ja, u kunt vrijblijvend een verkoopvoorstel aanvragen. Het is wel belangrijk dat de juiste eigenaar(s) akkoord zijn en afspraken goed worden vastgelegd."
-    },
-    {
-      "question": "Wat als één partner nog in de woning woont?",
-      "answer": "Dan bespreken we rustig wat mogelijk is. De uiteindelijke afspraken moeten juridisch en notarieel goed kunnen worden vastgelegd."
-    },
-    {
-      "question": "Is snelle duidelijkheid mogelijk?",
-      "answer": "Wij proberen snel duidelijkheid te geven over de verkoopmogelijkheden. De exacte planning hangt af van de woning, documenten en afspraken."
-    },
-    {
-      "question": "Kan dit zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar."
-    },
-    {
-      "question": "Betaal ik makelaarskosten?",
-      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
+      "question": "Kan ik mijn huis verkopen bij scheiding zonder makelaar regelen?",
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
     },
     {
       "question": "Is de aanvraag vrijblijvend?",
       "answer": "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
+    },
+    {
+      "question": "Moet de woning verkoopklaar zijn?",
+      "answer": "Niet altijd. Ook woningen met onderhoud, leegstand of renovatiebehoefte kunnen worden aangemeld."
+    },
+    {
+      "question": "Betaal ik makelaarskosten?",
+      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
     }
   ],
-  "ctaTitle": "Wilt u een woning verkopen bij scheiding?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en bespreek rustig wat mogelijk is in uw situatie."
+  "ctaTitle": "Wilt u huis verkopen bij scheiding?",
+  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden.",
+  "keywords": "huis verkopen bij scheiding, woning verkopen na scheiding, scheiding woning verkoop"
 };
 
-export default function HuisVerkopenBijScheiding() {
+export default function HuisVerkopenBijScheidingPage() {
   return <SeoLandingPage page={page} />;
 }
