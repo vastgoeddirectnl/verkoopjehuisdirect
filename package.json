@@ -6,10 +6,10 @@
     "start": "next start"
   },
   "dependencies": {
-    "@supabase/supabase-js": "latest",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "resend": "latest"
+    "resend": "latest",
+    "@neondatabase/serverless": "^1.0.0"
   }
 }
