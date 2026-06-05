@@ -1,63 +1,48 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-import { isAdminAuthenticated } from "../../../../lib/adminAuth";
+import { isAdminAuthenticated } from "../../../lib/adminAuth";
+import { query } from "../../../lib/neonDb";
 
-function getSupabaseAdmin() {
-  const supabaseUrl =
-    process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+export const runtime = "nodejs";
 
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error(
-      "SUPABASE_URL/NEXT_PUBLIC_SUPABASE_URL of SUPABASE_SERVICE_ROLE_KEY ontbreekt."
-    );
-  }
-
-  return createClient(supabaseUrl, serviceRoleKey, {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-    },
-  });
-}
-
-export async function PATCH(request, context) {
+export async function GET(request) {
   const authenticated = await isAdminAuthenticated();
 
   if (!authenticated) {
     return NextResponse.json({ error: "Niet ingelogd." }, { status: 401 });
   }
 
-  const { id } = await context.params;
-  const body = await request.json();
+  const { searchParams } = new URL(request.url);
+  const status = searchParams.get("status");
+  const search = String(searchParams.get("search") || "").trim().slice(0, 120);
 
-  const allowedFields = ["status", "notitie", "last_contact_at"];
-  const updates = {};
+  const where = [];
+  const params = [];
 
-  for (const field of allowedFields) {
-    if (Object.prototype.hasOwnProperty.call(body, field)) {
-      updates[field] = body[field];
-    }
+  if (status && status !== "Alle") {
+    params.push(status);
+    where.push(`status = $${params.length}`);
   }
 
-  updates.updated_at = new Date().toISOString();
+  if (search) {
+    params.push(`%${search}%`);
+    const i = params.length;
+    where.push(
+      `(naam ilike $${i} or telefoon ilike $${i} or postcode ilike $${i} or huisnummer ilike $${i} or pagina ilike $${i} or bron ilike $${i})`
+    );
+  }
 
   try {
-    const supabase = getSupabaseAdmin();
+    const sql = `
+      select *
+      from leads
+      ${where.length ? `where ${where.join(" and ")}` : ""}
+      order by created_at desc
+      limit 250
+    `;
 
-    const { data, error } = await supabase
-      .from("leads")
-      .update(updates)
-      .eq("id", id)
-      .select("*")
-      .single();
+    const { rows } = await query(sql, params);
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json({ lead: data });
+    return NextResponse.json({ leads: rows });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
