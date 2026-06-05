@@ -1,12 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  "https://izoysowkxttkwggazgfl.supabase.co",
-  "sb_publishable__e7ilYxa3-a_aWyoCvrTow_dkqk105H"
-);
 
 const whatsappLink =
   "https://wa.me/31612238051?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F";
@@ -136,34 +130,24 @@ export default function HomeClient() {
         "direct",
     };
 
-    const { error } = await supabase.from("leads").insert([
-      {
-        naam: lead.naam,
-        telefoon: lead.telefoon,
-        postcode: lead.postcode,
-        huisnummer: lead.huisnummer,
-        pagina: lead.pagina,
-        bron: lead.bron,
-      },
-    ]);
-
-    if (error) {
-      alert("Er ging iets mis. Probeer opnieuw.");
-      console.error(error);
-      return;
-    }
-
     try {
-      await fetch("/api/lead-email", {
+      const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(lead),
       });
-    } catch (mailError) {
-      console.warn("Lead opgeslagen, maar e-mailmelding is niet verzonden:", mailError);
-    }
 
-    setSubmitted(true);
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.error || "Lead opslaan mislukt.");
+      }
+
+      setSubmitted(true);
+    } catch (error) {
+      alert("Er ging iets mis. Probeer opnieuw of neem contact op via WhatsApp.");
+      console.error(error);
+    }
   };
 
   return (
