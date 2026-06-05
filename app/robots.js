@@ -4,9 +4,10 @@ export default function robots() {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/admin/"],
+        disallow: ["/admin", "/admin/", "/api", "/api/"],
       },
     ],
     sitemap: "https://www.verkoopjehuisdirect.nl/sitemap.xml",
+    host: "https://www.verkoopjehuisdirect.nl",
   };
 }

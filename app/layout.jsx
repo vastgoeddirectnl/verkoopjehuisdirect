@@ -1,12 +1,16 @@
 import "./globals.css";
 
 export const metadata = {
+  metadataBase: new URL("https://www.verkoopjehuisdirect.nl"),
   title: {
     default: "Vastgoed Direct Nederland | Huis snel verkopen zonder makelaar",
     template: "%s | Vastgoed Direct Nederland",
   },
   description:
     "Wilt u uw woning snel verkopen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
+  alternates: {
+    canonical: "/",
+  },
   keywords: [
     "huis snel verkopen",
     "huis direct verkopen",
@@ -36,6 +40,7 @@ export const metadata = {
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: ["/logo.png"],
   },
   robots: {
     index: true,
