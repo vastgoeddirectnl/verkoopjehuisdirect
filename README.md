@@ -43,3 +43,8 @@ LEAD_TO_EMAIL=info@verkoopjehuisdirect.nl
 ## Let op
 
 GitHub upload verwijdert geen oude bestanden. Als er nog een oude losse map `/lib` in de hoofdmap staat door eerdere uploads, mag die worden verwijderd. De juiste map is `app/lib`.
+
+
+## Opgeloste Vercel npm-timeout
+
+In een eerdere versie verwees `package-lock.json` naar een interne npm-registry. Deze versie gebruikt publieke npm-resolved URLs en bevat ook `.npmrc` met `registry=https://registry.npmjs.org/`. Upload ook `package-lock.json` opnieuw zodat de oude lockfile wordt overschreven.
