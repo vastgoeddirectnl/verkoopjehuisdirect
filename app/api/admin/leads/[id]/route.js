@@ -6,14 +6,12 @@ export const runtime = "nodejs";
 
 export async function PATCH(request, context) {
   const authenticated = await isAdminAuthenticated();
-
   if (!authenticated) {
     return NextResponse.json({ error: "Niet ingelogd." }, { status: 401 });
   }
 
   const { id } = await context.params;
   const body = await request.json();
-
   const allowedFields = ["status", "notitie", "last_contact_at"];
   const updates = [];
   const params = [];
@@ -26,10 +24,7 @@ export async function PATCH(request, context) {
   }
 
   if (!updates.length) {
-    return NextResponse.json(
-      { error: "Geen wijzigingen ontvangen." },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Geen wijzigingen ontvangen." }, { status: 400 });
   }
 
   params.push(id);

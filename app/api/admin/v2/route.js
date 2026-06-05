@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { isAdminAuthenticated } from "../../../lib/adminAuth";
-import { supabaseAdmin } from "../../../lib/supabaseAdmin";
+import { query, queryOne } from "../../../lib/neonDb";
+import { listLeads } from "../../../lib/leads";
+import { sendResendMail } from "../../../lib/mail";
+
+export const runtime = "nodejs";
 
 async function requireAdmin() {
   const ok = await isAdminAuthenticated();
@@ -17,53 +21,53 @@ export async function GET(request) {
   const denied = await requireAdmin();
   if (denied) return denied;
 
-  const db = supabaseAdmin();
   const { searchParams } = new URL(request.url);
   const action = searchParams.get("action") || "leads";
 
   try {
     if (action === "leads") {
-      const status = searchParams.get("status");
-      const search = searchParams.get("search");
-      let q = db.from("leads").select("*").order("created_at", { ascending: false }).limit(300);
-      if (status && status !== "Alle") q = q.eq("status", status);
-      if (search) q = q.or(`naam.ilike.%${search}%,email.ilike.%${search}%,telefoon.ilike.%${search}%,postcode.ilike.%${search}%,pagina.ilike.%${search}%,bron.ilike.%${search}%`);
-      const { data, error } = await q;
-      if (error) throw error;
-      return NextResponse.json({ leads: data || [] });
+      const leads = await listLeads({
+        status: searchParams.get("status"),
+        search: searchParams.get("search"),
+        limit: 300,
+      });
+      return NextResponse.json({ leads });
     }
 
     if (action === "proposals") {
-      const { data, error } = await db.from("proposals").select("*").order("created_at", { ascending: false }).limit(250);
-      if (error) throw error;
-      return NextResponse.json({ proposals: data || [] });
+      const { rows } = await query(
+        "select * from proposals order by created_at desc limit 250"
+      );
+      return NextResponse.json({ proposals: rows });
     }
 
     if (action === "proposal") {
       const id = searchParams.get("id");
-      const { data, error } = await db.from("proposals").select("*").eq("id", id).single();
-      if (error) throw error;
-      return NextResponse.json({ proposal: data });
+      const proposal = await queryOne("select * from proposals where id = $1", [id]);
+      if (!proposal) return NextResponse.json({ error: "Voorstel niet gevonden." }, { status: 404 });
+      return NextResponse.json({ proposal });
     }
 
     if (action === "tasks") {
-      const { data, error } = await db.from("tasks").select("*").order("due_date", { ascending: true }).limit(300);
-      if (error) throw error;
-      return NextResponse.json({ tasks: data || [] });
+      const { rows } = await query(
+        "select * from tasks order by due_date asc nulls last, created_at desc limit 300"
+      );
+      return NextResponse.json({ tasks: rows });
     }
 
     if (action === "report") {
-      const { data, error } = await db.from("leads").select("created_at,pagina,bron,status").order("created_at", { ascending: false }).limit(1000);
-      if (error) throw error;
+      const { rows } = await query(
+        "select created_at, pagina, bron, status from leads order by created_at desc limit 1000"
+      );
       const byPage = {}, bySource = {}, byStatus = {}, byMonth = {};
-      for (const lead of data || []) {
+      for (const lead of rows) {
         inc(byPage, lead.pagina);
         inc(bySource, lead.bron);
         inc(byStatus, lead.status || "Nieuw");
         const d = lead.created_at ? new Date(lead.created_at) : null;
         inc(byMonth, d ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}` : "Onbekend");
       }
-      return NextResponse.json({ total: data?.length || 0, byPage, bySource, byStatus, byMonth });
+      return NextResponse.json({ total: rows.length, byPage, bySource, byStatus, byMonth });
     }
 
     return NextResponse.json({ error: "Onbekende actie." }, { status: 400 });
@@ -76,86 +80,102 @@ export async function POST(request) {
   const denied = await requireAdmin();
   if (denied) return denied;
 
-  const db = supabaseAdmin();
   const body = await request.json();
   const action = body.action;
 
   try {
     if (action === "updateLead") {
-      const updates = {};
-      for (const key of ["status", "notitie", "last_contact_at"]) {
-        if (Object.prototype.hasOwnProperty.call(body, key)) updates[key] = body[key];
+      const allowedFields = ["status", "notitie", "last_contact_at"];
+      const updates = [];
+      const params = [];
+
+      for (const field of allowedFields) {
+        if (Object.prototype.hasOwnProperty.call(body, field)) {
+          params.push(body[field] || null);
+          updates.push(`${field} = $${params.length}`);
+        }
       }
-      updates.updated_at = new Date().toISOString();
-      const { data, error } = await db.from("leads").update(updates).eq("id", body.id).select("*").single();
-      if (error) throw error;
-      return NextResponse.json({ lead: data });
+
+      if (!updates.length) {
+        return NextResponse.json({ error: "Geen wijzigingen ontvangen." }, { status: 400 });
+      }
+
+      params.push(body.id);
+      const lead = await queryOne(
+        `update leads set ${updates.join(", ")}, updated_at = now() where id = $${params.length} returning *`,
+        params
+      );
+      if (!lead) return NextResponse.json({ error: "Lead niet gevonden." }, { status: 404 });
+      return NextResponse.json({ lead });
     }
 
     if (action === "createProposal") {
-      const insert = {
-        lead_id: String(body.lead_id || ""),
-        lead_naam: body.lead_naam || "",
-        lead_email: body.lead_email || "",
-        lead_telefoon: body.lead_telefoon || "",
-        property_address: body.property_address || "",
-        amount_text: body.amount_text || "",
-        validity_date: body.validity_date || null,
-        transfer_date_text: body.transfer_date_text || "",
-        deposit_text: body.deposit_text || "",
-        conditions_text: body.conditions_text || "",
-        notes: body.notes || "",
-        status: "Concept",
-      };
-      const { data, error } = await db.from("proposals").insert([insert]).select("*").single();
-      if (error) throw error;
-      return NextResponse.json({ proposal: data });
+      const proposal = await queryOne(
+        `insert into proposals (
+          lead_id, lead_naam, lead_email, lead_telefoon, property_address,
+          amount_text, validity_date, transfer_date_text, deposit_text, conditions_text, notes, status
+        ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,'Concept') returning *`,
+        [
+          body.lead_id ? String(body.lead_id) : null,
+          body.lead_naam || "",
+          body.lead_email || "",
+          body.lead_telefoon || "",
+          body.property_address || "",
+          body.amount_text || "",
+          body.validity_date || null,
+          body.transfer_date_text || "",
+          body.deposit_text || "",
+          body.conditions_text || "",
+          body.notes || "",
+        ]
+      );
+      return NextResponse.json({ proposal });
     }
 
     if (action === "createTask") {
-      const { data, error } = await db.from("tasks").insert([{
-        lead_id: body.lead_id ? String(body.lead_id) : null,
-        lead_naam: body.lead_naam || "",
-        title: body.title || "Nieuwe taak",
-        due_date: body.due_date || null,
-        status: body.status || "Open",
-        note: body.note || "",
-      }]).select("*").single();
-      if (error) throw error;
-      return NextResponse.json({ task: data });
+      const task = await queryOne(
+        `insert into tasks (lead_id, lead_naam, title, due_date, status, note)
+         values ($1,$2,$3,$4,$5,$6) returning *`,
+        [
+          body.lead_id ? String(body.lead_id) : null,
+          body.lead_naam || "",
+          body.title || "Nieuwe taak",
+          body.due_date || null,
+          body.status || "Open",
+          body.note || "",
+        ]
+      );
+      return NextResponse.json({ task });
     }
 
     if (action === "updateTask") {
-      const { data, error } = await db.from("tasks").update({
-        status: body.status,
-        updated_at: new Date().toISOString(),
-      }).eq("id", body.id).select("*").single();
-      if (error) throw error;
-      return NextResponse.json({ task: data });
+      const task = await queryOne(
+        "update tasks set status = $1, updated_at = now() where id = $2 returning *",
+        [body.status || "Open", body.id]
+      );
+      if (!task) return NextResponse.json({ error: "Taak niet gevonden." }, { status: 404 });
+      return NextResponse.json({ task });
     }
 
     if (action === "sendProposalEmail") {
-      if (!process.env.RESEND_API_KEY || !process.env.FROM_EMAIL) {
-        return NextResponse.json({ error: "RESEND_API_KEY en/of FROM_EMAIL ontbreekt." }, { status: 500 });
-      }
-      const { data: proposal, error } = await db.from("proposals").select("*").eq("id", body.id).single();
-      if (error) throw error;
+      const proposal = await queryOne("select * from proposals where id = $1", [body.id]);
+      if (!proposal) return NextResponse.json({ error: "Voorstel niet gevonden." }, { status: 404 });
       if (!proposal.lead_email) return NextResponse.json({ error: "Geen e-mailadres bekend." }, { status: 400 });
 
       const site = process.env.NEXT_PUBLIC_SITE_URL || "https://www.verkoopjehuisdirect.nl";
       const url = `${site}/admin/voorstellen/${proposal.id}/print`;
       const html = `<p>Beste ${proposal.lead_naam || "heer/mevrouw"},</p><p>Uw vrijblijvende verkoopvoorstel staat klaar:</p><p><a href="${url}">${url}</a></p><p>Met vriendelijke groet,<br>Vastgoed Direct Nederland<br>06 12 23 80 51</p>`;
 
-      const mail = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ from: process.env.FROM_EMAIL, to: proposal.lead_email, subject: "Vrijblijvend verkoopvoorstel Vastgoed Direct Nederland", html }),
+      await sendResendMail({
+        to: proposal.lead_email,
+        subject: "Vrijblijvend verkoopvoorstel Vastgoed Direct Nederland",
+        html,
       });
 
-      const mailResult = await mail.json().catch(() => ({}));
-      if (!mail.ok) return NextResponse.json({ error: mailResult.message || "E-mail verzenden mislukt." }, { status: 500 });
-
-      await db.from("proposals").update({ status: "Verzonden", emailed_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq("id", body.id);
+      await query(
+        "update proposals set status = 'Verzonden', emailed_at = now(), updated_at = now() where id = $1",
+        [body.id]
+      );
       return NextResponse.json({ ok: true });
     }
 

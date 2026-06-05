@@ -1,5 +1,7 @@
-// Supabase is vervangen door Neon Postgres.
-// Dit bestand blijft alleen staan om oude imports snel herkenbaar te maken.
+import { query, queryOne } from "./neonDb";
+
 export function supabaseAdmin() {
-  throw new Error("Supabase is vervangen door Neon. Gebruik app/lib/neonDb.js.");
+  throw new Error("Oude databasehelper aangeroepen. Deze app gebruikt Neon. Vervang deze import door neonDb.js.");
 }
+
+export { query, queryOne };

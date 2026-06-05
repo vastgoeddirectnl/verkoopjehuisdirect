@@ -1,23 +1,25 @@
 import { neon } from "@neondatabase/serverless";
 
-let sql;
+let sqlClient;
 
-export function getSql() {
-  const connectionString = process.env.DATABASE_URL;
-
-  if (!connectionString) {
-    throw new Error("DATABASE_URL ontbreekt. Voeg deze toe in Vercel Environment Variables.");
+export function getDatabaseUrl() {
+  const url = process.env.DATABASE_URL;
+  if (!url) {
+    throw new Error("DATABASE_URL ontbreekt. Voeg de Neon connection string toe in Vercel Environment Variables.");
   }
+  return url;
+}
 
-  if (!sql) {
-    sql = neon(connectionString);
+export function getSqlClient() {
+  if (!sqlClient) {
+    sqlClient = neon(getDatabaseUrl());
   }
-
-  return sql;
+  return sqlClient;
 }
 
 export async function query(text, params = []) {
-  const rows = await getSql()(text, params);
+  const sql = getSqlClient();
+  const rows = await sql(text, params);
   return { rows };
 }
 

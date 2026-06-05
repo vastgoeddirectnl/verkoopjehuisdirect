@@ -140,7 +140,7 @@ export default function HomeClient() {
       const result = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        throw new Error(result.error || "Lead opslaan mislukt.");
+        throw new Error(result.error || "Aanvraag verzenden mislukt.");
       }
 
       setSubmitted(true);

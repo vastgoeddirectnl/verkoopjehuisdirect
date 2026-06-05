@@ -1,114 +1,32 @@
-export default function sitemap() {
-  const baseUrl = "https://www.verkoopjehuisdirect.nl";
+const baseUrl = "https://www.verkoopjehuisdirect.nl";
 
-  return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-   {
-  url: `${baseUrl}/huis-verkopen-binnen-24-uur`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.85,
-},
-   {
-  url: `${baseUrl}/huis-direct-verkopen`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.86,
-},
-    {
-      url: `${baseUrl}/huis-snel-verkopen`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-  url: `${baseUrl}/opknapwoning-verkopen`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.82,
-},
-    {
-  url: `${baseUrl}/huis-verkopen-binnen-1-week`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.84,
-},
-{
-  url: `${baseUrl}/huis-verkopen-groningen`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.82,
-},
-    {
-  url: `${baseUrl}/huis-verkopen-bij-erfenis`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.82,
-},
-{
-  url: `${baseUrl}/verhuurde-woning-verkopen`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.82,
-},
-{
-  url: `${baseUrl}/huis-verkopen-zonder-bezichtigingen`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.82,
-},
-{
-  url: `${baseUrl}/huis-verkopen-bij-scheiding`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.82,
-},
-{
-  url: `${baseUrl}/leegstaand-huis-verkopen`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.82,
-},
-{
-  url: `${baseUrl}/huis-verkopen-met-achterstallig-onderhoud`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.82,
-},
-{
-  url: `${baseUrl}/huis-verkopen-aan-opkoper`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.82,
-}, 
-{
-  url: `${baseUrl}/woning-verkopen-friesland`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.78,
-},
-{
-  url: `${baseUrl}/woning-verkopen-drenthe`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.78,
-},
-{
-  url: `${baseUrl}/woning-verkopen-overijssel`,
-  lastModified: new Date(),
-  changeFrequency: "weekly",
-  priority: 0.78,
-},  
-    {
-      url: `${baseUrl}/woning-verkopen-zonder-makelaar`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.85,
-    },
-  ];
+const routes = [
+  ["/", 1],
+  ["/huis-direct-verkopen", 0.86],
+  ["/huis-snel-verkopen", 0.9],
+  ["/woning-verkopen-zonder-makelaar", 0.85],
+  ["/huis-verkopen-binnen-24-uur", 0.85],
+  ["/huis-verkopen-binnen-1-week", 0.84],
+  ["/huis-verkopen-zonder-bezichtigingen", 0.82],
+  ["/huis-verkopen-bij-scheiding", 0.82],
+  ["/huis-verkopen-aan-opkoper", 0.82],
+  ["/huis-verkopen-bij-erfenis", 0.82],
+  ["/opknapwoning-verkopen", 0.82],
+  ["/leegstaand-huis-verkopen", 0.82],
+  ["/huis-verkopen-met-achterstallig-onderhoud", 0.82],
+  ["/verhuurde-woning-verkopen", 0.82],
+  ["/huis-verkopen-groningen", 0.82],
+  ["/woning-verkopen-friesland", 0.78],
+  ["/woning-verkopen-drenthe", 0.78],
+  ["/woning-verkopen-overijssel", 0.78],
+  ["/privacyverklaring", 0.3],
+];
+
+export default function sitemap() {
+  return routes.map(([path, priority]) => ({
+    url: `${baseUrl}${path === "/" ? "" : path}`,
+    lastModified: new Date(),
+    changeFrequency: path === "/" ? "weekly" : "monthly",
+    priority,
+  }));
 }

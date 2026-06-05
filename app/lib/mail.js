@@ -1,4 +1,4 @@
-import { Resend } from "resend";
+const DEFAULT_TO = "info@verkoopjehuisdirect.nl";
 
 function escapeHtml(value = "") {
   return String(value)
@@ -9,65 +9,55 @@ function escapeHtml(value = "") {
     .replaceAll("'", "&#039;");
 }
 
-function getFromEmail() {
-  return process.env.FROM_EMAIL || "Vastgoed Direct Nederland <info@verkoopjehuisdirect.nl>";
+export function hasMailConfig() {
+  return Boolean(process.env.RESEND_API_KEY && process.env.FROM_EMAIL);
 }
 
-export async function sendLeadEmails(lead) {
-  if (!process.env.RESEND_API_KEY) {
-    return { sent: false, reason: "RESEND_API_KEY ontbreekt." };
+export async function sendResendMail({ to, subject, html, replyTo }) {
+  if (!hasMailConfig()) {
+    return { skipped: true, reason: "RESEND_API_KEY en/of FROM_EMAIL ontbreekt." };
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  const safe = {
-    naam: escapeHtml(lead.naam),
-    email: escapeHtml(lead.email),
-    telefoon: escapeHtml(lead.telefoon),
-    postcode: escapeHtml(lead.postcode),
-    huisnummer: escapeHtml(lead.huisnummer),
-    woningtype: escapeHtml(lead.woningtype),
-    staat: escapeHtml(lead.staat),
-    reden: escapeHtml(lead.reden),
-    pagina: escapeHtml(lead.pagina),
-    bron: escapeHtml(lead.bron),
-  };
-
-  await resend.emails.send({
-    from: getFromEmail(),
-    to: ["info@verkoopjehuisdirect.nl"],
-    subject: "Nieuwe woningaanvraag via verkoopjehuisdirect.nl",
-    html: `
-      <h2>Nieuwe woningaanvraag</h2>
-      <p><strong>Naam:</strong> ${safe.naam}</p>
-      <p><strong>E-mail:</strong> ${safe.email}</p>
-      <p><strong>Telefoon:</strong> ${safe.telefoon}</p>
-      <p><strong>Adres:</strong> ${safe.postcode} ${safe.huisnummer}</p>
-      <p><strong>Type woning:</strong> ${safe.woningtype}</p>
-      <p><strong>Staat woning:</strong> ${safe.staat}</p>
-      <p><strong>Reden verkoop:</strong> ${safe.reden}</p>
-      <hr />
-      <p><strong>Pagina:</strong> ${safe.pagina}</p>
-      <p><strong>Bron:</strong> ${safe.bron}</p>
-      <p><strong>Actie:</strong> bel deze lead zo snel mogelijk.</p>
-    `,
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: process.env.FROM_EMAIL,
+      to,
+      subject,
+      html,
+      ...(replyTo ? { reply_to: replyTo } : {}),
+    }),
   });
 
-  if (lead.email) {
-    await resend.emails.send({
-      from: getFromEmail(),
-      to: [lead.email],
-      subject: "Uw aanvraag is ontvangen",
-      html: `
-        <h2>Uw aanvraag is ontvangen</h2>
-        <p>Beste ${safe.naam || "heer/mevrouw"},</p>
-        <p>Bedankt voor uw aanvraag via verkoopjehuisdirect.nl.</p>
-        <p>Wij nemen zo snel mogelijk contact met u op voor een vrijblijvend verkoopvoorstel.</p>
-        <p>Met vriendelijke groet,</p>
-        <p><strong>Vastgoed Direct Nederland</strong></p>
-        <p>info@verkoopjehuisdirect.nl<br />06 12 23 80 51</p>
-      `,
-    });
+  const json = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(json.message || "E-mail verzenden via Resend is mislukt.");
   }
+  return json;
+}
 
-  return { sent: true };
+export async function sendLeadNotification(lead) {
+  const to = process.env.LEAD_TO_EMAIL || DEFAULT_TO;
+  const subject = `Nieuwe aanvraag verkoopvoorstel${lead.postcode ? ` - ${lead.postcode}` : ""}`;
+  const html = `
+    <h2>Nieuwe aanvraag via verkoopjehuisdirect.nl</h2>
+    <table cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:15px;">
+      <tr><td><strong>Naam</strong></td><td>${escapeHtml(lead.naam)}</td></tr>
+      <tr><td><strong>E-mail</strong></td><td>${escapeHtml(lead.email)}</td></tr>
+      <tr><td><strong>Telefoon</strong></td><td>${escapeHtml(lead.telefoon)}</td></tr>
+      <tr><td><strong>Adres</strong></td><td>${escapeHtml(`${lead.postcode || ""} ${lead.huisnummer || ""}`.trim())}</td></tr>
+      <tr><td><strong>Woningtype</strong></td><td>${escapeHtml(lead.woningtype)}</td></tr>
+      <tr><td><strong>Staat</strong></td><td>${escapeHtml(lead.staat)}</td></tr>
+      <tr><td><strong>Reden</strong></td><td>${escapeHtml(lead.reden)}</td></tr>
+      <tr><td><strong>Pagina</strong></td><td>${escapeHtml(lead.pagina)}</td></tr>
+      <tr><td><strong>Bron</strong></td><td>${escapeHtml(lead.bron)}</td></tr>
+    </table>
+    <p style="font-family:Arial,sans-serif;">Bekijk de lead in het interne dashboard: <a href="https://www.verkoopjehuisdirect.nl/admin">/admin</a></p>
+  `;
+
+  return sendResendMail({ to, subject, html, replyTo: lead.email || undefined });
 }
