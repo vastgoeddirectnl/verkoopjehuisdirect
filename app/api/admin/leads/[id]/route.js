@@ -1,48 +1,50 @@
 import { NextResponse } from "next/server";
-import { isAdminAuthenticated } from "../../../lib/adminAuth";
-import { query } from "../../../lib/neonDb";
+import { isAdminAuthenticated } from "../../../../lib/adminAuth";
+import { queryOne } from "../../../../lib/neonDb";
 
 export const runtime = "nodejs";
 
-export async function GET(request) {
+export async function PATCH(request, context) {
   const authenticated = await isAdminAuthenticated();
 
   if (!authenticated) {
     return NextResponse.json({ error: "Niet ingelogd." }, { status: 401 });
   }
 
-  const { searchParams } = new URL(request.url);
-  const status = searchParams.get("status");
-  const search = String(searchParams.get("search") || "").trim().slice(0, 120);
+  const { id } = await context.params;
+  const body = await request.json();
 
-  const where = [];
+  const allowedFields = ["status", "notitie", "last_contact_at"];
+  const updates = [];
   const params = [];
 
-  if (status && status !== "Alle") {
-    params.push(status);
-    where.push(`status = $${params.length}`);
+  for (const field of allowedFields) {
+    if (Object.prototype.hasOwnProperty.call(body, field)) {
+      params.push(body[field] || null);
+      updates.push(`${field} = $${params.length}`);
+    }
   }
 
-  if (search) {
-    params.push(`%${search}%`);
-    const i = params.length;
-    where.push(
-      `(naam ilike $${i} or telefoon ilike $${i} or postcode ilike $${i} or huisnummer ilike $${i} or pagina ilike $${i} or bron ilike $${i})`
+  if (!updates.length) {
+    return NextResponse.json(
+      { error: "Geen wijzigingen ontvangen." },
+      { status: 400 }
     );
   }
 
+  params.push(id);
+
   try {
-    const sql = `
-      select *
-      from leads
-      ${where.length ? `where ${where.join(" and ")}` : ""}
-      order by created_at desc
-      limit 250
-    `;
+    const lead = await queryOne(
+      `update leads set ${updates.join(", ")}, updated_at = now() where id = $${params.length} returning *`,
+      params
+    );
 
-    const { rows } = await query(sql, params);
+    if (!lead) {
+      return NextResponse.json({ error: "Lead niet gevonden." }, { status: 404 });
+    }
 
-    return NextResponse.json({ leads: rows });
+    return NextResponse.json({ lead });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
