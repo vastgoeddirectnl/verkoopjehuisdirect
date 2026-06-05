@@ -1,8 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
-
+// Supabase is vervangen door Neon Postgres.
+// Dit bestand blijft alleen staan om oude imports snel herkenbaar te maken.
 export function supabaseAdmin() {
-  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) throw new Error("SUPABASE_URL of SUPABASE_SERVICE_ROLE_KEY ontbreekt.");
-  return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  throw new Error("Supabase is vervangen door Neon. Gebruik app/lib/neonDb.js.");
 }
