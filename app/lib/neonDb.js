@@ -4,9 +4,13 @@ let sqlClient;
 
 export function getDatabaseUrl() {
   const url = process.env.DATABASE_URL;
+
   if (!url) {
-    throw new Error("DATABASE_URL ontbreekt. Voeg de Neon connection string toe in Vercel Environment Variables.");
+    throw new Error(
+      "DATABASE_URL ontbreekt. Voeg de Neon connection string toe in Vercel Environment Variables."
+    );
   }
+
   return url;
 }
 
@@ -14,13 +18,20 @@ export function getSqlClient() {
   if (!sqlClient) {
     sqlClient = neon(getDatabaseUrl());
   }
+
   return sqlClient;
 }
 
 export async function query(text, params = []) {
   const sql = getSqlClient();
-  const rows = await sql(text, params);
-  return { rows };
+
+  const result = await sql.query(text, params);
+
+  if (Array.isArray(result)) {
+    return { rows: result };
+  }
+
+  return { rows: result?.rows || [] };
 }
 
 export async function queryOne(text, params = []) {
