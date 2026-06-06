@@ -1,5 +1,5 @@
 import { query, queryOne } from "./neonDb";
-import { sendLeadNotification } from "./mail";
+import { sendApplicantConfirmation, sendLeadNotification } from "./mail";
 
 const TEXT_LIMITS = {
   naam: 160,
@@ -49,6 +49,7 @@ export function validateLead(lead) {
 export async function createLead(input = {}) {
   const lead = normalizeLead(input);
   const validation = validateLead(lead);
+
   if (!validation.ok) {
     const error = new Error(validation.error);
     error.status = 400;
@@ -73,12 +74,23 @@ export async function createLead(input = {}) {
     ]
   );
 
-  let mail = { skipped: true };
+  const mail = {
+    internal: { skipped: true },
+    applicant: { skipped: true },
+  };
+
   try {
-    mail = await sendLeadNotification(saved || lead);
+    mail.internal = await sendLeadNotification(saved || lead);
   } catch (error) {
-    console.warn("Lead opgeslagen, maar e-mailmelding is niet verzonden:", error.message);
-    mail = { skipped: false, error: error.message };
+    console.warn("Lead opgeslagen, maar interne e-mailmelding is niet verzonden:", error.message);
+    mail.internal = { skipped: false, error: error.message };
+  }
+
+  try {
+    mail.applicant = await sendApplicantConfirmation(saved || lead);
+  } catch (error) {
+    console.warn("Lead opgeslagen, maar ontvangstbevestiging is niet verzonden:", error.message);
+    mail.applicant = { skipped: false, error: error.message };
   }
 
   return { lead: saved, mail };
