@@ -58,6 +58,44 @@ function cleanForField(field, value) {
   return clean(value, 300) || null;
 }
 
+
+function siteUrl() {
+  return (process.env.NEXT_PUBLIC_SITE_URL || "https://www.verkoopjehuisdirect.nl").replace(/\/$/, "");
+}
+
+function formatMoney(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  if (raw.includes("€")) return raw;
+  const digits = raw.replace(/[^\d]/g, "");
+  if (!digits) return raw;
+  return `€ ${new Intl.NumberFormat("nl-NL", { maximumFractionDigits: 0 }).format(Number(digits))}`;
+}
+
+function formatAddress(proposal) {
+  const explicit = clean(proposal.property_address, 300);
+  if (explicit) return explicit.toUpperCase();
+  return [proposal.property_postcode, proposal.property_house_number].filter(Boolean).join(" ").toUpperCase();
+}
+
+function formatDateShort(value) {
+  if (!value) return "";
+  return new Intl.DateTimeFormat("nl-NL", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(value));
+}
+
+async function ensurePublicToken(proposal) {
+  if (proposal.public_token) return proposal.public_token;
+  const updated = await queryOne(
+    "update proposals set public_token = gen_random_uuid(), updated_at = now() where id = $1 returning public_token",
+    [proposal.id]
+  );
+  return updated?.public_token;
+}
+
 async function requireAdmin() {
   const authenticated = await isAdminAuthenticated();
   if (!authenticated) {
@@ -294,20 +332,60 @@ export async function POST(request) {
     }
 
     if (action === "sendProposalEmail") {
-      const proposal = await queryOne("select * from proposals where id = $1", [body.id]);
+      let proposal = await queryOne("select * from proposals where id = $1", [body.id]);
       if (!proposal) return NextResponse.json({ error: "Voorstel niet gevonden." }, { status: 404 });
       if (!proposal.lead_email) return NextResponse.json({ error: "Geen e-mailadres bekend." }, { status: 400 });
 
-      const site = process.env.NEXT_PUBLIC_SITE_URL || "https://www.verkoopjehuisdirect.nl";
-      const url = `${site}/admin/voorstellen/${proposal.id}/print`;
-      const subject = "Vrijblijvend verkoopvoorstel Vastgoed Direct Nederland";
+      const token = await ensurePublicToken(proposal);
+      proposal = { ...proposal, public_token: token };
+
+      const publicUrl = `${siteUrl()}/voorstel/${token}`;
+      const address = formatAddress(proposal);
+      const offerAmount = formatMoney(proposal.amount_text);
+      const validity = formatDateShort(proposal.validity_date);
+      const subject = address && address !== "-"
+        ? `Vrijblijvend verkoopvoorstel voor ${address}`
+        : "Uw vrijblijvende verkoopvoorstel van Vastgoed Direct Nederland";
+
+      const previewText = address && offerAmount
+        ? `Wij hebben een vrijblijvend verkoopvoorstel klaargezet voor ${address}: ${offerAmount}.`
+        : "Wij hebben uw vrijblijvende verkoopvoorstel klaargezet.";
+
       const html = `
-        <div style="font-family:Arial,sans-serif;font-size:16px;color:#0b2341;line-height:1.55;max-width:680px;">
-          <p>Beste ${proposal.lead_naam || "heer/mevrouw"},</p>
-          <p>Uw vrijblijvende verkoopvoorstel staat klaar. U kunt het voorstel rustig bekijken en desgewenst opslaan als PDF.</p>
-          <p><a href="${url}" style="display:inline-block;background:#ff6a00;color:#fff;text-decoration:none;border-radius:999px;padding:12px 18px;font-weight:bold;">Voorstel bekijken</a></p>
-          <p>Heeft u vragen of wilt u het voorstel bespreken? Dan kunt u reageren op deze e-mail of bellen/WhatsAppen via <strong>06 12 23 80 51</strong>.</p>
-          <p>Met vriendelijke groet,<br><strong>Vastgoed Direct Nederland</strong></p>
+        <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${previewText}</div>
+        <div style="font-family:Arial,sans-serif;background:#f5f2ec;padding:24px;color:#0b2341;">
+          <div style="max-width:680px;margin:0 auto;background:#fffdf9;border:1px solid #e8e3db;border-radius:24px;overflow:hidden;">
+            <div style="padding:26px 28px;border-bottom:1px solid #e8e3db;">
+              <img src="${siteUrl()}/logo.png" alt="Vastgoed Direct Nederland" style="max-width:220px;height:auto;">
+            </div>
+            <div style="padding:28px;">
+              <p style="margin:0 0 14px;font-size:16px;line-height:1.55;">Beste ${proposal.lead_naam || "heer/mevrouw"},</p>
+              <h1 style="margin:0 0 16px;font-size:28px;line-height:1.15;color:#071f3a;">Uw vrijblijvende verkoopvoorstel staat klaar</h1>
+              <p style="margin:0 0 18px;font-size:16px;line-height:1.65;color:#48586b;">
+                Naar aanleiding van uw aanvraag hebben wij een helder en vrijblijvend verkoopvoorstel voor u klaargezet.
+                In het voorstel vindt u het voorgestelde bedrag, de uitgangspunten, voorwaarden en vervolgstappen.
+              </p>
+              <div style="background:#fff7ef;border:1px solid #ffd5b6;border-radius:18px;padding:18px;margin:20px 0;">
+                <div style="font-size:13px;color:#7c4a24;text-transform:uppercase;font-weight:bold;letter-spacing:.06em;">Woning</div>
+                <div style="font-size:20px;font-weight:bold;margin-top:4px;color:#071f3a;">${address || "-"}</div>
+                <div style="font-size:30px;font-weight:bold;margin-top:8px;color:#ff6a00;">${offerAmount || "In overleg"}</div>
+                ${validity ? `<div style="font-size:14px;color:#48586b;margin-top:8px;">Geldig tot: ${validity}</div>` : ""}
+              </div>
+              <p style="margin:0 0 22px;font-size:16px;line-height:1.65;color:#48586b;">
+                U kunt het voorstel rustig bekijken. Heeft u vragen, wilt u iets aanvullen of wilt u het voorstel bespreken?
+                Dan kunt u direct reageren op deze e-mail of bellen/WhatsAppen via <strong>06 12 23 80 51</strong>.
+              </p>
+              <p style="margin:0 0 24px;">
+                <a href="${publicUrl}" style="display:inline-block;background:#ff6a00;color:#fff;text-decoration:none;border-radius:999px;padding:14px 22px;font-weight:bold;">Voorstel bekijken</a>
+              </p>
+              <p style="margin:0;font-size:14px;line-height:1.55;color:#6a7788;">
+                Dit voorstel is vrijblijvend en onder voorbehoud van definitieve controle, akkoord van betrokken partijen en notariële vastlegging.
+              </p>
+            </div>
+            <div style="padding:20px 28px;background:#071f3a;color:#fff;font-size:14px;">
+              Vastgoed Direct Nederland · info@verkoopjehuisdirect.nl · 06 12 23 80 51
+            </div>
+          </div>
         </div>
       `;
 
@@ -331,12 +409,26 @@ export async function POST(request) {
 
       if (!mailResult?.skipped) {
         await query(
-          "update proposals set status = 'Verzonden', emailed_at = now(), updated_at = now() where id = $1",
-          [proposal.id]
+          `update proposals
+           set status = 'Verzonden',
+               emailed_at = now(),
+               sent_to_email = $2,
+               last_emailed_subject = $3,
+               mail_message = $4,
+               updated_at = now()
+           where id = $1`,
+          [proposal.id, proposal.lead_email, subject, publicUrl]
         );
+
+        if (proposal.lead_id) {
+          await query(
+            "update leads set status = 'Voorstel verzonden', updated_at = now() where id = $1 and status <> 'Akkoord'",
+            [proposal.lead_id]
+          );
+        }
       }
 
-      return NextResponse.json({ ok: true, skipped: Boolean(mailResult?.skipped), mail: mailResult });
+      return NextResponse.json({ ok: true, skipped: Boolean(mailResult?.skipped), publicUrl, subject, mail: mailResult });
     }
 
     return NextResponse.json({ error: "Onbekende actie." }, { status: 400 });

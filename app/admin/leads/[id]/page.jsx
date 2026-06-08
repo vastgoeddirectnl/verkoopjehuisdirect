@@ -35,7 +35,7 @@ function Field({ label, children }) {
 }
 
 function defaultProposalForLead(lead) {
-  const propertyAddress = [lead?.postcode, lead?.huisnummer].filter(Boolean).join(" ");
+  const propertyAddress = [lead?.postcode, lead?.huisnummer].filter(Boolean).join(" ").toUpperCase();
   return {
     proposal_variant: "Uitgebreid",
     lead_id: lead?.id || "",
@@ -43,7 +43,7 @@ function defaultProposalForLead(lead) {
     lead_email: lead?.email || "",
     lead_telefoon: lead?.telefoon || "",
     property_address: propertyAddress,
-    property_postcode: lead?.postcode || "",
+    property_postcode: String(lead?.postcode || "").toUpperCase(),
     property_house_number: lead?.huisnummer || "",
     property_type: lead?.woningtype || "",
     living_area_text: "",
@@ -54,9 +54,9 @@ function defaultProposalForLead(lead) {
     validity_date: todayPlus(14),
     transfer_date_text: "In overleg",
     deposit_text: "In overleg bespreekbaar",
-    conditions_text: "Vrijblijvend voorstel onder voorbehoud van definitieve controle, akkoord van betrokken partijen en notariële vastlegging.",
-    assumptions_text: "Dit voorstel is gebaseerd op de door u verstrekte gegevens, openbare woninginformatie en de huidige bekende staat van de woning. Eventuele afwijkingen, bijzondere juridische situaties, verborgen gebreken of aanvullende kosten kunnen invloed hebben op de definitieve afspraken.",
-    included_items: "Heldere communicatie\nGeen makelaarskosten\nGeen openbare bezichtigingen nodig\nNotariële afwikkeling\nVerkoopoplossing op maat\nVrijblijvend voorstel",
+    conditions_text: "Dit voorstel is vrijblijvend en bedoeld om duidelijkheid te geven over een mogelijke verkoop. Definitieve afspraken worden pas schriftelijk en notarieel vastgelegd.",
+    assumptions_text: "Dit voorstel is gebaseerd op de door u verstrekte gegevens, openbare woninginformatie en de huidige bekende staat van de woning. Eventuele afwijkingen, bijzondere juridische situaties, verborgen gebreken, beperkte toegang tot documenten of aanvullende kosten kunnen invloed hebben op de definitieve afspraken.",
+    included_items: "Heldere communicatie\nGeen makelaarskosten\nGeen openbare bezichtigingen nodig\nVerkoop in huidige staat bespreekbaar\nFlexibele overdrachtsdatum\nNotariële afwikkeling\nVerkoopoplossing op maat\nVrijblijvend voorstel",
     traditional_price_text: "",
     agent_costs_text: "",
     notary_costs_text: "",
@@ -64,9 +64,9 @@ function defaultProposalForLead(lead) {
     other_costs_text: "",
     traditional_net_text: "",
     direct_net_text: "",
-    short_comparison_text: "Bij een directe verkoop wordt niet alleen gekeken naar de verkoopprijs, maar ook naar snelheid, zekerheid, kosten, benodigde werkzaamheden, risico’s en de gewenste overdrachtsdatum.",
-    reservations_text: "Controle woninggegevens\nControle eigendomssituatie\nControle beschikbare documenten\nNotariële toetsing\nAkkoord op voorwaarden\nGeen bijzondere belemmeringen",
-    next_steps_text: "U beoordeelt het voorstel rustig.\nWij bespreken vragen, bijzonderheden en eventuele voorwaarden.\nBij akkoord worden afspraken juridisch en notarieel vastgelegd.\nDe overdracht vindt plaats via de notaris.",
+    short_comparison_text: "Bij een directe verkoop wordt niet alleen gekeken naar de verkoopprijs, maar ook naar snelheid, zekerheid, verkoopkosten, benodigde werkzaamheden, privacy, risico’s en de gewenste overdrachtsdatum. Daardoor kan een direct voorstel lager lijken dan een verwachte verkoopprijs via de reguliere markt, terwijl de netto-opbrengst en zekerheid voor u gunstig kunnen uitpakken.",
+    reservations_text: "Controle woninggegevens\nControle eigendomssituatie\nControle beschikbare documenten\nControle eventuele huur-, gebruiks- of beslaggegevens\nNotariële toetsing\nAkkoord op voorwaarden\nGeen bijzondere belemmeringen\nDefinitieve schriftelijke vastlegging",
+    next_steps_text: "U beoordeelt het voorstel rustig.\nWij bespreken eventuele vragen, bijzonderheden en voorwaarden.\nIndien gewenst verzamelen wij aanvullende gegevens over de woning.\nBij akkoord worden de afspraken schriftelijk bevestigd.\nDe overdracht en betaling verlopen via de notaris.",
     contact_person: "Rob Schiphuis",
     notes: "",
   };
@@ -77,6 +77,7 @@ export default function LeadDetailPage({ params }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [notice, setNotice] = useState("");
   const [task, setTask] = useState({ title: "", due_date: todayPlus(1), note: "" });
   const [proposal, setProposal] = useState(null);
 
@@ -99,6 +100,7 @@ export default function LeadDetailPage({ params }) {
   async function post(body) {
     setSaving(true);
     setError("");
+    setNotice("");
     try {
       const res = await fetch("/api/admin/v2", {
         method: "POST",
@@ -133,7 +135,19 @@ export default function LeadDetailPage({ params }) {
     if (!proposal) return;
     const result = await post({ action: "createProposal", ...proposal });
     if (result?.proposal?.id) {
+      setNotice("Voorstel is aangemaakt. Controleer de print/PDF-versie voordat u het voorstel mailt.");
       window.open(`/admin/voorstellen/${result.proposal.id}/print`, "_blank", "noopener,noreferrer");
+    }
+  }
+
+  async function sendProposal(id) {
+    const confirmed = window.confirm("Wilt u dit voorstel nu naar de klant mailen?");
+    if (!confirmed) return;
+    const result = await post({ action: "sendProposalEmail", id });
+    if (result?.ok) {
+      setNotice(result.skipped
+        ? "Mail is overgeslagen omdat Resend niet actief is ingesteld. De klantlink is wel beschikbaar."
+        : "Voorstel is naar de klant gemaild en vastgelegd in de mailhistorie.");
     }
   }
 
@@ -146,6 +160,7 @@ export default function LeadDetailPage({ params }) {
       </header>
 
       {error ? <div className="error">{error}</div> : null}
+      {notice ? <div className="notice-top">{notice}</div> : null}
       {!lead ? <section className="card"><p>Lead laden...</p></section> : (
         <>
           <section className="hero card">
@@ -223,7 +238,7 @@ export default function LeadDetailPage({ params }) {
                   <h3>2. Woninggegevens</h3>
                   <div className="form-grid">
                     <Field label="Adres / woning"><input value={proposal.property_address} onChange={(e) => setProposalField("property_address", e.target.value)} /></Field>
-                    <Field label="Postcode"><input value={proposal.property_postcode} onChange={(e) => setProposalField("property_postcode", e.target.value)} /></Field>
+                    <Field label="Postcode"><input value={proposal.property_postcode} onChange={(e) => setProposalField("property_postcode", e.target.value.toUpperCase())} /></Field>
                     <Field label="Huisnummer"><input value={proposal.property_house_number} onChange={(e) => setProposalField("property_house_number", e.target.value)} /></Field>
                     <Field label="Type woning"><input value={proposal.property_type} onChange={(e) => setProposalField("property_type", e.target.value)} /></Field>
                     <Field label="Woonoppervlakte"><input placeholder="Bijv. 178 m²" value={proposal.living_area_text} onChange={(e) => setProposalField("living_area_text", e.target.value)} /></Field>
@@ -281,7 +296,7 @@ export default function LeadDetailPage({ params }) {
 
           <section className="grid three">
             <article className="card"><h2>Taken</h2>{(data.tasks || []).map((item) => <div className="item" key={item.id}><strong>{item.title}</strong><span>{item.status} · {item.due_date || "geen datum"}</span><select value={item.status || "Open"} onChange={(e) => post({ action: "updateTask", id: item.id, status: e.target.value })}>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select></div>)}</article>
-            <article className="card"><h2>Voorstellen</h2>{(data.proposals || []).map((item) => <div className="item" key={item.id}><strong>{item.amount_text || "Voorstel"}</strong><span>{item.status} · {fmt(item.created_at)}</span><a href={`/admin/voorstellen/${item.id}/print`} target="_blank">Print/PDF</a><button className="small" onClick={() => post({ action: "sendProposalEmail", id: item.id })}>Mail voorstel</button></div>)}</article>
+            <article className="card"><h2>Voorstellen</h2>{(data.proposals || []).map((item) => <div className="item" key={item.id}><strong>{item.amount_text || "Voorstel"}</strong><span>{item.status} · {fmt(item.created_at)}</span><a href={`/admin/voorstellen/${item.id}/print`} target="_blank">Interne print/PDF</a>{item.public_token ? <a href={`/voorstel/${item.public_token}`} target="_blank">Klantversie</a> : null}<button className="small" onClick={() => sendProposal(item.id)}>Mail voorstel naar klant</button>{item.emailed_at ? <small>Laatst gemaild: {fmt(item.emailed_at)}</small> : null}{item.public_viewed_at ? <small>Bekeken door klant: {fmt(item.public_viewed_at)}</small> : null}</div>)}</article>
             <article className="card"><h2>Mailhistorie</h2>{(data.mailLogs || []).map((item) => <div className="item" key={item.id}><strong>{item.type}</strong><span>{item.status} · {item.recipient}</span><small>{fmt(item.created_at)}</small></div>)}</article>
           </section>
         </>
@@ -291,5 +306,5 @@ export default function LeadDetailPage({ params }) {
 }
 
 const styles = `
-:root{--navy:#071f3a;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#ff6a00;--green:#20c768;--shadow:0 22px 70px rgba(7,31,58,.12)}body{margin:0;background:radial-gradient(circle at top right,#fff3e7,transparent 34%),var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.detail-page{max-width:1280px;margin:0 auto;padding:28px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}header a{color:var(--navy);font-weight:900;text-decoration:none}header img{width:220px;background:#fff;border-radius:18px;padding:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero span,.section-head span{color:#a64200;background:#fff3e7;border:1px solid #ffd5b6;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase}.hero h1{font-size:42px;letter-spacing:-.04em;margin:12px 0 6px}.hero p,.section-head p{color:var(--muted);font-size:18px}.actions,.proposal-actions{display:flex;gap:10px;flex-wrap:wrap}.actions a,.actions button,.card button,.item a,.secondary-link{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer;display:inline-block}.actions a:first-child{background:var(--navy)}.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:18px}.grid.three{grid-template-columns:repeat(3,1fr)}h2{margin:0 0 18px;font-size:24px;letter-spacing:-.03em}h3{margin:0 0 16px;font-size:20px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}.info{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.info span,.item span,.item small,label span{display:block;color:var(--muted);font-size:13px}.info strong{display:block;margin-top:6px;word-break:break-word}label{display:grid;gap:8px;font-weight:900;margin-top:12px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}.item{border-bottom:1px solid var(--line);padding:12px 0}.item:last-child{border-bottom:0}.item strong{display:block}.item a{margin-top:8px;background:var(--navy)}.item button.small{margin-top:8px;margin-left:8px;padding:9px 12px;font-size:13px}.error{background:#fff3f0;color:#9b1c00;border:1px solid #ffd1c4;border-radius:16px;padding:12px 14px;margin-bottom:16px}.proposal-card{margin:18px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.section-head h2{font-size:34px;margin:12px 0 8px}.secondary-link{background:var(--navy);white-space:nowrap}.proposal-form{display:grid;gap:20px}.form-section{border:1px solid var(--line);border-radius:24px;background:#fff;padding:20px}.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.form-section textarea{min-height:96px}.proposal-actions button{padding:14px 20px}.proposal-actions .ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}@media(max-width:1100px){.form-grid{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:1fr}}@media(max-width:900px){.grid,.hero,.section-head{grid-template-columns:1fr;display:grid}.info-grid,.form-grid{grid-template-columns:1fr}.detail-page{padding:18px}}
+:root{--navy:#071f3a;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#ff6a00;--green:#20c768;--shadow:0 22px 70px rgba(7,31,58,.12)}body{margin:0;background:radial-gradient(circle at top right,#fff3e7,transparent 34%),var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.detail-page{max-width:1280px;margin:0 auto;padding:28px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}header a{color:var(--navy);font-weight:900;text-decoration:none}header img{width:220px;background:#fff;border-radius:18px;padding:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero span,.section-head span{color:#a64200;background:#fff3e7;border:1px solid #ffd5b6;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase}.hero h1{font-size:42px;letter-spacing:-.04em;margin:12px 0 6px}.hero p,.section-head p{color:var(--muted);font-size:18px}.actions,.proposal-actions{display:flex;gap:10px;flex-wrap:wrap}.actions a,.actions button,.card button,.item a,.secondary-link{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer;display:inline-block;margin-right:8px;margin-top:8px}.actions a:first-child{background:var(--navy)}.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:18px}.grid.three{grid-template-columns:repeat(3,1fr)}h2{margin:0 0 18px;font-size:24px;letter-spacing:-.03em}h3{margin:0 0 16px;font-size:20px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}.info{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.info span,.item span,.item small,label span{display:block;color:var(--muted);font-size:13px}.info strong{display:block;margin-top:6px;word-break:break-word}label{display:grid;gap:8px;font-weight:900;margin-top:12px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}.item{border-bottom:1px solid var(--line);padding:12px 0}.item:last-child{border-bottom:0}.item strong{display:block}.item a{margin-top:8px;background:var(--navy)}.item button.small{margin-top:8px;margin-left:8px;padding:9px 12px;font-size:13px}.error,.notice-top{border-radius:16px;padding:12px 14px;margin-bottom:16px}.error{background:#fff3f0;color:#9b1c00;border:1px solid #ffd1c4}.notice-top{background:#f0fff6;color:#075c2a;border:1px solid #bff3d0}.proposal-card{margin:18px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.section-head h2{font-size:34px;margin:12px 0 8px}.secondary-link{background:var(--navy);white-space:nowrap}.proposal-form{display:grid;gap:20px}.form-section{border:1px solid var(--line);border-radius:24px;background:#fff;padding:20px}.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.form-section textarea{min-height:96px}.proposal-actions button{padding:14px 20px}.proposal-actions .ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}@media(max-width:1100px){.form-grid{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:1fr}}@media(max-width:900px){.grid,.hero,.section-head{grid-template-columns:1fr;display:grid}.info-grid,.form-grid{grid-template-columns:1fr}.detail-page{padding:18px}}
 `;
