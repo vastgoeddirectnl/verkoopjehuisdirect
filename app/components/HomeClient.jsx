@@ -65,30 +65,66 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "Is een aanbetaling mogelijk?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd.",
-      },
-    },
-    {
-      "@type": "Question",
       name: "Kan ik verkopen zonder bezichtigingen?",
       acceptedAnswer: {
         "@type": "Answer",
         text: "Ja, in veel situaties is dat mogelijk. Wij bespreken de verkoopmogelijkheden zonder traditioneel bezichtigingstraject of open huis.",
       },
     },
-    {
-      "@type": "Question",
-      name: "Moet ik mijn woning eerst opruimen of leegmaken?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Niet altijd. Dit hangt af van de situatie en de gewenste oplevering. Ook oplevering in huidige staat of in overleg kan bespreekbaar zijn.",
-      },
-    },
   ],
 };
+
+const situations = [
+  {
+    title: "Ik wil geen bezichtigingen",
+    text: "Prettig bij privacy, verhuur, persoonlijke omstandigheden of als u geen onbekenden over de vloer wilt.",
+  },
+  {
+    title: "Mijn woning heeft onderhoud nodig",
+    text: "Ook woningen met achterstallig onderhoud, schade of renovatiebehoefte kunnen worden aangemeld.",
+  },
+  {
+    title: "Ik wil snel duidelijkheid",
+    text: "Geen maandenlange onzekerheid, maar een concreet voorstel met voorwaarden en vervolgstappen.",
+  },
+  {
+    title: "Erfenis, scheiding of leegstand",
+    text: "Rust, overzicht en duidelijke afspraken in een periode waarin u geen onnodige verkoopdruk wilt.",
+  },
+];
+
+const processSteps = [
+  ["01", "Aanvraag", "U vult de belangrijkste woninggegevens in. Dit is gratis, discreet en vrijblijvend."],
+  ["02", "Persoonlijk contact", "Wij bespreken uw situatie, gewenste planning en eventuele bijzonderheden."],
+  ["03", "Voorstel", "U ontvangt een helder verkoopvoorstel met bedrag, voorwaarden en vervolgstappen."],
+  ["04", "Notaris", "Bij akkoord worden de afspraken zorgvuldig en notarieel vastgelegd."],
+];
+
+const comparisonRows = [
+  ["Woning verkoopklaar maken", "Vaak gewenst of noodzakelijk", "Niet altijd nodig"],
+  ["Bezichtigingen / open huis", "Meerdere momenten mogelijk", "Geen open huis nodig"],
+  ["Makelaarskosten", "Gebruikelijk van toepassing", "Geen makelaarskosten"],
+  ["Doorlooptijd", "Afhankelijk van markt en kijkers", "Snel duidelijkheid mogelijk"],
+  ["Privacy", "Meerdere partijen over de vloer", "Discreter traject"],
+  ["Afspraken", "Onderhandeling en voorbehouden", "Helder voorstel vooraf"],
+];
+
+const popularLinks = [
+  ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen"],
+  ["/opknapwoning-verkopen", "Opknapwoning verkopen"],
+  ["/huis-verkopen-met-achterstallig-onderhoud", "Achterstallig onderhoud"],
+  ["/huis-verkopen-groningen", "Huis verkopen in Groningen"],
+  ["/woning-verkopen-friesland", "Woning verkopen in Friesland"],
+  ["/huis-direct-verkopen", "Huis direct verkopen"],
+  ["/huis-snel-verkopen", "Huis snel verkopen"],
+  ["/woning-verkopen-zonder-makelaar", "Zonder makelaar verkopen"],
+  ["/huis-verkopen-zonder-bezichtigingen", "Zonder bezichtigingen"],
+  ["/huis-verkopen-bij-erfenis", "Huis verkopen bij erfenis"],
+  ["/huis-verkopen-bij-scheiding", "Huis verkopen bij scheiding"],
+  ["/verhuurde-woning-verkopen", "Verhuurde woning verkopen"],
+  ["/woning-verkopen-drenthe", "Woning verkopen in Drenthe"],
+  ["/woning-verkopen-overijssel", "Woning verkopen in Overijssel"],
+];
 
 export default function HomeClient() {
   const [step, setStep] = useState(1);
@@ -164,576 +200,904 @@ export default function HomeClient() {
       <style jsx global>{`
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: #0a2540; background: #f7f5f0; }
+        body {
+          margin: 0;
+          font-family: Arial, Helvetica, sans-serif;
+          color: #071f3a;
+          background: #f5f2ec;
+        }
         a { color: inherit; text-decoration: none; }
-        .container { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
-        .top-strip { background: #0a2540; color: #fff; font-size: 14px; font-weight: 800; }
-        .top-strip-inner { min-height: 42px; display: flex; align-items: center; justify-content: center; gap: 16px; }
-        .top-points { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96); border-bottom: 1px solid #e6e2db; backdrop-filter: blur(10px); }
-        .header-inner { min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-        .logo { display: block; width: 210px; max-width: 100%; height: auto; object-fit: contain; }
-        .nav { display: flex; align-items: center; gap: 24px; font-size: 15px; font-weight: 800; color: #24364a; }
+        button, input, select { font: inherit; }
+        .container { width: min(1240px, calc(100% - 44px)); margin: 0 auto; }
+        .top-strip {
+          background: #071f3a;
+          color: #fff;
+          font-size: 14px;
+          font-weight: 900;
+        }
+        .top-strip-inner {
+          min-height: 42px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 18px;
+          text-align: center;
+        }
+        .top-strip-inner span { white-space: nowrap; }
+        .header {
+          position: sticky;
+          top: 0;
+          z-index: 70;
+          background: rgba(255, 255, 255, .94);
+          border-bottom: 1px solid #e8e3db;
+          backdrop-filter: blur(14px);
+        }
+        .header-inner {
+          min-height: 88px;
+          display: grid;
+          grid-template-columns: auto 1fr auto;
+          align-items: center;
+          gap: 22px;
+        }
+        .logo {
+          display: block;
+          width: 260px;
+          max-width: 100%;
+          height: auto;
+          object-fit: contain;
+        }
+        .nav {
+          display: flex;
+          justify-content: center;
+          gap: 21px;
+          color: #24364a;
+          font-size: 15px;
+          font-weight: 900;
+        }
+        .nav a { white-space: nowrap; }
         .nav a:hover { color: #ff6a00; }
-        .header-actions { display: flex; align-items: center; gap: 10px; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 14px 22px; font-weight: 900; border: none; cursor: pointer; font-size: 15px; transition: .2s ease; white-space: nowrap; }
-        .btn-orange { background: #ff6a00; color: #fff; box-shadow: 0 10px 24px rgba(255,106,0,.25); }
-        .btn-orange:hover { background: #e85f00; transform: translateY(-1px); }
-        .btn-blue { background: #0a2540; color: #fff; }
-        .btn-blue:hover { background: #12395d; }
-        .btn-green { background: #25d366; color: #fff; }
-        .btn-light { background: #fff; color: #0a2540; border: 1px solid #d8d4cc; }
-        .hero { background: radial-gradient(circle at 84% 10%, rgba(255,106,0,.14), transparent 34%), radial-gradient(circle at 8% 88%, rgba(10,37,64,.16), transparent 38%), #fff; }
-        .hero-grid { display: grid; grid-template-columns: 1.03fr .97fr; gap: 54px; align-items: center; padding: 70px 0; }
-        .badge { display: inline-flex; color: #ff6a00; background: #fff2e8; border: 1px solid #ffd5b8; border-radius: 999px; padding: 10px 16px; font-size: 14px; font-weight: 900; margin-bottom: 22px; }
-        h1 { font-size: clamp(38px, 4.6vw, 62px); line-height: .98; letter-spacing: -2px; margin: 0; color: #0a2540; }
-        .lead { font-size: 20px; line-height: 1.7; color: #536273; max-width: 680px; margin: 26px 0 0; }
-        .trust-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 32px 0; }
-        .trust-card { background: #fff; border: 1px solid #e6e2db; border-radius: 20px; padding: 18px; font-weight: 900; box-shadow: 0 8px 22px rgba(10,37,64,.06); }
-        .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-start; }
-        .micro-note { font-size: 13px; color: #647386; margin: 9px 0 0; }
-        .form-card { background: #fff; border: 1px solid #e6e2db; border-radius: 34px; box-shadow: 0 28px 70px rgba(10,37,64,.16); padding: 32px; }
-        .form-logo-wrap { display: flex; justify-content: center; padding-bottom: 22px; margin-bottom: 24px; border-bottom: 1px solid #eee9e2; }
-        .form-logo { width: 245px; max-width: 100%; height: auto; display: block; object-fit: contain; }
-        .step-label { margin: 0; color: #ff6a00; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; font-size: 13px; }
-        .form-title { margin: 6px 0 8px; font-size: 32px; line-height: 1.1; color: #0a2540; }
-        .form-sub { margin: 0 0 18px; color: #687789; }
-        .notice { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 12px 14px; border-radius: 16px; font-weight: 800; margin-bottom: 18px; }
-        .field { width: 100%; border: 1px solid #d9d5ce; background: #faf9f6; border-radius: 18px; padding: 16px 18px; font-size: 16px; outline: none; }
-        .field:focus { border-color: #0a2540; background: #fff; }
+        .header-actions {
+          display: flex;
+          align-items: center;
+          gap: 9px;
+        }
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border: 0;
+          border-radius: 999px;
+          padding: 14px 21px;
+          font-weight: 900;
+          cursor: pointer;
+          transition: .2s ease;
+          white-space: nowrap;
+          line-height: 1;
+        }
+        .btn:hover { transform: translateY(-1px); }
+        .btn-orange {
+          background: #ff6a00;
+          color: #fff;
+          box-shadow: 0 14px 30px rgba(255, 106, 0, .24);
+        }
+        .btn-blue { background: #071f3a; color: #fff; }
+        .btn-light { background: #fff; color: #071f3a; border: 1px solid #e3ded6; }
+        .btn-green {
+          background: #25d366;
+          color: #fff;
+          box-shadow: 0 14px 30px rgba(37, 211, 102, .22);
+        }
+        .hero {
+          position: relative;
+          overflow: hidden;
+          background:
+            radial-gradient(circle at 82% 2%, rgba(255, 106, 0, .18), transparent 32%),
+            radial-gradient(circle at 6% 90%, rgba(7, 31, 58, .12), transparent 34%),
+            linear-gradient(180deg, #fffdf9 0%, #f7f3ec 100%);
+        }
+        .hero::before {
+          content: "";
+          position: absolute;
+          right: -110px;
+          top: 110px;
+          width: 330px;
+          height: 330px;
+          border-radius: 999px;
+          border: 52px solid rgba(255, 106, 0, .11);
+        }
+        .hero-grid {
+          position: relative;
+          z-index: 1;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(430px, .82fr);
+          gap: 58px;
+          align-items: start;
+          padding: 70px 0 74px;
+        }
+        .badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          color: #9a3d00;
+          background: #fff3e7;
+          border: 1px solid #ffd5b6;
+          border-radius: 999px;
+          padding: 10px 15px;
+          font-size: 13px;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: .06em;
+          margin-bottom: 20px;
+        }
+        h1 {
+          font-size: clamp(42px, 5vw, 70px);
+          line-height: .94;
+          letter-spacing: -2.9px;
+          margin: 0;
+          color: #071f3a;
+          max-width: 760px;
+        }
+        .hero-lead {
+          font-size: 20px;
+          line-height: 1.68;
+          color: #526274;
+          max-width: 680px;
+          margin: 24px 0 0;
+        }
+        .hero-cta-row {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+          align-items: flex-start;
+          margin: 30px 0 0;
+        }
+        .micro-note {
+          font-size: 13px;
+          color: #637286;
+          margin: 9px 0 0;
+          font-weight: 800;
+        }
+        .trust-micro {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 10px;
+          margin: 28px 0 0;
+          max-width: 760px;
+        }
+        .trust-micro div {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 18px;
+          padding: 15px;
+          font-weight: 900;
+          color: #071f3a;
+          box-shadow: 0 12px 28px rgba(7, 31, 58, .06);
+        }
+        .proposal-visual {
+          display: grid;
+          gap: 18px;
+        }
+        .proposal-card {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 34px;
+          padding: 26px;
+          box-shadow: 0 30px 90px rgba(7, 31, 58, .16);
+          overflow: hidden;
+          position: relative;
+        }
+        .proposal-card::before {
+          content: "";
+          position: absolute;
+          inset: 0 0 auto 0;
+          height: 112px;
+          background: linear-gradient(135deg, #071f3a, #123a67);
+        }
+        .proposal-card-inner { position: relative; z-index: 1; }
+        .proposal-top {
+          display: flex;
+          justify-content: space-between;
+          gap: 16px;
+          align-items: flex-start;
+          color: #fff;
+          min-height: 92px;
+        }
+        .proposal-top span {
+          display: block;
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: .07em;
+          font-weight: 900;
+          color: #d9e6f5;
+        }
+        .proposal-top strong {
+          display: block;
+          margin-top: 5px;
+          font-size: 20px;
+          line-height: 1.1;
+        }
+        .proposal-pill {
+          background: rgba(255, 255, 255, .14);
+          border: 1px solid rgba(255, 255, 255, .22);
+          border-radius: 999px;
+          padding: 8px 11px;
+          font-size: 12px;
+          font-weight: 900;
+          white-space: nowrap;
+        }
+        .amount-preview {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 26px;
+          padding: 22px;
+          box-shadow: 0 18px 42px rgba(7, 31, 58, .1);
+          margin-bottom: 15px;
+        }
+        .amount-preview small {
+          display: block;
+          color: #647386;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: .06em;
+        }
+        .amount-preview strong {
+          display: block;
+          font-size: 43px;
+          color: #ff6a00;
+          letter-spacing: -1.8px;
+          margin-top: 7px;
+        }
+        .proposal-list {
+          display: grid;
+          gap: 10px;
+        }
+        .proposal-list div {
+          display: flex;
+          gap: 10px;
+          align-items: flex-start;
+          background: #f8f5ef;
+          border: 1px solid #eee8df;
+          border-radius: 17px;
+          padding: 13px 14px;
+          color: #24364a;
+          font-weight: 850;
+        }
+        .proposal-list span {
+          color: #ff6a00;
+          font-weight: 900;
+        }
+        .confidence-card {
+          background: #071f3a;
+          color: #fff;
+          border-radius: 28px;
+          padding: 22px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+          box-shadow: 0 18px 50px rgba(7, 31, 58, .13);
+        }
+        .confidence-card div {
+          background: rgba(255,255,255,.1);
+          border: 1px solid rgba(255,255,255,.14);
+          border-radius: 18px;
+          padding: 15px;
+        }
+        .confidence-card strong, .confidence-card span { display: block; }
+        .confidence-card strong { font-size: 22px; color: #fff; }
+        .confidence-card span { color: #d9e6f5; font-size: 13px; margin-top: 4px; line-height: 1.35; }
+        .form-card {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 34px;
+          padding: 30px;
+          box-shadow: 0 30px 90px rgba(7, 31, 58, .16);
+        }
+        .form-logo-wrap {
+          display: flex;
+          justify-content: center;
+          padding-bottom: 20px;
+          margin-bottom: 22px;
+          border-bottom: 1px solid #eee9e2;
+        }
+        .form-logo {
+          width: 235px;
+          max-width: 100%;
+          height: auto;
+          display: block;
+        }
+        .form-benefits {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 8px;
+          margin: 0 0 18px;
+        }
+        .form-benefits span {
+          background: #fff7ef;
+          border: 1px solid #ffd5b6;
+          color: #8c3a00;
+          border-radius: 999px;
+          padding: 8px 10px;
+          text-align: center;
+          font-size: 12px;
+          font-weight: 900;
+        }
+        .step-label {
+          margin: 0;
+          color: #ff6a00;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: .06em;
+          font-size: 13px;
+        }
+        .form-title {
+          margin: 6px 0 8px;
+          font-size: 31px;
+          line-height: 1.06;
+          color: #071f3a;
+          letter-spacing: -1.1px;
+        }
+        .form-sub {
+          margin: 0 0 18px;
+          color: #687789;
+          line-height: 1.55;
+        }
+        .notice {
+          background: #fff7ed;
+          border: 1px solid #fed7aa;
+          color: #9a3412;
+          padding: 12px 14px;
+          border-radius: 16px;
+          font-weight: 850;
+          margin-bottom: 18px;
+        }
+        .field {
+          width: 100%;
+          border: 1px solid #d9d5ce;
+          background: #faf9f6;
+          border-radius: 18px;
+          padding: 16px 18px;
+          font-size: 16px;
+          outline: none;
+          min-height: 58px;
+        }
+        .field:focus { border-color: #071f3a; background: #fff; }
         .form-stack { display: grid; gap: 14px; }
-        .form-actions { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
-        .small-note { font-size: 12px; color: #798698; margin: 4px 0 0; }
-        .bar { background: #0a2540; color: #fff; }
-        .bar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 34px 0; text-align: center; font-size: 18px; font-weight: 900; }
-        .section { padding: 86px 0; }
-        .section-white { background: #fff; }
-        .section-head { max-width: 790px; margin: 0 auto 44px; text-align: center; }
-        .eyebrow { color: #ff6a00; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; margin: 0 0 10px; }
-        h2 { font-size: clamp(34px, 4vw, 54px); line-height: 1.05; letter-spacing: -1px; margin: 0; color: #0a2540; }
-        .section-head p { color: #647386; font-size: 18px; line-height: 1.7; }
-        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 22px; }
-        .card { background: #fff; border: 1px solid #e6e2db; border-radius: 30px; padding: 30px; box-shadow: 0 18px 44px rgba(10,37,64,.08); }
-        .number { width: 56px; height: 56px; border-radius: 18px; background: #ff6a00; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; margin-bottom: 22px; }
-        .card h3 { margin: 0 0 12px; font-size: 25px; color: #0a2540; }
-        .card p { margin: 0; color: #647386; line-height: 1.7; }
-        .center-cta { text-align: center; margin-top: 42px; }
-        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: center; }
-        .checks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 28px; }
-        .check { background: #f7f5f0; border-radius: 18px; padding: 18px; font-weight: 900; }
-        .dark-box { background: #0a2540; color: #fff; border-radius: 38px; padding: 38px; box-shadow: 0 20px 60px rgba(10,37,64,.18); }
-        .dark-box h3 { font-size: 34px; margin: 0 0 22px; color: #fff; }
-        .property-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 13px; }
-        .property { background: rgba(255,255,255,.1); border-radius: 18px; padding: 16px; font-weight: 800; }
-        .highlight { background: linear-gradient(135deg, #0a2540 0%, #12395d 100%); color: #fff; border-radius: 38px; padding: 46px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; }
-        .highlight h2 { color: #fff; }
-        .highlight p { color: #d7e1ec; line-height: 1.7; font-size: 18px; }
-        .highlight-list { display: grid; gap: 12px; }
-        .highlight-item { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.14); border-radius: 18px; padding: 16px; font-weight: 900; }
-        .scenario-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-        .scenario { background: #fff; border: 1px solid #e6e2db; border-radius: 22px; padding: 22px; font-weight: 900; box-shadow: 0 12px 30px rgba(10,37,64,.06); }
-        .scenario:hover { border-color: #ff6a00; transform: translateY(-1px); }
-        .experience-card { background: #fff; border: 1px solid #e6e2db; border-radius: 30px; padding: 30px; box-shadow: 0 18px 44px rgba(10,37,64,.08); }
-        .experience-card strong { display: block; margin-bottom: 10px; font-size: 21px; color: #0a2540; }
-        .experience-card p { color: #647386; line-height: 1.7; margin: 0; }
-        .faq { display: grid; gap: 14px; max-width: 900px; margin: 0 auto; }
-        .faq-item { background: #fff; border: 1px solid #e6e2db; border-radius: 24px; padding: 24px; }
-        .faq-item h3 { margin: 0 0 8px; color: #0a2540; font-size: 20px; }
-        .faq-item p { margin: 0; color: #647386; line-height: 1.7; }
-        .cta { background: #0a2540; color: #fff; text-align: center; padding: 84px 0; }
-        .cta h2 { color: #fff; }
-        .cta p { color: #c7d2df; font-size: 19px; line-height: 1.7; }
-        .cta-buttons { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
-        .footer { background: #071827; color: #cbd5e1; padding: 46px 0; }
-        .footer-grid { display: grid; grid-template-columns: 1.2fr .9fr 1.1fr 1.1fr 1.1fr; gap: 30px; }
-        .footer-logo { width: 220px; max-width: 100%; height: auto; background: #fff; border-radius: 14px; padding: 8px; object-fit: contain; }
-        .footer h3 { color: #fff; margin: 0 0 12px; }
-        .footer p { margin: 6px 0; color: #b8c3d0; }
-        .footer a:hover { color: #fff; }
-        .whatsapp-float { position: fixed; right: 22px; bottom: 22px; z-index: 60; background: #25d366; color: #fff; border-radius: 999px; padding: 16px 22px; font-weight: 900; box-shadow: 0 16px 40px rgba(37,211,102,.35); }
+        .form-actions { display: grid; grid-template-columns: .9fr 1.8fr; gap: 10px; }
+        .small-note {
+          font-size: 12px;
+          color: #798698;
+          margin: 4px 0 0;
+          line-height: 1.45;
+        }
         .success { text-align: center; padding: 34px 10px; }
-        .success-icon { width: 66px; height: 66px; border-radius: 50%; background: #dcfce7; color: #15803d; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 34px; font-weight: 900; }
-        @media (max-width: 1040px) {
-          .hero-grid, .two-col, .highlight { grid-template-columns: 1fr; }
-          .steps, .bar-grid { grid-template-columns: 1fr; }
-          .scenario-grid { grid-template-columns: repeat(2, 1fr); }
-          .header-inner { min-height: auto; padding: 12px 0; flex-wrap: wrap; }
-          .logo { width: 175px; }
-          .nav { order: 3; width: 100%; display: flex; overflow-x: auto; gap: 16px; padding: 8px 0 4px; white-space: nowrap; scrollbar-width: none; }
+        .success-icon {
+          width: 68px;
+          height: 68px;
+          border-radius: 50%;
+          background: #dcfce7;
+          color: #15803d;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 16px;
+          font-size: 34px;
+          font-weight: 900;
+        }
+        .section { padding: 82px 0; }
+        .section-white { background: #fff; }
+        .section-head {
+          max-width: 820px;
+          margin: 0 auto 42px;
+          text-align: center;
+        }
+        .eyebrow {
+          color: #ff6a00;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: .08em;
+          margin: 0 0 10px;
+          font-size: 13px;
+        }
+        h2 {
+          font-size: clamp(34px, 4vw, 54px);
+          line-height: 1.04;
+          letter-spacing: -1.8px;
+          margin: 0;
+          color: #071f3a;
+        }
+        .section-head p {
+          color: #647386;
+          font-size: 18px;
+          line-height: 1.7;
+          margin-bottom: 0;
+        }
+        .problem-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 16px;
+        }
+        .problem-card {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 28px;
+          padding: 24px;
+          box-shadow: 0 18px 48px rgba(7, 31, 58, .07);
+          min-height: 230px;
+        }
+        .problem-icon {
+          width: 46px;
+          height: 46px;
+          border-radius: 16px;
+          background: #fff3e7;
+          color: #ff6a00;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 900;
+          margin-bottom: 18px;
+        }
+        .problem-card h3, .premium-card h3 {
+          margin: 0 0 10px;
+          color: #071f3a;
+          font-size: 23px;
+          line-height: 1.15;
+          letter-spacing: -.4px;
+        }
+        .problem-card p, .premium-card p {
+          margin: 0;
+          color: #647386;
+          line-height: 1.65;
+        }
+        .comparison-wrap {
+          background: linear-gradient(135deg, #071f3a 0%, #123a67 100%);
+          border-radius: 38px;
+          padding: 38px;
+          color: #fff;
+          box-shadow: 0 26px 80px rgba(7, 31, 58, .2);
+        }
+        .comparison-intro {
+          display: grid;
+          grid-template-columns: 1fr .85fr;
+          gap: 28px;
+          align-items: end;
+          margin-bottom: 26px;
+        }
+        .comparison-intro h2 { color: #fff; }
+        .comparison-intro p {
+          color: #d7e3ef;
+          line-height: 1.7;
+          font-size: 18px;
+        }
+        .comparison-table {
+          display: grid;
+          grid-template-columns: 1.05fr 1fr 1.05fr;
+          border: 1px solid rgba(255,255,255,.18);
+          border-radius: 24px;
+          overflow: hidden;
+          background: rgba(255,255,255,.07);
+        }
+        .comparison-table div {
+          padding: 17px 18px;
+          border-right: 1px solid rgba(255,255,255,.16);
+          border-bottom: 1px solid rgba(255,255,255,.16);
+          color: #dbe7f3;
+          line-height: 1.42;
+        }
+        .comparison-table div:nth-child(3n) { border-right: 0; }
+        .comparison-table .head {
+          background: rgba(255,255,255,.12);
+          color: #fff;
+          font-weight: 900;
+          text-align: center;
+        }
+        .comparison-table .head.orange { background: #ff6a00; }
+        .comparison-table .label-cell {
+          font-weight: 900;
+          color: #fff;
+        }
+        .comparison-table .direct-cell {
+          background: rgba(255, 106, 0, .1);
+          color: #fff;
+          font-weight: 900;
+        }
+        .steps {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 16px;
+          position: relative;
+        }
+        .step-card {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 30px;
+          padding: 26px;
+          box-shadow: 0 18px 44px rgba(7, 31, 58, .08);
+        }
+        .step-number {
+          width: 58px;
+          height: 58px;
+          border-radius: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #071f3a;
+          color: #fff;
+          font-weight: 900;
+          font-size: 18px;
+          margin-bottom: 20px;
+        }
+        .step-card:nth-child(2) .step-number,
+        .step-card:nth-child(4) .step-number {
+          background: #ff6a00;
+        }
+        .step-card h3 {
+          margin: 0 0 9px;
+          font-size: 24px;
+          color: #071f3a;
+        }
+        .step-card p {
+          margin: 0;
+          color: #647386;
+          line-height: 1.65;
+        }
+        .two-col {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 36px;
+          align-items: center;
+        }
+        .premium-card {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 34px;
+          padding: 32px;
+          box-shadow: 0 24px 70px rgba(7, 31, 58, .1);
+        }
+        .premium-list {
+          display: grid;
+          gap: 11px;
+          margin-top: 22px;
+        }
+        .premium-list div {
+          display: flex;
+          gap: 10px;
+          background: #f8f5ef;
+          border: 1px solid #eee8df;
+          border-radius: 18px;
+          padding: 14px 15px;
+          font-weight: 900;
+          color: #24364a;
+        }
+        .premium-list span { color: #ff6a00; }
+        .dark-card {
+          background: #071f3a;
+          color: #fff;
+          border-radius: 34px;
+          padding: 34px;
+          box-shadow: 0 24px 70px rgba(7, 31, 58, .18);
+        }
+        .dark-card h3 {
+          color: #fff;
+          font-size: 32px;
+          letter-spacing: -.8px;
+          margin: 0 0 16px;
+        }
+        .dark-card p {
+          color: #d7e3ef;
+          line-height: 1.7;
+          font-size: 17px;
+        }
+        .contact-lines {
+          display: grid;
+          gap: 12px;
+          margin-top: 22px;
+        }
+        .contact-lines a, .contact-lines div {
+          background: rgba(255,255,255,.1);
+          border: 1px solid rgba(255,255,255,.16);
+          border-radius: 18px;
+          padding: 16px;
+          font-weight: 900;
+        }
+        .example-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 18px;
+        }
+        .example-card {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 30px;
+          padding: 28px;
+          box-shadow: 0 18px 48px rgba(7, 31, 58, .07);
+        }
+        .example-card small {
+          display: inline-flex;
+          background: #fff3e7;
+          border: 1px solid #ffd5b6;
+          color: #8c3a00;
+          border-radius: 999px;
+          padding: 7px 10px;
+          font-weight: 900;
+          margin-bottom: 16px;
+        }
+        .example-card strong {
+          display: block;
+          font-size: 22px;
+          margin-bottom: 10px;
+        }
+        .example-card p {
+          color: #647386;
+          line-height: 1.65;
+          margin: 0;
+        }
+        .faq {
+          display: grid;
+          gap: 12px;
+          max-width: 980px;
+          margin: 0 auto;
+        }
+        .faq-item {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 20px;
+          padding: 20px 22px;
+          display: grid;
+          grid-template-columns: minmax(230px, .42fr) 1fr;
+          gap: 22px;
+          align-items: start;
+        }
+        .faq-item h3 {
+          margin: 0;
+          color: #071f3a;
+          font-size: 18px;
+          line-height: 1.28;
+        }
+        .faq-item p {
+          margin: 0;
+          color: #647386;
+          line-height: 1.6;
+        }
+        .popular-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 12px;
+        }
+        .popular-grid a {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 20px;
+          padding: 18px;
+          font-weight: 900;
+          box-shadow: 0 12px 30px rgba(7,31,58,.06);
+        }
+        .popular-grid a:hover {
+          border-color: #ff6a00;
+          transform: translateY(-1px);
+        }
+        .final-cta {
+          background: linear-gradient(135deg, #071f3a 0%, #123a67 100%);
+          color: #fff;
+          padding: 84px 0;
+          text-align: center;
+        }
+        .final-cta h2 { color: #fff; }
+        .final-cta p {
+          color: #d7e3ef;
+          font-size: 19px;
+          line-height: 1.7;
+          max-width: 760px;
+          margin: 18px auto 0;
+        }
+        .cta-buttons {
+          display: flex;
+          justify-content: center;
+          gap: 12px;
+          flex-wrap: wrap;
+          margin-top: 28px;
+        }
+        .footer {
+          background: #061523;
+          color: #cbd5e1;
+          padding: 46px 0 56px;
+        }
+        .footer-grid {
+          display: grid;
+          grid-template-columns: 1.15fr .8fr 1fr 1fr 1fr;
+          gap: 28px;
+        }
+        .footer-logo {
+          width: 225px;
+          max-width: 100%;
+          height: auto;
+          background: #fff;
+          border-radius: 16px;
+          padding: 8px;
+          object-fit: contain;
+        }
+        .footer h3 { color: #fff; margin: 0 0 12px; }
+        .footer p {
+          margin: 7px 0;
+          color: #b8c3d0;
+          line-height: 1.45;
+        }
+        .footer a:hover { color: #fff; }
+        .whatsapp-float {
+          position: fixed;
+          right: 22px;
+          bottom: 22px;
+          z-index: 80;
+          background: #25d366;
+          color: #fff;
+          border-radius: 999px;
+          padding: 15px 20px;
+          font-weight: 900;
+          box-shadow: 0 16px 40px rgba(37,211,102,.35);
+        }
+        .mobile-bottom-cta { display: none; }
+
+        @media (max-width: 1160px) {
+          .header-inner {
+            grid-template-columns: auto auto;
+          }
+          .nav {
+            grid-column: 1 / -1;
+            justify-content: flex-start;
+            overflow-x: auto;
+            gap: 18px;
+            padding: 0 0 14px;
+            scrollbar-width: none;
+          }
           .nav::-webkit-scrollbar { display: none; }
-        }
-        @media (max-width: 640px) {
-          .container { width: min(100% - 28px, 1180px); }
-          .top-strip { display: block; }
-          .top-strip-inner { min-height: auto; padding: 9px 0; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
-          .top-strip-inner::-webkit-scrollbar { display: none; }
-          .top-points { flex-wrap: nowrap; gap: 16px; min-width: max-content; }
-          .header-actions .btn-green, .header-actions .btn-blue { display: none; }
-          .header-actions .btn-orange { padding: 12px 16px; font-size: 14px; }
-          .hero-grid { padding: 42px 0; }
-          .trust-row, .checks, .property-grid, .footer-grid, .scenario-grid { grid-template-columns: 1fr; }
-          .form-card { padding: 22px; border-radius: 26px; }
-          .form-actions { grid-template-columns: 1fr; }
-          .highlight { padding: 28px; border-radius: 28px; }
-          .footer-grid { gap: 24px; }
-          .whatsapp-float { right: 14px; bottom: 14px; padding: 14px 18px; }
+          .logo { width: 220px; }
+          .hero-grid, .comparison-intro, .two-col {
+            grid-template-columns: 1fr;
+          }
+          .proposal-visual {
+            max-width: 680px;
+            margin: 0 auto;
+          }
+          .trust-micro, .problem-grid, .steps {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          .popular-grid { grid-template-columns: repeat(3, 1fr); }
+          .footer-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
-
-        /* Mobiele optimalisatie op basis van visuele controle */
-        @media (max-width: 640px) {
-          .top-strip {
+        @media (max-width: 760px) {
+          .container { width: min(100% - 28px, 1240px); }
+          .top-strip { display: none; }
+          .header { position: relative; }
+          .header-inner {
+            display: flex;
+            flex-wrap: wrap;
+            min-height: auto;
+            padding: 16px 0 0;
+            gap: 12px;
+          }
+          .logo { width: 210px; }
+          .header-actions {
+            margin-left: auto;
+          }
+          .header-actions .btn-green,
+          .header-actions .btn-blue {
             display: none;
           }
-
-          .header {
-            position: relative;
-            top: auto;
-            box-shadow: 0 2px 12px rgba(10,37,64,.06);
-          }
-
-          .header-inner {
-            padding: 18px 0 8px;
-            gap: 12px;
-            align-items: center;
-          }
-
-          .logo {
-            width: 190px;
-          }
-
           .header-actions .btn-orange {
-            padding: 12px 18px;
+            padding: 12px 16px;
             font-size: 14px;
-            box-shadow: 0 8px 18px rgba(255,106,0,.22);
           }
-
           .nav {
-            order: 3;
             width: 100%;
-            font-size: 15px;
-            gap: 18px;
-            padding: 14px 0 10px;
+            order: 3;
             border-top: 1px solid #f0eee9;
+            padding: 13px 0 12px;
+            font-size: 14px;
           }
-
+          .hero-grid {
+            padding: 40px 0 46px;
+            gap: 32px;
+          }
           .badge {
             width: 100%;
             justify-content: center;
             text-align: center;
-            line-height: 1.35;
             border-radius: 24px;
-            padding: 12px 16px;
+            line-height: 1.35;
           }
-
           h1 {
-            font-size: clamp(38px, 11.5vw, 52px);
-            line-height: 1.04;
-            letter-spacing: -1.2px;
+            font-size: clamp(40px, 12vw, 52px);
+            line-height: 1.02;
+            letter-spacing: -1.5px;
           }
-
-          .lead {
-            font-size: 20px;
-            line-height: 1.62;
-          }
-
-          .hero-grid {
-            padding: 36px 0 46px;
-            gap: 34px;
-          }
-
-          .trust-row {
-            gap: 12px;
-            margin: 28px 0;
-          }
-
-          .trust-card {
-            padding: 18px 20px;
-            border-radius: 22px;
-            font-size: 17px;
-          }
-
-          .hero-buttons {
-            gap: 14px;
-          }
-
-          .hero-buttons .btn,
+          .hero-lead { font-size: 19px; line-height: 1.6; }
+          .hero-cta-row .btn,
           .cta-buttons .btn {
             width: 100%;
-            max-width: 100%;
           }
-
-          .form-card {
-            margin-top: 4px;
+          .trust-micro,
+          .problem-grid,
+          .steps,
+          .example-grid,
+          .popular-grid,
+          .footer-grid,
+          .confidence-card,
+          .form-benefits {
+            grid-template-columns: 1fr;
           }
-
-          .form-title {
-            font-size: 32px;
+          .proposal-card,
+          .form-card,
+          .comparison-wrap,
+          .premium-card,
+          .dark-card {
+            border-radius: 26px;
+            padding: 22px;
           }
-
-          .field {
-            min-height: 64px;
+          .proposal-top {
+            display: grid;
+            min-height: 102px;
           }
-
-          .whatsapp-float {
-            right: 12px;
-            bottom: 12px;
-            padding: 12px 16px;
-            font-size: 16px;
-            box-shadow: 0 12px 30px rgba(37,211,102,.32);
+          .amount-preview strong { font-size: 36px; }
+          .form-title { font-size: 30px; }
+          .form-actions { grid-template-columns: 1fr; }
+          .section { padding: 64px 0; }
+          .comparison-table { grid-template-columns: 1fr; }
+          .comparison-table .head { text-align: left; }
+          .comparison-table div {
+            border-right: 0;
           }
-
-          .cta {
-            padding: 72px 0 128px;
+          .faq-item {
+            display: block;
           }
-
-          .footer {
-            padding: 46px 0 120px;
+          .faq-item h3 {
+            margin-bottom: 8px;
           }
-
-          .footer-logo {
-            width: 100%;
-            max-width: 260px;
-            padding: 10px;
-          }
-
-          .footer p {
-            font-size: 18px;
-            line-height: 1.45;
-          }
-        }
-
-
-
-        /* Mobiele optimalisatie populaire onderwerpen */
-        @media (max-width: 640px) {
-          .popular-section .scenario-grid {
+          .popular-grid {
             display: flex;
             overflow-x: auto;
-            gap: 14px;
+            gap: 13px;
             padding: 4px 2px 14px;
             scroll-snap-type: x mandatory;
             scrollbar-width: none;
           }
-
-          .popular-section .scenario-grid::-webkit-scrollbar {
-            display: none;
-          }
-
-          .popular-section .scenario {
-            min-width: 78%;
+          .popular-grid::-webkit-scrollbar { display: none; }
+          .popular-grid a {
+            min-width: 76%;
             scroll-snap-align: start;
           }
-        }
-
-
-
-        /* Mobiele footer rustiger houden */
-        @media (max-width: 640px) {
-          .footer-grid {
-            gap: 30px;
-          }
-
-          .footer h3 {
-            margin-top: 4px;
-            margin-bottom: 10px;
-          }
-
-          .footer p {
-            margin: 7px 0;
-          }
-        }
-
-
-
-        /* Desktop optimalisatie op basis van visuele controle */
-        @media (min-width: 1041px) {
-          .container {
-            width: min(1260px, calc(100% - 56px));
-          }
-
-          .header-inner {
-            min-height: 78px;
-            gap: 18px;
-          }
-
-          .logo {
-            width: 185px;
-          }
-
-          .nav {
-            flex: 1;
-            justify-content: center;
-            gap: 20px;
-            font-size: 15px;
-          }
-
-          .nav a {
-            white-space: nowrap;
-            line-height: 1.15;
-          }
-
-          .header-actions {
-            flex-shrink: 0;
-            gap: 8px;
-          }
-
-          .header-actions .btn {
-            padding: 13px 19px;
-            font-size: 14px;
-          }
-
-          .hero-grid {
-            grid-template-columns: minmax(0, 1fr) minmax(420px, 0.86fr);
-            align-items: start;
-            gap: 64px;
-            padding: 64px 0 72px;
-          }
-
-          .hero .lead {
-            max-width: 640px;
-          }
-
-          .form-card {
-            margin-top: 34px;
-            padding: 30px;
-          }
-
-          .form-logo {
-            width: 220px;
-          }
-
-          .form-title {
-            font-size: 30px;
-          }
-
-          .trust-row {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            max-width: 640px;
-          }
-
-          .whatsapp-float {
-            right: 28px;
-            bottom: 28px;
-          }
-        }
-
-        @media (min-width: 1041px) and (max-width: 1180px) {
-          .logo {
-            width: 160px;
-          }
-
-          .nav {
-            gap: 14px;
-            font-size: 14px;
-          }
-
-          .header-actions .btn {
-            padding: 12px 15px;
-            font-size: 13px;
-          }
-        }
-
-
-
-        /* Desktop polish na visuele controle */
-        @media (min-width: 1041px) {
-          .logo {
-            width: 215px;
-          }
-
-          .header-inner {
-            min-height: 76px;
-            gap: 16px;
-          }
-
-          .nav {
-            gap: 18px;
-          }
-
-          .hero-grid {
-            padding: 58px 0 64px;
-            gap: 58px;
-          }
-
-          .form-card {
-            margin-top: 18px;
-            box-shadow: 0 26px 70px rgba(10, 37, 64, 0.13);
-          }
-
-          .form-logo {
-            width: 240px;
-          }
-
-          .section {
-            padding: 74px 0;
-          }
-
-          .section-head {
-            margin-bottom: 36px;
-          }
-
-          .popular-section {
-            padding-top: 70px;
-            padding-bottom: 76px;
-          }
-
-          .popular-section .scenario-grid {
-            grid-template-columns: repeat(5, minmax(0, 1fr));
-            gap: 13px;
-          }
-
-          .popular-section .scenario {
-            padding: 18px 19px;
-            min-height: 70px;
-            display: flex;
-            align-items: center;
-          }
-
-          #faq .faq {
-            max-width: 1120px;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            align-items: start;
-          }
-
-          #faq .faq-item {
-            padding: 20px 22px;
-          }
-
-          .whatsapp-float {
-            right: 24px;
-            bottom: 24px;
-            padding: 13px 19px;
-            font-size: 15px;
-            box-shadow: 0 12px 32px rgba(37, 211, 102, 0.28);
-          }
-        }
-
-        @media (min-width: 1041px) and (max-width: 1180px) {
-          .logo {
-            width: 178px;
-          }
-
-          .popular-section .scenario-grid {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-          }
-        }
-
-        @media (min-width: 1181px) and (max-width: 1360px) {
-          .popular-section .scenario-grid {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-          }
-        }
-
-
-
-        /* Laatste correctie: groter logo en nettere FAQ */
-        @media (min-width: 1041px) {
-          .logo {
-            width: 255px;
-          }
-
-          .header-inner {
-            min-height: 88px;
-            gap: 16px;
-          }
-
-          .nav {
-            gap: 16px;
-            font-size: 15px;
-          }
-
-          .header-actions .btn {
-            padding: 12px 17px;
-            font-size: 14px;
-          }
-
-          #faq .faq {
-            max-width: 980px;
-            grid-template-columns: 1fr;
-            gap: 12px;
-          }
-
-          #faq .faq-item {
-            padding: 18px 22px;
-            border-radius: 18px;
+          .whatsapp-float { display: none; }
+          .mobile-bottom-cta {
+            position: fixed;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            z-index: 90;
             display: grid;
-            grid-template-columns: minmax(240px, 0.42fr) 1fr;
-            gap: 20px;
-            align-items: start;
+            grid-template-columns: 1.25fr .75fr;
+            gap: 8px;
+            background: rgba(255, 255, 255, .94);
+            border: 1px solid #e8e3db;
+            border-radius: 22px;
+            padding: 8px;
+            box-shadow: 0 18px 50px rgba(7,31,58,.18);
+            backdrop-filter: blur(14px);
           }
-
-          #faq .faq-item h3 {
-            margin: 0;
-            font-size: 18px;
-            line-height: 1.25;
-          }
-
-          #faq .faq-item p {
-            line-height: 1.55;
-          }
-        }
-
-        @media (min-width: 1041px) and (max-width: 1180px) {
-          .logo {
-            width: 215px;
-          }
-
-          .nav {
-            gap: 12px;
+          .mobile-bottom-cta a {
+            min-height: 48px;
+            padding: 12px 10px;
             font-size: 14px;
           }
-
-          .header-actions .btn {
-            padding: 11px 14px;
-            font-size: 13px;
-          }
+          .final-cta { padding-bottom: 118px; }
+          .footer { padding-bottom: 112px; }
         }
-
-        @media (max-width: 700px) {
-          #faq .faq-item {
-            display: block;
-          }
-
-          #faq .faq-item h3 {
-            margin-bottom: 8px;
-          }
-        }
-
-
-
-        /* Logo naast Werkwijze groter maken */
-        @media (min-width: 1041px) {
-          .logo {
-            width: 285px;
-          }
-
-          .header-inner {
-            min-height: 92px;
-          }
-        }
-
-        @media (min-width: 1041px) and (max-width: 1180px) {
-          .logo {
-            width: 235px;
-          }
-        }
-
-        @media (max-width: 640px) {
-          .logo {
-            width: 205px;
-          }
-        }
-
       `}</style>
 
       <div className="top-strip">
         <div className="container top-strip-inner">
-          <div className="top-points">
-            <span>✓ Heldere verkoopoplossing</span>
-            <span>✓ Geen makelaarskosten</span>
-            <span>✓ Notariële afwikkeling</span>
-          </div>
+          <span>✓ Vrijblijvend voorstel</span>
+          <span>✓ Geen makelaarskosten</span>
+          <span>✓ Geen open huis nodig</span>
+          <span>✓ Notariële afwikkeling</span>
         </div>
       </div>
 
@@ -742,18 +1106,19 @@ export default function HomeClient() {
           <a href="/" aria-label="Vastgoed Direct Nederland">
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="logo" />
           </a>
-          <nav className="nav">
+
+          <nav className="nav" aria-label="Hoofdnavigatie">
+            <a href="#wanneer">Wanneer geschikt?</a>
+            <a href="#vergelijking">Vergelijking</a>
             <a href="#werkwijze">Werkwijze</a>
-            <a href="/huis-direct-verkopen">Direct verkopen</a>
-            <a href="/huis-snel-verkopen">Snel verkopen</a>
-            <a href="/woning-verkopen-zonder-makelaar">Zonder makelaar</a>
-            <a href="#mogelijkheden">Mogelijkheden</a>
+            <a href="#over-ons">Over ons</a>
             <a href="#faq">FAQ</a>
           </nav>
+
           <div className="header-actions">
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
             <a href="tel:0612238051" className="btn btn-blue">Bel direct</a>
-            <a href="#aanvraag" className="btn btn-orange">Vrijblijvend voorstel</a>
+            <a href="#aanvraag" className="btn btn-orange">Start aanvraag</a>
           </div>
         </div>
       </header>
@@ -761,28 +1126,63 @@ export default function HomeClient() {
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <div className="badge">Verkoopoplossing op maat · Zonder makelaar · Notarieel geregeld</div>
-            <h1>
-              Uw woning snel verkopen?
-              <br />
-              Ontvang een helder verkoopvoorstel zonder gedoe.
-            </h1>
-            <p className="lead">
-              Vastgoed Direct Nederland helpt woningeigenaren die snel duidelijkheid willen. Wij bieden een directe verkoopoplossing voor woningen in uiteenlopende situaties, zoals achterstallig onderhoud, verhuur, erfenis, scheiding of leegstand.
+            <div className="badge">Discreet · Vrijblijvend · Persoonlijk verkoopvoorstel</div>
+            <h1>Uw woning verkopen zonder bezichtigingen, makelaarskosten of onzekerheid?</h1>
+            <p className="hero-lead">
+              Ontvang een persoonlijk verkoopvoorstel van Vastgoed Direct Nederland.
+              Vrijblijvend, duidelijk en afgestemd op uw woning, planning en situatie.
             </p>
 
-            <div className="trust-row">
-              <div className="trust-card">✓ Vrijblijvend verkoopvoorstel</div>
-              <div className="trust-card">✓ Geen makelaarskosten</div>
-              <div className="trust-card">✓ Geen open huis nodig</div>
-              <div className="trust-card">✓ Notariële afwikkeling</div>
+            <div className="hero-cta-row">
+              <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
+              <div>
+                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
+                <p className="micro-note">🟢 Meestal snel reactie via WhatsApp</p>
+              </div>
             </div>
 
-            <div className="hero-buttons">
-              <a href="#aanvraag" className="btn btn-orange">Vrijblijvend verkoopvoorstel aanvragen</a>
+            <div className="trust-micro" aria-label="Voordelen">
+              <div>✓ Gratis aanvraag</div>
+              <div>✓ Geen verplichting</div>
+              <div>✓ Discreet contact</div>
+              <div>✓ Eén aanspreekpunt</div>
+            </div>
+          </div>
+
+          <div className="proposal-visual">
+            <div className="proposal-card">
+              <div className="proposal-card-inner">
+                <div className="proposal-top">
+                  <div>
+                    <span>Wat u ontvangt</span>
+                    <strong>Persoonlijk verkoopvoorstel</strong>
+                  </div>
+                  <div className="proposal-pill">Binnenkort besproken</div>
+                </div>
+
+                <div className="amount-preview">
+                  <small>Voorbeeld voorstelkaart</small>
+                  <strong>Helder bedrag</strong>
+                  <small>met voorwaarden, planning en vervolgstappen</small>
+                </div>
+
+                <div className="proposal-list">
+                  <div><span>✓</span> Indicatie verkoopmogelijkheid</div>
+                  <div><span>✓</span> Duidelijke voorwaarden vooraf</div>
+                  <div><span>✓</span> Mogelijke overdrachtsdatum</div>
+                  <div><span>✓</span> Vrijblijvend persoonlijk contact</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="confidence-card">
               <div>
-                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">Direct WhatsApp gesprek</a>
-                <p className="micro-note">🟢 Meestal snel reactie via WhatsApp</p>
+                <strong>06 12 23 80 51</strong>
+                <span>Rechtstreeks contact met Vastgoed Direct Nederland</span>
+              </div>
+              <div>
+                <strong>Geen open huis</strong>
+                <span>Verkooproute zonder standaard bezichtigingsdruk</span>
               </div>
             </div>
           </div>
@@ -791,20 +1191,30 @@ export default function HomeClient() {
             <div className="form-logo-wrap">
               <img src="/logo.png" alt="Vastgoed Direct Nederland" className="form-logo" />
             </div>
+
             {!submitted ? (
               <form onSubmit={submitLead}>
+                <div className="form-benefits">
+                  <span>1 minuut</span>
+                  <span>Gratis</span>
+                  <span>Vrijblijvend</span>
+                </div>
+
                 <p className="step-label">Stap {step} van 4</p>
-                <h2 className="form-title">Vrijblijvend verkoopvoorstel aanvragen</h2>
-                <p className="form-sub">Vul uw gegevens in. Wij nemen contact met u op om uw situatie rustig te bespreken.</p>
-                <div className="notice">Uw aanvraag is gratis, vertrouwelijk en verplicht u tot niets.</div>
+                <h2 className="form-title">Ontvang een persoonlijk verkoopvoorstel</h2>
+                <p className="form-sub">
+                  Vul uw gegevens in. Wij nemen persoonlijk contact met u op om uw situatie rustig te bespreken.
+                </p>
+                <div className="notice">Uw aanvraag is discreet, gratis en verplicht u tot niets.</div>
 
                 {step === 1 && (
                   <div className="form-stack">
                     <input name="postcode" value={form.postcode} onChange={updateForm} placeholder="Postcode" className="field" required />
                     <input name="huisnummer" value={form.huisnummer} onChange={updateForm} placeholder="Huisnummer" className="field" required />
-                    <button type="button" onClick={nextStep} className="btn btn-blue">Volgende</button>
+                    <button type="button" onClick={nextStep} className="btn btn-blue">Start mijn vrijblijvende aanvraag</button>
                   </div>
                 )}
+
                 {step === 2 && (
                   <div className="form-stack">
                     <select name="woningtype" value={form.woningtype} onChange={updateForm} className="field" required>
@@ -825,10 +1235,11 @@ export default function HomeClient() {
                     </select>
                     <div className="form-actions">
                       <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
-                      <button type="button" onClick={nextStep} className="btn btn-blue">Volgende</button>
+                      <button type="button" onClick={nextStep} className="btn btn-blue">Volgende stap</button>
                     </div>
                   </div>
                 )}
+
                 {step === 3 && (
                   <div className="form-stack">
                     <select name="reden" value={form.reden} onChange={updateForm} className="field" required>
@@ -843,10 +1254,11 @@ export default function HomeClient() {
                     </select>
                     <div className="form-actions">
                       <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
-                      <button type="button" onClick={nextStep} className="btn btn-blue">Volgende</button>
+                      <button type="button" onClick={nextStep} className="btn btn-blue">Naar contactgegevens</button>
                     </div>
                   </div>
                 )}
+
                 {step === 4 && (
                   <div className="form-stack">
                     <input name="naam" value={form.naam} onChange={updateForm} placeholder="Naam" className="field" required />
@@ -854,7 +1266,7 @@ export default function HomeClient() {
                     <input name="telefoon" value={form.telefoon} onChange={updateForm} placeholder="Telefoonnummer" className="field" required />
                     <div className="form-actions">
                       <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
-                      <button type="submit" className="btn btn-orange">Aanvraag versturen</button>
+                      <button type="submit" className="btn btn-orange">Verkoopmogelijkheden aanvragen</button>
                     </div>
                     <p className="small-note">Wij gebruiken uw gegevens alleen om contact op te nemen over uw aanvraag.</p>
                   </div>
@@ -864,171 +1276,150 @@ export default function HomeClient() {
               <div className="success">
                 <div className="success-icon">✓</div>
                 <h2 className="form-title">Aanvraag ontvangen</h2>
-                <p className="form-sub">Wij nemen zo snel mogelijk contact met u op.</p>
+                <p className="form-sub">Wij nemen zo snel mogelijk persoonlijk contact met u op.</p>
+                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">Aanvullen via WhatsApp</a>
               </div>
             )}
           </section>
         </div>
       </section>
 
-      <section className="section section-white">
-        <div className="container">
-          <div className="section-head" style={{ marginBottom: 0 }}>
-            <p className="eyebrow">Directe verkoopoplossing</p>
-            <h2>Rustig, duidelijk en zonder verkoopstress.</h2>
-            <p>
-              Wilt u uw woning snel verkopen zonder makelaar, bezichtigingen of onzekerheid? Vastgoed Direct Nederland biedt een directe verkoopoplossing met heldere afspraken, notariële afwikkeling en waar mogelijk een snelle overdracht. Ook bij achterstallig onderhoud, verhuur, erfenis, scheiding of leegstand denken wij met u mee.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="bar">
-        <div className="container bar-grid">
-          <div>Snel duidelijkheid</div>
-          <div>Geen verkoopstress</div>
-          <div>Ook slechte staat</div>
-          <div>Vrijblijvend voorstel</div>
-        </div>
-      </section>
-
-      <section className="section section-white">
+      <section id="wanneer" className="section section-white">
         <div className="container">
           <div className="section-head">
-            <p className="eyebrow">Voor welke woningen?</p>
-            <h2>Ook als uw woning niet verkoopklaar is.</h2>
+            <p className="eyebrow">Wanneer past dit bij u?</p>
+            <h2>Voor verkopers die vooral rust en duidelijkheid willen.</h2>
             <p>
-              Niet iedere woning past goed in een traditioneel verkooptraject. Ook bij onderhoud, verhuur, leegstand of persoonlijke omstandigheden denken wij mee over een passende verkoopoplossing.
+              Een traditioneel verkooptraject is niet altijd de beste route. Zeker niet als privacy, snelheid,
+              onderhoud of persoonlijke omstandigheden meespelen.
             </p>
           </div>
 
-          <div className="scenario-grid">
-            <div className="scenario">✓ Opknapwoning</div>
-            <div className="scenario">✓ Erfeniswoning</div>
-            <div className="scenario">✓ Verhuurde woning</div>
-            <div className="scenario">✓ Leegstaande woning</div>
-            <div className="scenario">✓ Woning met schade</div>
-            <div className="scenario">✓ Achterstallig onderhoud</div>
-            <div className="scenario">✓ Scheiding of financiële druk</div>
-            <div className="scenario">✓ Snel verhuizen</div>
+          <div className="problem-grid">
+            {situations.map((item) => (
+              <article className="problem-card" key={item.title}>
+                <div className="problem-icon">✓</div>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section id="werkwijze" className="section">
+      <section id="vergelijking" className="section">
+        <div className="container comparison-wrap">
+          <div className="comparison-intro">
+            <div>
+              <p className="eyebrow">Waarom direct verkopen?</p>
+              <h2>Niet alleen de prijs telt. Ook rust, tijd en zekerheid.</h2>
+            </div>
+            <p>
+              Bij woningverkoop kijkt u niet alleen naar een verkoopbedrag, maar ook naar verkoopkosten,
+              voorbereiding, bezichtigingen, onzekerheid en doorlooptijd. Dit overzicht maakt het verschil zichtbaar.
+            </p>
+          </div>
+
+          <div className="comparison-table">
+            <div className="head">Onderdeel</div>
+            <div className="head">Traditioneel verkopen</div>
+            <div className="head orange">Via Vastgoed Direct Nederland</div>
+
+            {comparisonRows.map(([label, normal, direct]) => (
+              <React.Fragment key={label}>
+                <div className="label-cell">{label}</div>
+                <div>{normal}</div>
+                <div className="direct-cell">{direct}</div>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="werkwijze" className="section section-white">
         <div className="container">
           <div className="section-head">
-            <p className="eyebrow">Simpel proces</p>
-            <h2>Zo werkt direct verkopen</h2>
-            <p>Geen verkoopstress, geen tientallen kijkers en duidelijke afspraken over de notariële afwikkeling.</p>
+            <p className="eyebrow">De werkwijze</p>
+            <h2>Van aanvraag naar duidelijk voorstel.</h2>
+            <p>Een overzichtelijk proces zonder onnodige druk. U bepaalt daarna zelf of het voorstel past.</p>
           </div>
+
           <div className="steps">
-            {[
-              ["1", "Aanvraag", "U vult uw woninggegevens in. De aanvraag is gratis en vrijblijvend."],
-              ["2", "Persoonlijk contact", "Wij bespreken uw situatie, gewenste snelheid en verkoopmogelijkheden."],
-              ["3", "Verkoopvoorstel", "U ontvangt een helder voorstel met duidelijke voorwaarden."],
-              ["4", "Notariële afwikkeling", "Bij akkoord worden de afspraken vastgelegd en via de notaris geregeld."],
-            ].map(([num, title, text]) => (
-              <div key={title} className="card">
-                <div className="number">{num}</div>
+            {processSteps.map(([num, title, text]) => (
+              <article className="step-card" key={title}>
+                <div className="step-number">{num}</div>
                 <h3>{title}</h3>
                 <p>{text}</p>
-              </div>
+              </article>
             ))}
           </div>
-          <div className="center-cta">
-            <a href="#aanvraag" className="btn btn-orange">Vrijblijvend verkoopvoorstel aanvragen</a>
+
+          <div style={{ textAlign: "center", marginTop: 38 }}>
+            <a href="#aanvraag" className="btn btn-orange">Ontvang mijn persoonlijke voorstel</a>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container two-col">
+          <div className="premium-card">
+            <p className="eyebrow">Wat krijgt u concreet?</p>
+            <h2>Een voorstel dat u echt kunt beoordelen.</h2>
+            <p>
+              Het voorstel is niet alleen een bedrag. U krijgt inzicht in de uitgangspunten, voorwaarden,
+              mogelijke overdrachtsdatum en vervolgstappen.
+            </p>
+
+            <div className="premium-list">
+              <div><span>✓</span> Voorgesteld bedrag of verkoopmogelijkheid</div>
+              <div><span>✓</span> Duidelijke uitgangspunten en voorbehouden</div>
+              <div><span>✓</span> Mogelijke overdracht en planning</div>
+              <div><span>✓</span> Overzicht van wat wel en niet nodig is</div>
+              <div><span>✓</span> Persoonlijk contact om vragen te bespreken</div>
+            </div>
+          </div>
+
+          <div className="dark-card">
+            <h3>Persoonlijk contact, geen callcenter.</h3>
+            <p>
+              U krijgt geen standaardreactie. Wij kijken naar uw woning, uw situatie en uw gewenste planning.
+              Daarna bespreken we rustig wat mogelijk is.
+            </p>
+            <div className="contact-lines">
+              <a href="tel:0612238051">Bel direct: 06 12 23 80 51</a>
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer">WhatsApp: meestal snel reactie</a>
+              <div>info@verkoopjehuisdirect.nl</div>
+            </div>
           </div>
         </div>
       </section>
 
       <section className="section section-white">
-        <div className="container highlight">
-          <div>
-            <p className="eyebrow">Meer zekerheid bij verkoop</p>
-            <h2>Geen makelaarskosten, notariële afwikkeling en in overleg een aanbetaling mogelijk.</h2>
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow">Voorbeeldsituaties</p>
+            <h2>Herkenbare situaties waarin direct verkopen rust kan geven.</h2>
             <p>
-              Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening. In sommige situaties is een aanbetaling of voorschot bespreekbaar, mits dit juridisch en notarieel goed kan worden vastgelegd.
+              Onderstaande voorbeelden laten zien wanneer een verkoopvoorstel zonder traditioneel traject interessant kan zijn.
             </p>
           </div>
-          <div className="highlight-list">
-            <div className="highlight-item">✓ Geen courtage of makelaarskosten</div>
-            <div className="highlight-item">✓ Standaard notariskosten levering voor onze rekening</div>
-            <div className="highlight-item">✓ Aanbetaling mogelijk als dit notarieel past</div>
-            <div className="highlight-item">✓ Flexibele overdrachtsdatum bespreekbaar</div>
-          </div>
-        </div>
-      </section>
 
-      <section id="mogelijkheden" className="section">
-        <div className="container">
-          <div className="section-head">
-            <p className="eyebrow">Voor wie is dit geschikt?</p>
-            <h2>Wij helpen vooral verkopers die snel duidelijkheid willen.</h2>
-            <p>Elke situatie is anders. Daarom kijken wij niet alleen naar de woning, maar ook naar uw gewenste tempo, overdrachtsdatum en persoonlijke situatie.</p>
-          </div>
-          <div className="scenario-grid">
-            {[
-              "Erfeniswoning",
-              "Scheiding of uit elkaar",
-              "Verhuurde woning",
-              "Achterstallig onderhoud",
-              "Leegstaande woning",
-              "Financiële druk",
-              "Opknapwoning",
-              "Snel verhuizen",
-            ].map((item) => (
-              <div key={item} className="scenario">✓ {item}</div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="voordelen" className="section section-white">
-        <div className="container two-col">
-          <div>
-            <p className="eyebrow">Waarom direct verkopen?</p>
-            <h2>Rust, snelheid en duidelijke afspraken.</h2>
-            <p className="lead">Een traditioneel verkooptraject past niet bij iedere situatie. Soms wilt u geen open huis, geen lange onderhandelingen en vooral snel weten waar u aan toe bent.</p>
-            <div className="checks">
-              <div className="check">✓ Geen verkoopstyling nodig</div>
-              <div className="check">✓ Geen open huis</div>
-              <div className="check">✓ Ook verhuurde woningen</div>
-              <div className="check">✓ Direct contact</div>
-              <div className="check">✓ Duidelijke voorwaarden vooraf</div>
-              <div className="check">✓ Flexibele overdracht</div>
-            </div>
-          </div>
-          <div className="dark-box">
-            <h3>Wij kijken onder andere naar</h3>
-            <div className="property-grid">
-              {["Opknapwoningen", "Erfeniswoningen", "Woningen met schade", "Leegstaande huizen", "Beleggingspanden", "Appartementen", "Verhuurde woningen", "Eengezinswoningen"].map((item) => (
-                <div key={item} className="property">✓ {item}</div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section section-white">
-        <div className="container">
-          <div className="section-head">
-            <p className="eyebrow">Ervaringen</p>
-            <h2>Wat verkopers belangrijk vinden</h2>
-          </div>
-          <div className="steps">
-            <div className="experience-card">
-              <strong>Rust in een drukke periode</strong>
-              <p>Voor veel verkopers is het belangrijk dat er snel duidelijkheid komt zonder lange verkoopvoorbereiding.</p>
-            </div>
-            <div className="experience-card">
-              <strong>Geen onbekenden over de vloer</strong>
-              <p>Geen open huis en geen reeks bezichtigingen kan prettig zijn bij verhuur, schade of persoonlijke omstandigheden.</p>
-            </div>
-            <div className="experience-card">
-              <strong>Afspraken die helder zijn</strong>
-              <p>Wij leggen duidelijk uit wat mogelijk is, welke stappen volgen en welke overdrachtsdatum past bij uw situatie.</p>
-            </div>
+          <div className="example-grid">
+            <article className="example-card">
+              <small>Leegstand</small>
+              <strong>Geen zin in maanden wachten</strong>
+              <p>De eigenaar wil duidelijkheid over de mogelijkheden en liever geen lang traject met meerdere kijkmomenten.</p>
+            </article>
+            <article className="example-card">
+              <small>Onderhoud</small>
+              <strong>Niet eerst alles opknappen</strong>
+              <p>De woning hoeft niet altijd volledig verkoopklaar gemaakt te worden voordat wij kunnen meedenken.</p>
+            </article>
+            <article className="example-card">
+              <small>Privacy</small>
+              <strong>Geen open huis of reeks bezichtigingen</strong>
+              <p>Voor de verkoper is rust belangrijk. Daarom kijken we naar een discreet en overzichtelijk alternatief.</p>
+            </article>
           </div>
         </div>
       </section>
@@ -1036,57 +1427,43 @@ export default function HomeClient() {
       <section id="over-ons" className="section">
         <div className="container two-col">
           <div>
-            <p className="eyebrow">Over ons</p>
-            <h2>Vastgoed Direct Nederland helpt verkopers die snel duidelijkheid willen.</h2>
-            <p className="lead">
-              Vastgoed Direct Nederland richt zich op woningeigenaren voor wie een traditioneel verkooptraject niet altijd past. Denk aan achterstallig onderhoud, leegstand, verhuur, erfenis, scheiding, financiële druk of een woning die lastig verkoopklaar te maken is.
+            <p className="eyebrow">Over Vastgoed Direct Nederland</p>
+            <h2>Een nuchtere verkooproute met duidelijke afspraken.</h2>
+            <p className="hero-lead">
+              Vastgoed Direct Nederland helpt woningeigenaren voor wie een traditioneel verkooptraject niet altijd past.
+              Denk aan achterstallig onderhoud, leegstand, verhuur, erfenis, scheiding, financiële druk of een woning die lastig verkoopklaar te maken is.
             </p>
-            <p className="lead">
-              Onze werkwijze is rustig, duidelijk en vrijblijvend. U ontvangt geen standaardverhaal, maar een verkoopoplossing die past bij uw situatie. We kijken mee naar de woning, bespreken uw wensen en zorgen bij akkoord voor een heldere notariële afwikkeling.
+            <p className="hero-lead">
+              Onze werkwijze is rustig en helder. U ontvangt geen standaardverhaal, maar een verkoopoplossing die past bij uw situatie.
             </p>
           </div>
 
-          <div className="dark-box">
-            <h3>Waar wij voor staan</h3>
-            <div className="property-grid">
-              <div className="property">✓ Duidelijke communicatie</div>
-              <div className="property">✓ Geen verkoopstress</div>
-              <div className="property">✓ Vrijblijvend voorstel</div>
-              <div className="property">✓ Notariële afwikkeling</div>
-              <div className="property">✓ Geen makelaarskosten</div>
-              <div className="property">✓ Oplossing op maat</div>
+          <div className="premium-card">
+            <h3>Waar wij op letten</h3>
+            <div className="premium-list">
+              <div><span>✓</span> Uw gewenste snelheid</div>
+              <div><span>✓</span> De staat en ligging van de woning</div>
+              <div><span>✓</span> Juridische en notariële haalbaarheid</div>
+              <div><span>✓</span> Privacy en persoonlijke omstandigheden</div>
+              <div><span>✓</span> Een duidelijke overdrachtsdatum</div>
+              <div><span>✓</span> Heldere voorwaarden vooraf</div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="section section-white popular-section">
+      <section className="section section-white">
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">Populaire onderwerpen</p>
-            <h2>Meer informatie over snel verkopen</h2>
-            <p>Bekijk welke verkoopoplossing het beste past bij uw situatie.</p>
+            <h2>Meer informatie over uw situatie</h2>
+            <p>Bekijk welke verkooproute het beste aansluit op uw woning of regio.</p>
           </div>
 
-          <div className="scenario-grid">
-            <a className="scenario" href="/leegstaand-huis-verkopen">Leegstaand huis verkopen</a>
-            <a className="scenario" href="/opknapwoning-verkopen">Opknapwoning verkopen</a>
-            <a className="scenario" href="/huis-verkopen-met-achterstallig-onderhoud">Huis verkopen met achterstallig onderhoud</a>
-            <a className="scenario" href="/huis-verkopen-groningen">Huis verkopen in Groningen</a>
-            <a className="scenario" href="/woning-verkopen-friesland">Woning verkopen in Friesland</a>
-
-            <a className="scenario" href="/huis-direct-verkopen">Huis direct verkopen</a>
-            <a className="scenario" href="/huis-snel-verkopen">Huis snel verkopen</a>
-            <a className="scenario" href="/woning-verkopen-zonder-makelaar">Woning verkopen zonder makelaar</a>
-            <a className="scenario" href="/huis-verkopen-binnen-24-uur">Huis verkopen binnen 24 uur</a>
-            <a className="scenario" href="/huis-verkopen-binnen-1-week">Huis verkopen binnen 1 week</a>
-            <a className="scenario" href="/huis-verkopen-aan-opkoper">Huis verkopen aan opkoper</a>
-            <a className="scenario" href="/huis-verkopen-zonder-bezichtigingen">Huis verkopen zonder bezichtigingen</a>
-            <a className="scenario" href="/huis-verkopen-bij-scheiding">Huis verkopen bij scheiding</a>
-            <a className="scenario" href="/huis-verkopen-bij-erfenis">Huis verkopen bij erfenis</a>
-            <a className="scenario" href="/verhuurde-woning-verkopen">Verhuurde woning verkopen</a>
-            <a className="scenario" href="/woning-verkopen-drenthe">Woning verkopen in Drenthe</a>
-            <a className="scenario" href="/woning-verkopen-overijssel">Woning verkopen in Overijssel</a>
+          <div className="popular-grid">
+            {popularLinks.map(([href, label]) => (
+              <a href={href} key={href}>✓ {label}</a>
+            ))}
           </div>
         </div>
       </section>
@@ -1094,62 +1471,57 @@ export default function HomeClient() {
       <section id="faq" className="section section-white">
         <div className="container">
           <div className="section-head">
-            <p className="eyebrow">FAQ</p>
-            <h2>Veelgestelde vragen</h2>
+            <p className="eyebrow">Veelgestelde vragen</p>
+            <h2>Twijfels wegnemen vóórdat u een aanvraag doet.</h2>
           </div>
+
           <div className="faq">
             <div className="faq-item">
               <h3>Is de aanvraag gratis?</h3>
-              <p>Ja, de aanvraag is volledig gratis en vrijblijvend. U zit nergens aan vast.</p>
+              <p>Ja, de aanvraag is gratis en vrijblijvend. U zit nergens aan vast.</p>
             </div>
             <div className="faq-item">
-              <h3>Betaal ik notariskosten?</h3>
-              <p>Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening. Eventuele afwijkende kosten of bijzondere afspraken bespreken we vooraf helder met u.</p>
+              <h3>Moet mijn woning verkoopklaar zijn?</h3>
+              <p>Nee, niet altijd. Ook woningen met onderhoud, schade of renovatiebehoefte kunnen worden aangemeld.</p>
             </div>
             <div className="faq-item">
-              <h3>Is een aanbetaling mogelijk?</h3>
-              <p>In sommige situaties is een aanbetaling of voorschot bespreekbaar. Dit hangt af van de woning, de gemaakte afspraken en wat juridisch en notarieel goed kan worden vastgelegd.</p>
-            </div>
-            <div className="faq-item">
-              <h3>Kopen jullie ook huizen in slechte staat?</h3>
-              <p>Ook woningen met schade, achterstallig onderhoud of renovatiebehoefte kunnen worden aangemeld.</p>
-            </div>
-            <div className="faq-item">
-              <h3>Heb ik een makelaar nodig?</h3>
-              <p>Nee, u kunt rechtstreeks een aanvraag doen via de website. Daardoor voorkomt u makelaarskosten en een lang verkooptraject.</p>
-            </div>
-            <div className="faq-item">
-              <h3>Kan ik zelf de overdrachtsdatum bepalen?</h3>
-              <p>De overdrachtsdatum stemmen we samen af. Een snelle overdracht is mogelijk, maar ook een latere overdracht kan bespreekbaar zijn.</p>
+              <h3>Betaal ik makelaarskosten?</h3>
+              <p>Nee, u doet rechtstreeks een aanvraag via Vastgoed Direct Nederland. Er zijn geen makelaarskosten voor dit traject.</p>
             </div>
             <div className="faq-item">
               <h3>Kan ik verkopen zonder bezichtigingen?</h3>
-              <p>Ja, in veel situaties is dat mogelijk. Wij bespreken de verkoopmogelijkheden zonder traditioneel bezichtigingstraject of open huis.</p>
+              <p>In veel situaties is dat mogelijk. Wij bespreken de verkoopmogelijkheden zonder traditioneel bezichtigingstraject of open huis.</p>
             </div>
             <div className="faq-item">
-              <h3>Moet ik mijn woning eerst opruimen of leegmaken?</h3>
-              <p>Niet altijd. Dit hangt af van de situatie en de gewenste oplevering. Ook oplevering in huidige staat of in overleg kan bespreekbaar zijn.</p>
+              <h3>Betaal ik notariskosten?</h3>
+              <p>Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening. Afwijkingen bespreken we vooraf.</p>
             </div>
             <div className="faq-item">
-              <h3>Kan ik contact opnemen als ik nog twijfel?</h3>
-              <p>Ja, een aanvraag is vrijblijvend. U kunt eerst rustig bespreken wat mogelijk is voordat u ergens een beslissing over neemt.</p>
+              <h3>Kan ik eerst alleen overleggen?</h3>
+              <p>Ja. U kunt vrijblijvend bellen, WhatsAppen of een aanvraag doen om uw situatie rustig te bespreken.</p>
             </div>
             <div className="faq-item">
               <h3>Voor welke regio’s kan ik een aanvraag doen?</h3>
-              <p>U kunt een aanvraag doen voor woningen in Nederland. Wij richten ons in eerste instantie vooral op Groningen, Drenthe, Friesland en Overijssel.</p>
+              <p>U kunt een aanvraag doen voor woningen in Nederland. De focus ligt vooral op Groningen, Drenthe, Friesland en Overijssel.</p>
+            </div>
+            <div className="faq-item">
+              <h3>Wanneer krijg ik duidelijkheid?</h3>
+              <p>Na uw aanvraag nemen wij persoonlijk contact op. Daarna kunnen wij beoordelen welke verkoopmogelijkheden passend zijn.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="cta">
+      <section className="final-cta">
         <div className="container">
-          <h2>Wilt u weten wat er mogelijk is?</h2>
-          <p>Vraag gratis een verkoopvoorstel aan, bel direct of stuur meteen een WhatsApp bericht. U ontvangt duidelijkheid zonder verplichtingen.</p>
+          <h2>Wilt u weten wat er mogelijk is voor uw woning?</h2>
+          <p>
+            Vraag gratis een persoonlijk verkoopvoorstel aan. Discreet, vrijblijvend en zonder traditioneel verkooptraject.
+          </p>
           <div className="cta-buttons">
-            <a href="#aanvraag" className="btn btn-orange">Vrijblijvend verkoopvoorstel aanvragen</a>
+            <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
             <a href="tel:0612238051" className="btn btn-light">Bel direct</a>
-            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">Direct WhatsApp gesprek</a>
+            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
           </div>
         </div>
       </section>
@@ -1158,7 +1530,8 @@ export default function HomeClient() {
         <div className="container footer-grid">
           <div>
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="footer-logo" />
-            <p>Vastgoed Direct Nederland helpt woningeigenaren met snelle en duidelijke verkoopmogelijkheden.</p>
+            <p>Verkoopjehuisdirect.nl is de website van Vastgoed Direct Nederland.</p>
+            <p>Voor woningeigenaren die snel duidelijkheid willen.</p>
           </div>
 
           <div>
@@ -1169,14 +1542,11 @@ export default function HomeClient() {
           </div>
 
           <div>
-            <h3>Populaire diensten</h3>
+            <h3>Diensten</h3>
             <p><a href="/huis-direct-verkopen">Huis direct verkopen</a></p>
             <p><a href="/huis-snel-verkopen">Huis snel verkopen</a></p>
             <p><a href="/woning-verkopen-zonder-makelaar">Zonder makelaar verkopen</a></p>
-            <p><a href="/huis-verkopen-binnen-24-uur">Huis verkopen binnen 24 uur</a></p>
-            <p><a href="/huis-verkopen-binnen-1-week">Huis verkopen binnen 1 week</a></p>
             <p><a href="/huis-verkopen-zonder-bezichtigingen">Zonder bezichtigingen verkopen</a></p>
-            <p><a href="/huis-verkopen-aan-opkoper">Huis verkopen aan opkoper</a></p>
           </div>
 
           <div>
@@ -1184,24 +1554,27 @@ export default function HomeClient() {
             <p><a href="/opknapwoning-verkopen">Opknapwoning verkopen</a></p>
             <p><a href="/huis-verkopen-bij-erfenis">Huis verkopen bij erfenis</a></p>
             <p><a href="/verhuurde-woning-verkopen">Verhuurde woning verkopen</a></p>
-            <p><a href="/huis-verkopen-bij-scheiding">Huis verkopen bij scheiding</a></p>
             <p><a href="/leegstaand-huis-verkopen">Leegstaand huis verkopen</a></p>
-            <p><a href="/huis-verkopen-met-achterstallig-onderhoud">Achterstallig onderhoud</a></p>
           </div>
 
           <div>
             <h3>Regio's</h3>
-            <p><a href="/huis-verkopen-groningen">Huis verkopen in Groningen</a></p>
-            <p><a href="/woning-verkopen-friesland">Woning verkopen in Friesland</a></p>
-            <p><a href="/woning-verkopen-drenthe">Woning verkopen in Drenthe</a></p>
-            <p><a href="/woning-verkopen-overijssel">Woning verkopen in Overijssel</a></p>
+            <p><a href="/huis-verkopen-groningen">Groningen</a></p>
+            <p><a href="/woning-verkopen-friesland">Friesland</a></p>
+            <p><a href="/woning-verkopen-drenthe">Drenthe</a></p>
+            <p><a href="/woning-verkopen-overijssel">Overijssel</a></p>
             <p><a href="/privacyverklaring">Privacyverklaring</a></p>
-            <p>© 2025 Vastgoed Direct Nederland</p>
+            <p>© 2026 Vastgoed Direct Nederland</p>
           </div>
         </div>
       </footer>
 
       <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
+
+      <div className="mobile-bottom-cta">
+        <a href="#aanvraag" className="btn btn-orange">Vrijblijvend voorstel</a>
+        <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+      </div>
     </main>
   );
 }
