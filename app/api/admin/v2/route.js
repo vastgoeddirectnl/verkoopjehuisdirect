@@ -353,39 +353,80 @@ export async function POST(request) {
 
       const html = `
         <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${previewText}</div>
-        <div style="font-family:Arial,sans-serif;background:#f5f2ec;padding:24px;color:#0b2341;">
-          <div style="max-width:680px;margin:0 auto;background:#fffdf9;border:1px solid #e8e3db;border-radius:24px;overflow:hidden;">
-            <div style="padding:26px 28px;border-bottom:1px solid #e8e3db;">
-              <img src="${siteUrl()}/logo.png" alt="Vastgoed Direct Nederland" style="max-width:220px;height:auto;">
-            </div>
-            <div style="padding:28px;">
-              <p style="margin:0 0 14px;font-size:16px;line-height:1.55;">Beste ${proposal.lead_naam || "heer/mevrouw"},</p>
-              <h1 style="margin:0 0 16px;font-size:28px;line-height:1.15;color:#071f3a;">Uw vrijblijvende verkoopvoorstel staat klaar</h1>
-              <p style="margin:0 0 18px;font-size:16px;line-height:1.65;color:#48586b;">
-                Naar aanleiding van uw aanvraag hebben wij een helder en vrijblijvend verkoopvoorstel voor u klaargezet.
-                In het voorstel vindt u het voorgestelde bedrag, de uitgangspunten, voorwaarden en vervolgstappen.
-              </p>
-              <div style="background:#fff7ef;border:1px solid #ffd5b6;border-radius:18px;padding:18px;margin:20px 0;">
-                <div style="font-size:13px;color:#7c4a24;text-transform:uppercase;font-weight:bold;letter-spacing:.06em;">Woning</div>
-                <div style="font-size:20px;font-weight:bold;margin-top:4px;color:#071f3a;">${address || "-"}</div>
-                <div style="font-size:30px;font-weight:bold;margin-top:8px;color:#ff6a00;">${offerAmount || "In overleg"}</div>
-                ${validity ? `<div style="font-size:14px;color:#48586b;margin-top:8px;">Geldig tot: ${validity}</div>` : ""}
+        <div style="font-family:Arial,Helvetica,sans-serif;background:#f5f2ec;padding:28px;color:#071f3a;">
+          <div style="max-width:720px;margin:0 auto;background:#fffdf9;border:1px solid #e8e3db;border-radius:28px;overflow:hidden;box-shadow:0 22px 70px rgba(7,31,58,.12);">
+            <div style="background:#071f3a;padding:30px 32px;color:#fff;position:relative;">
+              <img src="${siteUrl()}/logo.png" alt="Vastgoed Direct Nederland" style="max-width:220px;height:auto;background:#fff;border-radius:16px;padding:8px;">
+              <div style="margin-top:26px;display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.24);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:bold;text-transform:uppercase;letter-spacing:.07em;">
+                Vrijblijvend verkoopvoorstel
               </div>
-              <p style="margin:0 0 22px;font-size:16px;line-height:1.65;color:#48586b;">
-                U kunt het voorstel rustig bekijken. Heeft u vragen, wilt u iets aanvullen of wilt u het voorstel bespreken?
-                Dan kunt u direct reageren op deze e-mail of bellen/WhatsAppen via <strong>06 12 23 80 51</strong>.
-              </p>
-              <p style="margin:0 0 24px;">
-                <a href="${publicUrl}" style="display:inline-block;background:#ff6a00;color:#fff;text-decoration:none;border-radius:999px;padding:14px 22px;font-weight:bold;">Voorstel bekijken</a>
-              </p>
-              <p style="margin:0;font-size:14px;line-height:1.55;color:#6a7788;">
-                Dit voorstel is vrijblijvend en onder voorbehoud van definitieve controle, akkoord van betrokken partijen en notariële vastlegging.
+              <h1 style="margin:16px 0 0;font-size:34px;line-height:1.08;color:#fff;letter-spacing:-.03em;">
+                Uw persoonlijke voorstel staat klaar
+              </h1>
+              <p style="margin:14px 0 0;font-size:16px;line-height:1.65;color:#d9e6f5;">
+                Wij hebben het voorstel overzichtelijk voor u uitgewerkt, inclusief bedrag, uitgangspunten,
+                voorwaarden en vervolgstappen.
               </p>
             </div>
-            <div style="padding:20px 28px;background:#071f3a;color:#fff;font-size:14px;">
-              Vastgoed Direct Nederland · info@verkoopjehuisdirect.nl · 06 12 23 80 51
+
+            <div style="padding:30px 32px;">
+              <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#48586b;">Beste ${proposal.lead_naam || "heer/mevrouw"},</p>
+
+              <p style="margin:0 0 20px;font-size:16px;line-height:1.7;color:#48586b;">
+                Naar aanleiding van uw aanvraag hebben wij een vrijblijvend verkoopvoorstel voor u klaargezet.
+                Het voorstel is bedoeld om u snel en helder inzicht te geven in een mogelijke verkooproute via
+                Vastgoed Direct Nederland.
+              </p>
+
+              <div style="background:#fff7ef;border:1px solid #ffd5b6;border-radius:22px;padding:22px;margin:22px 0;">
+                <div style="font-size:12px;color:#7c4a24;text-transform:uppercase;font-weight:bold;letter-spacing:.07em;">Woning</div>
+                <div style="font-size:20px;font-weight:bold;margin-top:6px;color:#071f3a;line-height:1.3;">${address || "-"}</div>
+                <div style="font-size:38px;font-weight:bold;margin-top:12px;color:#ff6a00;letter-spacing:-.03em;">${offerAmount || "In overleg"}</div>
+                ${validity ? `<div style="font-size:14px;color:#48586b;margin-top:10px;">Geldig tot: ${validity}</div>` : ""}
+              </div>
+
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:separate;border-spacing:0 10px;margin:18px 0 24px;">
+                <tr>
+                  <td style="background:#ffffff;border:1px solid #e8e3db;border-radius:16px;padding:15px;">
+                    <strong style="display:block;color:#071f3a;font-size:15px;">Rustig bekijken</strong>
+                    <span style="display:block;color:#5f7083;font-size:14px;line-height:1.5;margin-top:4px;">U kunt het voorstel op uw gemak doornemen.</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="background:#ffffff;border:1px solid #e8e3db;border-radius:16px;padding:15px;">
+                    <strong style="display:block;color:#071f3a;font-size:15px;">Vragen bespreken</strong>
+                    <span style="display:block;color:#5f7083;font-size:14px;line-height:1.5;margin-top:4px;">Wij lichten het voorstel graag telefonisch of per e-mail toe.</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="background:#ffffff;border:1px solid #e8e3db;border-radius:16px;padding:15px;">
+                    <strong style="display:block;color:#071f3a;font-size:15px;">Geen verplichting</strong>
+                    <span style="display:block;color:#5f7083;font-size:14px;line-height:1.5;margin-top:4px;">Het voorstel is vrijblijvend en onder voorbehoud van definitieve controle.</span>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 26px;">
+                <a href="${publicUrl}" style="display:inline-block;background:#ff6a00;color:#fff;text-decoration:none;border-radius:999px;padding:15px 24px;font-weight:bold;box-shadow:0 14px 30px rgba(255,106,0,.24);">
+                  Voorstel bekijken
+                </a>
+              </p>
+
+              <p style="margin:0;font-size:15px;line-height:1.65;color:#48586b;">
+                Heeft u vragen of wilt u het voorstel bespreken? Reageer gerust op deze e-mail of bel/WhatsApp via
+                <strong>06 12 23 80 51</strong>.
+              </p>
+            </div>
+
+            <div style="padding:22px 32px;background:#071f3a;color:#d9e6f5;font-size:14px;line-height:1.55;">
+              <strong style="display:block;color:#fff;margin-bottom:5px;">Vastgoed Direct Nederland</strong>
+              info@verkoopjehuisdirect.nl · 06 12 23 80 51 · verkoopjehuisdirect.nl
             </div>
           </div>
+
+          <p style="max-width:720px;margin:14px auto 0;font-size:12px;line-height:1.5;color:#7a8797;text-align:center;">
+            Dit voorstel is vrijblijvend en onder voorbehoud van definitieve controle, akkoord van betrokken partijen en notariële vastlegging.
+          </p>
         </div>
       `;
 
