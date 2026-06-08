@@ -1,11 +1,17 @@
-import Link from "next/link";
-import { isAdminAuthenticated } from "../lib/adminAuth";
-import { redirect } from "next/navigation";
-import { query } from "../lib/neonDb";
+"use client";
 
-export const dynamic = "force-dynamic";
+import { useEffect, useMemo, useState } from "react";
 
-function formatDate(value) {
+const STATUSES = ["Nieuw", "Contact opgenomen", "In beoordeling", "Voorstel verzonden", "Akkoord", "Afgewezen"];
+const TASK_STATUSES = ["Open", "In behandeling", "Afgerond"];
+
+function todayPlus(days) {
+  const date = new Date();
+  date.setDate(date.getDate() + days);
+  return date.toISOString().slice(0, 10);
+}
+
+function fmt(value) {
   if (!value) return "-";
   return new Intl.DateTimeFormat("nl-NL", {
     day: "2-digit",
@@ -16,196 +22,458 @@ function formatDate(value) {
   }).format(new Date(value));
 }
 
-async function getDashboardData() {
-  const [leadsResult, statsResult, tasksResult, pageResult, sourceResult] = await Promise.all([
-    query("select * from leads order by created_at desc limit 100"),
-    query(`
-      select
-        count(*)::int as total,
-        count(*) filter (where created_at >= now() - interval '30 days')::int as last_30_days,
-        count(*) filter (where status = 'Nieuw')::int as nieuw,
-        count(*) filter (where status = 'Voorstel verzonden')::int as voorstel_verzonden
-      from leads
-    `),
-    query(`
-      select * from tasks
-      where status is distinct from 'Afgerond'
-      order by due_date asc nulls last, created_at desc
-      limit 8
-    `),
-    query(`
-      select coalesce(nullif(pagina, ''), '/') as pagina, count(*)::int as totaal
-      from leads
-      group by 1
-      order by totaal desc, pagina asc
-      limit 8
-    `),
-    query(`
-      select coalesce(nullif(bron, ''), 'onbekend') as bron, count(*)::int as totaal
-      from leads
-      group by 1
-      order by totaal desc, bron asc
-      limit 8
-    `),
-  ]);
+function cleanPhone(value) {
+  return String(value || "").replace(/[^\d+]/g, "");
+}
 
+function whatsappUrl(phone, name) {
+  const cleaned = cleanPhone(phone).replace(/^0/, "31");
+  const text = `Hallo ${name || ""}, bedankt voor uw aanvraag bij Vastgoed Direct Nederland. Ik neem graag contact met u op over uw woning.`;
+  return `https://wa.me/${cleaned}?text=${encodeURIComponent(text)}`;
+}
+
+function emptyProposal(days = 14) {
   return {
-    leads: leadsResult.rows || [],
-    stats: statsResult.rows?.[0] || {},
-    tasks: tasksResult.rows || [],
-    pages: pageResult.rows || [],
-    sources: sourceResult.rows || [],
+    amount_text: "",
+    validity_date: todayPlus(days),
+    transfer_date_text: "In overleg",
+    deposit_text: "In overleg bespreekbaar",
+    conditions_text:
+      "Vrijblijvend voorstel onder voorbehoud van definitieve controle, akkoord van betrokken partijen en notariële vastlegging.",
+    notes: "",
   };
 }
 
-export default async function AdminPage({ searchParams }) {
-  const authenticated = await isAdminAuthenticated();
+function Kpi({ label, value, hint }) {
+  return (
+    <article className="kpi-card">
+      <span>{label}</span>
+      <strong>{value ?? 0}</strong>
+      {hint ? <small>{hint}</small> : null}
+    </article>
+  );
+}
 
-  if (!authenticated) {
-    redirect("/admin/login");
+function Info({ label, value }) {
+  return (
+    <div className="info-card">
+      <span>{label}</span>
+      <strong>{value || "-"}</strong>
+    </div>
+  );
+}
+
+function Bar({ label, value, max }) {
+  const width = max ? Math.max(8, Math.round((Number(value) / max) * 100)) : 0;
+  return (
+    <div className="bar-row">
+      <div>
+        <strong>{label || "Onbekend"}</strong>
+        <span>{value} lead{Number(value) === 1 ? "" : "s"}</span>
+      </div>
+      <em><i style={{ width: `${width}%` }} /></em>
+    </div>
+  );
+}
+
+export default function AdminDashboard() {
+  const [checking, setChecking] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [view, setView] = useState("dashboard");
+  const [leads, setLeads] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [detail, setDetail] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  const [proposals, setProposals] = useState([]);
+  const [report, setReport] = useState({ kpis: {}, byPage: [], bySource: [], byStatus: [], byMonth: [], recentTasks: [] });
+  const [statusFilter, setStatusFilter] = useState("Alle");
+  const [taskFilter, setTaskFilter] = useState("Alle");
+  const [search, setSearch] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [proposalForm, setProposalForm] = useState(emptyProposal());
+  const [taskForm, setTaskForm] = useState({ title: "", due_date: todayPlus(1), note: "" });
+
+  const maxPage = useMemo(() => Math.max(1, ...((report.byPage || []).map((r) => Number(r.total) || 0))), [report]);
+  const maxSource = useMemo(() => Math.max(1, ...((report.bySource || []).map((r) => Number(r.total) || 0))), [report]);
+
+  async function apiGet(action, params = {}) {
+    const url = new URL(`/api/admin/v2`, window.location.origin);
+    url.searchParams.set("action", action);
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") url.searchParams.set(key, value);
+    });
+
+    const response = await fetch(url.toString(), { cache: "no-store" });
+    const json = await response.json().catch(() => ({}));
+
+    if (response.status === 401) {
+      setLoggedIn(false);
+      return null;
+    }
+
+    if (!response.ok) {
+      setError(json.error || "Ophalen mislukt.");
+      return null;
+    }
+
+    return json;
   }
 
-  const params = await searchParams;
-  const search = String(params?.search || "").trim().toLowerCase();
-  const status = String(params?.status || "Alle");
+  async function apiPost(body) {
+    setSaving(true);
+    setError("");
+    try {
+      const response = await fetch("/api/admin/v2", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const json = await response.json().catch(() => ({}));
+      if (response.status === 401) {
+        setLoggedIn(false);
+        return null;
+      }
+      if (!response.ok) {
+        setError(json.error || "Actie mislukt.");
+        return null;
+      }
+      return json;
+    } finally {
+      setSaving(false);
+    }
+  }
 
-  const data = await getDashboardData();
+  async function login(event) {
+    event.preventDefault();
+    setError("");
+    const response = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+    const json = await response.json().catch(() => ({}));
+    if (!response.ok) return setError(json.error || "Inloggen mislukt.");
+    setPassword("");
+    setLoggedIn(true);
+    await loadAll();
+  }
 
-  const filteredLeads = data.leads.filter((lead) => {
-    const matchesStatus = status === "Alle" || lead.status === status;
-    const haystack = [
-      lead.naam,
-      lead.email,
-      lead.telefoon,
-      lead.postcode,
-      lead.huisnummer,
-      lead.pagina,
-      lead.bron,
-      lead.status,
-    ].filter(Boolean).join(" ").toLowerCase();
+  async function logout() {
+    await fetch("/api/admin/logout", { method: "POST" });
+    setLoggedIn(false);
+    setSelected(null);
+    setDetail(null);
+  }
 
-    const matchesSearch = !search || haystack.includes(search);
-    return matchesStatus && matchesSearch;
-  });
+  async function loadLeads(next = {}) {
+    const data = await apiGet("leads", {
+      status: next.status ?? statusFilter,
+      search: next.search ?? search,
+      limit: 300,
+    });
+    if (data?.leads) setLeads(data.leads);
+  }
 
-  const statuses = ["Alle", "Nieuw", "Contact opgenomen", "In beoordeling", "Voorstel verzonden", "Akkoord", "Afgewezen"];
+  async function loadTasks(next = {}) {
+    const data = await apiGet("tasks", { status: next.status ?? taskFilter });
+    if (data?.tasks) setTasks(data.tasks);
+  }
+
+  async function loadProposals() {
+    const data = await apiGet("proposals");
+    if (data?.proposals) setProposals(data.proposals);
+  }
+
+  async function loadReport() {
+    const data = await apiGet("report");
+    if (data) setReport(data);
+  }
+
+  async function loadLeadDetail(id) {
+    const data = await apiGet("lead", { id });
+    if (!data) return;
+    setSelected(data.lead);
+    setDetail(data);
+    setProposalForm(emptyProposal());
+    setTaskForm({ title: "", due_date: todayPlus(1), note: "" });
+  }
+
+  async function loadAll() {
+    const [leadData, taskData, proposalData, reportData] = await Promise.all([
+      apiGet("leads", { limit: 300 }),
+      apiGet("tasks"),
+      apiGet("proposals"),
+      apiGet("report"),
+    ]);
+    if (leadData?.leads) setLeads(leadData.leads);
+    if (taskData?.tasks) setTasks(taskData.tasks);
+    if (proposalData?.proposals) setProposals(proposalData.proposals);
+    if (reportData) setReport(reportData);
+  }
+
+  async function updateLead(id, updates) {
+    const data = await apiPost({ action: "updateLead", id, ...updates });
+    if (!data?.lead) return;
+    setLeads((items) => items.map((lead) => (lead.id === id ? { ...lead, ...data.lead } : lead)));
+    setSelected(data.lead);
+    if (detail?.lead?.id === id) setDetail((old) => ({ ...old, lead: data.lead }));
+  }
+
+  async function createTask() {
+    if (!taskForm.title.trim()) return setError("Vul een taakomschrijving in.");
+    const data = await apiPost({
+      action: "createTask",
+      lead_id: selected?.id,
+      lead_naam: selected?.naam,
+      ...taskForm,
+    });
+    if (!data?.task) return;
+    setTaskForm({ title: "", due_date: todayPlus(1), note: "" });
+    await Promise.all([loadTasks(), selected?.id ? loadLeadDetail(selected.id) : null, loadReport()]);
+  }
+
+  async function updateTask(id, updates) {
+    const data = await apiPost({ action: "updateTask", id, ...updates });
+    if (!data?.task) return;
+    await Promise.all([loadTasks(), selected?.id ? loadLeadDetail(selected.id) : null, loadReport()]);
+  }
+
+  async function createProposal() {
+    if (!selected) return setError("Selecteer eerst een lead.");
+    const property_address = `${selected.postcode || ""} ${selected.huisnummer || ""}`.trim();
+    const data = await apiPost({
+      action: "createProposal",
+      lead_id: selected.id,
+      lead_naam: selected.naam,
+      lead_email: selected.email,
+      lead_telefoon: selected.telefoon,
+      property_address,
+      ...proposalForm,
+    });
+    if (!data?.proposal) return;
+    await updateLead(selected.id, { status: "Voorstel verzonden" });
+    await Promise.all([loadProposals(), loadLeadDetail(selected.id), loadReport()]);
+    setProposalForm(emptyProposal());
+    setView("proposals");
+  }
+
+  async function sendProposalEmail(id) {
+    if (!window.confirm("Verkoopvoorstel per e-mail verzenden?")) return;
+    const data = await apiPost({ action: "sendProposalEmail", id });
+    if (!data) return;
+    if (data.skipped) {
+      setError("E-mail is niet verzonden. Controleer RESEND_API_KEY en FROM_EMAIL in Vercel.");
+    }
+    await Promise.all([loadProposals(), selected?.id ? loadLeadDetail(selected.id) : null, loadReport()]);
+  }
+
+  useEffect(() => {
+    async function boot() {
+      const data = await apiGet("report");
+      if (data) {
+        setLoggedIn(true);
+        setReport(data);
+        await loadAll();
+      }
+      setChecking(false);
+    }
+    boot();
+  }, []);
+
+  useEffect(() => {
+    if (loggedIn) loadTasks({ status: taskFilter });
+  }, [taskFilter]);
+
+  if (checking) {
+    return <main className="admin-shell"><style>{styles}</style><section className="login-card"><img src="/logo.png" alt="Vastgoed Direct Nederland" /><p>Dashboard laden...</p></section></main>;
+  }
+
+  if (!loggedIn) {
+    return (
+      <main className="admin-shell login-bg">
+        <style>{styles}</style>
+        <section className="login-card">
+          <img src="/logo.png" alt="Vastgoed Direct Nederland" />
+          <span className="eyebrow">Intern platform</span>
+          <h1>Vastgoed Direct Nederland</h1>
+          <p>Log in voor leads, opvolging, verkoopvoorstellen en rapportage.</p>
+          <form onSubmit={login}>
+            <input type="password" placeholder="Admin wachtwoord" value={password} onChange={(event) => setPassword(event.target.value)} required />
+            <button>Inloggen</button>
+          </form>
+          {error ? <div className="error">{error}</div> : null}
+        </section>
+      </main>
+    );
+  }
 
   return (
-    <main className="admin-page">
+    <main className="admin-shell">
       <style>{styles}</style>
+      <aside className="sidebar">
+        <img src="/logo.png" alt="Vastgoed Direct Nederland" />
+        <nav>
+          {[
+            ["dashboard", "Overzicht"],
+            ["leads", "Leads"],
+            ["tasks", "Taken"],
+            ["proposals", "Voorstellen"],
+            ["reports", "Rapportage"],
+          ].map(([key, label]) => (
+            <button key={key} className={view === key ? "active" : ""} onClick={() => setView(key)}>{label}</button>
+          ))}
+        </nav>
+        <button className="logout" onClick={logout}>Uitloggen</button>
+      </aside>
 
-      <header className="topbar">
-        <div>
-          <span className="eyebrow">Vastgoed Direct Nederland</span>
-          <h1>Admin dashboard</h1>
-          <p>Beheer aanvragen, telefonische leads, taken, voorstellen en opvolging.</p>
-        </div>
-        <div className="top-actions">
-          <Link className="primary-action" href="/admin/nieuwe-lead">+ Nieuwe klant invoeren</Link>
-          <Link className="secondary-action" href="/api/admin/export">CSV export</Link>
-          <Link className="secondary-action" href="/admin/logout">Uitloggen</Link>
-        </div>
-      </header>
-
-      <section className="quick-create">
-        <div>
-          <strong>Telefonische aanvraag of WhatsApp-contact?</strong>
-          <span>Voer de klant direct handmatig in en maak daarna vanuit de lead een taak of verkoopvoorstel.</span>
-        </div>
-        <Link href="/admin/nieuwe-lead">Klant handmatig invoeren</Link>
-      </section>
-
-      <section className="stats-grid">
-        <article><span>Totaal leads</span><strong>{data.stats.total || 0}</strong></article>
-        <article><span>Laatste 30 dagen</span><strong>{data.stats.last_30_days || 0}</strong></article>
-        <article><span>Nieuw</span><strong>{data.stats.nieuw || 0}</strong></article>
-        <article><span>Voorstel verzonden</span><strong>{data.stats.voorstel_verzonden || 0}</strong></article>
-      </section>
-
-      <section className="panel">
-        <div className="panel-head">
+      <section className="workspace">
+        <header className="topbar">
           <div>
-            <h2>Leads</h2>
-            <p>Zoek, filter en open een lead voor detail, taken en voorstellen.</p>
+            <span className="eyebrow">Lead management</span>
+            <h1>{view === "dashboard" ? "Dashboard" : view === "leads" ? "Leads" : view === "tasks" ? "Taken & reminders" : view === "proposals" ? "Verkoopvoorstellen" : "Rapportage"}</h1>
           </div>
-          <Link className="primary-action small" href="/admin/nieuwe-lead">+ Nieuwe klant</Link>
-        </div>
+          <a className="export" href={`/api/admin/export?status=${encodeURIComponent(statusFilter)}&search=${encodeURIComponent(search)}`}>CSV export</a>
+        </header>
 
-        <form className="filters">
-          <input name="search" defaultValue={search} placeholder="Zoeken op naam, telefoon, e-mail, postcode, pagina of bron" />
-          <select name="status" defaultValue={status}>
-            {statuses.map((item) => <option key={item} value={item}>{item}</option>)}
-          </select>
-          <button type="submit">Filteren</button>
-          <Link href="/admin">Reset</Link>
-        </form>
+        {error ? <div className="error floating">{error}<button onClick={() => setError("")}>×</button></div> : null}
 
-        <div className="table">
-          <div className="row head">
-            <span>Datum</span>
-            <span>Klant</span>
-            <span>Woning</span>
-            <span>Status</span>
-            <span>Bron</span>
-            <span></span>
-          </div>
+        <section className="kpi-grid">
+          <Kpi label="Totaal leads" value={report.kpis?.total_leads} hint="Alle aanvragen" />
+          <Kpi label="Laatste 30 dagen" value={report.kpis?.leads_30d} hint="Nieuwe aanvragen" />
+          <Kpi label="Nieuwe leads" value={report.kpis?.new_leads} hint="Nog opvolgen" />
+          <Kpi label="Open taken" value={report.kpis?.open_tasks} hint="Actieve reminders" />
+        </section>
 
-          {filteredLeads.map((lead) => (
-            <div className="row" key={lead.id}>
-              <span>{formatDate(lead.created_at)}</span>
-              <span>
-                <strong>{lead.naam || "Onbekend"}</strong>
-                <small>{lead.telefoon || lead.email || "-"}</small>
-              </span>
-              <span>{[lead.postcode, lead.huisnummer].filter(Boolean).join(" ") || "-"}</span>
-              <span><em>{lead.status || "Nieuw"}</em></span>
-              <span>{lead.bron || "onbekend"}</span>
-              <span><Link href={`/admin/leads/${lead.id}`}>Open</Link></span>
+        {view === "dashboard" ? (
+          <section className="dashboard-grid">
+            <article className="panel wide">
+              <div className="panel-head"><h2>Nieuwste leads</h2><button onClick={() => setView("leads")}>Alle leads</button></div>
+              <div className="lead-table compact">
+                {leads.slice(0, 8).map((lead) => (
+                  <button key={lead.id} onClick={() => { setView("leads"); loadLeadDetail(lead.id); }}>
+                    <strong>{lead.naam || "Naam onbekend"}</strong>
+                    <span>{lead.postcode || "-"} {lead.huisnummer || ""}</span>
+                    <em>{lead.status || "Nieuw"}</em>
+                    <small>{fmt(lead.created_at)}</small>
+                  </button>
+                ))}
+              </div>
+            </article>
+            <article className="panel"><h2>Leads per pagina</h2>{(report.byPage || []).slice(0, 8).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={maxPage} />)}</article>
+            <article className="panel"><h2>Open taken</h2>{(report.recentTasks || []).map((task) => <div className="task-mini" key={task.id}><strong>{task.title}</strong><span>{task.lead_naam || "Algemeen"} · {task.due_date || "geen datum"}</span></div>)}</article>
+          </section>
+        ) : null}
+
+        {view === "leads" ? (
+          <section className="lead-layout">
+            <div className="panel lead-list-panel">
+              <div className="filters">
+                <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Zoek naam, telefoon, e-mail, postcode, pagina of bron" onKeyDown={(event) => { if (event.key === "Enter") loadLeads(); }} />
+                <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
+                  <option>Alle</option>
+                  {STATUSES.map((status) => <option key={status}>{status}</option>)}
+                </select>
+                <button onClick={() => loadLeads()}>Zoeken</button>
+              </div>
+              <div className="lead-table">
+                {leads.map((lead) => (
+                  <button key={lead.id} className={selected?.id === lead.id ? "selected" : ""} onClick={() => loadLeadDetail(lead.id)}>
+                    <strong>{lead.naam || "Naam onbekend"}</strong>
+                    <span>{lead.telefoon || "-"}</span>
+                    <span>{lead.postcode || "-"} {lead.huisnummer || ""}</span>
+                    <em>{lead.status || "Nieuw"}</em>
+                    <small>{fmt(lead.created_at)}</small>
+                  </button>
+                ))}
+              </div>
             </div>
-          ))}
 
-          {!filteredLeads.length ? (
-            <div className="empty">Geen leads gevonden met deze filters.</div>
-          ) : null}
-        </div>
-      </section>
+            <aside className="panel detail-panel">
+              {!selected ? <p>Selecteer een lead voor de detailweergave.</p> : (
+                <>
+                  <div className="detail-title">
+                    <div><span className="eyebrow">Lead detail</span><h2>{selected.naam || "Naam onbekend"}</h2><p>{selected.postcode || "-"} {selected.huisnummer || ""}</p></div>
+                    <a href={`/admin/leads/${selected.id}`}>Open detailpagina</a>
+                  </div>
 
-      <section className="bottom-grid">
-        <article className="panel">
-          <h2>Open taken</h2>
-          {data.tasks.map((task) => (
-            <div className="mini-item" key={task.id}>
-              <strong>{task.title}</strong>
-              <span>{task.lead_naam || "Geen naam"} · {task.due_date || "geen datum"}</span>
+                  <div className="info-grid">
+                    <Info label="Telefoon" value={selected.telefoon} />
+                    <Info label="E-mail" value={selected.email} />
+                    <Info label="Pagina" value={selected.pagina} />
+                    <Info label="Bron" value={selected.bron} />
+                    <Info label="Woningtype" value={selected.woningtype} />
+                    <Info label="Reden" value={selected.reden} />
+                  </div>
+
+                  <div className="quick-actions">
+                    {selected.telefoon ? <a href={`tel:${cleanPhone(selected.telefoon)}`}>Bellen</a> : null}
+                    {selected.telefoon ? <a className="green" href={whatsappUrl(selected.telefoon, selected.naam)} target="_blank">WhatsApp</a> : null}
+                    {selected.email ? <a href={`mailto:${selected.email}`}>Mailen</a> : null}
+                    <button onClick={() => updateLead(selected.id, { last_contact_at: new Date().toISOString(), status: selected.status === "Nieuw" ? "Contact opgenomen" : selected.status })}>Contact gehad</button>
+                  </div>
+
+                  <label className="field">Status<select value={selected.status || "Nieuw"} onChange={(event) => updateLead(selected.id, { status: event.target.value })}>{STATUSES.map((status) => <option key={status}>{status}</option>)}</select></label>
+                  <label className="field">Notitie<textarea value={selected.notitie || ""} onChange={(event) => setSelected({ ...selected, notitie: event.target.value })} onBlur={(event) => updateLead(selected.id, { notitie: event.target.value })} placeholder="Interne notitie, bijzonderheden, afspraken..." /></label>
+
+                  <div className="split">
+                    <article className="sub-panel"><h3>Nieuwe taak</h3><input value={taskForm.title} onChange={(event) => setTaskForm({ ...taskForm, title: event.target.value })} placeholder="Bijv. klant nabellen" /><input type="date" value={taskForm.due_date} onChange={(event) => setTaskForm({ ...taskForm, due_date: event.target.value })} /><textarea value={taskForm.note} onChange={(event) => setTaskForm({ ...taskForm, note: event.target.value })} placeholder="Toelichting" /><button disabled={saving} onClick={createTask}>Taak opslaan</button></article>
+                    <article className="sub-panel"><h3>Voorstel maken</h3><input value={proposalForm.amount_text} onChange={(event) => setProposalForm({ ...proposalForm, amount_text: event.target.value })} placeholder="Voorgesteld bedrag" /><input type="date" value={proposalForm.validity_date} onChange={(event) => setProposalForm({ ...proposalForm, validity_date: event.target.value })} /><input value={proposalForm.transfer_date_text} onChange={(event) => setProposalForm({ ...proposalForm, transfer_date_text: event.target.value })} placeholder="Oplevering" /><textarea value={proposalForm.conditions_text} onChange={(event) => setProposalForm({ ...proposalForm, conditions_text: event.target.value })} /><button disabled={saving} onClick={createProposal}>Voorstel genereren</button></article>
+                  </div>
+
+                  <div className="history-grid">
+                    <article><h3>Taken</h3>{(detail?.tasks || []).map((task) => <div className="history-item" key={task.id}><strong>{task.title}</strong><span>{task.status} · {task.due_date || "geen datum"}</span></div>)}</article>
+                    <article><h3>Mailhistorie</h3>{(detail?.mailLogs || []).map((mail) => <div className="history-item" key={mail.id}><strong>{mail.type}</strong><span>{mail.status} · {mail.recipient}</span><small>{fmt(mail.created_at)}</small></div>)}</article>
+                  </div>
+                </>
+              )}
+            </aside>
+          </section>
+        ) : null}
+
+        {view === "tasks" ? (
+          <section className="panel">
+            <div className="panel-head"><h2>Taken & reminders</h2><select value={taskFilter} onChange={(event) => setTaskFilter(event.target.value)}><option>Alle</option>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select></div>
+            <div className="task-list">
+              {tasks.map((task) => (
+                <article key={task.id} className={task.status === "Afgerond" ? "done" : ""}>
+                  <div><strong>{task.title}</strong><span>{task.lead_naam || "Algemeen"} · deadline: {task.due_date || "geen datum"}</span>{task.note ? <p>{task.note}</p> : null}</div>
+                  <select value={task.status || "Open"} onChange={(event) => updateTask(task.id, { status: event.target.value })}>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select>
+                </article>
+              ))}
             </div>
-          ))}
-          {!data.tasks.length ? <p>Geen open taken.</p> : null}
-        </article>
+          </section>
+        ) : null}
 
-        <article className="panel">
-          <h2>Leads per pagina</h2>
-          {data.pages.map((item) => (
-            <div className="mini-item" key={item.pagina}>
-              <strong>{item.pagina}</strong>
-              <span>{item.totaal} leads</span>
+        {view === "proposals" ? (
+          <section className="panel">
+            <div className="panel-head"><h2>Verkoopvoorstellen</h2><span>{proposals.length} voorstel(len)</span></div>
+            <div className="proposal-list">
+              {proposals.map((proposal) => (
+                <article key={proposal.id}>
+                  <div><strong>{proposal.lead_naam || "Naam onbekend"}</strong><span>{proposal.property_address || "Geen adres"} · {proposal.amount_text || "Geen bedrag"}</span><small>{proposal.status} · aangemaakt {fmt(proposal.created_at)}</small></div>
+                  <div className="row-actions"><a href={`/admin/voorstellen/${proposal.id}/print`} target="_blank">Print/PDF</a>{proposal.lead_email ? <button onClick={() => sendProposalEmail(proposal.id)}>Mail voorstel</button> : null}</div>
+                </article>
+              ))}
             </div>
-          ))}
-        </article>
+          </section>
+        ) : null}
 
-        <article className="panel">
-          <h2>Leads per bron</h2>
-          {data.sources.map((item) => (
-            <div className="mini-item" key={item.bron}>
-              <strong>{item.bron}</strong>
-              <span>{item.totaal} leads</span>
-            </div>
-          ))}
-        </article>
+        {view === "reports" ? (
+          <section className="dashboard-grid">
+            <article className="panel"><h2>Leads per pagina</h2>{(report.byPage || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={maxPage} />)}</article>
+            <article className="panel"><h2>Leads per bron</h2>{(report.bySource || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={maxSource} />)}</article>
+            <article className="panel"><h2>Statusverdeling</h2>{(report.byStatus || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={Math.max(1, report.kpis?.total_leads || 1)} />)}</article>
+            <article className="panel"><h2>Per maand</h2>{(report.byMonth || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={Math.max(1, ...(report.byMonth || []).map((r) => Number(r.total) || 0))} />)}</article>
+          </section>
+        ) : null}
       </section>
     </main>
   );
 }
 
 const styles = `
-:root{--navy:#071f3a;--orange:#ff6a00;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--shadow:0 22px 70px rgba(7,31,58,.12)}body{margin:0;background:radial-gradient(circle at top right,#fff3e7,transparent 34%),var(--bg);font-family:Inter,Arial,Helvetica,sans-serif;color:var(--navy)}.admin-page{max-width:1280px;margin:0 auto;padding:28px}.topbar{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:18px}.eyebrow{display:inline-block;background:#fff3e7;border:1px solid #ffd5b6;color:#a64200;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}h1{font-size:46px;line-height:1;margin:14px 0 10px;letter-spacing:-.055em}h2{font-size:26px;margin:0 0 8px;letter-spacing:-.035em}p{color:var(--muted);line-height:1.55}.top-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.primary-action,.secondary-action,.quick-create a,.filters button,.filters a,.row a{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:13px 17px;text-decoration:none;font-weight:900;border:0;cursor:pointer}.primary-action,.quick-create a,.filters button{background:var(--orange);color:#fff}.secondary-action,.filters a{background:#fff;color:var(--navy);border:1px solid var(--line)}.primary-action.small{padding:10px 14px}.quick-create,.panel,.stats-grid article{background:var(--card);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow)}.quick-create{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 22px;margin-bottom:18px}.quick-create strong,.quick-create span{display:block}.quick-create span{color:var(--muted);margin-top:4px}.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px}.stats-grid article{padding:22px}.stats-grid span{display:block;color:var(--muted);font-size:13px}.stats-grid strong{display:block;font-size:38px;margin-top:8px;letter-spacing:-.04em}.panel{padding:22px;margin-bottom:18px}.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.filters{display:grid;grid-template-columns:1fr 220px auto auto;gap:10px;margin:18px 0}.filters input,.filters select{border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;background:#fff}.table{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff}.row{display:grid;grid-template-columns:170px 1.3fr 1fr 170px 150px 90px;gap:12px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}.row.head{background:var(--navy);color:#fff;font-weight:900}.row strong,.row small{display:block}.row small{color:var(--muted);margin-top:4px}.row em{font-style:normal;background:#fff3e7;color:#a64200;border:1px solid #ffd5b6;border-radius:999px;padding:6px 9px;font-size:12px;font-weight:900}.row a{background:var(--navy);color:#fff;padding:9px 12px}.empty{padding:18px;color:var(--muted)}.bottom-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.mini-item{border-bottom:1px solid var(--line);padding:12px 0}.mini-item:last-child{border-bottom:0}.mini-item strong,.mini-item span{display:block}.mini-item span{color:var(--muted);margin-top:4px;font-size:14px}@media(max-width:1100px){.stats-grid,.bottom-grid{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:1fr 1fr}.row.head{display:none}.filters{grid-template-columns:1fr 1fr}.topbar{display:grid}.top-actions{justify-content:flex-start}}@media(max-width:720px){.admin-page{padding:16px}h1{font-size:36px}.stats-grid,.bottom-grid,.filters{grid-template-columns:1fr}.quick-create{display:grid}.row{grid-template-columns:1fr;padding:16px}.panel-head{display:grid}}
+:root{--navy:#071f3a;--navy2:#0d3159;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#ff6a00;--green:#20c768;--shadow:0 22px 70px rgba(7,31,58,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.admin-shell{min-height:100vh;background:radial-gradient(circle at top right,#fff3e7,transparent 38%),var(--bg);display:flex}.login-bg{align-items:center;justify-content:center}.login-card{width:min(460px,calc(100% - 32px));background:rgba(255,253,249,.92);border:1px solid rgba(232,227,219,.9);border-radius:32px;padding:34px;box-shadow:var(--shadow);backdrop-filter:blur(10px)}.login-card img{width:220px;max-width:100%;margin-bottom:24px}.login-card h1,.topbar h1{margin:4px 0 8px;font-size:38px;letter-spacing:-.04em}.login-card p{color:var(--muted);line-height:1.55}.login-card form{display:grid;gap:12px;margin-top:24px}.login-card input,.filters input,.filters select,.field select,.field textarea,.sub-panel input,.sub-panel textarea,.panel-head select{width:100%;border:1px solid var(--line);border-radius:16px;padding:14px 16px;font:inherit;background:#fff}.login-card button,.filters button,.sub-panel button,.quick-actions a,.quick-actions button,.export,.panel-head button,.row-actions a,.row-actions button{border:0;border-radius:999px;background:var(--orange);color:white;text-decoration:none;padding:13px 18px;font-weight:900;cursor:pointer}.eyebrow{display:inline-flex;align-items:center;border:1px solid #ffd5b6;background:#fff3e7;color:#a64200;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.sidebar{width:286px;background:#061b32;color:#fff;padding:28px;display:flex;flex-direction:column;gap:28px;position:sticky;top:0;height:100vh}.sidebar img{width:205px;background:#fff;border-radius:18px;padding:12px}.sidebar nav{display:grid;gap:10px}.sidebar button{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;border-radius:16px;padding:14px 16px;text-align:left;font-weight:850;cursor:pointer}.sidebar button.active,.sidebar button:hover{background:#fff;color:var(--navy)}.sidebar .logout{margin-top:auto;background:rgba(255,106,0,.16);border-color:rgba(255,106,0,.45)}.workspace{flex:1;padding:34px;min-width:0}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px}.export{background:var(--navy)}.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:22px}.kpi-card,.panel,.detail-panel{background:var(--card);border:1px solid var(--line);border-radius:26px;box-shadow:0 12px 42px rgba(7,31,58,.08)}.kpi-card{padding:22px}.kpi-card span,.info-card span,.bar-row span,.proposal-list small,.task-list span,.history-item span,.history-item small{color:var(--muted);font-size:13px}.kpi-card strong{display:block;font-size:34px;letter-spacing:-.04em;margin:8px 0}.dashboard-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.panel{padding:22px}.panel.wide{grid-row:span 2}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}.panel h2,.detail-panel h2{margin:0 0 14px;font-size:24px;letter-spacing:-.03em}.lead-layout{display:grid;grid-template-columns:minmax(420px,.9fr) minmax(520px,1.1fr);gap:18px;align-items:start}.filters{display:grid;grid-template-columns:1fr 170px auto;gap:10px;margin-bottom:16px}.lead-table{display:grid;gap:9px;max-height:72vh;overflow:auto;padding-right:4px}.lead-table button{border:1px solid var(--line);background:#fff;border-radius:18px;padding:14px;display:grid;grid-template-columns:1.2fr .85fr .8fr .7fr .85fr;gap:10px;align-items:center;text-align:left;color:var(--navy);cursor:pointer}.lead-table.compact button{grid-template-columns:1.2fr .8fr .7fr .8fr}.lead-table button.selected,.lead-table button:hover{border-color:#ffb47a;box-shadow:0 10px 26px rgba(255,106,0,.12)}.lead-table em{font-style:normal;background:#eef4ff;border-radius:999px;padding:6px 10px;text-align:center;font-weight:850;color:#164575}.detail-panel{padding:24px;position:sticky;top:24px}.detail-title{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:20px}.detail-title h2{font-size:32px;margin:6px 0 4px}.detail-title a{color:var(--orange);font-weight:900}.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.info-card{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.info-card strong{display:block;margin-top:6px;word-break:break-word}.quick-actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}.quick-actions a,.quick-actions button{background:var(--navy)}.quick-actions a.green{background:var(--green)}.field{display:grid;gap:8px;font-weight:900;margin:12px 0}.field textarea{min-height:110px;resize:vertical}.split,.history-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.sub-panel{background:#f8f5ef;border:1px solid var(--line);border-radius:22px;padding:16px;display:grid;gap:10px}.sub-panel h3,.history-grid h3{margin:0 0 4px}.sub-panel textarea{min-height:86px;resize:vertical}.history-grid article{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px}.history-item,.task-mini{border-bottom:1px solid var(--line);padding:10px 0}.history-item:last-child,.task-mini:last-child{border-bottom:0}.history-item strong,.history-item span,.history-item small,.task-mini strong,.task-mini span{display:block}.task-list,.proposal-list{display:grid;gap:12px}.task-list article,.proposal-list article{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:18px}.task-list article.done{opacity:.62}.task-list p{margin:6px 0 0;color:var(--muted)}.proposal-list strong,.task-list strong{display:block;font-size:17px}.proposal-list span{display:block;color:var(--muted);margin:6px 0}.row-actions{display:flex;gap:8px;white-space:nowrap}.row-actions a{background:var(--navy)}.bar-row{display:grid;gap:8px;margin:14px 0}.bar-row div{display:flex;justify-content:space-between;gap:16px}.bar-row em{height:10px;background:#eee8df;border-radius:999px;overflow:hidden}.bar-row i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),#ffb47a);border-radius:999px}.error{background:#fff3f0;color:#9b1c00;border:1px solid #ffd1c4;border-radius:16px;padding:12px 14px;margin-top:14px}.error.floating{margin:0 0 16px;display:flex;justify-content:space-between;gap:12px}.error button{border:0;background:transparent;font-size:20px;color:inherit;cursor:pointer}@media(max-width:1100px){.admin-shell{display:block}.sidebar{position:relative;width:auto;height:auto}.sidebar nav{grid-template-columns:repeat(3,1fr)}.kpi-grid{grid-template-columns:repeat(2,1fr)}.lead-layout,.dashboard-grid{grid-template-columns:1fr}.detail-panel{position:relative;top:0}}@media(max-width:700px){.workspace{padding:18px}.filters,.split,.history-grid,.info-grid,.kpi-grid{grid-template-columns:1fr}.lead-table button{grid-template-columns:1fr}.topbar{display:grid}.sidebar nav{grid-template-columns:1fr}}
 `;
