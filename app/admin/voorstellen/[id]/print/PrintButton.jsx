@@ -1,5 +1,5 @@
 "use client";
 
 export default function PrintButton() {
-  return <button onClick={() => window.print()}>Opslaan als PDF / printen</button>;
+  return <button type="button" onClick={() => window.print()}>Print / opslaan als PDF</button>;
 }

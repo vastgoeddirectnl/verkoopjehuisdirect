@@ -9,8 +9,53 @@ export const runtime = "nodejs";
 
 const STATUSES = ["Nieuw", "Contact opgenomen", "In beoordeling", "Voorstel verzonden", "Akkoord", "Afgewezen"];
 
-function clean(value, max = 500) {
+const PROPOSAL_FIELDS = [
+  "proposal_variant",
+  "lead_id",
+  "lead_naam",
+  "lead_email",
+  "lead_telefoon",
+  "property_address",
+  "property_postcode",
+  "property_house_number",
+  "property_type",
+  "living_area_text",
+  "plot_area_text",
+  "build_year_text",
+  "current_situation",
+  "amount_text",
+  "validity_date",
+  "transfer_date_text",
+  "deposit_text",
+  "conditions_text",
+  "assumptions_text",
+  "included_items",
+  "traditional_price_text",
+  "agent_costs_text",
+  "notary_costs_text",
+  "renovation_costs_text",
+  "other_costs_text",
+  "traditional_net_text",
+  "direct_net_text",
+  "short_comparison_text",
+  "reservations_text",
+  "next_steps_text",
+  "contact_person",
+  "notes",
+];
+
+function clean(value, max = 1500) {
   return String(value || "").trim().slice(0, max);
+}
+
+function cleanForField(field, value) {
+  if (field === "lead_id") return value || null;
+  if (field === "validity_date") return value || null;
+  if (field === "proposal_variant") return clean(value, 40) || "Uitgebreid";
+  if (["conditions_text", "assumptions_text", "included_items", "short_comparison_text", "reservations_text", "next_steps_text", "notes"].includes(field)) {
+    return clean(value, 2500) || null;
+  }
+  return clean(value, 300) || null;
 }
 
 async function requireAdmin() {
@@ -215,25 +260,36 @@ export async function POST(request) {
     }
 
     if (action === "createProposal") {
+      const columns = PROPOSAL_FIELDS;
+      const params = columns.map((field) => cleanForField(field, body[field]));
+      const placeholders = columns.map((_, index) => `$${index + 1}`).join(",");
       const proposal = await queryOne(
-        `insert into proposals (
-          lead_id, lead_naam, lead_email, lead_telefoon, property_address,
-          amount_text, validity_date, transfer_date_text, deposit_text, conditions_text, notes, status
-        ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,'Concept') returning *`,
-        [
-          body.lead_id || null,
-          clean(body.lead_naam, 160),
-          clean(body.lead_email, 190),
-          clean(body.lead_telefoon, 80),
-          clean(body.property_address, 260),
-          clean(body.amount_text, 120),
-          body.validity_date || null,
-          clean(body.transfer_date_text, 180),
-          clean(body.deposit_text, 180),
-          clean(body.conditions_text, 1500),
-          clean(body.notes, 1500),
-        ]
+        `insert into proposals (${columns.join(",")}, status) values (${placeholders}, 'Concept') returning *`,
+        params
       );
+      return NextResponse.json({ proposal });
+    }
+
+    if (action === "updateProposal") {
+      const updates = [];
+      const params = [];
+      for (const field of PROPOSAL_FIELDS) {
+        if (Object.prototype.hasOwnProperty.call(body, field)) {
+          params.push(cleanForField(field, body[field]));
+          updates.push(`${field} = $${params.length}`);
+        }
+      }
+
+      if (!updates.length) {
+        return NextResponse.json({ error: "Geen voorstelwijziging ontvangen." }, { status: 400 });
+      }
+
+      params.push(body.id);
+      const proposal = await queryOne(
+        `update proposals set ${updates.join(", ")}, updated_at = now() where id = $${params.length} returning *`,
+        params
+      );
+      if (!proposal) return NextResponse.json({ error: "Voorstel niet gevonden." }, { status: 404 });
       return NextResponse.json({ proposal });
     }
 
@@ -246,11 +302,11 @@ export async function POST(request) {
       const url = `${site}/admin/voorstellen/${proposal.id}/print`;
       const subject = "Vrijblijvend verkoopvoorstel Vastgoed Direct Nederland";
       const html = `
-        <div style="font-family:Arial,sans-serif;font-size:16px;color:#0b2341;line-height:1.55;max-width:640px;">
+        <div style="font-family:Arial,sans-serif;font-size:16px;color:#0b2341;line-height:1.55;max-width:680px;">
           <p>Beste ${proposal.lead_naam || "heer/mevrouw"},</p>
-          <p>Uw vrijblijvende verkoopvoorstel staat klaar.</p>
+          <p>Uw vrijblijvende verkoopvoorstel staat klaar. U kunt het voorstel rustig bekijken en desgewenst opslaan als PDF.</p>
           <p><a href="${url}" style="display:inline-block;background:#ff6a00;color:#fff;text-decoration:none;border-radius:999px;padding:12px 18px;font-weight:bold;">Voorstel bekijken</a></p>
-          <p>U kunt het voorstel rustig bekijken. Heeft u vragen, dan kunt u reageren op deze e-mail of bellen/WhatsAppen via <strong>06 12 23 80 51</strong>.</p>
+          <p>Heeft u vragen of wilt u het voorstel bespreken? Dan kunt u reageren op deze e-mail of bellen/WhatsAppen via <strong>06 12 23 80 51</strong>.</p>
           <p>Met vriendelijke groet,<br><strong>Vastgoed Direct Nederland</strong></p>
         </div>
       `;
