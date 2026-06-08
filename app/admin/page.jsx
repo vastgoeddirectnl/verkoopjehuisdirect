@@ -287,7 +287,24 @@ export default function AdminDashboard() {
   }, [taskFilter]);
 
   if (checking) {
-    return <main className="admin-shell"><style>{styles}</style><section className="login-card"><img src="/logo.png" alt="Vastgoed Direct Nederland" /><p>Dashboard laden...</p></section></main>;
+    return <main className="admin-shell">
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginBottom: "16px" }}>
+        <a
+          href="/admin/nieuwe-lead"
+          style={{
+            background: "#ff6a00",
+            color: "#fff",
+            textDecoration: "none",
+            borderRadius: "999px",
+            padding: "12px 16px",
+            fontWeight: 900,
+            boxShadow: "0 12px 28px rgba(255,106,0,.22)",
+          }}
+        >
+          + Klant toevoegen
+        </a>
+      </div>
+<style>{styles}</style><section className="login-card"><img src="/logo.png" alt="Vastgoed Direct Nederland" /><p>Dashboard laden...</p></section></main>;
   }
 
   if (!loggedIn) {
