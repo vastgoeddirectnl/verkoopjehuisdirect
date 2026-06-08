@@ -1,5 +1,6 @@
 import { query, queryOne } from "./neonDb";
 import { sendApplicantConfirmation, sendLeadNotification } from "./mail";
+import { logMailEventSafe } from "./mailLog";
 
 const TEXT_LIMITS = {
   naam: 160,
@@ -81,16 +82,50 @@ export async function createLead(input = {}) {
 
   try {
     mail.internal = await sendLeadNotification(saved || lead);
+    await logMailEventSafe({
+      lead_id: saved?.id,
+      type: "interne melding",
+      recipient: process.env.LEAD_TO_EMAIL || "info@verkoopjehuisdirect.nl",
+      subject: `Nieuwe aanvraag verkoopvoorstel${saved?.postcode ? ` - ${saved.postcode}` : ""}`,
+      status: mail.internal?.skipped ? "Overgeslagen" : "Verzonden",
+      provider_id: mail.internal?.id,
+      error: mail.internal?.reason,
+    });
   } catch (error) {
     console.warn("Lead opgeslagen, maar interne e-mailmelding is niet verzonden:", error.message);
     mail.internal = { skipped: false, error: error.message };
+    await logMailEventSafe({
+      lead_id: saved?.id,
+      type: "interne melding",
+      recipient: process.env.LEAD_TO_EMAIL || "info@verkoopjehuisdirect.nl",
+      subject: "Nieuwe aanvraag verkoopvoorstel",
+      status: "Fout",
+      error: error.message,
+    });
   }
 
   try {
     mail.applicant = await sendApplicantConfirmation(saved || lead);
+    await logMailEventSafe({
+      lead_id: saved?.id,
+      type: "ontvangstbevestiging",
+      recipient: saved?.email || lead.email,
+      subject: "Wij hebben uw aanvraag ontvangen",
+      status: mail.applicant?.skipped ? "Overgeslagen" : "Verzonden",
+      provider_id: mail.applicant?.id,
+      error: mail.applicant?.reason,
+    });
   } catch (error) {
     console.warn("Lead opgeslagen, maar ontvangstbevestiging is niet verzonden:", error.message);
     mail.applicant = { skipped: false, error: error.message };
+    await logMailEventSafe({
+      lead_id: saved?.id,
+      type: "ontvangstbevestiging",
+      recipient: saved?.email || lead.email,
+      subject: "Wij hebben uw aanvraag ontvangen",
+      status: "Fout",
+      error: error.message,
+    });
   }
 
   return { lead: saved, mail };
@@ -102,7 +137,7 @@ export async function listLeads({ status, search, limit = 300 } = {}) {
 
   if (status && status !== "Alle") {
     params.push(status);
-    where.push(`status = $${params.length}`);
+    where.push(`l.status = $${params.length}`);
   }
 
   const cleanedSearch = cleanText(search, 120);
@@ -110,16 +145,36 @@ export async function listLeads({ status, search, limit = 300 } = {}) {
     params.push(`%${cleanedSearch}%`);
     const i = params.length;
     where.push(`(
-      naam ilike $${i} or email ilike $${i} or telefoon ilike $${i} or postcode ilike $${i} or
-      huisnummer ilike $${i} or pagina ilike $${i} or bron ilike $${i} or woningtype ilike $${i} or reden ilike $${i}
+      l.naam ilike $${i} or l.email ilike $${i} or l.telefoon ilike $${i} or l.postcode ilike $${i} or
+      l.huisnummer ilike $${i} or l.pagina ilike $${i} or l.bron ilike $${i} or l.woningtype ilike $${i} or l.reden ilike $${i}
     )`);
   }
 
   params.push(Math.min(Number(limit) || 300, 500));
   const sql = `
-    select * from leads
+    select
+      l.*,
+      coalesce(t.open_tasks, 0)::int as open_tasks,
+      p.last_proposal_at,
+      m.last_mail_at
+    from leads l
+    left join (
+      select lead_id, count(*) filter (where status <> 'Afgerond') as open_tasks
+      from tasks
+      group by lead_id
+    ) t on t.lead_id = l.id
+    left join (
+      select lead_id, max(created_at) as last_proposal_at
+      from proposals
+      group by lead_id
+    ) p on p.lead_id = l.id
+    left join (
+      select lead_id, max(created_at) as last_mail_at
+      from mail_logs
+      group by lead_id
+    ) m on m.lead_id = l.id
     ${where.length ? `where ${where.join(" and ")}` : ""}
-    order by created_at desc
+    order by l.created_at desc
     limit $${params.length}
   `;
 
