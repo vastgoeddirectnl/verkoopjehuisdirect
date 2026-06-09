@@ -15,7 +15,7 @@ const localBusinessSchema = {
   telephone: "+31612238051",
   email: "info@verkoopjehuisdirect.nl",
   description:
-    "Vastgoed Direct Nederland helpt woningeigenaren die hun woning snel, duidelijk en zonder verkoopstress willen verkopen. Wij bieden een directe verkoopoplossing voor woningen in uiteenlopende situaties, zoals achterstallig onderhoud, leegstand, verhuur, erfenis, scheiding of financiële druk.",
+    "Vastgoed Direct Nederland helpt woningeigenaren die hun woning snel, duidelijk en zonder verkoopstress willen verkopen. Wij bieden een directe verkoopoplossing voor woningen in uiteenlopende situaties.",
   areaServed: ["Groningen", "Drenthe", "Friesland", "Overijssel", "Nederland"],
   priceRange: "Vrijblijvend verkoopvoorstel",
   contactPoint: {
@@ -57,56 +57,35 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "Betaal ik notariskosten?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening. Eventuele afwijkende kosten of bijzondere afspraken bespreken we vooraf duidelijk.",
-      },
-    },
-    {
-      "@type": "Question",
       name: "Kan ik verkopen zonder bezichtigingen?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Ja, in veel situaties is dat mogelijk. Wij bespreken de verkoopmogelijkheden zonder traditioneel bezichtigingstraject of open huis.",
+        text: "In veel situaties is dat mogelijk. Wij bespreken de verkoopmogelijkheden zonder traditioneel bezichtigingstraject of open huis.",
       },
     },
   ],
 };
 
 const situations = [
-  {
-    title: "Ik wil geen bezichtigingen",
-    text: "Prettig bij privacy, verhuur, persoonlijke omstandigheden of als u geen onbekenden over de vloer wilt.",
-  },
-  {
-    title: "Mijn woning heeft onderhoud nodig",
-    text: "Ook woningen met achterstallig onderhoud, schade of renovatiebehoefte kunnen worden aangemeld.",
-  },
-  {
-    title: "Ik wil snel duidelijkheid",
-    text: "Geen maandenlange onzekerheid, maar een concreet voorstel met voorwaarden en vervolgstappen.",
-  },
-  {
-    title: "Erfenis, scheiding of leegstand",
-    text: "Rust, overzicht en duidelijke afspraken in een periode waarin u geen onnodige verkoopdruk wilt.",
-  },
+  ["Geen bezichtigingen", "Prettig bij privacy, verhuur of als u geen onbekenden over de vloer wilt."],
+  ["Onderhoud of opknapwerk", "Niet altijd nodig om de woning eerst verkoopklaar te maken."],
+  ["Snel duidelijkheid", "Een concreet voorstel met bedrag, voorwaarden en planning."],
+  ["Erfenis, scheiding of leegstand", "Rust en overzicht zonder onnodige verkoopdruk."],
 ];
 
 const processSteps = [
-  ["01", "Aanvraag", "U vult de belangrijkste woninggegevens in. Dit is gratis, discreet en vrijblijvend."],
-  ["02", "Persoonlijk contact", "Wij bespreken uw situatie, gewenste planning en eventuele bijzonderheden."],
-  ["03", "Voorstel", "U ontvangt een helder verkoopvoorstel met bedrag, voorwaarden en vervolgstappen."],
-  ["04", "Notaris", "Bij akkoord worden de afspraken zorgvuldig en notarieel vastgelegd."],
+  ["01", "Aanvraag", "U vult de belangrijkste gegevens in."],
+  ["02", "Contact", "Wij bespreken uw situatie persoonlijk."],
+  ["03", "Voorstel", "U ontvangt een helder voorstel."],
+  ["04", "Notaris", "Bij akkoord wordt alles vastgelegd."],
 ];
 
 const comparisonRows = [
-  ["Woning verkoopklaar maken", "Vaak gewenst of noodzakelijk", "Niet altijd nodig"],
-  ["Bezichtigingen / open huis", "Meerdere momenten mogelijk", "Geen open huis nodig"],
-  ["Makelaarskosten", "Gebruikelijk van toepassing", "Geen makelaarskosten"],
-  ["Doorlooptijd", "Afhankelijk van markt en kijkers", "Snel duidelijkheid mogelijk"],
-  ["Privacy", "Meerdere partijen over de vloer", "Discreter traject"],
-  ["Afspraken", "Onderhandeling en voorbehouden", "Helder voorstel vooraf"],
+  ["Woning verkoopklaar maken", "Vaak gewenst", "Niet altijd nodig"],
+  ["Bezichtigingen / open huis", "Meerdere momenten", "Geen open huis nodig"],
+  ["Makelaarskosten", "Gebruikelijk", "Geen makelaarskosten"],
+  ["Doorlooptijd", "Onzekerder", "Snel duidelijkheid"],
+  ["Privacy", "Meerdere partijen", "Discreter traject"],
 ];
 
 const popularLinks = [
@@ -122,8 +101,6 @@ const popularLinks = [
   ["/huis-verkopen-bij-erfenis", "Huis verkopen bij erfenis"],
   ["/huis-verkopen-bij-scheiding", "Huis verkopen bij scheiding"],
   ["/verhuurde-woning-verkopen", "Verhuurde woning verkopen"],
-  ["/woning-verkopen-drenthe", "Woning verkopen in Drenthe"],
-  ["/woning-verkopen-overijssel", "Woning verkopen in Overijssel"],
 ];
 
 export default function HomeClient() {
@@ -140,12 +117,12 @@ export default function HomeClient() {
     telefoon: "",
   });
 
-  const updateForm = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const updateForm = (event) => setForm({ ...form, [event.target.name]: event.target.value });
   const nextStep = () => setStep((current) => Math.min(current + 1, 4));
   const previousStep = () => setStep((current) => Math.max(current - 1, 1));
 
-  const submitLead = async (e) => {
-    e.preventDefault();
+  const submitLead = async (event) => {
+    event.preventDefault();
 
     const params = new URLSearchParams(window.location.search);
 
@@ -159,11 +136,7 @@ export default function HomeClient() {
       staat: form.staat,
       reden: form.reden,
       pagina: window.location.pathname,
-      bron:
-        params.get("utm_source") ||
-        params.get("source") ||
-        document.referrer ||
-        "direct",
+      bron: params.get("utm_source") || params.get("source") || document.referrer || "direct",
     };
 
     try {
@@ -208,32 +181,34 @@ export default function HomeClient() {
         }
         a { color: inherit; text-decoration: none; }
         button, input, select { font: inherit; }
-        .container { width: min(1240px, calc(100% - 44px)); margin: 0 auto; }
+        .container { width: min(1180px, calc(100% - 44px)); margin: 0 auto; }
+
         .top-strip {
           background: #071f3a;
           color: #fff;
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 900;
         }
         .top-strip-inner {
-          min-height: 42px;
+          min-height: 36px;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 18px;
+          gap: 20px;
           text-align: center;
         }
         .top-strip-inner span { white-space: nowrap; }
+
         .header {
           position: sticky;
           top: 0;
-          z-index: 70;
-          background: rgba(255, 255, 255, .94);
+          z-index: 80;
+          background: rgba(255, 255, 255, .95);
           border-bottom: 1px solid #e8e3db;
           backdrop-filter: blur(14px);
         }
         .header-inner {
-          min-height: 88px;
+          min-height: 76px;
           display: grid;
           grid-template-columns: auto 1fr auto;
           align-items: center;
@@ -241,7 +216,7 @@ export default function HomeClient() {
         }
         .logo {
           display: block;
-          width: 260px;
+          width: 230px;
           max-width: 100%;
           height: auto;
           object-fit: contain;
@@ -249,28 +224,24 @@ export default function HomeClient() {
         .nav {
           display: flex;
           justify-content: center;
-          gap: 21px;
+          gap: 20px;
           color: #24364a;
-          font-size: 15px;
+          font-size: 14px;
           font-weight: 900;
         }
-        .nav a { white-space: nowrap; }
         .nav a:hover { color: #ff6a00; }
-        .header-actions {
-          display: flex;
-          align-items: center;
-          gap: 9px;
-        }
+        .header-actions { display: flex; align-items: center; gap: 8px; }
+
         .btn {
           display: inline-flex;
           align-items: center;
           justify-content: center;
           border: 0;
           border-radius: 999px;
-          padding: 14px 21px;
+          padding: 13px 19px;
           font-weight: 900;
           cursor: pointer;
-          transition: .2s ease;
+          transition: .18s ease;
           white-space: nowrap;
           line-height: 1;
         }
@@ -278,229 +249,105 @@ export default function HomeClient() {
         .btn-orange {
           background: #ff6a00;
           color: #fff;
-          box-shadow: 0 14px 30px rgba(255, 106, 0, .24);
+          box-shadow: 0 12px 28px rgba(255, 106, 0, .23);
         }
         .btn-blue { background: #071f3a; color: #fff; }
         .btn-light { background: #fff; color: #071f3a; border: 1px solid #e3ded6; }
         .btn-green {
           background: #25d366;
           color: #fff;
-          box-shadow: 0 14px 30px rgba(37, 211, 102, .22);
+          box-shadow: 0 12px 28px rgba(37, 211, 102, .2);
         }
+
         .hero {
           position: relative;
           overflow: hidden;
           background:
-            radial-gradient(circle at 82% 2%, rgba(255, 106, 0, .18), transparent 32%),
-            radial-gradient(circle at 6% 90%, rgba(7, 31, 58, .12), transparent 34%),
-            linear-gradient(180deg, #fffdf9 0%, #f7f3ec 100%);
-        }
-        .hero::before {
-          content: "";
-          position: absolute;
-          right: -110px;
-          top: 110px;
-          width: 330px;
-          height: 330px;
-          border-radius: 999px;
-          border: 52px solid rgba(255, 106, 0, .11);
+            radial-gradient(circle at 84% 6%, rgba(255, 106, 0, .15), transparent 30%),
+            linear-gradient(180deg, #fffdf9 0%, #f6f2eb 100%);
         }
         .hero-grid {
-          position: relative;
-          z-index: 1;
           display: grid;
-          grid-template-columns: minmax(0, 1fr) minmax(430px, .82fr);
-          gap: 58px;
-          align-items: start;
-          padding: 70px 0 74px;
+          grid-template-columns: minmax(0, 1.02fr) minmax(380px, .78fr);
+          gap: 46px;
+          align-items: center;
+          padding: 52px 0 54px;
         }
         .badge {
           display: inline-flex;
-          align-items: center;
-          gap: 8px;
           color: #9a3d00;
           background: #fff3e7;
           border: 1px solid #ffd5b6;
           border-radius: 999px;
-          padding: 10px 15px;
-          font-size: 13px;
+          padding: 9px 14px;
+          font-size: 12px;
           font-weight: 900;
           text-transform: uppercase;
           letter-spacing: .06em;
-          margin-bottom: 20px;
+          margin-bottom: 18px;
         }
         h1 {
-          font-size: clamp(42px, 5vw, 70px);
-          line-height: .94;
-          letter-spacing: -2.9px;
+          font-size: clamp(42px, 4.5vw, 64px);
+          line-height: .97;
+          letter-spacing: -2.4px;
           margin: 0;
           color: #071f3a;
-          max-width: 760px;
+          max-width: 740px;
         }
         .hero-lead {
-          font-size: 20px;
-          line-height: 1.68;
+          font-size: 19px;
+          line-height: 1.62;
           color: #526274;
-          max-width: 680px;
-          margin: 24px 0 0;
+          max-width: 660px;
+          margin: 20px 0 0;
         }
         .hero-cta-row {
           display: flex;
-          gap: 12px;
+          gap: 11px;
           flex-wrap: wrap;
-          align-items: flex-start;
-          margin: 30px 0 0;
+          align-items: center;
+          margin: 26px 0 0;
         }
         .micro-note {
           font-size: 13px;
-          color: #637286;
-          margin: 9px 0 0;
-          font-weight: 800;
+          color: #647386;
+          margin: 13px 0 0;
+          font-weight: 850;
         }
         .trust-micro {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 10px;
-          margin: 28px 0 0;
-          max-width: 760px;
+          gap: 9px;
+          margin: 24px 0 0;
+          max-width: 720px;
         }
         .trust-micro div {
           background: #fff;
           border: 1px solid #e8e3db;
-          border-radius: 18px;
-          padding: 15px;
+          border-radius: 16px;
+          padding: 13px 14px;
+          font-size: 14px;
           font-weight: 900;
           color: #071f3a;
-          box-shadow: 0 12px 28px rgba(7, 31, 58, .06);
+          box-shadow: 0 10px 22px rgba(7, 31, 58, .06);
         }
-        .proposal-visual {
-          display: grid;
-          gap: 18px;
-        }
-        .proposal-card {
-          background: #fff;
-          border: 1px solid #e8e3db;
-          border-radius: 34px;
-          padding: 26px;
-          box-shadow: 0 30px 90px rgba(7, 31, 58, .16);
-          overflow: hidden;
-          position: relative;
-        }
-        .proposal-card::before {
-          content: "";
-          position: absolute;
-          inset: 0 0 auto 0;
-          height: 112px;
-          background: linear-gradient(135deg, #071f3a, #123a67);
-        }
-        .proposal-card-inner { position: relative; z-index: 1; }
-        .proposal-top {
-          display: flex;
-          justify-content: space-between;
-          gap: 16px;
-          align-items: flex-start;
-          color: #fff;
-          min-height: 92px;
-        }
-        .proposal-top span {
-          display: block;
-          font-size: 12px;
-          text-transform: uppercase;
-          letter-spacing: .07em;
-          font-weight: 900;
-          color: #d9e6f5;
-        }
-        .proposal-top strong {
-          display: block;
-          margin-top: 5px;
-          font-size: 20px;
-          line-height: 1.1;
-        }
-        .proposal-pill {
-          background: rgba(255, 255, 255, .14);
-          border: 1px solid rgba(255, 255, 255, .22);
-          border-radius: 999px;
-          padding: 8px 11px;
-          font-size: 12px;
-          font-weight: 900;
-          white-space: nowrap;
-        }
-        .amount-preview {
-          background: #fff;
-          border: 1px solid #e8e3db;
-          border-radius: 26px;
-          padding: 22px;
-          box-shadow: 0 18px 42px rgba(7, 31, 58, .1);
-          margin-bottom: 15px;
-        }
-        .amount-preview small {
-          display: block;
-          color: #647386;
-          font-weight: 900;
-          text-transform: uppercase;
-          letter-spacing: .06em;
-        }
-        .amount-preview strong {
-          display: block;
-          font-size: 43px;
-          color: #ff6a00;
-          letter-spacing: -1.8px;
-          margin-top: 7px;
-        }
-        .proposal-list {
-          display: grid;
-          gap: 10px;
-        }
-        .proposal-list div {
-          display: flex;
-          gap: 10px;
-          align-items: flex-start;
-          background: #f8f5ef;
-          border: 1px solid #eee8df;
-          border-radius: 17px;
-          padding: 13px 14px;
-          color: #24364a;
-          font-weight: 850;
-        }
-        .proposal-list span {
-          color: #ff6a00;
-          font-weight: 900;
-        }
-        .confidence-card {
-          background: #071f3a;
-          color: #fff;
-          border-radius: 28px;
-          padding: 22px;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 14px;
-          box-shadow: 0 18px 50px rgba(7, 31, 58, .13);
-        }
-        .confidence-card div {
-          background: rgba(255,255,255,.1);
-          border: 1px solid rgba(255,255,255,.14);
-          border-radius: 18px;
-          padding: 15px;
-        }
-        .confidence-card strong, .confidence-card span { display: block; }
-        .confidence-card strong { font-size: 22px; color: #fff; }
-        .confidence-card span { color: #d9e6f5; font-size: 13px; margin-top: 4px; line-height: 1.35; }
+
         .form-card {
           background: #fff;
           border: 1px solid #e8e3db;
-          border-radius: 34px;
-          padding: 30px;
-          box-shadow: 0 30px 90px rgba(7, 31, 58, .16);
+          border-radius: 30px;
+          padding: 26px;
+          box-shadow: 0 26px 80px rgba(7, 31, 58, .15);
         }
         .form-logo-wrap {
           display: flex;
           justify-content: center;
-          padding-bottom: 20px;
-          margin-bottom: 22px;
+          padding-bottom: 16px;
+          margin-bottom: 18px;
           border-bottom: 1px solid #eee9e2;
         }
         .form-logo {
-          width: 235px;
+          width: 212px;
           max-width: 100%;
           height: auto;
           display: block;
@@ -509,14 +356,14 @@ export default function HomeClient() {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 8px;
-          margin: 0 0 18px;
+          margin: 0 0 15px;
         }
         .form-benefits span {
           background: #fff7ef;
           border: 1px solid #ffd5b6;
           color: #8c3a00;
           border-radius: 999px;
-          padding: 8px 10px;
+          padding: 8px 9px;
           text-align: center;
           font-size: 12px;
           font-weight: 900;
@@ -527,481 +374,149 @@ export default function HomeClient() {
           font-weight: 900;
           text-transform: uppercase;
           letter-spacing: .06em;
-          font-size: 13px;
+          font-size: 12px;
         }
         .form-title {
           margin: 6px 0 8px;
-          font-size: 31px;
-          line-height: 1.06;
+          font-size: 29px;
+          line-height: 1.05;
           color: #071f3a;
-          letter-spacing: -1.1px;
+          letter-spacing: -1px;
         }
         .form-sub {
-          margin: 0 0 18px;
+          margin: 0 0 15px;
           color: #687789;
-          line-height: 1.55;
+          line-height: 1.5;
         }
         .notice {
           background: #fff7ed;
           border: 1px solid #fed7aa;
           color: #9a3412;
-          padding: 12px 14px;
-          border-radius: 16px;
+          padding: 11px 13px;
+          border-radius: 15px;
           font-weight: 850;
-          margin-bottom: 18px;
+          margin-bottom: 14px;
+          font-size: 14px;
         }
         .field {
           width: 100%;
           border: 1px solid #d9d5ce;
           background: #faf9f6;
-          border-radius: 18px;
-          padding: 16px 18px;
+          border-radius: 16px;
+          padding: 15px 16px;
           font-size: 16px;
           outline: none;
-          min-height: 58px;
+          min-height: 55px;
         }
         .field:focus { border-color: #071f3a; background: #fff; }
-        .form-stack { display: grid; gap: 14px; }
-        .form-actions { display: grid; grid-template-columns: .9fr 1.8fr; gap: 10px; }
+        .form-stack { display: grid; gap: 12px; }
+        .form-actions { display: grid; grid-template-columns: .8fr 1.6fr; gap: 9px; }
         .small-note {
           font-size: 12px;
           color: #798698;
-          margin: 4px 0 0;
+          margin: 3px 0 0;
           line-height: 1.45;
         }
-        .success { text-align: center; padding: 34px 10px; }
+        .form-receive {
+          margin-top: 16px;
+          padding-top: 16px;
+          border-top: 1px solid #eee9e2;
+          display: grid;
+          gap: 8px;
+        }
+        .form-receive strong {
+          display: block;
+          font-size: 14px;
+          margin-bottom: 2px;
+        }
+        .form-receive div {
+          display: flex;
+          gap: 8px;
+          align-items: flex-start;
+          background: #f8f5ef;
+          border: 1px solid #eee8df;
+          border-radius: 14px;
+          padding: 10px 12px;
+          color: #24364a;
+          font-size: 13px;
+          font-weight: 850;
+        }
+        .form-receive span { color: #ff6a00; font-weight: 900; }
+        .success { text-align: center; padding: 28px 8px; }
         .success-icon {
-          width: 68px;
-          height: 68px;
+          width: 62px;
+          height: 62px;
           border-radius: 50%;
           background: #dcfce7;
           color: #15803d;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 0 auto 16px;
-          font-size: 34px;
-          font-weight: 900;
-        }
-        .section { padding: 82px 0; }
-        .section-white { background: #fff; }
-        .section-head {
-          max-width: 820px;
-          margin: 0 auto 42px;
-          text-align: center;
-        }
-        .eyebrow {
-          color: #ff6a00;
-          font-weight: 900;
-          text-transform: uppercase;
-          letter-spacing: .08em;
-          margin: 0 0 10px;
-          font-size: 13px;
-        }
-        h2 {
-          font-size: clamp(34px, 4vw, 54px);
-          line-height: 1.04;
-          letter-spacing: -1.8px;
-          margin: 0;
-          color: #071f3a;
-        }
-        .section-head p {
-          color: #647386;
-          font-size: 18px;
-          line-height: 1.7;
-          margin-bottom: 0;
-        }
-        .problem-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 16px;
-        }
-        .problem-card {
-          background: #fff;
-          border: 1px solid #e8e3db;
-          border-radius: 28px;
-          padding: 24px;
-          box-shadow: 0 18px 48px rgba(7, 31, 58, .07);
-          min-height: 230px;
-        }
-        .problem-icon {
-          width: 46px;
-          height: 46px;
-          border-radius: 16px;
-          background: #fff3e7;
-          color: #ff6a00;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 900;
-          margin-bottom: 18px;
-        }
-        .problem-card h3, .premium-card h3 {
-          margin: 0 0 10px;
-          color: #071f3a;
-          font-size: 23px;
-          line-height: 1.15;
-          letter-spacing: -.4px;
-        }
-        .problem-card p, .premium-card p {
-          margin: 0;
-          color: #647386;
-          line-height: 1.65;
-        }
-        .comparison-wrap {
-          background: linear-gradient(135deg, #071f3a 0%, #123a67 100%);
-          border-radius: 38px;
-          padding: 38px;
-          color: #fff;
-          box-shadow: 0 26px 80px rgba(7, 31, 58, .2);
-        }
-        .comparison-intro {
-          display: grid;
-          grid-template-columns: 1fr .85fr;
-          gap: 28px;
-          align-items: end;
-          margin-bottom: 26px;
-        }
-        .comparison-intro h2 { color: #fff; }
-        .comparison-intro p {
-          color: #d7e3ef;
-          line-height: 1.7;
-          font-size: 18px;
-        }
-        .comparison-table {
-          display: grid;
-          grid-template-columns: 1.05fr 1fr 1.05fr;
-          border: 1px solid rgba(255,255,255,.18);
-          border-radius: 24px;
-          overflow: hidden;
-          background: rgba(255,255,255,.07);
-        }
-        .comparison-table div {
-          padding: 17px 18px;
-          border-right: 1px solid rgba(255,255,255,.16);
-          border-bottom: 1px solid rgba(255,255,255,.16);
-          color: #dbe7f3;
-          line-height: 1.42;
-        }
-        .comparison-table div:nth-child(3n) { border-right: 0; }
-        .comparison-table .head {
-          background: rgba(255,255,255,.12);
-          color: #fff;
-          font-weight: 900;
-          text-align: center;
-        }
-        .comparison-table .head.orange { background: #ff6a00; }
-        .comparison-table .label-cell {
-          font-weight: 900;
-          color: #fff;
-        }
-        .comparison-table .direct-cell {
-          background: rgba(255, 106, 0, .1);
-          color: #fff;
-          font-weight: 900;
-        }
-        .steps {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 16px;
-          position: relative;
-        }
-        .step-card {
-          background: #fff;
-          border: 1px solid #e8e3db;
-          border-radius: 30px;
-          padding: 26px;
-          box-shadow: 0 18px 44px rgba(7, 31, 58, .08);
-        }
-        .step-number {
-          width: 58px;
-          height: 58px;
-          border-radius: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #071f3a;
-          color: #fff;
-          font-weight: 900;
-          font-size: 18px;
-          margin-bottom: 20px;
-        }
-        .step-card:nth-child(2) .step-number,
-        .step-card:nth-child(4) .step-number {
-          background: #ff6a00;
-        }
-        .step-card h3 {
-          margin: 0 0 9px;
-          font-size: 24px;
-          color: #071f3a;
-        }
-        .step-card p {
-          margin: 0;
-          color: #647386;
-          line-height: 1.65;
-        }
-        .two-col {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 36px;
-          align-items: center;
-        }
-        .premium-card {
-          background: #fff;
-          border: 1px solid #e8e3db;
-          border-radius: 34px;
-          padding: 32px;
-          box-shadow: 0 24px 70px rgba(7, 31, 58, .1);
-        }
-        .premium-list {
-          display: grid;
-          gap: 11px;
-          margin-top: 22px;
-        }
-        .premium-list div {
-          display: flex;
-          gap: 10px;
-          background: #f8f5ef;
-          border: 1px solid #eee8df;
-          border-radius: 18px;
-          padding: 14px 15px;
-          font-weight: 900;
-          color: #24364a;
-        }
-        .premium-list span { color: #ff6a00; }
-        .dark-card {
-          background: #071f3a;
-          color: #fff;
-          border-radius: 34px;
-          padding: 34px;
-          box-shadow: 0 24px 70px rgba(7, 31, 58, .18);
-        }
-        .dark-card h3 {
-          color: #fff;
+          margin: 0 auto 14px;
           font-size: 32px;
-          letter-spacing: -.8px;
-          margin: 0 0 16px;
-        }
-        .dark-card p {
-          color: #d7e3ef;
-          line-height: 1.7;
-          font-size: 17px;
-        }
-        .contact-lines {
-          display: grid;
-          gap: 12px;
-          margin-top: 22px;
-        }
-        .contact-lines a, .contact-lines div {
-          background: rgba(255,255,255,.1);
-          border: 1px solid rgba(255,255,255,.16);
-          border-radius: 18px;
-          padding: 16px;
           font-weight: 900;
         }
-        .example-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 18px;
-        }
-        .example-card {
+
+        .review-band {
           background: #fff;
-          border: 1px solid #e8e3db;
-          border-radius: 30px;
-          padding: 28px;
-          box-shadow: 0 18px 48px rgba(7, 31, 58, .07);
+          border-top: 1px solid #e8e3db;
+          border-bottom: 1px solid #e8e3db;
+          padding: 24px 0;
         }
-        .example-card small {
-          display: inline-flex;
-          background: #fff3e7;
-          border: 1px solid #ffd5b6;
-          color: #8c3a00;
-          border-radius: 999px;
-          padding: 7px 10px;
-          font-weight: 900;
-          margin-bottom: 16px;
-        }
-        .example-card strong {
-          display: block;
-          font-size: 22px;
-          margin-bottom: 10px;
-        }
-        .example-card p {
-          color: #647386;
-          line-height: 1.65;
-          margin: 0;
-        }
-        .faq {
+        .review-compact {
           display: grid;
-          gap: 12px;
-          max-width: 980px;
-          margin: 0 auto;
-        }
-        .faq-item {
-          background: #fff;
-          border: 1px solid #e8e3db;
-          border-radius: 20px;
-          padding: 20px 22px;
-          display: grid;
-          grid-template-columns: minmax(230px, .42fr) 1fr;
+          grid-template-columns: .9fr 1.55fr auto;
           gap: 22px;
-          align-items: start;
+          align-items: center;
         }
-        .faq-item h3 {
-          margin: 0;
-          color: #071f3a;
-          font-size: 18px;
-          line-height: 1.28;
-        }
-        .faq-item p {
-          margin: 0;
-          color: #647386;
-          line-height: 1.6;
-        }
-        .popular-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 12px;
-        }
-        .popular-grid a {
-          background: #fff;
-          border: 1px solid #e8e3db;
-          border-radius: 20px;
-          padding: 18px;
-          font-weight: 900;
-          box-shadow: 0 12px 30px rgba(7,31,58,.06);
-        }
-        .popular-grid a:hover {
-          border-color: #ff6a00;
-          transform: translateY(-1px);
-        }
-        .final-cta {
-          background: linear-gradient(135deg, #071f3a 0%, #123a67 100%);
+        .review-score {
+          background: #071f3a;
           color: #fff;
-          padding: 84px 0;
-          text-align: center;
-        }
-        .final-cta h2 { color: #fff; }
-        .final-cta p {
-          color: #d7e3ef;
-          font-size: 19px;
-          line-height: 1.7;
-          max-width: 760px;
-          margin: 18px auto 0;
-        }
-        .cta-buttons {
+          border-radius: 24px;
+          padding: 20px;
           display: flex;
-          justify-content: center;
-          gap: 12px;
-          flex-wrap: wrap;
-          margin-top: 28px;
+          align-items: center;
+          gap: 15px;
         }
-        .footer {
-          background: #061523;
-          color: #cbd5e1;
-          padding: 46px 0 56px;
-        }
-        .footer-grid {
-          display: grid;
-          grid-template-columns: 1.15fr .8fr 1fr 1fr 1fr;
-          gap: 28px;
-        }
-        .footer-logo {
-          width: 225px;
-          max-width: 100%;
-          height: auto;
-          background: #fff;
-          border-radius: 16px;
-          padding: 8px;
-          object-fit: contain;
-        }
-        .footer h3 { color: #fff; margin: 0 0 12px; }
-        .footer p {
-          margin: 7px 0;
-          color: #b8c3d0;
-          line-height: 1.45;
-        }
-        .footer a:hover { color: #fff; }
-        .whatsapp-float {
-          position: fixed;
-          right: 22px;
-          bottom: 22px;
-          z-index: 80;
-          background: #25d366;
-          color: #fff;
-          border-radius: 999px;
-          padding: 15px 20px;
-          font-weight: 900;
-          box-shadow: 0 16px 40px rgba(37,211,102,.35);
-        }
-        .mobile-bottom-cta { display: none; }
-
-
-        .review-highlight-section {
-          padding: 68px 0;
-          background:
-            radial-gradient(circle at 86% 8%, rgba(255, 106, 0, .13), transparent 34%),
-            linear-gradient(180deg, #fffdf9 0%, #f7f3ec 100%);
-        }
-        .review-highlight {
-          display: grid;
-          grid-template-columns: 1.18fr .82fr;
-          gap: 22px;
-          align-items: stretch;
-        }
-        .review-content {
-          background: #fff;
-          border: 1px solid #e8e3db;
-          border-radius: 34px;
-          padding: 34px;
-          box-shadow: 0 24px 70px rgba(7,31,58,.10);
-          position: relative;
-          overflow: hidden;
-        }
-        .review-content::before {
-          content: "“";
-          position: absolute;
-          right: 28px;
-          top: 4px;
-          font-size: 150px;
-          line-height: 1;
-          color: rgba(255,106,0,.10);
-          font-family: Georgia, serif;
-          pointer-events: none;
+        .review-score strong {
+          display: block;
+          font-size: 42px;
+          line-height: .9;
+          letter-spacing: -1.5px;
         }
         .stars {
           color: #f5a400;
-          letter-spacing: 2px;
-          font-size: 22px;
+          letter-spacing: 1.5px;
+          font-size: 16px;
           font-weight: 900;
-          margin: 0 0 14px;
+          margin-top: 4px;
         }
-        .stars.small {
-          font-size: 18px;
-          margin: 8px 0 16px;
+        .review-score span {
+          color: #d7e3ef;
+          font-size: 13px;
+          font-weight: 850;
         }
-        .review-content h2 {
-          max-width: 760px;
-          margin-bottom: 18px;
+        .review-quote h2 {
+          font-size: 30px;
+          line-height: 1.12;
+          margin: 0 0 8px;
+          letter-spacing: -.8px;
         }
-        .review-text {
+        .review-quote p {
           color: #526274;
-          font-size: 17px;
-          line-height: 1.7;
-          margin: 0 0 14px;
-          max-width: 820px;
+          line-height: 1.58;
+          margin: 0;
+          font-size: 16px;
         }
         .review-author {
+          min-width: 160px;
           display: flex;
           align-items: center;
-          gap: 12px;
-          margin-top: 22px;
-          padding-top: 20px;
-          border-top: 1px solid #eee9e2;
+          gap: 10px;
         }
         .avatar {
-          width: 48px;
-          height: 48px;
+          width: 44px;
+          height: 44px;
           border-radius: 50%;
           background: #5967c8;
           color: #fff;
@@ -1009,201 +524,518 @@ export default function HomeClient() {
           align-items: center;
           justify-content: center;
           font-weight: 900;
-          font-size: 22px;
+          font-size: 20px;
         }
         .review-author strong,
         .review-author span {
           display: block;
         }
-        .review-author strong {
-          color: #071f3a;
-          font-size: 17px;
-        }
+        .review-author strong { font-size: 15px; }
         .review-author span {
           color: #647386;
-          font-size: 14px;
-          margin-top: 3px;
+          font-size: 13px;
+          margin-top: 2px;
           font-weight: 850;
         }
-        .review-trust-card {
-          background: linear-gradient(135deg, #071f3a 0%, #123a67 100%);
-          color: #fff;
-          border-radius: 34px;
-          padding: 34px;
-          box-shadow: 0 24px 70px rgba(7,31,58,.18);
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
+
+        .section { padding: 62px 0; }
+        .section-tight { padding: 52px 0; }
+        .section-white { background: #fff; }
+        .section-head {
+          max-width: 790px;
+          margin: 0 auto 32px;
+          text-align: center;
         }
-        .review-trust-card span {
-          display: inline-flex;
-          width: fit-content;
-          background: rgba(255,255,255,.12);
-          border: 1px solid rgba(255,255,255,.22);
-          border-radius: 999px;
-          padding: 8px 12px;
-          font-size: 12px;
-          text-transform: uppercase;
-          letter-spacing: .07em;
+        .eyebrow {
+          color: #ff6a00;
           font-weight: 900;
-          color: #fff;
+          text-transform: uppercase;
+          letter-spacing: .08em;
+          margin: 0 0 9px;
+          font-size: 12px;
         }
-        .review-trust-card strong {
-          display: block;
-          font-size: 72px;
-          line-height: .95;
-          letter-spacing: -3px;
-          color: #fff;
-          margin-top: 18px;
+        h2 {
+          font-size: clamp(32px, 3.5vw, 48px);
+          line-height: 1.05;
+          letter-spacing: -1.5px;
+          margin: 0;
+          color: #071f3a;
         }
-        .review-trust-card p {
-          color: #d7e3ef;
+        .section-head p {
+          color: #647386;
           font-size: 17px;
-          line-height: 1.65;
-          margin: 0 0 22px;
+          line-height: 1.62;
+          margin-bottom: 0;
         }
 
-        @media (max-width: 1160px) {
-          .header-inner {
-            grid-template-columns: auto auto;
-          }
+        .problem-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 15px;
+        }
+        .problem-card {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 24px;
+          padding: 22px;
+          box-shadow: 0 14px 38px rgba(7, 31, 58, .06);
+          min-height: 184px;
+        }
+        .problem-icon {
+          width: 38px;
+          height: 38px;
+          border-radius: 14px;
+          background: #fff3e7;
+          color: #ff6a00;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 900;
+          margin-bottom: 15px;
+        }
+        .problem-card h3,
+        .premium-card h3 {
+          margin: 0 0 9px;
+          color: #071f3a;
+          font-size: 21px;
+          line-height: 1.15;
+          letter-spacing: -.35px;
+        }
+        .problem-card p,
+        .premium-card p {
+          margin: 0;
+          color: #647386;
+          line-height: 1.58;
+        }
+
+        .comparison-wrap {
+          background: linear-gradient(135deg, #071f3a 0%, #123a67 100%);
+          border-radius: 32px;
+          padding: 34px;
+          color: #fff;
+          box-shadow: 0 22px 66px rgba(7, 31, 58, .18);
+        }
+        .comparison-top {
+          display: grid;
+          grid-template-columns: .9fr 1.1fr;
+          gap: 28px;
+          align-items: end;
+          margin-bottom: 24px;
+        }
+        .comparison-top h2 { color: #fff; }
+        .comparison-top p {
+          color: #d7e3ef;
+          line-height: 1.62;
+          font-size: 17px;
+          margin: 0;
+        }
+        .compare-columns {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+        }
+        .compare-box {
+          background: rgba(255,255,255,.08);
+          border: 1px solid rgba(255,255,255,.16);
+          border-radius: 24px;
+          overflow: hidden;
+        }
+        .compare-title {
+          padding: 16px 18px;
+          background: rgba(255,255,255,.12);
+          color: #fff;
+          font-weight: 900;
+          text-align: center;
+        }
+        .compare-title.orange { background: #ff6a00; }
+        .compare-list { display: grid; }
+        .compare-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+          padding: 13px 16px;
+          border-top: 1px solid rgba(255,255,255,.14);
+          color: #dbe7f3;
+          line-height: 1.35;
+        }
+        .compare-row strong {
+          color: #fff;
+          font-size: 14px;
+        }
+        .compare-row span {
+          font-size: 14px;
+          color: #d7e3ef;
+          font-weight: 850;
+        }
+
+        .steps {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 14px;
+        }
+        .step-card {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 24px;
+          padding: 22px;
+          box-shadow: 0 14px 38px rgba(7, 31, 58, .06);
+        }
+        .step-number {
+          width: 46px;
+          height: 46px;
+          border-radius: 17px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #071f3a;
+          color: #fff;
+          font-weight: 900;
+          margin-bottom: 16px;
+        }
+        .step-card:nth-child(2) .step-number,
+        .step-card:nth-child(4) .step-number {
+          background: #ff6a00;
+        }
+        .step-card h3 {
+          margin: 0 0 7px;
+          font-size: 22px;
+          color: #071f3a;
+        }
+        .step-card p {
+          margin: 0;
+          color: #647386;
+          line-height: 1.55;
+        }
+
+        .two-col {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 28px;
+          align-items: center;
+        }
+        .premium-card {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 28px;
+          padding: 28px;
+          box-shadow: 0 18px 54px rgba(7, 31, 58, .08);
+        }
+        .premium-list {
+          display: grid;
+          gap: 10px;
+          margin-top: 20px;
+        }
+        .premium-list div {
+          display: flex;
+          gap: 9px;
+          background: #f8f5ef;
+          border: 1px solid #eee8df;
+          border-radius: 15px;
+          padding: 12px 13px;
+          font-weight: 900;
+          color: #24364a;
+          line-height: 1.35;
+        }
+        .premium-list span { color: #ff6a00; }
+        .dark-card {
+          background: #071f3a;
+          color: #fff;
+          border-radius: 28px;
+          padding: 30px;
+          box-shadow: 0 18px 54px rgba(7, 31, 58, .16);
+        }
+        .dark-card h3 {
+          color: #fff;
+          font-size: 31px;
+          letter-spacing: -.8px;
+          margin: 0 0 13px;
+        }
+        .dark-card p {
+          color: #d7e3ef;
+          line-height: 1.62;
+          font-size: 16px;
+        }
+        .contact-lines {
+          display: grid;
+          gap: 10px;
+          margin-top: 19px;
+        }
+        .contact-lines a,
+        .contact-lines div {
+          background: rgba(255,255,255,.1);
+          border: 1px solid rgba(255,255,255,.16);
+          border-radius: 15px;
+          padding: 14px;
+          font-weight: 900;
+        }
+
+        .examples-and-links {
+          display: grid;
+          grid-template-columns: 1.15fr .85fr;
+          gap: 24px;
+          align-items: start;
+        }
+        .example-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 14px;
+        }
+        .example-card {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 24px;
+          padding: 22px;
+          box-shadow: 0 14px 38px rgba(7, 31, 58, .06);
+        }
+        .example-card small {
+          display: inline-flex;
+          background: #fff3e7;
+          border: 1px solid #ffd5b6;
+          color: #8c3a00;
+          border-radius: 999px;
+          padding: 6px 9px;
+          font-weight: 900;
+          margin-bottom: 12px;
+        }
+        .example-card strong {
+          display: block;
+          font-size: 20px;
+          margin-bottom: 8px;
+        }
+        .example-card p {
+          color: #647386;
+          line-height: 1.55;
+          margin: 0;
+        }
+        .popular-box {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 24px;
+          padding: 22px;
+          box-shadow: 0 14px 38px rgba(7, 31, 58, .06);
+        }
+        .popular-box h3 {
+          margin: 0 0 12px;
+          font-size: 22px;
+        }
+        .popular-grid {
+          display: grid;
+          gap: 8px;
+        }
+        .popular-grid a {
+          background: #f8f5ef;
+          border: 1px solid #eee8df;
+          border-radius: 13px;
+          padding: 11px 12px;
+          font-size: 14px;
+          font-weight: 900;
+        }
+        .popular-grid a:hover {
+          border-color: #ff6a00;
+        }
+
+        .faq {
+          display: grid;
+          gap: 10px;
+          max-width: 930px;
+          margin: 0 auto;
+        }
+        .faq-item {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 18px;
+          padding: 17px 19px;
+          display: grid;
+          grid-template-columns: minmax(220px, .42fr) 1fr;
+          gap: 22px;
+          align-items: start;
+        }
+        .faq-item h3 {
+          margin: 0;
+          color: #071f3a;
+          font-size: 17px;
+          line-height: 1.28;
+        }
+        .faq-item p {
+          margin: 0;
+          color: #647386;
+          line-height: 1.55;
+        }
+
+        .final-cta {
+          background: linear-gradient(135deg, #071f3a 0%, #123a67 100%);
+          color: #fff;
+          padding: 64px 0;
+          text-align: center;
+        }
+        .final-cta h2 { color: #fff; }
+        .final-cta p {
+          color: #d7e3ef;
+          font-size: 18px;
+          line-height: 1.6;
+          max-width: 730px;
+          margin: 16px auto 0;
+        }
+        .cta-buttons {
+          display: flex;
+          justify-content: center;
+          gap: 11px;
+          flex-wrap: wrap;
+          margin-top: 24px;
+        }
+
+        .footer {
+          background: #061523;
+          color: #cbd5e1;
+          padding: 38px 0 46px;
+        }
+        .footer-grid {
+          display: grid;
+          grid-template-columns: 1.15fr .8fr 1fr 1fr 1fr;
+          gap: 28px;
+        }
+        .footer-logo {
+          width: 205px;
+          max-width: 100%;
+          height: auto;
+          background: #fff;
+          border-radius: 15px;
+          padding: 8px;
+          object-fit: contain;
+        }
+        .footer h3 { color: #fff; margin: 0 0 10px; }
+        .footer p {
+          margin: 6px 0;
+          color: #b8c3d0;
+          line-height: 1.42;
+        }
+        .footer a:hover { color: #fff; }
+
+        .whatsapp-float {
+          position: fixed;
+          right: 18px;
+          bottom: 18px;
+          z-index: 80;
+          background: #25d366;
+          color: #fff;
+          border-radius: 999px;
+          padding: 13px 17px;
+          font-weight: 900;
+          box-shadow: 0 14px 32px rgba(37,211,102,.32);
+          font-size: 14px;
+        }
+        .mobile-bottom-cta { display: none; }
+
+        @media (max-width: 1140px) {
+          .header-inner { grid-template-columns: auto auto; }
           .nav {
             grid-column: 1 / -1;
             justify-content: flex-start;
             overflow-x: auto;
             gap: 18px;
-            padding: 0 0 14px;
+            padding: 0 0 13px;
             scrollbar-width: none;
           }
           .nav::-webkit-scrollbar { display: none; }
-          .logo { width: 220px; }
-          .hero-grid, .comparison-intro, .two-col, .review-highlight {
+          .hero-grid,
+          .comparison-top,
+          .two-col,
+          .examples-and-links,
+          .review-compact {
             grid-template-columns: 1fr;
           }
-          .proposal-visual {
-            max-width: 680px;
-            margin: 0 auto;
-          }
-          .trust-micro, .problem-grid, .steps {
+          .trust-micro,
+          .problem-grid,
+          .steps {
             grid-template-columns: repeat(2, 1fr);
           }
-          .popular-grid { grid-template-columns: repeat(3, 1fr); }
+          .form-card {
+            max-width: 620px;
+            margin: 0 auto;
+          }
           .footer-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 760px) {
-          .container { width: min(100% - 28px, 1240px); }
+          .container { width: min(100% - 28px, 1180px); }
           .top-strip { display: none; }
           .header { position: relative; }
           .header-inner {
             display: flex;
             flex-wrap: wrap;
             min-height: auto;
-            padding: 16px 0 0;
+            padding: 14px 0 0;
             gap: 12px;
           }
-          .logo { width: 210px; }
-          .header-actions {
-            margin-left: auto;
-          }
+          .logo { width: 205px; }
+          .header-actions { margin-left: auto; }
           .header-actions .btn-green,
-          .header-actions .btn-blue {
-            display: none;
-          }
+          .header-actions .btn-blue { display: none; }
           .header-actions .btn-orange {
-            padding: 12px 16px;
+            padding: 12px 15px;
             font-size: 14px;
           }
           .nav {
             width: 100%;
             order: 3;
             border-top: 1px solid #f0eee9;
-            padding: 13px 0 12px;
+            padding: 12px 0 11px;
             font-size: 14px;
           }
           .hero-grid {
-            padding: 40px 0 46px;
-            gap: 32px;
+            padding: 34px 0 36px;
+            gap: 28px;
           }
           .badge {
             width: 100%;
             justify-content: center;
             text-align: center;
-            border-radius: 24px;
+            border-radius: 22px;
             line-height: 1.35;
           }
           h1 {
-            font-size: clamp(40px, 12vw, 52px);
+            font-size: clamp(38px, 11vw, 50px);
             line-height: 1.02;
-            letter-spacing: -1.5px;
+            letter-spacing: -1.3px;
           }
-          .hero-lead { font-size: 19px; line-height: 1.6; }
+          .hero-lead { font-size: 18px; line-height: 1.55; }
           .hero-cta-row .btn,
-          .cta-buttons .btn {
-            width: 100%;
-          }
+          .cta-buttons .btn { width: 100%; }
           .trust-micro,
           .problem-grid,
           .steps,
           .example-grid,
-          .popular-grid,
           .footer-grid,
-          .confidence-card,
           .form-benefits {
             grid-template-columns: 1fr;
           }
-          .proposal-card,
           .form-card,
           .comparison-wrap,
           .premium-card,
           .dark-card,
-          .review-content,
-          .review-trust-card {
-            border-radius: 26px;
+          .popular-box {
+            border-radius: 24px;
             padding: 22px;
           }
-          .review-highlight-section {
-            padding: 52px 0;
-          }
-          .review-content::before {
-            font-size: 96px;
-            right: 16px;
-            top: 8px;
-          }
-          .review-trust-card strong {
-            font-size: 56px;
-          }
-          .proposal-top {
-            display: grid;
-            min-height: 102px;
-          }
-          .amount-preview strong { font-size: 36px; }
-          .form-title { font-size: 30px; }
+          .form-title { font-size: 28px; }
           .form-actions { grid-template-columns: 1fr; }
-          .section { padding: 64px 0; }
-          .comparison-table { grid-template-columns: 1fr; }
-          .comparison-table .head { text-align: left; }
-          .comparison-table div {
-            border-right: 0;
+          .review-band { padding: 22px 0; }
+          .review-score {
+            border-radius: 22px;
+            padding: 18px;
           }
-          .faq-item {
-            display: block;
-          }
-          .faq-item h3 {
-            margin-bottom: 8px;
-          }
+          .review-quote h2 { font-size: 27px; }
+          .review-author { min-width: 0; }
+          .section { padding: 50px 0; }
+          .section-tight { padding: 44px 0; }
+          .compare-columns { grid-template-columns: 1fr; }
+          .compare-row { grid-template-columns: 1fr; gap: 5px; }
+          .faq-item { display: block; }
+          .faq-item h3 { margin-bottom: 7px; }
           .popular-grid {
-            display: flex;
-            overflow-x: auto;
-            gap: 13px;
-            padding: 4px 2px 14px;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none;
-          }
-          .popular-grid::-webkit-scrollbar { display: none; }
-          .popular-grid a {
-            min-width: 76%;
-            scroll-snap-align: start;
+            max-height: 312px;
+            overflow: auto;
+            padding-right: 2px;
           }
           .whatsapp-float { display: none; }
           .mobile-bottom-cta {
@@ -1227,8 +1059,8 @@ export default function HomeClient() {
             padding: 12px 10px;
             font-size: 14px;
           }
-          .final-cta { padding-bottom: 118px; }
-          .footer { padding-bottom: 112px; }
+          .final-cta { padding-bottom: 112px; }
+          .footer { padding-bottom: 108px; }
         }
       `}</style>
 
@@ -1266,64 +1098,25 @@ export default function HomeClient() {
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <div className="badge">Discreet · Vrijblijvend · Persoonlijk verkoopvoorstel</div>
-            <h1>Uw woning verkopen zonder bezichtigingen, makelaarskosten of onzekerheid?</h1>
+            <div className="badge">Discreet · vrijblijvend · persoonlijk verkoopvoorstel</div>
+            <h1>Uw woning verkopen zonder bezichtigingen of makelaarskosten?</h1>
             <p className="hero-lead">
-              Ontvang een persoonlijk verkoopvoorstel van Vastgoed Direct Nederland.
-              Vrijblijvend, duidelijk en afgestemd op uw woning, planning en situatie.
+              Ontvang een persoonlijk verkoopvoorstel zonder open huis, verkoopstress of onnodige onzekerheid.
+              Duidelijk, discreet en afgestemd op uw situatie.
             </p>
 
             <div className="hero-cta-row">
               <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
-              <div>
-                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
-                <p className="micro-note">🟢 Meestal snel reactie via WhatsApp</p>
-              </div>
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
             </div>
+
+            <p className="micro-note">🟢 Meestal snel reactie via WhatsApp · gratis en zonder verplichting</p>
 
             <div className="trust-micro" aria-label="Voordelen">
               <div>✓ Gratis aanvraag</div>
               <div>✓ Geen verplichting</div>
               <div>✓ Discreet contact</div>
               <div>✓ Eén aanspreekpunt</div>
-            </div>
-          </div>
-
-          <div className="proposal-visual">
-            <div className="proposal-card">
-              <div className="proposal-card-inner">
-                <div className="proposal-top">
-                  <div>
-                    <span>Wat u ontvangt</span>
-                    <strong>Persoonlijk verkoopvoorstel</strong>
-                  </div>
-                  <div className="proposal-pill">Binnenkort besproken</div>
-                </div>
-
-                <div className="amount-preview">
-                  <small>Voorbeeld voorstelkaart</small>
-                  <strong>Helder bedrag</strong>
-                  <small>met voorwaarden, planning en vervolgstappen</small>
-                </div>
-
-                <div className="proposal-list">
-                  <div><span>✓</span> Indicatie verkoopmogelijkheid</div>
-                  <div><span>✓</span> Duidelijke voorwaarden vooraf</div>
-                  <div><span>✓</span> Mogelijke overdrachtsdatum</div>
-                  <div><span>✓</span> Vrijblijvend persoonlijk contact</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="confidence-card">
-              <div>
-                <strong>06 12 23 80 51</strong>
-                <span>Rechtstreeks contact met Vastgoed Direct Nederland</span>
-              </div>
-              <div>
-                <strong>Geen open huis</strong>
-                <span>Verkooproute zonder standaard bezichtigingsdruk</span>
-              </div>
             </div>
           </div>
 
@@ -1343,7 +1136,7 @@ export default function HomeClient() {
                 <p className="step-label">Stap {step} van 4</p>
                 <h2 className="form-title">Ontvang een persoonlijk verkoopvoorstel</h2>
                 <p className="form-sub">
-                  Vul uw gegevens in. Wij nemen persoonlijk contact met u op om uw situatie rustig te bespreken.
+                  Vul uw gegevens in. Wij nemen persoonlijk contact op om uw situatie rustig te bespreken.
                 </p>
                 <div className="notice">Uw aanvraag is discreet, gratis en verplicht u tot niets.</div>
 
@@ -1351,7 +1144,7 @@ export default function HomeClient() {
                   <div className="form-stack">
                     <input name="postcode" value={form.postcode} onChange={updateForm} placeholder="Postcode" className="field" required />
                     <input name="huisnummer" value={form.huisnummer} onChange={updateForm} placeholder="Huisnummer" className="field" required />
-                    <button type="button" onClick={nextStep} className="btn btn-blue">Start mijn vrijblijvende aanvraag</button>
+                    <button type="button" onClick={nextStep} className="btn btn-blue">Bekijk mijn verkoopmogelijkheden</button>
                   </div>
                 )}
 
@@ -1406,7 +1199,7 @@ export default function HomeClient() {
                     <input name="telefoon" value={form.telefoon} onChange={updateForm} placeholder="Telefoonnummer" className="field" required />
                     <div className="form-actions">
                       <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
-                      <button type="submit" className="btn btn-orange">Verkoopmogelijkheden aanvragen</button>
+                      <button type="submit" className="btn btn-orange">Aanvraag versturen</button>
                     </div>
                     <p className="small-note">Wij gebruiken uw gegevens alleen om contact op te nemen over uw aanvraag.</p>
                   </div>
@@ -1420,48 +1213,40 @@ export default function HomeClient() {
                 <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">Aanvullen via WhatsApp</a>
               </div>
             )}
+
+            <div className="form-receive">
+              <strong>Wat u ontvangt:</strong>
+              <div><span>✓</span> Een persoonlijk verkoopvoorstel</div>
+              <div><span>✓</span> Duidelijke voorwaarden en vervolgstappen</div>
+              <div><span>✓</span> Mogelijke overdrachtsdatum in overleg</div>
+            </div>
           </section>
         </div>
       </section>
 
-
-      <section className="review-highlight-section">
-        <div className="container">
-          <div className="review-highlight">
-            <div className="review-content">
-              <p className="eyebrow">Echte Google-review</p>
-              <div className="stars" aria-label="5 sterren">★★★★★</div>
-              <h2>“Precies de oplossing die ik zocht.”</h2>
-              <p className="review-text">
-                “Ik had bij meerdere partijen een voorstel aangevraagd, omdat ik vooral op zoek was naar een duidelijke
-                en snelle manier om mijn woning te verkopen zonder veel gedoe.
-              </p>
-              <p className="review-text">
-                Uiteindelijk heb ik gekozen voor Vastgoed Direct Nederland. Het contact was prettig en duidelijk.
-                Er werd goed uitgelegd hoe het proces zou verlopen en afspraken werden snel opgepakt.
-              </p>
-              <p className="review-text">
-                De woning is uiteindelijk binnen enkele weken verkocht. Voor mij was dit precies de oplossing die ik zocht
-                en ik kijk tevreden terug op het traject.”
-              </p>
-              <div className="review-author">
-                <div className="avatar">L</div>
-                <div>
-                  <strong>Laura vd Zalm</strong>
-                  <span>5,0 ★ Google-review</span>
-                </div>
-              </div>
+      <section className="review-band">
+        <div className="container review-compact">
+          <div className="review-score">
+            <strong>5,0</strong>
+            <div>
+              <div className="stars">★★★★★</div>
+              <span>Google-review</span>
             </div>
+          </div>
 
-            <div className="review-trust-card">
-              <span>Beoordeeld via Google</span>
-              <strong>5,0</strong>
-              <div className="stars small">★★★★★</div>
-              <p>
-                Een echte ervaring van een verkoper die koos voor duidelijkheid,
-                snelheid en een verkooptraject zonder veel gedoe.
-              </p>
-              <a href="#aanvraag" className="btn btn-orange">Ook mijn mogelijkheden bekijken</a>
+          <div className="review-quote">
+            <h2>“Precies de oplossing die ik zocht.”</h2>
+            <p>
+              “Het contact was prettig en duidelijk. Er werd goed uitgelegd hoe het proces zou verlopen
+              en afspraken werden snel opgepakt. De woning is uiteindelijk binnen enkele weken verkocht.”
+            </p>
+          </div>
+
+          <div className="review-author">
+            <div className="avatar">L</div>
+            <div>
+              <strong>Laura vd Zalm</strong>
+              <span>via Google</span>
             </div>
           </div>
         </div>
@@ -1473,48 +1258,60 @@ export default function HomeClient() {
             <p className="eyebrow">Wanneer past dit bij u?</p>
             <h2>Voor verkopers die vooral rust en duidelijkheid willen.</h2>
             <p>
-              Een traditioneel verkooptraject is niet altijd de beste route. Zeker niet als privacy, snelheid,
-              onderhoud of persoonlijke omstandigheden meespelen.
+              Een traditioneel verkooptraject is niet altijd de beste route. Zeker niet als privacy,
+              snelheid, onderhoud of persoonlijke omstandigheden meespelen.
             </p>
           </div>
 
           <div className="problem-grid">
-            {situations.map((item) => (
-              <article className="problem-card" key={item.title}>
+            {situations.map(([title, text]) => (
+              <article className="problem-card" key={title}>
                 <div className="problem-icon">✓</div>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
+                <h3>{title}</h3>
+                <p>{text}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="vergelijking" className="section">
+      <section id="vergelijking" className="section-tight">
         <div className="container comparison-wrap">
-          <div className="comparison-intro">
+          <div className="comparison-top">
             <div>
               <p className="eyebrow">Waarom direct verkopen?</p>
               <h2>Niet alleen de prijs telt. Ook rust, tijd en zekerheid.</h2>
             </div>
             <p>
-              Bij woningverkoop kijkt u niet alleen naar een verkoopbedrag, maar ook naar verkoopkosten,
-              voorbereiding, bezichtigingen, onzekerheid en doorlooptijd. Dit overzicht maakt het verschil zichtbaar.
+              Een verkoopbedrag is belangrijk, maar verkoopkosten, voorbereiding, privacy,
+              bezichtigingen en doorlooptijd wegen ook mee.
             </p>
           </div>
 
-          <div className="comparison-table">
-            <div className="head">Onderdeel</div>
-            <div className="head">Traditioneel verkopen</div>
-            <div className="head orange">Via Vastgoed Direct Nederland</div>
+          <div className="compare-columns">
+            <div className="compare-box">
+              <div className="compare-title">Traditioneel verkopen</div>
+              <div className="compare-list">
+                {comparisonRows.map(([label, normal]) => (
+                  <div className="compare-row" key={`normal-${label}`}>
+                    <strong>{label}</strong>
+                    <span>{normal}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-            {comparisonRows.map(([label, normal, direct]) => (
-              <React.Fragment key={label}>
-                <div className="label-cell">{label}</div>
-                <div>{normal}</div>
-                <div className="direct-cell">{direct}</div>
-              </React.Fragment>
-            ))}
+            <div className="compare-box">
+              <div className="compare-title orange">Via Vastgoed Direct Nederland</div>
+              <div className="compare-list">
+                {comparisonRows.map(([label, , direct]) => (
+                  <div className="compare-row" key={`direct-${label}`}>
+                    <strong>{label}</strong>
+                    <span>{direct}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1537,27 +1334,26 @@ export default function HomeClient() {
             ))}
           </div>
 
-          <div style={{ textAlign: "center", marginTop: 38 }}>
+          <div style={{ textAlign: "center", marginTop: 30 }}>
             <a href="#aanvraag" className="btn btn-orange">Ontvang mijn persoonlijke voorstel</a>
           </div>
         </div>
       </section>
 
-      <section className="section">
+      <section id="over-ons" className="section-tight">
         <div className="container two-col">
           <div className="premium-card">
             <p className="eyebrow">Wat krijgt u concreet?</p>
             <h2>Een voorstel dat u echt kunt beoordelen.</h2>
             <p>
-              Het voorstel is niet alleen een bedrag. U krijgt inzicht in de uitgangspunten, voorwaarden,
-              mogelijke overdrachtsdatum en vervolgstappen.
+              Het voorstel is niet alleen een bedrag. U krijgt inzicht in uitgangspunten,
+              voorwaarden, mogelijke overdracht en vervolgstappen.
             </p>
 
             <div className="premium-list">
               <div><span>✓</span> Voorgesteld bedrag of verkoopmogelijkheid</div>
               <div><span>✓</span> Duidelijke uitgangspunten en voorbehouden</div>
               <div><span>✓</span> Mogelijke overdracht en planning</div>
-              <div><span>✓</span> Overzicht van wat wel en niet nodig is</div>
               <div><span>✓</span> Persoonlijk contact om vragen te bespreken</div>
             </div>
           </div>
@@ -1578,76 +1374,40 @@ export default function HomeClient() {
       </section>
 
       <section className="section section-white">
-        <div className="container">
-          <div className="section-head">
-            <p className="eyebrow">Voorbeeldsituaties</p>
-            <h2>Herkenbare situaties waarin direct verkopen rust kan geven.</h2>
-            <p>
-              Onderstaande voorbeelden laten zien wanneer een verkoopvoorstel zonder traditioneel traject interessant kan zijn.
-            </p>
-          </div>
-
-          <div className="example-grid">
-            <article className="example-card">
-              <small>Leegstand</small>
-              <strong>Geen zin in maanden wachten</strong>
-              <p>De eigenaar wil duidelijkheid over de mogelijkheden en liever geen lang traject met meerdere kijkmomenten.</p>
-            </article>
-            <article className="example-card">
-              <small>Onderhoud</small>
-              <strong>Niet eerst alles opknappen</strong>
-              <p>De woning hoeft niet altijd volledig verkoopklaar gemaakt te worden voordat wij kunnen meedenken.</p>
-            </article>
-            <article className="example-card">
-              <small>Privacy</small>
-              <strong>Geen open huis of reeks bezichtigingen</strong>
-              <p>Voor de verkoper is rust belangrijk. Daarom kijken we naar een discreet en overzichtelijk alternatief.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="over-ons" className="section">
-        <div className="container two-col">
+        <div className="container examples-and-links">
           <div>
-            <p className="eyebrow">Over Vastgoed Direct Nederland</p>
-            <h2>Een nuchtere verkooproute met duidelijke afspraken.</h2>
-            <p className="hero-lead">
-              Vastgoed Direct Nederland helpt woningeigenaren voor wie een traditioneel verkooptraject niet altijd past.
-              Denk aan achterstallig onderhoud, leegstand, verhuur, erfenis, scheiding, financiële druk of een woning die lastig verkoopklaar te maken is.
-            </p>
-            <p className="hero-lead">
-              Onze werkwijze is rustig en helder. U ontvangt geen standaardverhaal, maar een verkoopoplossing die past bij uw situatie.
-            </p>
-          </div>
-
-          <div className="premium-card">
-            <h3>Waar wij op letten</h3>
-            <div className="premium-list">
-              <div><span>✓</span> Uw gewenste snelheid</div>
-              <div><span>✓</span> De staat en ligging van de woning</div>
-              <div><span>✓</span> Juridische en notariële haalbaarheid</div>
-              <div><span>✓</span> Privacy en persoonlijke omstandigheden</div>
-              <div><span>✓</span> Een duidelijke overdrachtsdatum</div>
-              <div><span>✓</span> Heldere voorwaarden vooraf</div>
+            <div className="section-head" style={{ textAlign: "left", margin: "0 0 22px" }}>
+              <p className="eyebrow">Voorbeeldsituaties</p>
+              <h2>Herkenbare redenen om direct te verkopen.</h2>
+            </div>
+            <div className="example-grid">
+              <article className="example-card">
+                <small>Leegstand</small>
+                <strong>Geen maanden wachten</strong>
+                <p>Snel duidelijkheid over de mogelijkheden zonder lang verkooptraject.</p>
+              </article>
+              <article className="example-card">
+                <small>Onderhoud</small>
+                <strong>Niet eerst alles opknappen</strong>
+                <p>De woning hoeft niet altijd volledig verkoopklaar te zijn.</p>
+              </article>
+              <article className="example-card">
+                <small>Privacy</small>
+                <strong>Geen open huis</strong>
+                <p>Een rustiger traject zonder reeks bezichtigingen.</p>
+              </article>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section className="section section-white">
-        <div className="container">
-          <div className="section-head">
-            <p className="eyebrow">Populaire onderwerpen</p>
-            <h2>Meer informatie over uw situatie</h2>
-            <p>Bekijk welke verkooproute het beste aansluit op uw woning of regio.</p>
-          </div>
-
-          <div className="popular-grid">
-            {popularLinks.map(([href, label]) => (
-              <a href={href} key={href}>✓ {label}</a>
-            ))}
-          </div>
+          <aside className="popular-box">
+            <p className="eyebrow">Verkoopinformatie</p>
+            <h3>Per situatie of regio</h3>
+            <div className="popular-grid">
+              {popularLinks.map(([href, label]) => (
+                <a href={href} key={href}>✓ {label}</a>
+              ))}
+            </div>
+          </aside>
         </div>
       </section>
 
@@ -1682,14 +1442,6 @@ export default function HomeClient() {
             <div className="faq-item">
               <h3>Kan ik eerst alleen overleggen?</h3>
               <p>Ja. U kunt vrijblijvend bellen, WhatsAppen of een aanvraag doen om uw situatie rustig te bespreken.</p>
-            </div>
-            <div className="faq-item">
-              <h3>Voor welke regio’s kan ik een aanvraag doen?</h3>
-              <p>U kunt een aanvraag doen voor woningen in Nederland. De focus ligt vooral op Groningen, Drenthe, Friesland en Overijssel.</p>
-            </div>
-            <div className="faq-item">
-              <h3>Wanneer krijg ik duidelijkheid?</h3>
-              <p>Na uw aanvraag nemen wij persoonlijk contact op. Daarna kunnen wij beoordelen welke verkoopmogelijkheden passend zijn.</p>
             </div>
           </div>
         </div>
