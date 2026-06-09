@@ -936,6 +936,133 @@ export default function HomeClient() {
         }
         .mobile-bottom-cta { display: none; }
 
+
+        .review-highlight-section {
+          padding: 68px 0;
+          background:
+            radial-gradient(circle at 86% 8%, rgba(255, 106, 0, .13), transparent 34%),
+            linear-gradient(180deg, #fffdf9 0%, #f7f3ec 100%);
+        }
+        .review-highlight {
+          display: grid;
+          grid-template-columns: 1.18fr .82fr;
+          gap: 22px;
+          align-items: stretch;
+        }
+        .review-content {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 34px;
+          padding: 34px;
+          box-shadow: 0 24px 70px rgba(7,31,58,.10);
+          position: relative;
+          overflow: hidden;
+        }
+        .review-content::before {
+          content: "“";
+          position: absolute;
+          right: 28px;
+          top: 4px;
+          font-size: 150px;
+          line-height: 1;
+          color: rgba(255,106,0,.10);
+          font-family: Georgia, serif;
+          pointer-events: none;
+        }
+        .stars {
+          color: #f5a400;
+          letter-spacing: 2px;
+          font-size: 22px;
+          font-weight: 900;
+          margin: 0 0 14px;
+        }
+        .stars.small {
+          font-size: 18px;
+          margin: 8px 0 16px;
+        }
+        .review-content h2 {
+          max-width: 760px;
+          margin-bottom: 18px;
+        }
+        .review-text {
+          color: #526274;
+          font-size: 17px;
+          line-height: 1.7;
+          margin: 0 0 14px;
+          max-width: 820px;
+        }
+        .review-author {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-top: 22px;
+          padding-top: 20px;
+          border-top: 1px solid #eee9e2;
+        }
+        .avatar {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: #5967c8;
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 900;
+          font-size: 22px;
+        }
+        .review-author strong,
+        .review-author span {
+          display: block;
+        }
+        .review-author strong {
+          color: #071f3a;
+          font-size: 17px;
+        }
+        .review-author span {
+          color: #647386;
+          font-size: 14px;
+          margin-top: 3px;
+          font-weight: 850;
+        }
+        .review-trust-card {
+          background: linear-gradient(135deg, #071f3a 0%, #123a67 100%);
+          color: #fff;
+          border-radius: 34px;
+          padding: 34px;
+          box-shadow: 0 24px 70px rgba(7,31,58,.18);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        .review-trust-card span {
+          display: inline-flex;
+          width: fit-content;
+          background: rgba(255,255,255,.12);
+          border: 1px solid rgba(255,255,255,.22);
+          border-radius: 999px;
+          padding: 8px 12px;
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: .07em;
+          font-weight: 900;
+          color: #fff;
+        }
+        .review-trust-card strong {
+          display: block;
+          font-size: 72px;
+          line-height: .95;
+          letter-spacing: -3px;
+          color: #fff;
+          margin-top: 18px;
+        }
+        .review-trust-card p {
+          color: #d7e3ef;
+          font-size: 17px;
+          line-height: 1.65;
+          margin: 0 0 22px;
+        }
+
         @media (max-width: 1160px) {
           .header-inner {
             grid-template-columns: auto auto;
@@ -950,7 +1077,7 @@ export default function HomeClient() {
           }
           .nav::-webkit-scrollbar { display: none; }
           .logo { width: 220px; }
-          .hero-grid, .comparison-intro, .two-col {
+          .hero-grid, .comparison-intro, .two-col, .review-highlight {
             grid-template-columns: 1fr;
           }
           .proposal-visual {
@@ -1029,9 +1156,22 @@ export default function HomeClient() {
           .form-card,
           .comparison-wrap,
           .premium-card,
-          .dark-card {
+          .dark-card,
+          .review-content,
+          .review-trust-card {
             border-radius: 26px;
             padding: 22px;
+          }
+          .review-highlight-section {
+            padding: 52px 0;
+          }
+          .review-content::before {
+            font-size: 96px;
+            right: 16px;
+            top: 8px;
+          }
+          .review-trust-card strong {
+            font-size: 56px;
           }
           .proposal-top {
             display: grid;
@@ -1281,6 +1421,49 @@ export default function HomeClient() {
               </div>
             )}
           </section>
+        </div>
+      </section>
+
+
+      <section className="review-highlight-section">
+        <div className="container">
+          <div className="review-highlight">
+            <div className="review-content">
+              <p className="eyebrow">Echte Google-review</p>
+              <div className="stars" aria-label="5 sterren">★★★★★</div>
+              <h2>“Precies de oplossing die ik zocht.”</h2>
+              <p className="review-text">
+                “Ik had bij meerdere partijen een voorstel aangevraagd, omdat ik vooral op zoek was naar een duidelijke
+                en snelle manier om mijn woning te verkopen zonder veel gedoe.
+              </p>
+              <p className="review-text">
+                Uiteindelijk heb ik gekozen voor Vastgoed Direct Nederland. Het contact was prettig en duidelijk.
+                Er werd goed uitgelegd hoe het proces zou verlopen en afspraken werden snel opgepakt.
+              </p>
+              <p className="review-text">
+                De woning is uiteindelijk binnen enkele weken verkocht. Voor mij was dit precies de oplossing die ik zocht
+                en ik kijk tevreden terug op het traject.”
+              </p>
+              <div className="review-author">
+                <div className="avatar">L</div>
+                <div>
+                  <strong>Laura vd Zalm</strong>
+                  <span>5,0 ★ Google-review</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="review-trust-card">
+              <span>Beoordeeld via Google</span>
+              <strong>5,0</strong>
+              <div className="stars small">★★★★★</div>
+              <p>
+                Een echte ervaring van een verkoper die koos voor duidelijkheid,
+                snelheid en een verkooptraject zonder veel gedoe.
+              </p>
+              <a href="#aanvraag" className="btn btn-orange">Ook mijn mogelijkheden bekijken</a>
+            </div>
+          </div>
         </div>
       </section>
 
