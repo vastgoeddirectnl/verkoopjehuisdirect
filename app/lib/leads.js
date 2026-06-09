@@ -1,6 +1,7 @@
 import { query, queryOne } from "./neonDb";
 import { sendApplicantConfirmation, sendLeadNotification } from "./mail";
 import { logMailEventSafe } from "./mailLog";
+import { refreshLeadAutomation } from "./automation";
 
 const TEXT_LIMITS = {
   naam: 160,
@@ -75,13 +76,15 @@ export async function createLead(input = {}) {
     ]
   );
 
+  const automatedLead = await refreshLeadAutomation(saved);
+
   const mail = {
     internal: { skipped: true },
     applicant: { skipped: true },
   };
 
   try {
-    mail.internal = await sendLeadNotification(saved || lead);
+    mail.internal = await sendLeadNotification(automatedLead || saved || lead);
     await logMailEventSafe({
       lead_id: saved?.id,
       type: "interne melding",
@@ -105,7 +108,7 @@ export async function createLead(input = {}) {
   }
 
   try {
-    mail.applicant = await sendApplicantConfirmation(saved || lead);
+    mail.applicant = await sendApplicantConfirmation(automatedLead || saved || lead);
     await logMailEventSafe({
       lead_id: saved?.id,
       type: "ontvangstbevestiging",
@@ -128,7 +131,7 @@ export async function createLead(input = {}) {
     });
   }
 
-  return { lead: saved, mail };
+  return { lead: automatedLead || saved, mail };
 }
 
 export async function listLeads({ status, search, limit = 300 } = {}) {

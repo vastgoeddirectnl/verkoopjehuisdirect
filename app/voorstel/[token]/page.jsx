@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
-import { query, queryOne } from "../../lib/neonDb";
+import { queryOne } from "../../lib/neonDb";
+import { markProposalViewed } from "../../lib/automation";
 import PrintButton from "./PrintButton";
 
 export const dynamic = "force-dynamic";
@@ -52,14 +53,7 @@ export default async function PublicProposalPage({ params }) {
 
   if (!proposal) notFound();
 
-  await query(
-    `update proposals
-     set public_viewed_at = now(),
-         public_view_count = coalesce(public_view_count, 0) + 1,
-         updated_at = now()
-     where id = $1`,
-    [proposal.id]
-  );
+  await markProposalViewed(proposal);
 
   const address = formatAddress(proposal);
   const offerAmount = amount(proposal.amount_text);

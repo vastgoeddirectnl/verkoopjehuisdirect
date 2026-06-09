@@ -4,10 +4,11 @@ import { query, queryOne } from "../../../lib/neonDb";
 import { listLeads } from "../../../lib/leads";
 import { sendResendMail } from "../../../lib/mail";
 import { logMailEventSafe } from "../../../lib/mailLog";
+import { markProposalSentAutomation, refreshLeadAutomation, refreshAllLeadAutomation } from "../../../lib/automation";
 
 export const runtime = "nodejs";
 
-const STATUSES = ["Nieuw", "Contact opgenomen", "In beoordeling", "Voorstel verzonden", "Akkoord", "Afgewezen"];
+const STATUSES = ["Nieuw", "Contact opgenomen", "In beoordeling", "Voorstel verzonden", "Voorstel bekeken", "Akkoord", "Afgewezen"];
 
 const PROPOSAL_FIELDS = [
   "proposal_variant",
@@ -185,6 +186,9 @@ export async function GET(request) {
             count(*) filter (where created_at >= now() - interval '30 days')::int as leads_30d,
             count(*) filter (where status = 'Nieuw')::int as new_leads,
             (select count(*)::int from tasks where status <> 'Afgerond') as open_tasks,
+            count(*) filter (where lead_priority = 'Hoog')::int as high_priority_leads,
+            count(*) filter (where next_follow_up_at is not null and next_follow_up_at <= current_date and status not in ('Akkoord','Afgewezen'))::int as followups_due,
+            count(*) filter (where status = 'Voorstel bekeken')::int as proposal_viewed_leads,
             (select count(*)::int from proposals) as total_proposals,
             (select count(*)::int from mail_logs where status = 'Verzonden') as sent_mails
           from leads
@@ -235,7 +239,7 @@ export async function POST(request) {
     const action = body.action;
 
     if (action === "updateLead") {
-      const allowed = ["status", "notitie", "last_contact_at", "naam", "email", "telefoon", "postcode", "huisnummer", "woningtype", "staat", "reden"];
+      const allowed = ["status", "notitie", "last_contact_at", "naam", "email", "telefoon", "postcode", "huisnummer", "woningtype", "staat", "reden", "next_follow_up_at"];
       const updates = [];
       const params = [];
 
@@ -259,7 +263,8 @@ export async function POST(request) {
       );
 
       if (!lead) return NextResponse.json({ error: "Lead niet gevonden." }, { status: 404 });
-      return NextResponse.json({ lead });
+      const automatedLead = await refreshLeadAutomation(lead);
+      return NextResponse.json({ lead: automatedLead || lead });
     }
 
     if (action === "createTask") {
@@ -463,13 +468,19 @@ export async function POST(request) {
 
         if (proposal.lead_id) {
           await query(
-            "update leads set status = 'Voorstel verzonden', updated_at = now() where id = $1 and status <> 'Akkoord'",
+            "update leads set status = 'Voorstel verzonden', next_follow_up_at = current_date + interval '2 days', updated_at = now() where id = $1 and status not in ('Akkoord','Afgewezen')",
             [proposal.lead_id]
           );
+          await markProposalSentAutomation(proposal);
         }
       }
 
       return NextResponse.json({ ok: true, skipped: Boolean(mailResult?.skipped), publicUrl, subject, mail: mailResult });
+    }
+
+    if (action === "runAutomation") {
+      const result = await refreshAllLeadAutomation(body.limit || 300);
+      return NextResponse.json({ ok: true, ...result });
     }
 
     return NextResponse.json({ error: "Onbekende actie." }, { status: 400 });

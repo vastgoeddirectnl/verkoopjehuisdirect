@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAdminAuthenticated } from "../../../lib/adminAuth";
 import { queryOne } from "../../../lib/neonDb";
+import { refreshLeadAutomation } from "../../../lib/automation";
 
 export const runtime = "nodejs";
 
@@ -69,7 +70,9 @@ export async function POST(request) {
       ]
     );
 
-    return NextResponse.json({ lead });
+    const automatedLead = await refreshLeadAutomation(lead);
+
+    return NextResponse.json({ lead: automatedLead || lead });
   } catch (error) {
     return NextResponse.json({ error: error.message || "Lead aanmaken mislukt." }, { status: 500 });
   }
