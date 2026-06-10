@@ -89,18 +89,32 @@ const comparisonRows = [
 ];
 
 const popularLinks = [
-  ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen"],
-  ["/opknapwoning-verkopen", "Opknapwoning verkopen"],
-  ["/huis-verkopen-met-achterstallig-onderhoud", "Achterstallig onderhoud"],
-  ["/huis-verkopen-groningen", "Huis verkopen in Groningen"],
-  ["/woning-verkopen-friesland", "Woning verkopen in Friesland"],
   ["/huis-direct-verkopen", "Huis direct verkopen"],
   ["/huis-snel-verkopen", "Huis snel verkopen"],
   ["/woning-verkopen-zonder-makelaar", "Zonder makelaar verkopen"],
   ["/huis-verkopen-zonder-bezichtigingen", "Zonder bezichtigingen"],
+  ["/huis-verkopen-zonder-funda", "Zonder Funda verkopen"],
+  ["/huis-verkopen-zonder-verkoopklaar-maken", "Zonder verkoopklaar maken"],
+  ["/woning-verkopen-met-schade", "Woning met schade verkopen"],
+  ["/huis-verkopen-met-spoed", "Huis verkopen met spoed"],
+  ["/huis-verkopen-na-overlijden", "Huis verkopen na overlijden"],
+  ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen"],
+  ["/opknapwoning-verkopen", "Opknapwoning verkopen"],
+  ["/huis-verkopen-met-achterstallig-onderhoud", "Achterstallig onderhoud"],
   ["/huis-verkopen-bij-erfenis", "Huis verkopen bij erfenis"],
   ["/huis-verkopen-bij-scheiding", "Huis verkopen bij scheiding"],
   ["/verhuurde-woning-verkopen", "Verhuurde woning verkopen"],
+  ["/huis-verkopen-groningen", "Huis verkopen in Groningen"],
+  ["/woning-verkopen-drenthe", "Woning verkopen in Drenthe"],
+  ["/woning-verkopen-friesland", "Woning verkopen in Friesland"],
+  ["/woning-verkopen-overijssel", "Woning verkopen in Overijssel"],
+  ["/huis-verkopen-stadskanaal", "Huis verkopen in Stadskanaal"],
+  ["/huis-verkopen-veendam", "Huis verkopen in Veendam"],
+  ["/huis-verkopen-winschoten", "Huis verkopen in Winschoten"],
+  ["/huis-verkopen-assen", "Huis verkopen in Assen"],
+  ["/huis-verkopen-emmen", "Huis verkopen in Emmen"],
+  ["/huis-verkopen-borger", "Huis verkopen in Borger"],
+  ["/huis-verkopen-gieten", "Huis verkopen in Gieten"],
 ];
 
 export default function HomeClient() {
@@ -1153,7 +1167,7 @@ export default function HomeClient() {
           .faq-item { display: block; }
           .faq-item h3 { margin-bottom: 7px; }
           .popular-grid {
-            max-height: 312px;
+            max-height: 390px;
             overflow: auto;
             padding-right: 2px;
           }
@@ -1521,7 +1535,7 @@ export default function HomeClient() {
 
           <aside className="popular-box">
             <p className="eyebrow">Verkoopinformatie</p>
-            <h3>Per situatie of regio</h3>
+            <h3>Per situatie, regio of plaats</h3>
             <div className="popular-grid">
               {popularLinks.map(([href, label]) => (
                 <a href={href} key={href}>✓ {label}</a>
@@ -1602,6 +1616,8 @@ export default function HomeClient() {
             <p><a href="/huis-snel-verkopen">Huis snel verkopen</a></p>
             <p><a href="/woning-verkopen-zonder-makelaar">Zonder makelaar verkopen</a></p>
             <p><a href="/huis-verkopen-zonder-bezichtigingen">Zonder bezichtigingen verkopen</a></p>
+            <p><a href="/huis-verkopen-zonder-funda">Zonder Funda verkopen</a></p>
+            <p><a href="/huis-verkopen-met-spoed">Met spoed verkopen</a></p>
           </div>
 
           <div>
@@ -1610,6 +1626,8 @@ export default function HomeClient() {
             <p><a href="/huis-verkopen-bij-erfenis">Huis verkopen bij erfenis</a></p>
             <p><a href="/verhuurde-woning-verkopen">Verhuurde woning verkopen</a></p>
             <p><a href="/leegstaand-huis-verkopen">Leegstaand huis verkopen</a></p>
+            <p><a href="/woning-verkopen-met-schade">Woning met schade verkopen</a></p>
+            <p><a href="/huis-verkopen-na-overlijden">Na overlijden verkopen</a></p>
           </div>
 
           <div>
@@ -1618,6 +1636,8 @@ export default function HomeClient() {
             <p><a href="/woning-verkopen-friesland">Friesland</a></p>
             <p><a href="/woning-verkopen-drenthe">Drenthe</a></p>
             <p><a href="/woning-verkopen-overijssel">Overijssel</a></p>
+            <p><a href="/huis-verkopen-stadskanaal">Stadskanaal</a></p>
+            <p><a href="/huis-verkopen-assen">Assen</a></p>
             <p><a href="/privacyverklaring">Privacyverklaring</a></p>
             <p>© 2026 Vastgoed Direct Nederland</p>
           </div>
