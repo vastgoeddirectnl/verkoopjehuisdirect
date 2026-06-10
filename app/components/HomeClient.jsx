@@ -268,7 +268,7 @@ export default function HomeClient() {
         }
         .hero-grid {
           display: grid;
-          grid-template-columns: minmax(0, 1.02fr) minmax(380px, .78fr);
+          grid-template-columns: minmax(0, 1.05fr) minmax(360px, .72fr);
           gap: 46px;
           align-items: center;
           padding: 52px 0 54px;
@@ -925,6 +925,126 @@ export default function HomeClient() {
           font-size: 14px;
         }
         .mobile-bottom-cta { display: none; }
+
+
+        @media (min-width: 1141px) and (max-height: 850px) {
+          .top-strip-inner {
+            min-height: 30px;
+            font-size: 12px;
+          }
+          .header-inner {
+            min-height: 64px;
+          }
+          .logo {
+            width: 205px;
+          }
+          .nav {
+            font-size: 13px;
+            gap: 16px;
+          }
+          .btn {
+            padding: 11px 16px;
+            font-size: 14px;
+          }
+          .hero-grid {
+            padding: 34px 0 36px;
+            gap: 34px;
+            align-items: center;
+          }
+          h1 {
+            font-size: clamp(38px, 4vw, 54px);
+            line-height: .98;
+          }
+          .hero-lead {
+            font-size: 17px;
+            line-height: 1.52;
+            margin-top: 16px;
+          }
+          .hero-cta-row {
+            margin-top: 20px;
+          }
+          .micro-note {
+            margin-top: 10px;
+          }
+          .trust-micro {
+            margin-top: 18px;
+            gap: 8px;
+          }
+          .trust-micro div {
+            padding: 10px 12px;
+            font-size: 13px;
+            border-radius: 14px;
+          }
+          .form-card {
+            padding: 20px;
+            border-radius: 26px;
+          }
+          .form-logo-wrap {
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+          }
+          .form-logo {
+            width: 175px;
+          }
+          .form-benefits {
+            margin-bottom: 10px;
+          }
+          .form-benefits span {
+            padding: 6px 8px;
+            font-size: 11px;
+          }
+          .form-title {
+            font-size: 24px;
+            margin-bottom: 6px;
+          }
+          .form-sub {
+            font-size: 14px;
+            line-height: 1.42;
+            margin-bottom: 10px;
+          }
+          .notice {
+            padding: 9px 11px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            border-radius: 13px;
+          }
+          .field {
+            min-height: 48px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            font-size: 15px;
+          }
+          .form-stack {
+            gap: 9px;
+          }
+          .form-receive {
+            margin-top: 12px;
+            padding-top: 12px;
+            gap: 6px;
+          }
+          .form-receive strong {
+            font-size: 13px;
+          }
+          .form-receive div {
+            padding: 8px 10px;
+            font-size: 12px;
+            border-radius: 12px;
+          }
+        }
+
+        @media (min-width: 1141px) and (max-height: 760px) {
+          .form-receive div:nth-of-type(3) {
+            display: none;
+          }
+          .hero-grid {
+            padding-top: 28px;
+            padding-bottom: 30px;
+          }
+          .badge {
+            margin-bottom: 14px;
+            padding: 8px 12px;
+          }
+        }
 
         @media (max-width: 1140px) {
           .header-inner { grid-template-columns: auto auto; }
