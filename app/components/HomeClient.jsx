@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { trackGoogleAdsConversion } from "../lib/googleAds";
 
 const whatsappLink =
   "https://wa.me/31612238051?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F";
@@ -166,6 +167,7 @@ export default function HomeClient() {
         throw new Error(result.error || "Aanvraag verzenden mislukt.");
       }
 
+      trackGoogleAdsConversion("lead");
       setSubmitted(true);
     } catch (error) {
       alert("Er ging iets mis. Probeer opnieuw of neem contact op via WhatsApp.");
@@ -1222,8 +1224,8 @@ export default function HomeClient() {
           </nav>
 
           <div className="header-actions">
-            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
-            <a href="tel:0612238051" className="btn btn-blue">Bel direct</a>
+            <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+            <a href="tel:0612238051" onClick={() => trackGoogleAdsConversion("call")} className="btn btn-blue">Bel direct</a>
             <a href="#aanvraag" className="btn btn-orange">Start aanvraag</a>
           </div>
         </div>
@@ -1241,7 +1243,7 @@ export default function HomeClient() {
 
             <div className="hero-cta-row">
               <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
+              <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
             </div>
 
             <p className="micro-note">🟢 Meestal snel reactie via WhatsApp · gratis en zonder verplichting</p>
@@ -1344,7 +1346,7 @@ export default function HomeClient() {
                 <div className="success-icon">✓</div>
                 <h2 className="form-title">Aanvraag ontvangen</h2>
                 <p className="form-sub">Wij nemen zo snel mogelijk persoonlijk contact met u op.</p>
-                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">Aanvullen via WhatsApp</a>
+                <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">Aanvullen via WhatsApp</a>
               </div>
             )}
 
@@ -1499,8 +1501,8 @@ export default function HomeClient() {
               Daarna bespreken we rustig wat mogelijk is.
             </p>
             <div className="contact-lines">
-              <a href="tel:0612238051">Bel direct: 06 12 23 80 51</a>
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer">WhatsApp: meestal snel reactie</a>
+              <a href="tel:0612238051" onClick={() => trackGoogleAdsConversion("call")}>Bel direct: 06 12 23 80 51</a>
+              <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer">WhatsApp: meestal snel reactie</a>
               <div>info@verkoopjehuisdirect.nl</div>
             </div>
           </div>
@@ -1589,8 +1591,8 @@ export default function HomeClient() {
           </p>
           <div className="cta-buttons">
             <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
-            <a href="tel:0612238051" className="btn btn-light">Bel direct</a>
-            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+            <a href="tel:0612238051" onClick={() => trackGoogleAdsConversion("call")} className="btn btn-light">Bel direct</a>
+            <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
           </div>
         </div>
       </section>
@@ -1607,7 +1609,7 @@ export default function HomeClient() {
             <h3>Contact</h3>
             <p>info@verkoopjehuisdirect.nl</p>
             <p>06 12 23 80 51</p>
-            <p><a href="tel:0612238051">Bel direct</a></p>
+            <p><a href="tel:0612238051" onClick={() => trackGoogleAdsConversion("call")}>Bel direct</a></p>
           </div>
 
           <div>
@@ -1644,11 +1646,11 @@ export default function HomeClient() {
         </div>
       </footer>
 
-      <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
+      <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
 
       <div className="mobile-bottom-cta">
         <a href="#aanvraag" className="btn btn-orange">Vrijblijvend voorstel</a>
-        <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+        <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
       </div>
     </main>
   );

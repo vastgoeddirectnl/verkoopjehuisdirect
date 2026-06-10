@@ -1,4 +1,5 @@
 import "./globals.css";
+import GoogleAdsTag from "./components/GoogleAdsTag";
 
 export const metadata = {
   metadataBase: new URL("https://www.verkoopjehuisdirect.nl"),
@@ -30,7 +31,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="nl">
-      <body>{children}</body>
+      <body>
+        <GoogleAdsTag />
+        {children}
+      </body>
     </html>
   );
 }
