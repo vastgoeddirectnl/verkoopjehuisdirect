@@ -89,6 +89,62 @@ const comparisonRows = [
   ["Privacy", "Meerdere partijen", "Discreter traject"],
 ];
 
+const whyDifferent = [
+  [
+    "Geen druk om te verkopen",
+    "U vraagt vrijblijvend informatie aan. Daarna beslist u zelf of deze verkooproute bij uw situatie past.",
+  ],
+  [
+    "Aandacht voor de situatie achter de woning",
+    "Niet iedere verkoop draait alleen om de woningwaarde. Soms spelen onderhoud, leegstand, verhuur, erfenis, scheiding, privacy of dubbele lasten mee.",
+  ],
+  [
+    "Een voorstel dat u echt kunt beoordelen",
+    "U krijgt niet alleen een bedrag, maar ook inzicht in voorwaarden, planning, overdracht en vervolgstappen.",
+  ],
+];
+
+const woningTypes = [
+  "Tussenwoning",
+  "Hoekwoning",
+  "Twee-onder-een-kapwoning",
+  "Vrijstaande woning",
+  "Appartement",
+  "Benedenwoning",
+  "Bovenwoning",
+  "Maisonette",
+  "Woonboerderij",
+  "Bungalow",
+  "Recreatiewoning",
+  "Chalet",
+  "Anders / weet ik niet zeker",
+];
+
+const verkoopSituaties = [
+  "Geen bijzonderheden",
+  "Achterstallig onderhoud",
+  "Leegstand",
+  "Verhuurde woning",
+  "Erfenis / nalatenschap",
+  "Scheiding",
+  "Dubbele lasten",
+  "Financiële druk",
+  "Geen zin in bezichtigingen",
+  "Behoefte aan privacy",
+  "Snel duidelijkheid gewenst",
+  "Anders",
+];
+
+const termijnen = [
+  "Zo snel mogelijk",
+  "Binnen 1 maand",
+  "Binnen 3 maanden",
+  "Binnen 6 maanden",
+  "Later dit jaar",
+  "Ik oriënteer mij alleen",
+  "Anders",
+];
+
 const popularLinks = [
   ["/huis-direct-verkopen", "Huis direct verkopen"],
   ["/huis-snel-verkopen", "Huis snel verkopen"],
@@ -125,15 +181,16 @@ export default function HomeClient() {
     postcode: "",
     huisnummer: "",
     woningtype: "",
-    staat: "",
-    reden: "",
+    situatie: "",
+    termijn: "",
+    toelichting: "",
     naam: "",
     email: "",
     telefoon: "",
   });
 
   const updateForm = (event) => setForm({ ...form, [event.target.name]: event.target.value });
-  const nextStep = () => setStep((current) => Math.min(current + 1, 4));
+  const nextStep = () => setStep((current) => Math.min(current + 1, 3));
   const previousStep = () => setStep((current) => Math.max(current - 1, 1));
 
   const submitLead = async (event) => {
@@ -148,8 +205,14 @@ export default function HomeClient() {
       postcode: form.postcode,
       huisnummer: form.huisnummer,
       woningtype: form.woningtype,
-      staat: form.staat,
-      reden: form.reden,
+      staat: form.situatie,
+      reden: [
+        form.termijn ? `Termijn: ${form.termijn}` : "",
+        form.toelichting ? `Toelichting: ${form.toelichting}` : "",
+      ].filter(Boolean).join(" | "),
+      situatie: form.situatie,
+      termijn: form.termijn,
+      toelichting: form.toelichting,
       pagina: window.location.pathname,
       bron: params.get("utm_source") || params.get("source") || document.referrer || "direct",
     };
@@ -404,6 +467,54 @@ export default function HomeClient() {
           color: #687789;
           line-height: 1.5;
         }
+        .form-part {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          margin: 0 0 10px;
+          color: #071f3a;
+          font-weight: 900;
+          font-size: 14px;
+        }
+        .form-part span {
+          width: 25px;
+          height: 25px;
+          border-radius: 10px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: #fff3e7;
+          color: #ff6a00;
+          border: 1px solid #ffd5b6;
+          font-size: 12px;
+        }
+        .field-label {
+          display: grid;
+          gap: 6px;
+          color: #24364a;
+          font-size: 13px;
+          font-weight: 900;
+        }
+        textarea.field {
+          min-height: 92px;
+          resize: vertical;
+          line-height: 1.45;
+        }
+        .form-assurance {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 7px;
+          margin-top: 10px;
+        }
+        .form-assurance span {
+          background: #f8f5ef;
+          border: 1px solid #eee8df;
+          border-radius: 999px;
+          padding: 7px 9px;
+          color: #24364a;
+          font-size: 12px;
+          font-weight: 900;
+        }
         .notice {
           background: #fff7ed;
           border: 1px solid #fed7aa;
@@ -582,6 +693,77 @@ export default function HomeClient() {
           font-size: 17px;
           line-height: 1.62;
           margin-bottom: 0;
+        }
+
+        .different-section {
+          background:
+            radial-gradient(circle at 10% 8%, rgba(255, 106, 0, .10), transparent 28%),
+            linear-gradient(180deg, #fffdf9 0%, #f5f2ec 100%);
+          border-top: 1px solid #eee8df;
+          border-bottom: 1px solid #eee8df;
+        }
+        .different-intro {
+          max-width: 820px;
+          margin: 0 auto 26px;
+          text-align: center;
+        }
+        .different-intro h2 {
+          margin-bottom: 14px;
+        }
+        .different-intro p {
+          margin: 0 auto;
+          color: #647386;
+          font-size: 17px;
+          line-height: 1.62;
+          max-width: 750px;
+        }
+        .different-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+        }
+        .different-card {
+          position: relative;
+          overflow: hidden;
+          background: rgba(255, 255, 255, .92);
+          border: 1px solid #e8e3db;
+          border-radius: 26px;
+          padding: 24px;
+          box-shadow: 0 18px 52px rgba(7, 31, 58, .08);
+          min-height: 205px;
+        }
+        .different-card:before {
+          content: "";
+          position: absolute;
+          inset: 0 auto auto 0;
+          width: 100%;
+          height: 4px;
+          background: linear-gradient(90deg, #ff6a00, rgba(255, 106, 0, .12));
+        }
+        .different-number {
+          width: 42px;
+          height: 42px;
+          border-radius: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #071f3a;
+          color: #fff;
+          font-weight: 900;
+          margin-bottom: 16px;
+        }
+        .different-card:nth-child(2) .different-number { background: #ff6a00; }
+        .different-card h3 {
+          margin: 0 0 10px;
+          color: #071f3a;
+          font-size: 22px;
+          line-height: 1.14;
+          letter-spacing: -.4px;
+        }
+        .different-card p {
+          margin: 0;
+          color: #647386;
+          line-height: 1.6;
         }
 
         .problem-grid {
@@ -1080,6 +1262,9 @@ export default function HomeClient() {
           .review-compact {
             grid-template-columns: 1fr;
           }
+          .different-grid {
+            grid-template-columns: 1fr;
+          }
           .trust-micro,
           .problem-grid,
           .steps {
@@ -1153,8 +1338,10 @@ export default function HomeClient() {
             border-radius: 24px;
             padding: 22px;
           }
-          .form-title { font-size: 28px; }
+          .form-title { font-size: 26px; }
+          .form-sub { font-size: 14px; }
           .form-actions { grid-template-columns: 1fr; }
+          .different-card { min-height: 0; padding: 21px; }
           .review-band { padding: 22px 0; }
           .review-score {
             border-radius: 22px;
@@ -1234,11 +1421,12 @@ export default function HomeClient() {
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <div className="badge">Discreet · vrijblijvend · persoonlijk verkoopvoorstel</div>
-            <h1>Uw woning verkopen zonder bezichtigingen of makelaarskosten?</h1>
+            <div className="badge">Geen standaard huizenopkoper · wel rustig duidelijkheid</div>
+            <h1>Uw woning verkopen zonder verkoopstress?</h1>
             <p className="hero-lead">
-              Ontvang een persoonlijk verkoopvoorstel zonder open huis, verkoopstress of onnodige onzekerheid.
-              Duidelijk, discreet en afgestemd op uw situatie.
+              Ontvang eerst rustig duidelijkheid over uw mogelijkheden. Geen open huis, geen verkoopdruk en geen
+              verplichting om door te gaan. Vastgoed Direct Nederland helpt woningeigenaren die een alternatief zoeken
+              voor het traditionele verkooptraject.
             </p>
 
             <div className="hero-cta-row">
@@ -1246,13 +1434,13 @@ export default function HomeClient() {
               <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
             </div>
 
-            <p className="micro-note">🟢 Meestal snel reactie via WhatsApp · gratis en zonder verplichting</p>
+            <p className="micro-note">Eerst duidelijkheid. Geen verkoopdruk. Geen open huis.</p>
 
             <div className="trust-micro" aria-label="Voordelen">
-              <div>✓ Gratis aanvraag</div>
-              <div>✓ Geen verplichting</div>
-              <div>✓ Discreet contact</div>
-              <div>✓ Eén aanspreekpunt</div>
+              <div>✓ Gratis en vrijblijvend</div>
+              <div>✓ Geen makelaarskosten</div>
+              <div>✓ Geen open huis nodig</div>
+              <div>✓ Persoonlijk contact, geen callcenter</div>
             </div>
           </div>
 
@@ -1264,63 +1452,56 @@ export default function HomeClient() {
             {!submitted ? (
               <form onSubmit={submitLead}>
                 <div className="form-benefits">
-                  <span>1 minuut</span>
-                  <span>Gratis</span>
+                  <span>Persoonlijk</span>
+                  <span>Discreet</span>
                   <span>Vrijblijvend</span>
                 </div>
 
-                <p className="step-label">Stap {step} van 4</p>
-                <h2 className="form-title">Ontvang een persoonlijk verkoopvoorstel</h2>
+                <p className="step-label">Stap {step} van 3</p>
+                <h2 className="form-title">Ontvang vrijblijvend duidelijkheid</h2>
                 <p className="form-sub">
-                  Vul uw gegevens in. Wij nemen persoonlijk contact op om uw situatie rustig te bespreken.
+                  Vertel kort om welke woning en situatie het gaat. Wij kijken persoonlijk met u mee en nemen
+                  contact op met een helder beeld van de mogelijkheden.
                 </p>
-                <div className="notice">Uw aanvraag is discreet, gratis en verplicht u tot niets.</div>
+                <div className="notice">Gratis en vrijblijvend. Geen verkoopdruk, geen verplichting.</div>
 
                 {step === 1 && (
                   <div className="form-stack">
+                    <div className="form-part"><span>1</span> Uw woning</div>
                     <input name="postcode" value={form.postcode} onChange={updateForm} placeholder="Postcode" className="field" required />
                     <input name="huisnummer" value={form.huisnummer} onChange={updateForm} placeholder="Huisnummer" className="field" required />
-                    <button type="button" onClick={nextStep} className="btn btn-blue">Bekijk mijn verkoopmogelijkheden</button>
+                    <select name="woningtype" value={form.woningtype} onChange={updateForm} className="field" required>
+                      <option value="">Type woning</option>
+                      {woningTypes.map((type) => (
+                        <option key={type}>{type}</option>
+                      ))}
+                    </select>
+                    <button type="button" onClick={nextStep} className="btn btn-blue">Volgende stap</button>
                   </div>
                 )}
 
                 {step === 2 && (
                   <div className="form-stack">
-                    <select name="woningtype" value={form.woningtype} onChange={updateForm} className="field" required>
-                      <option value="">Type woning</option>
-                      <option>Appartement</option>
-                      <option>Rijtjeshuis</option>
-                      <option>Twee-onder-een-kap</option>
-                      <option>Vrijstaande woning</option>
-                      <option>Beleggingspand</option>
-                      <option>Verhuurde woning</option>
+                    <div className="form-part"><span>2</span> Uw situatie</div>
+                    <select name="situatie" value={form.situatie} onChange={updateForm} className="field" required>
+                      <option value="">Situatie</option>
+                      {verkoopSituaties.map((situatie) => (
+                        <option key={situatie}>{situatie}</option>
+                      ))}
                     </select>
-                    <select name="staat" value={form.staat} onChange={updateForm} className="field" required>
-                      <option value="">Staat van de woning</option>
-                      <option>Goed onderhouden</option>
-                      <option>Normaal bewoond</option>
-                      <option>Renovatie nodig</option>
-                      <option>Slechte staat / schade</option>
+                    <select name="termijn" value={form.termijn} onChange={updateForm} className="field" required>
+                      <option value="">Gewenste termijn</option>
+                      {termijnen.map((termijn) => (
+                        <option key={termijn}>{termijn}</option>
+                      ))}
                     </select>
-                    <div className="form-actions">
-                      <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
-                      <button type="button" onClick={nextStep} className="btn btn-blue">Volgende stap</button>
-                    </div>
-                  </div>
-                )}
-
-                {step === 3 && (
-                  <div className="form-stack">
-                    <select name="reden" value={form.reden} onChange={updateForm} className="field" required>
-                      <option value="">Reden van verkoop</option>
-                      <option>Snel verkopen</option>
-                      <option>Erfenis</option>
-                      <option>Scheiding</option>
-                      <option>Financiële situatie</option>
-                      <option>Verhuurde woning verkopen</option>
-                      <option>Leegstand</option>
-                      <option>Anders</option>
-                    </select>
+                    <textarea
+                      name="toelichting"
+                      value={form.toelichting}
+                      onChange={updateForm}
+                      placeholder="Korte toelichting (optioneel)"
+                      className="field"
+                    />
                     <div className="form-actions">
                       <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
                       <button type="button" onClick={nextStep} className="btn btn-blue">Naar contactgegevens</button>
@@ -1328,16 +1509,22 @@ export default function HomeClient() {
                   </div>
                 )}
 
-                {step === 4 && (
+                {step === 3 && (
                   <div className="form-stack">
+                    <div className="form-part"><span>3</span> Contactgegevens</div>
                     <input name="naam" value={form.naam} onChange={updateForm} placeholder="Naam" className="field" required />
-                    <input name="email" value={form.email} onChange={updateForm} placeholder="E-mail" type="email" className="field" required />
                     <input name="telefoon" value={form.telefoon} onChange={updateForm} placeholder="Telefoonnummer" className="field" required />
+                    <input name="email" value={form.email} onChange={updateForm} placeholder="E-mailadres" type="email" className="field" required />
                     <div className="form-actions">
                       <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
-                      <button type="submit" className="btn btn-orange">Aanvraag versturen</button>
+                      <button type="submit" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</button>
                     </div>
-                    <p className="small-note">Wij gebruiken uw gegevens alleen om contact op te nemen over uw aanvraag.</p>
+                    <p className="small-note">Wij gebruiken uw gegevens alleen om persoonlijk contact op te nemen over uw aanvraag.</p>
+                    <div className="form-assurance">
+                      <span>Persoonlijk contact</span>
+                      <span>Geen callcenter</span>
+                      <span>Discreet behandeld</span>
+                    </div>
                   </div>
                 )}
               </form>
@@ -1352,9 +1539,9 @@ export default function HomeClient() {
 
             <div className="form-receive">
               <strong>Wat u ontvangt:</strong>
-              <div><span>✓</span> Een persoonlijk verkoopvoorstel</div>
-              <div><span>✓</span> Duidelijke voorwaarden en vervolgstappen</div>
-              <div><span>✓</span> Mogelijke overdrachtsdatum in overleg</div>
+              <div><span>✓</span> Rustig duidelijkheid over uw mogelijkheden</div>
+              <div><span>✓</span> Heldere voorwaarden en vervolgstappen</div>
+              <div><span>✓</span> Persoonlijk contact zonder verkoopdruk</div>
             </div>
           </section>
         </div>
@@ -1388,14 +1575,37 @@ export default function HomeClient() {
         </div>
       </section>
 
+      <section className="section different-section">
+        <div className="container">
+          <div className="different-intro">
+            <p className="eyebrow">Onderscheidend en persoonlijk</p>
+            <h2>Waarom Vastgoed Direct Nederland anders werkt</h2>
+            <p>
+              Veel partijen beloven vooral snelheid. Wij vinden duidelijkheid belangrijker. Daarom ontvangt u geen
+              standaardverhaal, maar eerst een rustig en persoonlijk beeld van uw mogelijkheden.
+            </p>
+          </div>
+
+          <div className="different-grid">
+            {whyDifferent.map(([title, text], index) => (
+              <article className="different-card" key={title}>
+                <div className="different-number">0{index + 1}</div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section id="wanneer" className="section section-white">
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">Wanneer past dit bij u?</p>
-            <h2>Voor verkopers die vooral rust en duidelijkheid willen.</h2>
+            <h2>Voor verkopers die eerst overzicht willen.</h2>
             <p>
               Een traditioneel verkooptraject is niet altijd de beste route. Zeker niet als privacy,
-              snelheid, onderhoud of persoonlijke omstandigheden meespelen.
+              onderhoud, leegstand of persoonlijke omstandigheden meespelen.
             </p>
           </div>
 
@@ -1587,7 +1797,7 @@ export default function HomeClient() {
         <div className="container">
           <h2>Wilt u weten wat er mogelijk is voor uw woning?</h2>
           <p>
-            Vraag gratis een persoonlijk verkoopvoorstel aan. Discreet, vrijblijvend en zonder traditioneel verkooptraject.
+            Vraag gratis en vrijblijvend duidelijkheid aan. Persoonlijk, discreet en zonder verkoopdruk.
           </p>
           <div className="cta-buttons">
             <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
@@ -1602,7 +1812,7 @@ export default function HomeClient() {
           <div>
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="footer-logo" />
             <p>Verkoopjehuisdirect.nl is de website van Vastgoed Direct Nederland.</p>
-            <p>Voor woningeigenaren die snel duidelijkheid willen.</p>
+            <p>Voor woningeigenaren die rustig duidelijkheid willen zonder verkoopdruk.</p>
           </div>
 
           <div>
