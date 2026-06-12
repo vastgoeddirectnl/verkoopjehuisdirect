@@ -8,6 +8,7 @@ const routes = [
   ["/huis-verkopen-binnen-24-uur", 0.85],
   ["/huis-verkopen-binnen-1-week", 0.84],
   ["/huis-verkopen-zonder-bezichtigingen", 0.82],
+  ["/woning-verkopen-zonder-open-huis", 0.82],
   ["/huis-verkopen-bij-scheiding", 0.82],
   ["/huis-verkopen-aan-opkoper", 0.82],
   ["/huis-verkopen-bij-erfenis", 0.82],
