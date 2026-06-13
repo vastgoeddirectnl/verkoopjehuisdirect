@@ -188,6 +188,14 @@ export default function HomeClient() {
     email: "",
     telefoon: "",
   });
+  const [showMobileSticky, setShowMobileSticky] = useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => setShowMobileSticky(window.scrollY > 720);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const updateForm = (event) => setForm({ ...form, [event.target.name]: event.target.value });
   const nextStep = () => {
@@ -1415,14 +1423,12 @@ export default function HomeClient() {
             font-size: 13px;
           }
           .hero-grid {
-            padding: 24px 0 26px;
-            gap: 18px;
+            padding: 22px 0 24px;
+            gap: 16px;
             align-items: start;
           }
           .badge {
-            font-size: 11px;
-            padding: 8px 11px;
-            margin-bottom: 12px;
+            display: none;
           }
           h1 {
             font-size: clamp(31px, 9.2vw, 38px);
@@ -1438,24 +1444,25 @@ export default function HomeClient() {
             margin-top: 10px;
           }
           .hero-cta-row {
-            margin-top: 14px;
+            margin-top: 13px;
             gap: 6px;
           }
           .hero-cta-row .btn-light {
             display: none;
           }
           .micro-note {
-            margin-top: 9px;
-            font-size: 12px;
-          }
-          .mobile-proof-line {
             display: none;
           }
+          .mobile-proof-line {
+            display: block;
+            margin-top: 10px;
+            color: #526274;
+            font-size: 12px;
+            line-height: 1.35;
+            font-weight: 850;
+          }
           .trust-micro {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px 12px;
-            margin-top: 13px;
+            display: none;
           }
           .trust-micro div {
             background: transparent;
@@ -1488,9 +1495,10 @@ export default function HomeClient() {
             font-size: 11px;
           }
           .form-title {
-            font-size: 22px;
-            letter-spacing: -.45px;
+            font-size: 21px;
+            letter-spacing: -.4px;
             margin: 5px 0 5px;
+            line-height: 1.12;
           }
           .form-sub-desktop { display: none; }
           .form-sub-mobile {
@@ -1562,22 +1570,16 @@ export default function HomeClient() {
           .section-tight { padding: 36px 0; }
           .mobile-bottom-cta {
             display: flex;
-            grid-template-columns: none;
-            left: 14px;
-            right: 14px;
-            bottom: 10px;
+            left: 18px;
+            right: 18px;
+            bottom: 12px;
             padding: 6px;
             border-radius: 18px;
           }
           .mobile-bottom-cta a {
+            width: 100%;
             min-height: 44px;
             font-size: 14px;
-          }
-          .mobile-bottom-cta a:first-child {
-            width: 100%;
-          }
-          .mobile-bottom-cta a:nth-child(2) {
-            display: none;
           }
         }
       `}</style>
@@ -1624,7 +1626,7 @@ export default function HomeClient() {
               voor het traditionele verkooptraject.
             </p>
             <p className="hero-lead hero-lead-mobile">
-              Ontvang vrijblijvend duidelijkheid. Geen open huis, geen verkoopdruk en geen verplichting.
+              Vraag rustig een persoonlijk verkoopbeeld aan. Geen open huis, geen verkoopdruk en geen verplichting.
             </p>
 
             <div className="hero-cta-row">
@@ -1633,7 +1635,7 @@ export default function HomeClient() {
             </div>
 
             <p className="micro-note">Eerst duidelijkheid. Geen verkoopdruk. Geen open huis.</p>
-            <div className="mobile-proof-line">Binnen 1 minuut aangevraagd · gratis en vrijblijvend</div>
+            <div className="mobile-proof-line">Persoonlijk contact · Discreet behandeld · Vrijblijvend</div>
 
             <div className="trust-micro" aria-label="Voordelen">
               <div>✓ Gratis en vrijblijvend</div>
@@ -1658,13 +1660,13 @@ export default function HomeClient() {
                 <div className="mobile-form-kicker">Binnen 1 minuut aangevraagd</div>
 
                 <p className="step-label">Stap {step} van 3</p>
-                <h2 className="form-title">Ontvang vrijblijvend duidelijkheid</h2>
+                <h2 className="form-title">Vertel kort om welke woning het gaat</h2>
                 <p className="form-sub form-sub-desktop">
-                  Vertel kort om welke woning en situatie het gaat. Wij kijken persoonlijk met u mee en nemen
-                  contact op met een helder beeld van de mogelijkheden.
+                  Postcode, type woning en uw situatie zijn genoeg voor een eerste contact. Wij nemen persoonlijk
+                  contact met u op.
                 </p>
                 <p className="form-sub form-sub-mobile">
-                  Kort doorgeven is genoeg. Wij nemen persoonlijk contact op.
+                  Postcode, type woning en uw situatie zijn genoeg voor het eerste contact.
                 </p>
                 <div className="notice">Gratis en vrijblijvend. Geen verkoopdruk, geen verplichting.</div>
 
@@ -2061,10 +2063,11 @@ export default function HomeClient() {
 
       <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
 
-      <div className="mobile-bottom-cta">
-        <a href="#aanvraag" className="btn btn-orange">Gratis voorstel aanvragen</a>
-        <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
-      </div>
+      {showMobileSticky && (
+        <div className="mobile-bottom-cta">
+          <a href="#aanvraag" className="btn btn-orange">Gratis voorstel aanvragen</a>
+        </div>
+      )}
     </main>
   );
 }
