@@ -190,7 +190,17 @@ export default function HomeClient() {
   });
 
   const updateForm = (event) => setForm({ ...form, [event.target.name]: event.target.value });
-  const nextStep = () => setStep((current) => Math.min(current + 1, 3));
+  const nextStep = () => {
+    if (step === 1 && (!form.postcode || !form.huisnummer || !form.woningtype)) {
+      alert("Vul postcode, huisnummer en type woning in om door te gaan.");
+      return;
+    }
+    if (step === 2 && !form.situatie) {
+      alert("Kies kort welke situatie het beste past. De gewenste termijn en toelichting zijn optioneel.");
+      return;
+    }
+    setStep((current) => Math.min(current + 1, 3));
+  };
   const previousStep = () => setStep((current) => Math.max(current - 1, 1));
 
   const submitLead = async (event) => {
@@ -380,6 +390,8 @@ export default function HomeClient() {
           max-width: 660px;
           margin: 20px 0 0;
         }
+        .hero-lead-mobile { display: none; }
+        .mobile-proof-line { display: none; }
         .hero-cta-row {
           display: flex;
           gap: 11px;
@@ -417,6 +429,7 @@ export default function HomeClient() {
           border-radius: 30px;
           padding: 26px;
           box-shadow: 0 26px 80px rgba(7, 31, 58, .15);
+          scroll-margin-top: 92px;
         }
         .form-logo-wrap {
           display: flex;
@@ -447,6 +460,8 @@ export default function HomeClient() {
           font-size: 12px;
           font-weight: 900;
         }
+        .mobile-form-kicker { display: none; }
+        .form-sub-mobile { display: none; }
         .step-label {
           margin: 0;
           color: #ff6a00;
@@ -1384,6 +1399,184 @@ export default function HomeClient() {
           }
           .final-cta { padding-bottom: 112px; }
           .footer { padding-bottom: 108px; }
+
+          /* Mobile-first conversie-optimalisatie */
+          .header {
+            position: sticky;
+            top: 0;
+          }
+          .header-inner {
+            padding: 10px 0;
+          }
+          .logo { width: 172px; }
+          .nav { display: none; }
+          .header-actions .btn-orange {
+            padding: 11px 13px;
+            font-size: 13px;
+          }
+          .hero-grid {
+            padding: 24px 0 26px;
+            gap: 18px;
+            align-items: start;
+          }
+          .badge {
+            font-size: 11px;
+            padding: 8px 11px;
+            margin-bottom: 12px;
+          }
+          h1 {
+            font-size: clamp(34px, 10.2vw, 43px);
+            line-height: 1.01;
+            letter-spacing: -1.15px;
+          }
+          .hero-lead-desktop { display: none; }
+          .hero-lead-mobile {
+            display: block;
+            font-size: 16px;
+            line-height: 1.48;
+            margin-top: 12px;
+          }
+          .hero-cta-row {
+            margin-top: 16px;
+            gap: 8px;
+          }
+          .micro-note {
+            margin-top: 9px;
+            font-size: 12px;
+          }
+          .mobile-proof-line {
+            display: block;
+            margin: 10px 0 0;
+            color: #8c3a00;
+            background: #fff7ef;
+            border: 1px solid #ffd5b6;
+            border-radius: 15px;
+            padding: 9px 11px;
+            font-size: 13px;
+            font-weight: 900;
+            text-align: center;
+          }
+          .trust-micro {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 14px;
+          }
+          .trust-micro div {
+            padding: 10px 9px;
+            border-radius: 14px;
+            font-size: 12px;
+            line-height: 1.25;
+          }
+          .form-card {
+            padding: 17px;
+            border-radius: 22px;
+            box-shadow: 0 18px 48px rgba(7,31,58,.14);
+            scroll-margin-top: 14px;
+          }
+          .form-logo-wrap { display: none; }
+          .form-benefits {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-bottom: 10px;
+          }
+          .form-benefits span {
+            padding: 7px 5px;
+            font-size: 11px;
+          }
+          .mobile-form-kicker {
+            display: block;
+            margin: 0 0 9px;
+            color: #071f3a;
+            background: #f8f5ef;
+            border: 1px solid #eee8df;
+            border-radius: 15px;
+            padding: 9px 11px;
+            font-size: 13px;
+            font-weight: 900;
+            text-align: center;
+          }
+          .step-label {
+            font-size: 11px;
+          }
+          .form-title {
+            font-size: 24px;
+            letter-spacing: -.7px;
+            margin: 5px 0 5px;
+          }
+          .form-sub-desktop { display: none; }
+          .form-sub-mobile {
+            display: block;
+            margin-bottom: 10px;
+          }
+          .notice {
+            padding: 9px 11px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            border-radius: 14px;
+          }
+          .form-part {
+            margin-bottom: 8px;
+            font-size: 13px;
+          }
+          .form-stack { gap: 9px; }
+          .field {
+            min-height: 49px;
+            padding: 12px 13px;
+            border-radius: 14px;
+            font-size: 16px;
+          }
+          textarea.field { min-height: 78px; }
+          .form-receive { display: none; }
+          .review-band {
+            padding: 14px 0;
+          }
+          .review-compact {
+            gap: 10px;
+          }
+          .review-score {
+            border-radius: 18px;
+            padding: 12px 14px;
+            gap: 11px;
+          }
+          .review-score strong {
+            font-size: 31px;
+          }
+          .stars {
+            font-size: 13px;
+          }
+          .review-quote h2 {
+            font-size: 22px;
+            margin-bottom: 0;
+          }
+          .review-quote p { display: none; }
+          .review-author {
+            gap: 8px;
+          }
+          .avatar {
+            width: 36px;
+            height: 36px;
+            font-size: 17px;
+          }
+          .different-section {
+            border-top: 0;
+          }
+          .different-intro p,
+          .section-head p {
+            font-size: 15px;
+            line-height: 1.5;
+          }
+          .different-card,
+          .problem-card,
+          .step-card,
+          .example-card {
+            padding: 18px;
+            border-radius: 20px;
+          }
+          .section { padding: 40px 0; }
+          .section-tight { padding: 36px 0; }
+          .mobile-bottom-cta {
+            grid-template-columns: 1.35fr .65fr;
+          }
         }
       `}</style>
 
@@ -1423,10 +1616,13 @@ export default function HomeClient() {
           <div>
             <div className="badge">Geen standaard huizenopkoper · wel rustig duidelijkheid</div>
             <h1>Uw woning verkopen zonder verkoopstress?</h1>
-            <p className="hero-lead">
+            <p className="hero-lead hero-lead-desktop">
               Ontvang eerst rustig duidelijkheid over uw mogelijkheden. Geen open huis, geen verkoopdruk en geen
               verplichting om door te gaan. Vastgoed Direct Nederland helpt woningeigenaren die een alternatief zoeken
               voor het traditionele verkooptraject.
+            </p>
+            <p className="hero-lead hero-lead-mobile">
+              Ontvang vrijblijvend duidelijkheid. Geen open huis, geen verkoopdruk en geen verplichting.
             </p>
 
             <div className="hero-cta-row">
@@ -1435,6 +1631,7 @@ export default function HomeClient() {
             </div>
 
             <p className="micro-note">Eerst duidelijkheid. Geen verkoopdruk. Geen open huis.</p>
+            <div className="mobile-proof-line">Binnen 1 minuut aangevraagd · gratis en vrijblijvend</div>
 
             <div className="trust-micro" aria-label="Voordelen">
               <div>✓ Gratis en vrijblijvend</div>
@@ -1456,12 +1653,16 @@ export default function HomeClient() {
                   <span>Discreet</span>
                   <span>Vrijblijvend</span>
                 </div>
+                <div className="mobile-form-kicker">Binnen 1 minuut aangevraagd</div>
 
                 <p className="step-label">Stap {step} van 3</p>
                 <h2 className="form-title">Ontvang vrijblijvend duidelijkheid</h2>
-                <p className="form-sub">
+                <p className="form-sub form-sub-desktop">
                   Vertel kort om welke woning en situatie het gaat. Wij kijken persoonlijk met u mee en nemen
                   contact op met een helder beeld van de mogelijkheden.
+                </p>
+                <p className="form-sub form-sub-mobile">
+                  Kort doorgeven is genoeg. Wij nemen persoonlijk contact op.
                 </p>
                 <div className="notice">Gratis en vrijblijvend. Geen verkoopdruk, geen verplichting.</div>
 
@@ -1489,8 +1690,8 @@ export default function HomeClient() {
                         <option key={situatie}>{situatie}</option>
                       ))}
                     </select>
-                    <select name="termijn" value={form.termijn} onChange={updateForm} className="field" required>
-                      <option value="">Gewenste termijn</option>
+                    <select name="termijn" value={form.termijn} onChange={updateForm} className="field">
+                      <option value="">Gewenste termijn (optioneel)</option>
                       {termijnen.map((termijn) => (
                         <option key={termijn}>{termijn}</option>
                       ))}
@@ -1504,7 +1705,7 @@ export default function HomeClient() {
                     />
                     <div className="form-actions">
                       <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
-                      <button type="button" onClick={nextStep} className="btn btn-blue">Naar contactgegevens</button>
+                      <button type="button" onClick={nextStep} className="btn btn-blue">Naar laatste stap</button>
                     </div>
                   </div>
                 )}
@@ -1859,7 +2060,7 @@ export default function HomeClient() {
       <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
 
       <div className="mobile-bottom-cta">
-        <a href="#aanvraag" className="btn btn-orange">Vrijblijvend voorstel</a>
+        <a href="#aanvraag" className="btn btn-orange">Gratis voorstel aanvragen</a>
         <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
       </div>
     </main>
