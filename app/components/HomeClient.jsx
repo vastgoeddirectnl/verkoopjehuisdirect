@@ -1400,7 +1400,7 @@ export default function HomeClient() {
           .final-cta { padding-bottom: 112px; }
           .footer { padding-bottom: 108px; }
 
-          /* Mobile-first conversie-optimalisatie */
+          /* Rustige mobile-first conversie-optimalisatie */
           .header {
             position: sticky;
             top: 0;
@@ -1425,82 +1425,71 @@ export default function HomeClient() {
             margin-bottom: 12px;
           }
           h1 {
-            font-size: clamp(34px, 10.2vw, 43px);
-            line-height: 1.01;
-            letter-spacing: -1.15px;
+            font-size: clamp(31px, 9.2vw, 38px);
+            line-height: 1.06;
+            letter-spacing: -.9px;
+            max-width: 620px;
           }
           .hero-lead-desktop { display: none; }
           .hero-lead-mobile {
             display: block;
-            font-size: 16px;
-            line-height: 1.48;
-            margin-top: 12px;
+            font-size: 15px;
+            line-height: 1.45;
+            margin-top: 10px;
           }
           .hero-cta-row {
-            margin-top: 16px;
-            gap: 8px;
+            margin-top: 14px;
+            gap: 6px;
+          }
+          .hero-cta-row .btn-light {
+            display: none;
           }
           .micro-note {
             margin-top: 9px;
             font-size: 12px;
           }
           .mobile-proof-line {
-            display: block;
-            margin: 10px 0 0;
-            color: #8c3a00;
-            background: #fff7ef;
-            border: 1px solid #ffd5b6;
-            border-radius: 15px;
-            padding: 9px 11px;
-            font-size: 13px;
-            font-weight: 900;
-            text-align: center;
+            display: none;
           }
           .trust-micro {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+            margin-top: 13px;
           }
           .trust-micro div {
-            padding: 10px 9px;
-            border-radius: 14px;
+            background: transparent;
+            border: 0;
+            box-shadow: none;
+            padding: 0;
+            border-radius: 0;
             font-size: 12px;
             line-height: 1.25;
+            color: #24364a;
           }
           .form-card {
             padding: 17px;
             border-radius: 22px;
-            box-shadow: 0 18px 48px rgba(7,31,58,.14);
+            box-shadow: 0 18px 42px rgba(7,31,58,.12);
             scroll-margin-top: 14px;
           }
           .form-logo-wrap { display: none; }
           .form-benefits {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin-bottom: 10px;
+            display: none;
           }
           .form-benefits span {
             padding: 7px 5px;
             font-size: 11px;
           }
           .mobile-form-kicker {
-            display: block;
-            margin: 0 0 9px;
-            color: #071f3a;
-            background: #f8f5ef;
-            border: 1px solid #eee8df;
-            border-radius: 15px;
-            padding: 9px 11px;
-            font-size: 13px;
-            font-weight: 900;
-            text-align: center;
+            display: none;
           }
           .step-label {
             font-size: 11px;
           }
           .form-title {
-            font-size: 24px;
-            letter-spacing: -.7px;
+            font-size: 22px;
+            letter-spacing: -.45px;
             margin: 5px 0 5px;
           }
           .form-sub-desktop { display: none; }
@@ -1509,10 +1498,7 @@ export default function HomeClient() {
             margin-bottom: 10px;
           }
           .notice {
-            padding: 9px 11px;
-            margin-bottom: 10px;
-            font-size: 13px;
-            border-radius: 14px;
+            display: none;
           }
           .form-part {
             margin-bottom: 8px;
@@ -1575,7 +1561,23 @@ export default function HomeClient() {
           .section { padding: 40px 0; }
           .section-tight { padding: 36px 0; }
           .mobile-bottom-cta {
-            grid-template-columns: 1.35fr .65fr;
+            display: flex;
+            grid-template-columns: none;
+            left: 14px;
+            right: 14px;
+            bottom: 10px;
+            padding: 6px;
+            border-radius: 18px;
+          }
+          .mobile-bottom-cta a {
+            min-height: 44px;
+            font-size: 14px;
+          }
+          .mobile-bottom-cta a:first-child {
+            width: 100%;
+          }
+          .mobile-bottom-cta a:nth-child(2) {
+            display: none;
           }
         }
       `}</style>
