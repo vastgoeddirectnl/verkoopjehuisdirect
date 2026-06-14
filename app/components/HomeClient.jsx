@@ -16,7 +16,7 @@ const localBusinessSchema = {
   telephone: "+31612238051",
   email: "info@verkoopjehuisdirect.nl",
   description:
-    "Vastgoed Direct Nederland helpt woningeigenaren die hun woning snel, duidelijk en zonder verkoopstress willen verkopen. Wij bieden een directe verkoopoplossing voor woningen in uiteenlopende situaties.",
+    "Vastgoed Direct Nederland helpt woningeigenaren die hun woning zonder gedoe willen verkopen. Ook als de woning onderhoud nodig heeft, nog vol spullen staat of niet verkoopklaar is.",
   areaServed: ["Groningen", "Drenthe", "Friesland", "Overijssel", "Nederland"],
   priceRange: "Vrijblijvend verkoopvoorstel",
   contactPoint: {
@@ -45,7 +45,7 @@ const faqSchema = {
       name: "Moet mijn woning verkoopklaar zijn?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Nee, ook woningen met achterstallig onderhoud, schade, leegstand of renovatiebehoefte kunnen worden aangemeld.",
+        text: "Nee, de woning hoeft niet verkoopklaar te zijn. Ook woningen met onderhoud, schade of een woning die nog vol spullen staat kunnen worden aangemeld.",
       },
     },
     {
@@ -68,39 +68,39 @@ const faqSchema = {
 };
 
 const situations = [
+  ["Niet eerst opknappen", "Ook als de woning onderhoud nodig heeft of niet verkoopklaar is."],
+  ["Niet eerst leeghalen", "Staat de woning nog vol spullen? Dan kunt u toch vrijblijvend informeren."],
   ["Geen bezichtigingen", "Prettig bij privacy, verhuur of als u geen onbekenden over de vloer wilt."],
-  ["Onderhoud of opknapwerk", "Niet altijd nodig om de woning eerst verkoopklaar te maken."],
-  ["Snel duidelijkheid", "Een concreet voorstel met bedrag, voorwaarden en planning."],
-  ["Erfenis, scheiding of leegstand", "Rust en overzicht zonder onnodige verkoopdruk."],
+  ["Erfenis, scheiding of leegstand", "Rust en overzicht zonder onnodige stappen vooraf."],
 ];
 
 const processSteps = [
-  ["01", "Aanvraag", "U vult de belangrijkste gegevens in."],
-  ["02", "Contact", "Wij bespreken uw situatie persoonlijk."],
-  ["03", "Voorstel", "U ontvangt een helder voorstel."],
-  ["04", "Notaris", "Bij akkoord wordt alles vastgelegd."],
+  ["01", "Aanvraag", "U vult kort uw adres en situatie in."],
+  ["02", "Contact", "Wij nemen persoonlijk contact met u op."],
+  ["03", "Voorstel", "U hoort wat er mogelijk is."],
+  ["04", "Notaris", "Bij akkoord wordt alles netjes vastgelegd."],
 ];
 
 const comparisonRows = [
-  ["Woning verkoopklaar maken", "Vaak gewenst", "Niet altijd nodig"],
+  ["Woning verkoopklaar maken", "Vaak gewenst", "Niet eerst nodig"],
+  ["Woning leeghalen", "Vaak zelf regelen", "Niet eerst nodig"],
   ["Bezichtigingen / open huis", "Meerdere momenten", "Geen open huis nodig"],
   ["Makelaarskosten", "Gebruikelijk", "Geen makelaarskosten"],
-  ["Doorlooptijd", "Onzekerder", "Snel duidelijkheid"],
-  ["Privacy", "Meerdere partijen", "Discreter traject"],
+  ["Privacy", "Meerdere partijen", "Discreter contact"],
 ];
 
 const whyDifferent = [
   [
-    "Geen druk om te verkopen",
-    "U vraagt vrijblijvend informatie aan. Daarna beslist u zelf of deze verkooproute bij uw situatie past.",
+    "Niet eerst opknappen of leeghalen",
+    "De woning hoeft niet verkoopklaar te zijn. Ook als er onderhoud nodig is of de woning nog vol spullen staat, kunt u vrijblijvend informeren.",
   ],
   [
-    "Aandacht voor de situatie achter de woning",
-    "Niet iedere verkoop draait alleen om de woningwaarde. Soms spelen onderhoud, leegstand, verhuur, erfenis, scheiding, privacy of dubbele lasten mee.",
+    "Eerst gewoon duidelijkheid",
+    "U hoort rustig wat er mogelijk is. Daarna beslist u zelf of u verder wilt. Zonder druk en zonder verplichting.",
   ],
   [
-    "Een voorstel dat u echt kunt beoordelen",
-    "U krijgt niet alleen een bedrag, maar ook inzicht in voorwaarden, planning, overdracht en vervolgstappen.",
+    "Persoonlijk contact",
+    "Geen standaardreactie of callcenter. We kijken naar uw woning, de situatie en wat voor u praktisch haalbaar is.",
   ],
 ];
 
@@ -131,6 +131,9 @@ const verkoopSituaties = [
   "Financiële druk",
   "Geen zin in bezichtigingen",
   "Behoefte aan privacy",
+  "Woning staat nog vol spullen",
+  "Woning is niet verkoopklaar",
+  "Woning moet nog leeggehaald worden",
   "Snel duidelijkheid gewenst",
   "Anders",
 ];
@@ -1618,15 +1621,14 @@ export default function HomeClient() {
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <div className="badge">Geen standaard huizenopkoper · wel rustig duidelijkheid</div>
-            <h1>Uw woning verkopen zonder verkoopstress?</h1>
+            <div className="badge">Ook als de woning nog niet verkoopklaar is</div>
+            <h1>Uw woning verkopen zonder gedoe?</h1>
             <p className="hero-lead hero-lead-desktop">
-              Ontvang eerst rustig duidelijkheid over uw mogelijkheden. Geen open huis, geen verkoopdruk en geen
-              verplichting om door te gaan. Vastgoed Direct Nederland helpt woningeigenaren die een alternatief zoeken
-              voor het traditionele verkooptraject.
+              Wilt u weten wat er mogelijk is met uw woning? Vraag vrijblijvend een voorstel aan. Ook als de woning
+              onderhoud nodig heeft, nog vol spullen staat of niet verkoopklaar is.
             </p>
             <p className="hero-lead hero-lead-mobile">
-              Vraag rustig een persoonlijk verkoopbeeld aan. Geen open huis, geen verkoopdruk en geen verplichting.
+              Vraag vrijblijvend een voorstel aan. Ook als de woning nog vol spullen staat, onderhoud nodig heeft of niet verkoopklaar is.
             </p>
 
             <div className="hero-cta-row">
@@ -1634,14 +1636,14 @@ export default function HomeClient() {
               <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
             </div>
 
-            <p className="micro-note">Eerst duidelijkheid. Geen verkoopdruk. Geen open huis.</p>
-            <div className="mobile-proof-line">Persoonlijk contact · Discreet behandeld · Vrijblijvend</div>
+            <p className="micro-note">Niet eerst opknappen. Niet eerst leeghalen. Vrijblijvend voorstel.</p>
+            <div className="mobile-proof-line">Niet eerst opknappen · Niet leeghalen · Vrijblijvend</div>
 
             <div className="trust-micro" aria-label="Voordelen">
               <div>✓ Gratis en vrijblijvend</div>
-              <div>✓ Geen makelaarskosten</div>
-              <div>✓ Geen open huis nodig</div>
-              <div>✓ Persoonlijk contact, geen callcenter</div>
+              <div>✓ Niet eerst opknappen</div>
+              <div>✓ Niet eerst leeghalen</div>
+              <div>✓ Persoonlijk contact</div>
             </div>
           </div>
 
@@ -1653,8 +1655,8 @@ export default function HomeClient() {
             {!submitted ? (
               <form onSubmit={submitLead}>
                 <div className="form-benefits">
-                  <span>Persoonlijk</span>
-                  <span>Discreet</span>
+                  <span>Niet opknappen</span>
+                  <span>Niet leeghalen</span>
                   <span>Vrijblijvend</span>
                 </div>
                 <div className="mobile-form-kicker">Binnen 1 minuut aangevraagd</div>
@@ -1662,13 +1664,13 @@ export default function HomeClient() {
                 <p className="step-label">Stap {step} van 3</p>
                 <h2 className="form-title">Vertel kort om welke woning het gaat</h2>
                 <p className="form-sub form-sub-desktop">
-                  Postcode, type woning en uw situatie zijn genoeg voor een eerste contact. Wij nemen persoonlijk
-                  contact met u op.
+                  Vul uw adres en situatie in. Ook als de woning nog vol staat, onderhoud nodig heeft of niet
+                  verkoopklaar is.
                 </p>
                 <p className="form-sub form-sub-mobile">
-                  Postcode, type woning en uw situatie zijn genoeg voor het eerste contact.
+                  Ook als de woning nog vol staat, onderhoud nodig heeft of niet verkoopklaar is.
                 </p>
-                <div className="notice">Gratis en vrijblijvend. Geen verkoopdruk, geen verplichting.</div>
+                <div className="notice">Gratis en vrijblijvend. U hoeft de woning niet eerst op te knappen of leeg te halen.</div>
 
                 {step === 1 && (
                   <div className="form-stack">
@@ -1726,9 +1728,9 @@ export default function HomeClient() {
                     </div>
                     <p className="small-note">Wij gebruiken uw gegevens alleen om persoonlijk contact op te nemen over uw aanvraag.</p>
                     <div className="form-assurance">
-                      <span>Persoonlijk contact</span>
-                      <span>Geen callcenter</span>
-                      <span>Discreet behandeld</span>
+                      <span>Niet eerst opknappen</span>
+                      <span>Niet eerst leeghalen</span>
+                      <span>Vrijblijvend</span>
                     </div>
                   </div>
                 )}
@@ -1744,9 +1746,9 @@ export default function HomeClient() {
 
             <div className="form-receive">
               <strong>Wat u ontvangt:</strong>
-              <div><span>✓</span> Rustig duidelijkheid over uw mogelijkheden</div>
-              <div><span>✓</span> Heldere voorwaarden en vervolgstappen</div>
-              <div><span>✓</span> Persoonlijk contact zonder verkoopdruk</div>
+              <div><span>✓</span> Duidelijkheid zonder dat u eerst hoeft op te knappen</div>
+              <div><span>✓</span> Ook mogelijk als de woning nog vol spullen staat</div>
+              <div><span>✓</span> Persoonlijk contact zonder verplichting</div>
             </div>
           </section>
         </div>
@@ -1786,8 +1788,8 @@ export default function HomeClient() {
             <p className="eyebrow">Onderscheidend en persoonlijk</p>
             <h2>Waarom Vastgoed Direct Nederland anders werkt</h2>
             <p>
-              Veel partijen beloven vooral snelheid. Wij vinden duidelijkheid belangrijker. Daarom ontvangt u geen
-              standaardverhaal, maar eerst een rustig en persoonlijk beeld van uw mogelijkheden.
+              Veel partijen praten vooral over snelheid. Wij maken het liever concreet: wat is er mogelijk met uw woning,
+              ook als deze nog niet leeg, opgeknapt of verkoopklaar is?
             </p>
           </div>
 
@@ -1807,10 +1809,10 @@ export default function HomeClient() {
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">Wanneer past dit bij u?</p>
-            <h2>Voor verkopers die eerst overzicht willen.</h2>
+            <h2>Als u zonder gedoe wilt weten wat mogelijk is.</h2>
             <p>
-              Een traditioneel verkooptraject is niet altijd de beste route. Zeker niet als privacy,
-              onderhoud, leegstand of persoonlijke omstandigheden meespelen.
+              Bijvoorbeeld als de woning onderhoud nodig heeft, nog vol spullen staat, leegstaat of als u geen open huis
+              en bezichtigingen wilt.
             </p>
           </div>
 
@@ -1830,12 +1832,12 @@ export default function HomeClient() {
         <div className="container comparison-wrap">
           <div className="comparison-top">
             <div>
-              <p className="eyebrow">Waarom direct verkopen?</p>
-              <h2>Niet alleen de prijs telt. Ook rust, tijd en zekerheid.</h2>
+              <p className="eyebrow">Waarom rechtstreeks verkopen?</p>
+              <h2>Niet eerst opruimen, opknappen of bezichtigingen plannen.</h2>
             </div>
             <p>
-              Een verkoopbedrag is belangrijk, maar verkoopkosten, voorbereiding, privacy,
-              bezichtigingen en doorlooptijd wegen ook mee.
+              Een verkoopbedrag is belangrijk, maar ook de tijd, moeite en kosten vooraf tellen mee. Soms wilt u vooral
+              duidelijkheid zonder eerst alles verkoopklaar te maken.
             </p>
           </div>
 
@@ -1871,8 +1873,8 @@ export default function HomeClient() {
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">De werkwijze</p>
-            <h2>Van aanvraag naar duidelijk voorstel.</h2>
-            <p>Een overzichtelijk proces zonder onnodige druk. U bepaalt daarna zelf of het voorstel past.</p>
+            <h2>Van korte aanvraag naar duidelijk voorstel.</h2>
+            <p>U hoeft nog niet alles klaar of opgeruimd te hebben. Een adres en korte toelichting zijn genoeg om te starten.</p>
           </div>
 
           <div className="steps">
@@ -1895,25 +1897,24 @@ export default function HomeClient() {
         <div className="container two-col">
           <div className="premium-card">
             <p className="eyebrow">Wat krijgt u concreet?</p>
-            <h2>Een voorstel dat u echt kunt beoordelen.</h2>
+            <h2>Duidelijkheid zonder dat u eerst alles hoeft te regelen.</h2>
             <p>
-              Het voorstel is niet alleen een bedrag. U krijgt inzicht in uitgangspunten,
-              voorwaarden, mogelijke overdracht en vervolgstappen.
+              U hoeft de woning niet eerst verkoopklaar te maken. Wij kijken naar de woning zoals die nu is en bespreken
+              wat praktisch mogelijk is.
             </p>
 
             <div className="premium-list">
-              <div><span>✓</span> Voorgesteld bedrag of verkoopmogelijkheid</div>
-              <div><span>✓</span> Duidelijke uitgangspunten en voorbehouden</div>
-              <div><span>✓</span> Mogelijke overdracht en planning</div>
+              <div><span>✓</span> Duidelijkheid over de verkoopmogelijkheid</div>
+              <div><span>✓</span> Ook bij onderhoud of achterstallig werk</div>
+              <div><span>✓</span> Ook als de woning nog vol spullen staat</div>
               <div><span>✓</span> Persoonlijk contact om vragen te bespreken</div>
             </div>
           </div>
 
           <div className="dark-card">
-            <h3>Persoonlijk contact, geen callcenter.</h3>
+            <h3>Persoonlijk contact, geen standaardverhaal.</h3>
             <p>
-              U krijgt geen standaardreactie. Wij kijken naar uw woning, uw situatie en uw gewenste planning.
-              Daarna bespreken we rustig wat mogelijk is.
+              U hoeft uw woning niet mooier voor te doen dan hij is. Vertel kort wat er speelt, dan kijken we rustig met u mee.
             </p>
             <div className="contact-lines">
               <a href="tel:0612238051" onClick={() => trackGoogleAdsConversion("call")}>Bel direct: 06 12 23 80 51</a>
@@ -1939,8 +1940,8 @@ export default function HomeClient() {
               </article>
               <article className="example-card">
                 <small>Onderhoud</small>
-                <strong>Niet eerst alles opknappen</strong>
-                <p>De woning hoeft niet altijd volledig verkoopklaar te zijn.</p>
+                <strong>Niet eerst opknappen of leeghalen</strong>
+                <p>Ook als de woning onderhoud nodig heeft of nog vol spullen staat.</p>
               </article>
               <article className="example-card">
                 <small>Privacy</small>
@@ -1975,8 +1976,8 @@ export default function HomeClient() {
               <p>Ja, de aanvraag is gratis en vrijblijvend. U zit nergens aan vast.</p>
             </div>
             <div className="faq-item">
-              <h3>Moet mijn woning verkoopklaar zijn?</h3>
-              <p>Nee, niet altijd. Ook woningen met onderhoud, schade of renovatiebehoefte kunnen worden aangemeld.</p>
+              <h3>Moet mijn woning verkoopklaar of leeg zijn?</h3>
+              <p>Nee. Ook als de woning onderhoud nodig heeft, schade heeft of nog vol spullen staat, kunt u vrijblijvend informeren.</p>
             </div>
             <div className="faq-item">
               <h3>Betaal ik makelaarskosten?</h3>
@@ -2000,9 +2001,9 @@ export default function HomeClient() {
 
       <section className="final-cta">
         <div className="container">
-          <h2>Wilt u weten wat er mogelijk is voor uw woning?</h2>
+          <h2>Wilt u weten wat er mogelijk is met uw woning?</h2>
           <p>
-            Vraag gratis en vrijblijvend duidelijkheid aan. Persoonlijk, discreet en zonder verkoopdruk.
+            Ook als de woning nog vol spullen staat, onderhoud nodig heeft of niet verkoopklaar is. Vraag vrijblijvend een voorstel aan.
           </p>
           <div className="cta-buttons">
             <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
@@ -2017,7 +2018,7 @@ export default function HomeClient() {
           <div>
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="footer-logo" />
             <p>Verkoopjehuisdirect.nl is de website van Vastgoed Direct Nederland.</p>
-            <p>Voor woningeigenaren die rustig duidelijkheid willen zonder verkoopdruk.</p>
+            <p>Voor woningeigenaren die willen weten wat er mogelijk is, ook als de woning niet verkoopklaar is.</p>
           </div>
 
           <div>
