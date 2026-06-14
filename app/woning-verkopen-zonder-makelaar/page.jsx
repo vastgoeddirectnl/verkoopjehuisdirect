@@ -110,7 +110,7 @@ const page = {
   ],
   "faqs": [
     {
-      "question": "Kan ik mijn woning verkopen zonder makelaar zonder makelaar regelen?",
+      "question": "Kan ik mijn woning verkopen zonder een makelaar in te schakelen?",
       "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
     },
     {
