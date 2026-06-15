@@ -136,6 +136,7 @@ export default function SeoLandingPage({ page }) {
         .lead{font-size:19px;line-height:1.62;color:#526274;max-width:720px;margin:20px 0 0}
         .hero-cta-row{display:flex;gap:11px;flex-wrap:wrap;align-items:center;margin:25px 0 0}
         .micro-note{font-size:13px;color:#647386;margin:13px 0 0;font-weight:850}
+        .mobile-trust-line{display:none}
         .trust-micro{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:23px 0 0;max-width:760px}
         .trust-micro div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font-size:14px;font-weight:900;color:var(--navy);box-shadow:0 10px 22px rgba(7,31,58,.06)}
         .cta-card{background:#fff;border:1px solid var(--line);border-radius:30px;padding:24px;box-shadow:0 24px 72px rgba(7,31,58,.14)}
@@ -161,6 +162,10 @@ export default function SeoLandingPage({ page }) {
         .short-answer{display:grid;grid-template-columns:.76fr 1.24fr;gap:24px;align-items:center}
         .benefit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:22px}
         .benefit-item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px 16px;font-weight:900;color:#24364a;box-shadow:0 12px 30px rgba(7,31,58,.055)}
+        .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+        .why-card{background:#fff;border:1px solid var(--line);border-radius:26px;padding:24px;box-shadow:0 16px 44px rgba(7,31,58,.07)}
+        .why-card strong{display:block;font-size:19px;line-height:1.2;color:var(--navy);margin-bottom:9px}
+        .why-card p{margin:0;color:#647386;line-height:1.56;font-size:16px}
         .content-grid{display:grid;gap:18px}
         .content-block{background:#fff;border:1px solid var(--line);border-radius:26px;padding:26px;box-shadow:0 14px 38px rgba(7,31,58,.055)}
         .content-block p{color:#647386;font-size:17px;line-height:1.68;margin:0 0 12px}
@@ -206,6 +211,7 @@ export default function SeoLandingPage({ page }) {
           .nav::-webkit-scrollbar{display:none}
           .hero-grid,.comparison-top,.short-answer{grid-template-columns:1fr}
           .trust-micro,.benefit-grid{grid-template-columns:repeat(2,1fr)}
+          .why-grid{grid-template-columns:1fr}
           .cta-card{max-width:620px;margin:0 auto}
           .footer-grid{grid-template-columns:repeat(2,1fr)}
         }
@@ -213,38 +219,47 @@ export default function SeoLandingPage({ page }) {
           .container{width:min(100% - 28px,1120px)}
           .top-strip{display:none}
           .header{position:relative}
-          .header-inner{display:flex;flex-wrap:wrap;min-height:auto;padding:14px 0 0;gap:12px}
-          .logo{width:205px}
+          .header-inner{display:flex;align-items:center;min-height:auto;padding:12px 0;gap:10px}
+          .logo{width:178px}
+          .nav{display:none}
           .header-actions{margin-left:auto}
           .header-actions .btn-green,.header-actions .btn-blue{display:none}
-          .header-actions .btn-orange{padding:12px 15px;font-size:14px}
-          .nav{width:100%;order:3;border-top:1px solid #f0eee9;padding:12px 0 11px;font-size:14px}
-          .hero-grid{padding:34px 0 36px;gap:28px}
-          .badge{width:100%;justify-content:center;text-align:center;border-radius:22px;line-height:1.35}
-          h1{font-size:clamp(38px,11vw,50px);line-height:1.02;letter-spacing:-1.3px}
-          .lead{font-size:18px;line-height:1.55}
+          .header-actions .btn-orange{padding:11px 13px;font-size:13px}
+          .hero-grid{padding:30px 0 30px;gap:22px}
+          .badge{display:none}
+          h1{font-size:clamp(35px,10vw,45px);line-height:1.04;letter-spacing:-1.1px}
+          .lead{font-size:17px;line-height:1.52;margin-top:15px}
+          .hero-cta-row{margin-top:20px}
           .hero-cta-row .btn,.cta-buttons .btn{width:100%}
-          .trust-micro,.benefit-grid,.compare-columns,.related-grid{grid-template-columns:1fr}
-          .section{padding:48px 0}.section-tight{padding:42px 0}
-          .card,.content-block,.cta-card,.comparison-wrap{border-radius:24px;padding:22px}
+          .hero-cta-row .btn-light{display:none}
+          .micro-note{display:none}
+          .mobile-trust-line{display:block;font-size:13px;color:#647386;font-weight:900;margin-top:12px;line-height:1.45}
+          .trust-micro{display:none}
+          .benefit-grid,.compare-columns,.related-grid{grid-template-columns:1fr}
+          .section{padding:42px 0}.section-tight{padding:38px 0}
+          .section-head{text-align:left;margin-bottom:20px}
+          .card,.content-block,.cta-card,.comparison-wrap,.why-card{border-radius:22px;padding:20px}
+          .cta-logo{display:none}
+          .cta-card h2{font-size:24px}
+          .review-mini{display:none}
           .compare-row{grid-template-columns:1fr;gap:5px}
           .faq-item{display:block}
           .faq-item h3{margin-bottom:7px}
           .footer-grid{grid-template-columns:1fr}
           .whatsapp-float{display:none}
-          .mobile-bottom-cta{position:fixed;left:10px;right:10px;bottom:10px;z-index:90;display:grid;grid-template-columns:1.25fr .75fr;gap:8px;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:22px;padding:8px;box-shadow:0 18px 50px rgba(7,31,58,.18);backdrop-filter:blur(14px)}
-          .mobile-bottom-cta a{min-height:48px;padding:12px 10px;font-size:14px}
-          .final-cta{padding-bottom:112px}
-          .footer{padding-bottom:108px}
+          .mobile-bottom-cta{position:fixed;left:10px;right:10px;bottom:10px;z-index:90;display:block;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:22px;padding:8px;box-shadow:0 18px 50px rgba(7,31,58,.18);backdrop-filter:blur(14px)}
+          .mobile-bottom-cta a{width:100%;min-height:48px;padding:12px 10px;font-size:14px}
+          .final-cta{padding-bottom:100px}
+          .footer{padding-bottom:102px}
         }
       `}</style>
 
       <div className="top-strip">
         <div className="container top-strip-inner">
-          <span>✓ Vrijblijvend voorstel</span>
-          <span>✓ Geen makelaarskosten</span>
+          <span>✓ Niet eerst opknappen</span>
+          <span>✓ Niet leeghalen</span>
           <span>✓ Geen open huis nodig</span>
-          <span>✓ Notariële afwikkeling</span>
+          <span>✓ Vrijblijvend voorstel</span>
         </div>
       </div>
 
@@ -256,7 +271,7 @@ export default function SeoLandingPage({ page }) {
 
           <nav className="nav" aria-label="Navigatie">
             <a href="/#aanvraag">Aanvraag</a>
-            <a href="#voordelen">Voordelen</a>
+            <a href="#waarom-anders">Waarom anders</a>
             <a href="#vergelijking">Vergelijking</a>
             <a href="#faq">FAQ</a>
           </nav>
@@ -272,7 +287,7 @@ export default function SeoLandingPage({ page }) {
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <div className="badge">{page.eyebrow}</div>
+            <div className="badge">Ook als de woning niet verkoopklaar is</div>
             <h1>{page.h1}</h1>
             <p className="lead">{page.lead}</p>
 
@@ -281,28 +296,29 @@ export default function SeoLandingPage({ page }) {
               <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
             </div>
 
-            <p className="micro-note">🟢 Meestal snel reactie via WhatsApp · gratis en zonder verplichting</p>
+            <p className="micro-note">De woning hoeft niet eerst opgeknapt of leeggehaald te worden. U zit nergens aan vast.</p>
+            <p className="mobile-trust-line">Niet opknappen · Niet leeghalen · Vrijblijvend</p>
 
             <div className="trust-micro" aria-label="Voordelen">
-              <div>✓ Gratis aanvraag</div>
-              <div>✓ Geen verplichting</div>
-              <div>✓ Discreet contact</div>
-              <div>✓ Eén aanspreekpunt</div>
+              <div>✓ Niet eerst opknappen</div>
+              <div>✓ Niet leeghalen</div>
+              <div>✓ Geen open huis</div>
+              <div>✓ Vrijblijvend</div>
             </div>
           </div>
 
           <aside className="cta-card">
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="cta-logo" />
-            <h2>Ontvang een persoonlijk verkoopvoorstel</h2>
+            <h2>Vertel kort om welke woning het gaat</h2>
             <p>
-              U krijgt duidelijkheid over uw mogelijkheden, voorwaarden en mogelijke vervolgstappen.
+              Postcode, type woning en uw situatie zijn genoeg voor het eerste contact. Ook als de woning nog vol staat, onderhoud nodig heeft of niet verkoopklaar is.
             </p>
             <div className="mini-checks">
               <div><span>✓</span> Geen makelaarskosten</div>
-              <div><span>✓</span> Geen open huis nodig</div>
-              <div><span>✓</span> Voorstel afgestemd op uw situatie</div>
+              <div><span>✓</span> U hoeft de woning niet eerst leeg te halen</div>
+              <div><span>✓</span> U beslist zelf of u verder wilt</div>
             </div>
-            <a href="/#aanvraag" className="btn btn-orange" style={{ width: "100%" }}>Start gratis aanvraag</a>
+            <a href="/#aanvraag" className="btn btn-orange" style={{ width: "100%" }}>Start vrijblijvende aanvraag</a>
 
             <div className="review-mini">
               <strong>5,0 Google-review</strong>
@@ -333,7 +349,34 @@ export default function SeoLandingPage({ page }) {
         </div>
       </section>
 
-      <section className="section-tight">
+      <section id="waarom-anders" className="section-tight">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow">Waarom anders</p>
+            <h2>Geen standaard verkooptraject. Eerst rustig duidelijkheid.</h2>
+            <p>
+              Veel verkopers willen vooral weten waar ze aan toe zijn. Daarom maken we het laagdrempelig: u hoeft de woning niet eerst op te knappen, leeg te halen of verkoopklaar te maken om een voorstel aan te vragen.
+            </p>
+          </div>
+
+          <div className="why-grid">
+            <div className="why-card">
+              <strong>Niet eerst opknappen of leeghalen</strong>
+              <p>Ook als de woning nog vol spullen staat, onderhoud nodig heeft of niet verkoopklaar is, kijken wij met u mee.</p>
+            </div>
+            <div className="why-card">
+              <strong>Geen open huis of verkoopdruk</strong>
+              <p>U vraagt rustig informatie aan. Daarna beslist u zelf of het voorstel en de voorwaarden bij uw situatie passen.</p>
+            </div>
+            <div className="why-card">
+              <strong>Voorstel dat u kunt beoordelen</strong>
+              <p>U krijgt niet alleen een bedrag, maar ook duidelijkheid over voorwaarden, planning, overdracht en vervolgstappen.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-tight section-white">
         <div className="container content-grid">
           {sections.map((section) => (
             <section className="content-block" key={section.title}>
@@ -366,11 +409,11 @@ export default function SeoLandingPage({ page }) {
             <div className="comparison-top">
               <div>
                 <p className="eyebrow">Vergelijking</p>
-                <h2>Niet alleen de prijs telt. Ook rust, tijd en zekerheid.</h2>
+                <h2>Niet alleen de prijs telt. Ook rust, tijd en voorwaarden.</h2>
               </div>
               <p>
-                Bij verkoop gaat het niet alleen om het hoogste bod. Ook kosten, snelheid,
-                privacy, zekerheid en de gewenste oplevering zijn belangrijk.
+                Bij verkoop gaat het niet alleen om het hoogste bod. Ook kosten, bezichtigingen,
+                oplevering, spullen in de woning en gewenste overdrachtsdatum zijn belangrijk.
               </p>
             </div>
 
@@ -403,7 +446,7 @@ export default function SeoLandingPage({ page }) {
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">Veelgestelde vragen</p>
-            <h2>Twijfels wegnemen vóórdat u een aanvraag doet.</h2>
+            <h2>Duidelijkheid voordat u een aanvraag doet.</h2>
           </div>
 
           <div className="faq">
@@ -450,7 +493,7 @@ export default function SeoLandingPage({ page }) {
           <div>
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="footer-logo" />
             <p>Verkoopjehuisdirect.nl is de website van Vastgoed Direct Nederland.</p>
-            <p>Voor woningeigenaren die snel duidelijkheid willen.</p>
+            <p>Voor woningeigenaren die duidelijkheid willen zonder gedoe.</p>
           </div>
 
           <div>
@@ -482,8 +525,7 @@ export default function SeoLandingPage({ page }) {
       <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
 
       <div className="mobile-bottom-cta">
-        <a href="/#aanvraag" className="btn btn-orange">Vrijblijvend voorstel</a>
-        <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+        <a href="/#aanvraag" className="btn btn-orange">Vrijblijvend voorstel aanvragen</a>
       </div>
     </main>
   );

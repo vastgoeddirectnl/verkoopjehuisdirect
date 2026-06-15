@@ -2,13 +2,15 @@ import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
   title: "Leegstaand huis verkopen",
-  description: "Leegstaand huis of leegstaande woning verkopen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een voorstel aan.",
+  description:
+    "Leegstaand huis verkopen zonder open huis, makelaarstraject of verkoopstress? Ook als de woning nog spullen bevat of onderhoud nodig heeft.",
   alternates: {
     canonical: "https://www.verkoopjehuisdirect.nl/leegstaand-huis-verkopen",
   },
   openGraph: {
     title: "Leegstaand huis verkopen",
-    description: "Leegstaand huis of leegstaande woning verkopen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een voorstel aan.",
+    description:
+      "Leegstaand huis verkopen zonder open huis, makelaarstraject of verkoopstress? Ook als de woning nog spullen bevat of onderhoud nodig heeft.",
     url: "https://www.verkoopjehuisdirect.nl/leegstaand-huis-verkopen",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
@@ -17,118 +19,101 @@ export const metadata = {
 };
 
 const page = {
-  "slug": "/leegstaand-huis-verkopen",
-  "breadcrumb": "Leegstaand huis verkopen",
-  "eyebrow": "Leegstaand huis verkopen",
-  "h1": "Leegstaand huis verkopen zonder langdurig verkooptraject",
-  "lead": "Een leegstaand huis kan zorgen en kosten geven. Wij helpen met een vrijblijvende verkoopoplossing en duidelijke voorwaarden.",
-  "shortAnswer": "Leegstaand huis of leegstaande woning verkopen zonder makelaar, open huis of verkoopstress? U kunt vrijblijvend een voorstel aan.",
-  "benefits": [
+  slug: "/leegstaand-huis-verkopen",
+  breadcrumb: "Leegstaand huis verkopen",
+  eyebrow: "Leegstaand huis verkopen",
+  h1: "Leegstaand huis verkopen zonder gedoe",
+  lead:
+    "Staat de woning leeg of kost deze u elke maand geld? Vraag vrijblijvend een voorstel aan. Ook als de woning nog spullen bevat, onderhoud nodig heeft of niet verkoopklaar is.",
+  shortAnswer:
+    "Een leegstaand huis kan vrijblijvend worden aangemeld voor een voorstel. De woning hoeft niet eerst opgeknapt, leeggehaald of volledig verkoopklaar gemaakt te worden.",
+  benefits: [
     "Leegstaand huis verkopen",
-    "Geen makelaarskosten",
+    "Ook bij dubbele lasten",
+    "Niet eerst opknappen",
+    "Niet leeghalen",
     "Geen open huis nodig",
-    "Vrijblijvend verkoopvoorstel",
-    "Duidelijke voorwaarden",
-    "Notariële afwikkeling"
+    "Vrijblijvend voorstel",
   ],
-  "sections": [
+  sections: [
     {
-      "title": "Leegstaand huis verkopen: wanneer is dit interessant?",
-      "paragraphs": [
-        "Een leegstaand huis kan zorgen en kosten geven. Wij helpen met een vrijblijvende verkoopoplossing en duidelijke voorwaarden.",
-        "Een directe verkoopoplossing kan passend zijn wanneer u snel duidelijkheid wilt, geen lang verkooptraject wilt of de woning niet eerst verkoopklaar wilt maken."
-      ]
+      title: "Leegstaand huis verkopen: wanneer is dit interessant?",
+      paragraphs: [
+        "Een leegstaande woning kan zorgen geven door kosten, onderhoud, verzekeringen, toezicht of risico op achteruitgang.",
+        "Als een normaal verkooptraject niet goed past, kunt u eerst vrijblijvend laten beoordelen wat er mogelijk is.",
+      ],
     },
     {
-      "title": "Zonder traditioneel verkooptraject",
-      "paragraphs": [
-        "U hoeft niet altijd te kiezen voor een verkooptraject met meerdere bezichtigingen, open huis of lange onderhandelingen.",
-        "Bij Vastgoed Direct Nederland vraagt u vrijblijvend een helder verkoopvoorstel aan. Daarna beslist u rustig of het voorstel bij uw situatie past."
-      ]
+      title: "Ook als de woning nog niet klaar is voor verkoop",
+      paragraphs: [
+        "Een leegstaande woning is niet altijd automatisch verkoopklaar. Soms staan er nog spullen, is er onderhoud nodig of moet er nog veel geregeld worden.",
+        "U hoeft dit niet allemaal vooraf op te lossen om een voorstel aan te vragen.",
+      ],
     },
     {
-      "title": "Voor welke situaties?",
-      "bullets": [
+      title: "Voor welke situaties?",
+      bullets: [
         "Leegstaand huis verkopen",
-        "Leegstand",
+        "Leegstaande woning met spullen",
+        "Dubbele lasten",
         "Achterstallig onderhoud",
-        "Opknapwoning",
-        "Erfenis",
-        "Scheiding",
-        "Verhuur",
-        "Snel duidelijkheid gewenst"
-      ]
+        "Woning is niet verkoopklaar",
+        "Erfeniswoning",
+        "Geen open huis gewenst",
+        "Snel duidelijkheid gewenst",
+      ],
     },
     {
-      "title": "Hoe werkt het?",
-      "steps": [
-        "U vult uw woninggegevens in.",
-        "Wij bespreken uw situatie en gewenste snelheid.",
-        "U ontvangt een vrijblijvend verkoopvoorstel.",
-        "Bij akkoord wordt de overdracht via de notaris geregeld."
-      ]
+      title: "Hoe werkt het?",
+      steps: [
+        "U vult kort uw adres en situatie in.",
+        "Wij nemen persoonlijk contact met u op.",
+        "U ontvangt een vrijblijvend voorstel met voorwaarden en planning.",
+        "U beslist zelf of u verder wilt.",
+      ],
     },
     {
-      "title": "Kosten en afwikkeling",
-      "paragraphs": [
-        "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
-        "Een aanbetaling of voorschot kan in sommige situaties bespreekbaar zijn, mits dit juridisch en notarieel goed wordt vastgelegd."
-      ]
-    }
+      title: "Kosten en afwikkeling",
+      paragraphs: [
+        "De aanvraag is gratis en vrijblijvend. U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland.",
+        "Als het voorstel past, worden afspraken over oplevering, overdracht en eventuele achtergebleven spullen duidelijk vastgelegd.",
+      ],
+    },
   ],
-  "comparisonRows": [
-    [
-      "Makelaarskosten",
-      "Vaak courtage of vast tarief",
-      "Geen makelaarskosten"
-    ],
-    [
-      "Bezichtigingen",
-      "Vaak meerdere kijkers",
-      "Niet standaard nodig"
-    ],
-    [
-      "Snelheid",
-      "Kan weken of maanden duren",
-      "Snelle duidelijkheid mogelijk"
-    ],
-    [
-      "Onderhoud",
-      "Kan verkoop lastiger maken",
-      "Ook deze woningen kunnen worden aangemeld"
-    ],
-    [
-      "Opleverdatum",
-      "Afhankelijk van koper",
-      "In overleg bespreekbaar"
-    ],
-    [
-      "Afwikkeling",
-      "Afhankelijk van afspraken",
-      "Bij akkoord via de notaris"
-    ]
+  comparisonRows: [
+    ["Makelaarskosten", "Vaak courtage of vast tarief", "Geen makelaarskosten"],
+    ["Bezichtigingen", "Vaak meerdere kijkers", "Geen open huis nodig"],
+    ["Leegstand", "Kosten lopen vaak door", "Snelle duidelijkheid mogelijk"],
+    ["Spullen in de woning", "Moeten vaak eerst weg", "Bespreekbaar binnen het voorstel"],
+    ["Onderhoud", "Kan verkoop lastiger maken", "Wordt meegenomen in het voorstel"],
+    ["Afwikkeling", "Afhankelijk van afspraken", "Bij akkoord via de notaris"],
   ],
-  "faqs": [
+  faqs: [
     {
-      "question": "Kan ik mijn leegstaand huis verkopen zonder makelaar regelen?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
+      question: "Kan ik een leegstaand huis verkopen zonder makelaar?",
+      answer:
+        "Ja, u kunt rechtstreeks een vrijblijvend voorstel aanvragen zonder traditioneel makelaarstraject.",
     },
     {
-      "question": "Is de aanvraag vrijblijvend?",
-      "answer": "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
+      question: "Moet de woning eerst leeggehaald worden?",
+      answer:
+        "Nee, niet vooraf. Ook als er nog spullen in de woning staan, kunt u een aanvraag doen.",
     },
     {
-      "question": "Moet de woning verkoopklaar zijn?",
-      "answer": "Niet altijd. Ook woningen met onderhoud, leegstand of renovatiebehoefte kunnen worden aangemeld."
+      question: "Kan ik ook een leegstaande woning met onderhoud aanmelden?",
+      answer:
+        "Ja, ook bij achterstallig onderhoud of een woning die niet verkoopklaar is, kunt u vrijblijvend contact opnemen.",
     },
     {
-      "question": "Betaal ik makelaarskosten?",
-      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
-    }
+      question: "Is de aanvraag vrijblijvend?",
+      answer:
+        "Ja, de aanvraag is gratis en vrijblijvend. U beslist zelf of u verder wilt.",
+    },
   ],
-  "ctaTitle": "Wilt u leegstaand huis verkopen?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden.",
-  "keywords": "leegstaand huis verkopen, leegstaande woning verkopen, woning leegstand verkopen"
+  ctaTitle: "Wilt u een leegstaand huis verkopen?",
+  ctaText:
+    "Vraag vrijblijvend een voorstel aan. Ook als de woning nog spullen bevat, onderhoud nodig heeft of niet verkoopklaar is.",
+  keywords: "leegstaand huis verkopen, leegstaande woning verkopen, woning leegstand verkopen",
 };
 
 export default function LeegstaandHuisVerkopenPage() {
