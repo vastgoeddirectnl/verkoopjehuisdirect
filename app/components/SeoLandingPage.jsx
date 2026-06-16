@@ -207,6 +207,31 @@ export default function SeoLandingPage({ page }) {
         .footer a:hover{color:#fff}
         .whatsapp-float{position:fixed;right:18px;bottom:18px;z-index:80;background:#25d366;color:#fff;border-radius:999px;padding:13px 17px;font-weight:900;box-shadow:0 14px 32px rgba(37,211,102,.32);font-size:14px;text-decoration:none}
         .mobile-bottom-cta{display:none}
+
+        @media(min-width:761px){
+          .section{padding:46px 0}
+          .section-tight{padding:36px 0}
+          .section-head{max-width:720px;margin:0 auto 24px}
+          .section-head h2{font-size:32px;line-height:1.12;letter-spacing:-.75px}
+          .section-head p,.text{font-size:15.5px;line-height:1.58}
+          .short-answer{gap:20px}
+          .short-answer h2{font-size:28px;line-height:1.14;letter-spacing:-.6px}
+          .content-grid{max-width:960px;margin:0 auto;gap:14px}
+          .content-block{padding:20px 24px;border-radius:22px}
+          .content-block h2{font-size:22px;line-height:1.22;letter-spacing:-.35px;margin:0 0 7px}
+          .content-block p{font-size:14.5px;line-height:1.55;margin:0 0 8px}
+          .example-card{max-width:960px;margin:0 auto;padding:20px 24px;border-radius:22px}
+          .example-card h2{font-size:24px;line-height:1.15;letter-spacing:-.45px;margin:0 0 8px}
+          .example-card p:not(.eyebrow){font-size:14.5px;line-height:1.55}
+          .list{gap:6px;margin-top:9px}
+          .list li{font-size:13.5px;line-height:1.28;padding:8px 12px;border-radius:12px}
+          .steps{gap:7px;margin-top:10px}
+          .steps li{font-size:14px;line-height:1.35;padding:8px 10px;border-radius:13px}
+          .faq-item{padding:14px 16px;gap:18px;border-radius:16px}
+          .faq-item h3{font-size:17px;line-height:1.25;letter-spacing:-.2px;margin:0}
+          .faq-item p{font-size:14.5px;line-height:1.5}
+          .related-grid a{font-size:14px;padding:11px 12px;border-radius:14px}
+        }
         @media(max-width:1040px){
           .header-inner{grid-template-columns:auto auto}
           .nav{grid-column:1/-1;justify-content:flex-start;overflow-x:auto;gap:18px;padding:0 0 12px;scrollbar-width:none}
