@@ -153,25 +153,29 @@ export default function SeoLandingPage({ page }) {
         .eyebrow{color:var(--orange);font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin:0 0 9px;font-size:12px}
         h2{font-size:clamp(31px,3.4vw,46px);line-height:1.06;letter-spacing:-1.4px;margin:0;color:var(--navy)}
         h3{font-size:22px;line-height:1.18;letter-spacing:-.35px;margin:0 0 9px;color:var(--navy)}
-        .section-head p,.text{color:#647386;font-size:17px;line-height:1.62;margin-bottom:0}
+        .section-head p,.text{color:#647386;font-size:16px;line-height:1.62;margin-bottom:0}
+        .short-answer h2{font-size:clamp(26px,2.4vw,38px);line-height:1.1;letter-spacing:-.9px}
+        .section-head h2{font-size:clamp(28px,2.8vw,40px);line-height:1.1;letter-spacing:-1px}
         .card{background:#fff;border:1px solid var(--line);border-radius:26px;padding:26px;box-shadow:0 16px 44px rgba(7,31,58,.07)}
         .short-answer{display:grid;grid-template-columns:.76fr 1.24fr;gap:24px;align-items:center}
         .benefit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:22px}
-        .benefit-item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px 16px;font-weight:900;color:#24364a;box-shadow:0 12px 30px rgba(7,31,58,.055)}
+        .benefit-item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px 15px;font-size:15px;font-weight:900;color:#24364a;box-shadow:0 12px 30px rgba(7,31,58,.055)}
         .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
         .why-card{background:#fff;border:1px solid var(--line);border-radius:26px;padding:24px;box-shadow:0 16px 44px rgba(7,31,58,.07)}
-        .why-card strong{display:block;font-size:19px;line-height:1.2;color:var(--navy);margin-bottom:9px}
-        .why-card p{margin:0;color:#647386;line-height:1.56;font-size:16px}
+        .why-card strong{display:block;font-size:18px;line-height:1.2;color:var(--navy);margin-bottom:9px}
+        .why-card p{margin:0;color:#647386;line-height:1.55;font-size:15px}
         .content-grid{display:grid;gap:18px}
         .content-block{background:#fff;border:1px solid var(--line);border-radius:26px;padding:26px;box-shadow:0 14px 38px rgba(7,31,58,.055)}
-        .content-block p{color:#647386;font-size:17px;line-height:1.68;margin:0 0 12px}
+        .content-block h2{font-size:clamp(24px,2vw,32px);line-height:1.14;letter-spacing:-.7px;margin:0 0 12px}
+        .content-block p{color:#647386;font-size:16px;line-height:1.62;margin:0 0 12px}
         .content-block p:last-child{margin-bottom:0}
         .example-card{background:linear-gradient(135deg,#fff7ef 0%,#ffffff 100%);border:1px solid #ffd9bd;border-radius:28px;padding:28px;box-shadow:0 16px 44px rgba(255,106,0,.08)}
-        .example-card p{color:#5f7083;font-size:17px;line-height:1.68;margin:0}
+        .example-card h2{font-size:clamp(24px,2.1vw,33px);line-height:1.12;letter-spacing:-.75px;margin-bottom:10px}
+        .example-card p{color:#5f7083;font-size:16px;line-height:1.62;margin:0}
         .list{display:grid;gap:10px;margin:12px 0 0;padding:0;list-style:none}
-        .list li{background:#f8f5ef;border:1px solid #eee8df;border-radius:15px;padding:12px 14px;color:#24364a;font-weight:850;line-height:1.35}
+        .list li{background:#f8f5ef;border:1px solid #eee8df;border-radius:15px;padding:10px 13px;color:#24364a;font-size:15px;font-weight:850;line-height:1.35}
         .steps{counter-reset:step;display:grid;gap:10px;margin:14px 0 0;padding:0;list-style:none}
-        .steps li{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;background:#f8f5ef;border:1px solid #eee8df;border-radius:16px;padding:10px 12px;color:#24364a;font-weight:850}
+        .steps li{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;background:#f8f5ef;border:1px solid #eee8df;border-radius:16px;padding:10px 12px;color:#24364a;font-size:15px;font-weight:850}
         .steps li:before{counter-increment:step;content:counter(step);width:38px;height:38px;border-radius:14px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900}
         .comparison-wrap{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:32px;padding:32px;color:#fff;box-shadow:0 22px 66px rgba(7,31,58,.18)}
         .comparison-top{display:grid;grid-template-columns:.9fr 1.1fr;gap:26px;align-items:end;margin-bottom:22px}
@@ -185,10 +189,10 @@ export default function SeoLandingPage({ page }) {
         .compare-row strong{color:#fff;font-size:14px}
         .compare-row span{font-size:14px;color:#d7e3ef;font-weight:850}
         .faq{display:grid;gap:10px;max-width:940px;margin:0 auto}
-        .faq-item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px 19px;display:grid;grid-template-columns:minmax(220px,.42fr) 1fr;gap:22px;align-items:start}
-        .faq-item p{margin:0;color:#647386;line-height:1.55}
+        .faq-item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px 18px;display:grid;grid-template-columns:minmax(220px,.42fr) 1fr;gap:22px;align-items:start}
+        .faq-item p{margin:0;color:#647386;font-size:15px;line-height:1.55}
         .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-        .related-grid a{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font-weight:900;color:#071f3a;text-decoration:none;box-shadow:0 10px 24px rgba(7,31,58,.045)}
+        .related-grid a{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 13px;font-size:15px;font-weight:900;color:#071f3a;text-decoration:none;box-shadow:0 10px 24px rgba(7,31,58,.045)}
         .related-grid a:hover{border-color:var(--orange)}
         .final-cta{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:58px 0;text-align:center}
         .final-cta h2{color:#fff}
@@ -237,6 +241,9 @@ export default function SeoLandingPage({ page }) {
           .section{padding:42px 0}.section-tight{padding:38px 0}
           .section-head{text-align:left;margin-bottom:20px}
           .card,.content-block,.cta-card,.comparison-wrap,.why-card,.example-card{border-radius:22px;padding:20px}
+          .content-block h2,.example-card h2{font-size:24px;line-height:1.15;letter-spacing:-.5px}
+          .section-head h2,.short-answer h2{font-size:28px;line-height:1.12;letter-spacing:-.65px}
+          .content-block p,.example-card p,.section-head p,.text{font-size:15px;line-height:1.58}
           .cta-logo{display:none}
           .cta-card h2{font-size:24px}
           .review-mini{display:none}
