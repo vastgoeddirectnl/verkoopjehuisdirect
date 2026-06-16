@@ -1,36 +1,28 @@
 const whatsappBase = "https://wa.me/31612238051";
 
 const internalLinks = [
-  ["/huis-direct-verkopen", "Huis direct verkopen"],
   ["/huis-snel-verkopen", "Huis snel verkopen"],
+  ["/huis-direct-verkopen", "Huis direct verkopen"],
   ["/woning-verkopen-zonder-makelaar", "Woning verkopen zonder makelaar"],
-  ["/huis-verkopen-binnen-24-uur", "Huis verkopen binnen 24 uur"],
-  ["/huis-verkopen-binnen-1-week", "Huis verkopen binnen 1 week"],
-  ["/huis-verkopen-zonder-bezichtigingen", "Huis verkopen zonder bezichtigingen"],
-  ["/woning-verkopen-zonder-open-huis", "Woning verkopen zonder open huis"],
-  ["/huis-verkopen-zonder-funda", "Huis verkopen zonder Funda"],
-  ["/huis-verkopen-zonder-verkoopklaar-maken", "Huis verkopen zonder verkoopklaar maken"],
-  ["/woning-verkopen-met-schade", "Woning verkopen met schade"],
-  ["/huis-verkopen-met-spoed", "Huis verkopen met spoed"],
-  ["/huis-verkopen-na-overlijden", "Huis verkopen na overlijden"],
   ["/opknapwoning-verkopen", "Opknapwoning verkopen"],
   ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen"],
-  ["/huis-verkopen-met-achterstallig-onderhoud", "Huis verkopen met achterstallig onderhoud"],
+  ["/huis-verkopen-zonder-leeghalen", "Huis verkopen zonder leeghalen"],
+  ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen"],
+  ["/woning-verkopen-die-nog-vol-staat", "Woning verkopen die nog vol staat"],
+  ["/geerfde-woning-verkopen-zonder-leeghalen", "Geërfde woning verkopen zonder leeghalen"],
+  ["/opknapwoning-verkopen-zonder-makelaar", "Opknapwoning verkopen zonder makelaar"],
+  ["/leegstaand-huis-verkopen-wat-zijn-de-opties", "Leegstaand huis verkopen: opties"],
+  ["/huis-verkopen-bij-dubbele-lasten", "Huis verkopen bij dubbele lasten"],
+  ["/huis-verkopen-zonder-bezichtigingen-uitleg", "Huis verkopen zonder bezichtigingen"],
   ["/huis-verkopen-bij-erfenis", "Huis verkopen bij erfenis"],
-  ["/huis-verkopen-bij-scheiding", "Huis verkopen bij scheiding"],
   ["/verhuurde-woning-verkopen", "Verhuurde woning verkopen"],
+  ["/huis-verkopen-met-achterstallig-onderhoud", "Huis verkopen met achterstallig onderhoud"],
+  ["/huis-verkopen-zonder-bezichtigingen", "Huis verkopen zonder bezichtigingen"],
   ["/huis-verkopen-aan-opkoper", "Huis verkopen aan opkoper"],
   ["/huis-verkopen-groningen", "Huis verkopen in Groningen"],
-  ["/woning-verkopen-friesland", "Woning verkopen in Friesland"],
   ["/woning-verkopen-drenthe", "Woning verkopen in Drenthe"],
+  ["/woning-verkopen-friesland", "Woning verkopen in Friesland"],
   ["/woning-verkopen-overijssel", "Woning verkopen in Overijssel"],
-  ["/huis-verkopen-stadskanaal", "Huis verkopen in Stadskanaal"],
-  ["/huis-verkopen-veendam", "Huis verkopen in Veendam"],
-  ["/huis-verkopen-winschoten", "Huis verkopen in Winschoten"],
-  ["/huis-verkopen-assen", "Huis verkopen in Assen"],
-  ["/huis-verkopen-emmen", "Huis verkopen in Emmen"],
-  ["/huis-verkopen-borger", "Huis verkopen in Borger"],
-  ["/huis-verkopen-gieten", "Huis verkopen in Gieten"],
 ];
 
 function relatedLinksFor(page) {
@@ -47,6 +39,8 @@ export default function SeoLandingPage({ page }) {
   const benefits = Array.isArray(page.benefits) ? page.benefits : [];
   const comparisonRows = Array.isArray(page.comparisonRows) ? page.comparisonRows : [];
   const relatedLinks = relatedLinksFor(page);
+  const example = page.exampleSituation;
+  const showFaqSchema = faqs.length > 0;
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -87,10 +81,12 @@ export default function SeoLandingPage({ page }) {
 
   return (
     <main className="seo-page">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      {showFaqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
@@ -170,6 +166,8 @@ export default function SeoLandingPage({ page }) {
         .content-block{background:#fff;border:1px solid var(--line);border-radius:26px;padding:26px;box-shadow:0 14px 38px rgba(7,31,58,.055)}
         .content-block p{color:#647386;font-size:17px;line-height:1.68;margin:0 0 12px}
         .content-block p:last-child{margin-bottom:0}
+        .example-card{background:linear-gradient(135deg,#fff7ef 0%,#ffffff 100%);border:1px solid #ffd9bd;border-radius:28px;padding:28px;box-shadow:0 16px 44px rgba(255,106,0,.08)}
+        .example-card p{color:#5f7083;font-size:17px;line-height:1.68;margin:0}
         .list{display:grid;gap:10px;margin:12px 0 0;padding:0;list-style:none}
         .list li{background:#f8f5ef;border:1px solid #eee8df;border-radius:15px;padding:12px 14px;color:#24364a;font-weight:850;line-height:1.35}
         .steps{counter-reset:step;display:grid;gap:10px;margin:14px 0 0;padding:0;list-style:none}
@@ -238,7 +236,7 @@ export default function SeoLandingPage({ page }) {
           .benefit-grid,.compare-columns,.related-grid{grid-template-columns:1fr}
           .section{padding:42px 0}.section-tight{padding:38px 0}
           .section-head{text-align:left;margin-bottom:20px}
-          .card,.content-block,.cta-card,.comparison-wrap,.why-card{border-radius:22px;padding:20px}
+          .card,.content-block,.cta-card,.comparison-wrap,.why-card,.example-card{border-radius:22px;padding:20px}
           .cta-logo{display:none}
           .cta-card h2{font-size:24px}
           .review-mini{display:none}
@@ -376,6 +374,18 @@ export default function SeoLandingPage({ page }) {
         </div>
       </section>
 
+      {example && (
+        <section className="section-tight section-white">
+          <div className="container">
+            <div className="example-card">
+              <p className="eyebrow">Voorbeeldsituatie</p>
+              <h2>{example.title}</h2>
+              <p>{example.text}</p>
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="section-tight section-white">
         <div className="container content-grid">
           {sections.map((section) => (
@@ -442,23 +452,25 @@ export default function SeoLandingPage({ page }) {
         </section>
       )}
 
-      <section id="faq" className="section section-white">
-        <div className="container">
-          <div className="section-head">
-            <p className="eyebrow">Veelgestelde vragen</p>
-            <h2>Duidelijkheid voordat u een aanvraag doet.</h2>
-          </div>
+      {faqs.length > 0 && (
+        <section id="faq" className="section section-white">
+          <div className="container">
+            <div className="section-head">
+              <p className="eyebrow">Veelgestelde vragen</p>
+              <h2>Duidelijkheid voordat u een aanvraag doet.</h2>
+            </div>
 
-          <div className="faq">
-            {faqs.map((faq) => (
-              <div className="faq-item" key={faq.question}>
-                <h3>{faq.question}</h3>
-                <p>{faq.answer}</p>
-              </div>
-            ))}
+            <div className="faq">
+              {faqs.map((faq) => (
+                <div className="faq-item" key={faq.question}>
+                  <h3>{faq.question}</h3>
+                  <p>{faq.answer}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {relatedLinks.length > 0 && (
         <section className="section-tight">
@@ -512,12 +524,11 @@ export default function SeoLandingPage({ page }) {
           </div>
 
           <div>
-            <h3>Regio's</h3>
-            <p><a href="/huis-verkopen-groningen">Groningen</a></p>
-            <p><a href="/woning-verkopen-drenthe">Drenthe</a></p>
-            <p><a href="/woning-verkopen-friesland">Friesland</a></p>
-            <p><a href="/woning-verkopen-overijssel">Overijssel</a></p>
-            <p><a href="/privacyverklaring">Privacyverklaring</a></p>
+            <h3>Kennisbank</h3>
+            <p><a href="/huis-verkopen-zonder-leeghalen">Zonder leeghalen</a></p>
+            <p><a href="/huis-verkopen-zonder-opknappen">Zonder opknappen</a></p>
+            <p><a href="/woning-verkopen-die-nog-vol-staat">Woning staat nog vol</a></p>
+            <p><a href="/huis-verkopen-bij-dubbele-lasten">Dubbele lasten</a></p>
           </div>
         </div>
       </footer>

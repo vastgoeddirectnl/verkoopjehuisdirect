@@ -1,119 +1,169 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Woning verkopen zonder makelaar",
-  description:
-    "Woning verkopen zonder makelaar, open huis of gedoe? Ook als de woning nog vol staat of onderhoud nodig heeft. Vraag vrijblijvend een voorstel aan.",
-  alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/woning-verkopen-zonder-makelaar",
+  "title": "Woning verkopen zonder makelaar",
+  "description": "Woning verkopen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een voorstel aan.",
+  "alternates": {
+    "canonical": "https://www.verkoopjehuisdirect.nl/woning-verkopen-zonder-makelaar"
   },
-  openGraph: {
-    title: "Woning verkopen zonder makelaar",
-    description:
-      "Woning verkopen zonder makelaar, open huis of gedoe? Ook als de woning nog vol staat of onderhoud nodig heeft. Vraag vrijblijvend een voorstel aan.",
-    url: "https://www.verkoopjehuisdirect.nl/woning-verkopen-zonder-makelaar",
-    siteName: "Vastgoed Direct Nederland",
-    locale: "nl_NL",
-    type: "website",
-  },
+  "openGraph": {
+    "title": "Woning verkopen zonder makelaar",
+    "description": "Woning verkopen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een voorstel aan.",
+    "url": "https://www.verkoopjehuisdirect.nl/woning-verkopen-zonder-makelaar",
+    "siteName": "Vastgoed Direct Nederland",
+    "locale": "nl_NL",
+    "type": "website"
+  }
 };
 
 const page = {
-  slug: "/woning-verkopen-zonder-makelaar",
-  breadcrumb: "Woning verkopen zonder makelaar",
-  eyebrow: "Woning verkopen zonder makelaar",
-  h1: "Woning verkopen zonder makelaar of gedoe",
-  lead:
-    "Wilt u uw woning verkopen zonder makelaar, open huis of lange reeks bezichtigingen? Vraag vrijblijvend een voorstel aan. Ook als de woning nog niet verkoopklaar is.",
-  shortAnswer:
-    "U kunt uw woning zonder makelaar aanmelden voor een vrijblijvend voorstel. De woning hoeft niet eerst leeg, opgeknapt of volledig verkoopklaar te zijn.",
-  benefits: [
-    "Zonder makelaar verkopen",
+  "slug": "/woning-verkopen-zonder-makelaar",
+  "breadcrumb": "Woning verkopen zonder makelaar",
+  "eyebrow": "Zonder makelaar",
+  "h1": "Woning verkopen zonder makelaar of gedoe",
+  "lead": "Wilt u uw woning verkopen zonder traditioneel makelaarstraject? Vraag vrijblijvend een voorstel aan. Ook als de woning nog vol staat, onderhoud nodig heeft of niet verkoopklaar is.",
+  "shortAnswer": "U bent niet verplicht om via een makelaar te verkopen. Een directe verkoop kan een alternatief zijn als u geen open huis, bezichtigingen of makelaarskosten wilt.",
+  "benefits": [
     "Geen makelaarskosten",
-    "Geen open huis nodig",
+    "Geen open huis",
+    "Geen bezichtigingen",
     "Niet eerst opknappen",
     "Niet leeghalen",
-    "Vrijblijvend voorstel",
+    "Vrijblijvend"
   ],
-  sections: [
+  "exampleSituation": {
+    "title": "Als u geen verkooptraject met kijkers wilt",
+    "text": "Een veelvoorkomende reden om zonder makelaar te willen verkopen is dat iemand geen reeks bezichtigingen wil of de woning niet eerst netjes kan maken. Dan kan een directe verkooproute rust geven, mits de voorwaarden duidelijk zijn."
+  },
+  "sections": [
     {
-      title: "Woning verkopen zonder makelaar: wanneer past dit?",
-      paragraphs: [
-        "Niet iedere verkoper wil een standaard verkooptraject met foto's, Funda, open huis en meerdere bezichtigingen.",
-        "Soms wilt u vooral weten wat er mogelijk is, zonder dat u de woning eerst helemaal netjes of leeg hoeft te maken.",
-      ],
+      "title": "Wanneer speelt dit?",
+      "paragraphs": [
+        "Verkopen zonder makelaar speelt vaak als iemand geen courtage, foto's, open huis of reeks bezichtigingen wil.",
+        "Het kan ook spelen bij privacy, een woning vol spullen, achterstallig onderhoud of een situatie waarin rust belangrijk is."
+      ]
     },
     {
-      title: "Geen open huis en geen verkoopdruk",
-      paragraphs: [
-        "U vraagt vrijblijvend een voorstel aan en beslist daarna zelf of u verder wilt. Er is geen verplichting en geen druk om te verkopen.",
-        "Dat kan prettig zijn als privacy belangrijk is of als de woning niet geschikt is voor een normaal bezichtigingstraject.",
-      ],
+      "title": "Welke opties heeft u?",
+      "bullets": [
+        "Zelf verkopen",
+        "Alsnog een makelaar inschakelen",
+        "Onderhands verkopen",
+        "Een vrijblijvend direct voorstel aanvragen"
+      ]
     },
     {
-      title: "Voor welke situaties?",
-      bullets: [
-        "Woning verkopen zonder makelaar",
-        "Geen open huis gewenst",
-        "Geen zin in bezichtigingen",
-        "Woning staat nog vol spullen",
-        "Achterstallig onderhoud",
-        "Opknapwoning",
-        "Behoefte aan privacy",
-        "Snel duidelijkheid gewenst",
-      ],
+      "title": "Nadelen van regulier verkopen",
+      "paragraphs": [
+        "Regulier verkopen kan goed werken, maar vraagt vaak voorbereiding: opruimen, foto's, bezichtigingen, onderhandelen en wachten op financiering of voorwaarden."
+      ]
     },
     {
-      title: "Hoe werkt het?",
-      steps: [
-        "U vult kort uw adres en situatie in.",
-        "Wij nemen persoonlijk contact met u op.",
-        "U ontvangt een vrijblijvend voorstel met voorwaarden en planning.",
-        "U beslist zelf of u verder wilt.",
-      ],
+      "title": "Hoe werkt verkoop zonder makelaar?",
+      "steps": [
+        "U vraagt vrijblijvend informatie aan.",
+        "Wij kijken naar uw woning en situatie.",
+        "U ontvangt een voorstel met duidelijke voorwaarden.",
+        "Bij akkoord wordt de overdracht notarieel vastgelegd."
+      ]
     },
     {
-      title: "Kosten en afwikkeling",
-      paragraphs: [
-        "De aanvraag is gratis en vrijblijvend. U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland.",
-        "Als het voorstel past, worden afspraken over overdracht, oplevering en eventuele spullen in de woning vooraf duidelijk vastgelegd.",
-      ],
-    },
+      "title": "Waar moet u op letten?",
+      "paragraphs": [
+        "Zorg dat afspraken over prijs, oplevering, inboedel, datum en eventuele voorwaarden duidelijk op papier staan."
+      ]
+    }
   ],
-  comparisonRows: [
-    ["Makelaarskosten", "Vaak courtage of vast tarief", "Geen makelaarskosten"],
-    ["Bezichtigingen", "Vaak meerdere kijkers", "Geen open huis nodig"],
-    ["Privacy", "Vaak openbare presentatie", "Discreet traject mogelijk"],
-    ["Verkoopklaar maken", "Vaak eerst opruimen of herstellen", "Niet eerst opknappen of leeghalen"],
-    ["Spullen in de woning", "Moeten vaak eerst weg", "Bespreekbaar binnen het voorstel"],
-    ["Afwikkeling", "Afhankelijk van afspraken", "Bij akkoord via de notaris"],
+  "comparisonRows": [
+    [
+      "Opknappen",
+      "Vaak eerst nodig voor presentatie",
+      "Niet vooraf nodig voor een eerste voorstel"
+    ],
+    [
+      "Leeghalen",
+      "Vaak nodig voor foto's en bezichtigingen",
+      "Kan worden besproken in de voorwaarden"
+    ],
+    [
+      "Bezichtigingen",
+      "Vaak meerdere kijkers",
+      "Geen open huis nodig"
+    ],
+    [
+      "Kosten",
+      "Mogelijk courtage, styling of herstel",
+      "Geen makelaarskosten voor de aanvraag"
+    ],
+    [
+      "Planning",
+      "Afhankelijk van koper en markt",
+      "In overleg duidelijk af te spreken"
+    ],
+    [
+      "Beslissing",
+      "Vaak langer traject",
+      "U beslist zelf na het voorstel"
+    ]
   ],
-  faqs: [
+  "faqs": [
     {
-      question: "Kan ik mijn woning verkopen zonder makelaar?",
-      answer:
-        "Ja, u kunt rechtstreeks een vrijblijvend voorstel aanvragen zonder traditioneel makelaarstraject.",
+      "question": "Kan ik mijn woning verkopen zonder makelaar?",
+      "answer": "Ja, dat kan. U bent niet verplicht om een makelaar in te schakelen. Een directe verkoop kan een alternatief zijn als u geen open huis, bezichtigingen of makelaarskosten wilt."
     },
     {
-      question: "Moet mijn woning verkoopklaar of leeg zijn?",
-      answer:
-        "Nee, dat hoeft niet vooraf. Ook als de woning nog vol spullen staat, onderhoud nodig heeft of niet verkoopklaar is, kunt u een aanvraag doen.",
+      "question": "Betaal ik makelaarskosten bij deze verkooproute?",
+      "answer": "Nee, bij deze verkooproute betaalt u geen traditionele makelaarskosten. U vraagt vrijblijvend een voorstel aan en beslist zelf of u verder wilt."
     },
     {
-      question: "Moet ik bezichtigingen of een open huis doen?",
-      answer:
-        "Nee, dat is niet standaard nodig. U kunt eerst rustig een voorstel aanvragen zonder open huis of reeks bezichtigingen.",
+      "question": "Moet ik zelf alles regelen als ik zonder makelaar verkoop?",
+      "answer": "Nee, niet alles. Bij een directe verkoop worden de afspraken duidelijk vastgelegd en loopt de juridische levering via de notaris."
     },
     {
-      question: "Is de aanvraag vrijblijvend?",
-      answer:
-        "Ja, de aanvraag is gratis en vrijblijvend. U beslist zelf of u verder wilt.",
+      "question": "Kan ik zonder makelaar verkopen als de woning nog niet netjes is?",
+      "answer": "Ja, dat kan. De woning hoeft niet altijd eerst opgeknapt, gestyled of volledig leeggehaald te worden."
     },
+    {
+      "question": "Is verkopen zonder makelaar geschikt voor iedere woning?",
+      "answer": "Niet altijd. Soms is reguliere verkoop via een makelaar beter. Daarom kijken wij eerst naar uw woning en situatie, zodat u een goede afweging kunt maken."
+    }
   ],
-  ctaTitle: "Wilt u verkopen zonder makelaarstraject?",
-  ctaText:
-    "Vraag vrijblijvend een voorstel aan. Ook als de woning nog niet verkoopklaar is of nog vol spullen staat.",
-  keywords: "woning verkopen zonder makelaar, huis verkopen zonder makelaar, zonder courtage",
+  "relatedLinks": [
+    [
+      "/huis-verkopen-zonder-leeghalen",
+      "Huis verkopen zonder leeghalen"
+    ],
+    [
+      "/huis-verkopen-zonder-opknappen",
+      "Huis verkopen zonder opknappen"
+    ],
+    [
+      "/woning-verkopen-die-nog-vol-staat",
+      "Woning verkopen die nog vol staat"
+    ],
+    [
+      "/opknapwoning-verkopen-zonder-makelaar",
+      "Opknapwoning verkopen zonder makelaar"
+    ],
+    [
+      "/leegstaand-huis-verkopen-wat-zijn-de-opties",
+      "Leegstaand huis verkopen: wat zijn de opties?"
+    ],
+    [
+      "/huis-verkopen-bij-dubbele-lasten",
+      "Huis verkopen bij dubbele lasten"
+    ],
+    [
+      "/huis-verkopen-zonder-bezichtigingen-uitleg",
+      "Huis verkopen zonder bezichtigingen"
+    ],
+    [
+      "/geerfde-woning-verkopen-zonder-leeghalen",
+      "Geërfde woning verkopen zonder leeghalen"
+    ]
+  ],
+  "ctaTitle": "Zonder makelaar verkopen?",
+  "ctaText": "Vraag vrijblijvend een voorstel aan. Geen open huis, geen verkoopdruk en u beslist zelf."
 };
 
 export default function WoningVerkopenZonderMakelaarPage() {
