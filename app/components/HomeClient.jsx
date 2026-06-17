@@ -34,39 +34,46 @@ const faqSchema = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "Kan ik mijn woning verkopen zonder makelaar?",
+      name: "Moet mijn woning eerst leeg zijn?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel verkooptraject met een makelaar.",
+        text: "Nee, dat hoeft niet altijd. Ook als de woning nog vol spullen staat, kunt u vrijblijvend laten bekijken wat er mogelijk is.",
       },
     },
     {
       "@type": "Question",
-      name: "Moet mijn woning verkoopklaar zijn?",
+      name: "Moet ik eerst opknappen?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Nee, de woning hoeft niet verkoopklaar te zijn. Ook woningen met onderhoud, schade of een woning die nog vol spullen staat kunnen worden aangemeld.",
+        text: "Nee, dat hoeft niet altijd. Ook bij onderhoud, schade of een woning die niet verkoopklaar is, kunt u vrijblijvend een voorstel aanvragen.",
       },
     },
     {
       "@type": "Question",
-      name: "Betaal ik makelaarskosten?",
+      name: "Zit ik ergens aan vast?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Nee, u betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland.",
+        text: "Nee. Een aanvraag is gratis en vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
       },
     },
     {
       "@type": "Question",
-      name: "Kan ik verkopen zonder bezichtigingen?",
+      name: "Kan dit zonder open huis?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "In veel situaties is dat mogelijk. Wij bespreken de verkoopmogelijkheden zonder traditioneel bezichtigingstraject of open huis.",
+        text: "Ja, in veel situaties is een open huis niet nodig. Wij bespreken rustig wat bij uw woning en situatie past.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Wat gebeurt er na mijn aanvraag?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Wij nemen persoonlijk contact met u op, bespreken kort de situatie en geven aan welke vervolgstappen mogelijk zijn.",
       },
     },
   ],
 };
-
 const situations = [
   ["Niet eerst opknappen", "Ook als de woning onderhoud nodig heeft of niet verkoopklaar is."],
   ["Niet eerst leeghalen", "Staat de woning nog vol spullen? Dan kunt u toch vrijblijvend informeren."],
@@ -75,50 +82,61 @@ const situations = [
 ];
 
 const processSteps = [
-  ["01", "Korte aanvraag", "U vult uw adres en situatie in. Meer hoeft nog niet."],
-  ["02", "Persoonlijk contact", "We kijken rustig mee en bespreken wat praktisch mogelijk is."],
-  ["03", "Duidelijk voorstel", "U ontvangt helderheid over bedrag, voorwaarden en vervolgstappen."],
+  ["1", "Korte aanvraag", "Vul uw woning en situatie kort in."],
+  ["2", "Eerste inschatting", "U ontvangt snel een eerste vrijblijvend beeld."],
+  ["3", "Persoonlijk contact", "We bespreken uw situatie en bekijken de woning eventueel in de huidige staat."],
+  ["4", "Helder voorstel", "U ontvangt een concreet voorstel met bod, voorwaarden en planning."],
+  ["5", "U beslist zelf", "Bij akkoord regelen we de overeenkomst en overdracht via de notaris."],
 ];
 
 const comparisonRows = [
-  ["Woning verkoopklaar maken", "Vaak gewenst", "Niet eerst nodig"],
-  ["Woning leeghalen", "Vaak zelf regelen", "Niet eerst nodig"],
-  ["Bezichtigingen / open huis", "Meerdere momenten", "Geen open huis nodig"],
-  ["Makelaarskosten", "Gebruikelijk", "Geen makelaarskosten"],
-  ["Privacy", "Meerdere partijen", "Discreter contact"],
+  ["Opknappen", "Vaak eerst nodig", "Niet vooraf nodig"],
+  ["Leeghalen", "Vaak zelf regelen", "Niet eerst nodig"],
+  ["Bezichtigingen", "Meerdere momenten", "Geen open huis nodig"],
+  ["Kosten", "Makelaars- en verkoopkosten", "Geen makelaarskosten"],
+  ["Snel duidelijkheid", "Afhankelijk van markt", "Eerst helder voorstel"],
+  ["Persoonlijk contact", "Meerdere schakels", "Eén persoonlijk contact"],
 ];
 
 const whyDifferent = [
   [
+    "Geen verkoopdruk",
+    "U vraagt vrijblijvend informatie aan en beslist zelf of u verder wilt.",
+  ],
+  [
     "Niet eerst opknappen of leeghalen",
-    "De woning hoeft niet verkoopklaar te zijn. Ook als er onderhoud nodig is of de woning nog vol spullen staat, kunt u vrijblijvend informeren.",
+    "Ook als de woning onderhoud nodig heeft of nog vol spullen staat, kijken wij mee.",
   ],
   [
-    "Eerst gewoon duidelijkheid",
-    "U hoort rustig wat er mogelijk is. Daarna beslist u zelf of u verder wilt. Zonder druk en zonder verplichting.",
-  ],
-  [
-    "Persoonlijk contact",
-    "Geen standaardreactie of callcenter. We kijken naar uw woning, de situatie en wat voor u praktisch haalbaar is.",
+    "Persoonlijk en discreet",
+    "Geen callcenter, maar persoonlijk contact en duidelijke afspraken.",
   ],
 ];
 
 const routeCards = [
   ["/huis-verkopen-zonder-opknappen", "Niet eerst opknappen", "Ook bij onderhoud of schade kunt u vrijblijvend laten bekijken wat mogelijk is.", "Bekijk mogelijkheden"],
-  ["/huis-verkopen-zonder-leeghalen", "Niet eerst leeghalen", "De woning hoeft niet altijd eerst leeg te zijn voor een eerste voorstel.", "Lees meer"],
-  ["/woning-verkopen-die-nog-vol-staat", "Woning staat nog vol spullen", "Ook bij inboedel, erfenis of verhuizing kijken wij rustig met u mee.", "Meer hierover"],
-  ["/leegstaand-huis-verkopen", "Leegstand of dubbele lasten", "Voorkom dat kosten en onderhoud blijven doorlopen zonder duidelijkheid.", "Bekijk route"],
-  ["/opknapwoning-verkopen", "Opknapwoning verkopen", "U hoeft niet altijd eerst te investeren in herstel of verkoopklaar maken.", "Bekijk pagina"],
-  ["/woning-verkopen-zonder-makelaar", "Zonder makelaar verkopen", "Geen open huis, geen reeks bezichtigingen en geen traditionele makelaarskosten.", "Bekijk opties"],
-  ["/huis-verkopen-bij-erfenis", "Erfenis of nalatenschap", "Eerst duidelijkheid zonder direct alles te hoeven opruimen of leeghalen.", "Lees meer"],
-  ["/huis-verkopen-zonder-bezichtigingen", "Zonder bezichtigingen", "Een rustiger traject als privacy, tijd of gemak belangrijk is.", "Bekijk mogelijkheden"],
+  ["/huis-verkopen-zonder-leeghalen", "Niet eerst leeghalen", "De woning hoeft niet altijd eerst leeggehaald te worden.", "Lees meer"],
+  ["/woning-verkopen-die-nog-vol-staat", "Woning staat nog vol spullen", "Ook bij inboedel of achtergebleven spullen kijken wij met u mee.", "Meer hierover"],
+  ["/opknapwoning-verkopen", "Opknapwoning verkopen", "Ook als de woning niet verkoopklaar is.", "Bekijk pagina"],
+  ["/leegstaand-huis-verkopen", "Leegstand of dubbele lasten", "Krijg duidelijkheid als kosten en zorgen blijven doorlopen.", "Bekijk route"],
+  ["/woning-verkopen-zonder-makelaar", "Zonder makelaar verkopen", "Geen traditioneel makelaarstraject of open huis nodig.", "Bekijk opties"],
+];
+
+const answerMenuLinks = [
+  ["/huis-verkopen-zonder-leeghalen", "Huis verkopen zonder leeghalen"],
+  ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen"],
+  ["/woning-verkopen-die-nog-vol-staat", "Woning die nog vol staat"],
+  ["/opknapwoning-verkopen", "Opknapwoning verkopen"],
+  ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen"],
+  ["/huis-verkopen-zonder-bezichtigingen-uitleg", "Huis verkopen zonder bezichtigingen"],
 ];
 
 const faqItems = [
-  ["Moet mijn woning eerst leeg of verkoopklaar zijn?", "Nee. Ook als de woning onderhoud nodig heeft, schade heeft of nog vol spullen staat, kunt u vrijblijvend informeren."],
-  ["Zit ik ergens aan vast na een aanvraag?", "Nee. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."],
-  ["Betaal ik makelaarskosten?", "Nee, voor deze verkooproute betaalt u geen traditionele makelaarskosten."],
-  ["Kan ik ook eerst even overleggen?", "Ja. U kunt bellen, WhatsAppen of een korte aanvraag doen. We kijken rustig met u mee."],
+  ["Moet mijn woning eerst leeg zijn?", "Nee, dat hoeft niet altijd. Ook als de woning nog vol spullen staat, kunt u vrijblijvend laten bekijken wat er mogelijk is."],
+  ["Moet ik eerst opknappen?", "Nee, dat hoeft niet altijd. Ook bij onderhoud, schade of een woning die niet verkoopklaar is, kunt u vrijblijvend een voorstel aanvragen."],
+  ["Zit ik ergens aan vast?", "Nee. Een aanvraag is gratis en vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."],
+  ["Kan dit zonder open huis?", "Ja, in veel situaties is een open huis niet nodig. Wij bespreken rustig wat bij uw woning en situatie past."],
+  ["Wat gebeurt er na mijn aanvraag?", "Wij nemen persoonlijk contact met u op, bespreken kort de situatie en geven aan welke vervolgstappen mogelijk zijn."],
 ];
 
 const woningTypes = [
@@ -347,6 +365,65 @@ export default function HomeClient() {
           font-weight: 900;
         }
         .nav a:hover { color: #ff6a00; }
+        .nav-menu {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          min-height: 38px;
+        }
+        .nav-trigger {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          color: #24364a;
+          font-size: 14px;
+          font-weight: 900;
+          cursor: default;
+        }
+        .nav-trigger:after {
+          content: "▾";
+          color: #ff6a00;
+          font-size: 11px;
+          margin-top: 1px;
+        }
+        .nav-dropdown {
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translateX(-50%) translateY(8px);
+          width: 260px;
+          display: grid;
+          gap: 6px;
+          padding: 12px;
+          background: rgba(255, 255, 255, .98);
+          border: 1px solid #e8e3db;
+          border-radius: 18px;
+          box-shadow: 0 18px 50px rgba(7,31,58,.14);
+          opacity: 0;
+          pointer-events: none;
+          transition: .18s ease;
+          z-index: 120;
+        }
+        .nav-menu:hover .nav-dropdown,
+        .nav-menu:focus-within .nav-dropdown {
+          opacity: 1;
+          pointer-events: auto;
+          transform: translateX(-50%) translateY(0);
+        }
+        .nav-dropdown a {
+          display: block;
+          padding: 10px 11px;
+          background: #f8f5ef;
+          border: 1px solid #eee8df;
+          border-radius: 12px;
+          color: #24364a;
+          font-size: 13px;
+          line-height: 1.2;
+        }
+        .nav-dropdown a:hover {
+          background: #fff3e7;
+          border-color: #ffd5b6;
+        }
         .header-actions { display: flex; align-items: center; gap: 8px; }
 
         .btn {
@@ -449,6 +526,30 @@ export default function HomeClient() {
           font-weight: 900;
           color: #071f3a;
           box-shadow: 0 10px 22px rgba(7, 31, 58, .06);
+        }
+        .hero-proof-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin: 18px 0 0;
+        }
+        .hero-proof-row span {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 999px;
+          padding: 10px 12px;
+          color: #24364a;
+          font-size: 13px;
+          font-weight: 900;
+          box-shadow: 0 10px 22px rgba(7,31,58,.055);
+        }
+        .hero-proof-row span:before {
+          content: "✓";
+          color: #ff6a00;
+          font-weight: 900;
         }
 
         .form-card {
@@ -1179,9 +1280,69 @@ export default function HomeClient() {
         }
         .compact-steps {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 14px;
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 12px;
+          align-items: stretch;
         }
+        .compact-steps .step-card {
+          padding: 16px;
+          border-radius: 22px;
+          min-height: 170px;
+        }
+        .compact-steps .step-card h3 {
+          font-size: 18px;
+          line-height: 1.15;
+        }
+        .compact-steps .step-card p {
+          font-size: 14px;
+          line-height: 1.48;
+        }
+        .compact-steps .step-number {
+          width: 40px;
+          height: 40px;
+          border-radius: 15px;
+          margin-bottom: 12px;
+        }
+
+        .comparison-compact {
+          background: #071f3a;
+          border-radius: 30px;
+          padding: 28px;
+          color: #fff;
+          box-shadow: 0 18px 54px rgba(7, 31, 58, .16);
+        }
+        .comparison-compact-head {
+          display: grid;
+          grid-template-columns: .95fr 1.05fr;
+          gap: 26px;
+          align-items: end;
+          margin-bottom: 18px;
+        }
+        .comparison-compact h2 { color: #fff; }
+        .comparison-compact p { color: #d7e3ef; line-height: 1.55; margin: 0; }
+        .comparison-table {
+          display: grid;
+          gap: 7px;
+        }
+        .comparison-table-row {
+          display: grid;
+          grid-template-columns: .75fr 1fr 1fr;
+          gap: 10px;
+          align-items: center;
+          background: rgba(255,255,255,.08);
+          border: 1px solid rgba(255,255,255,.12);
+          border-radius: 14px;
+          padding: 10px 12px;
+          color: #dbe7f3;
+          font-size: 14px;
+          line-height: 1.3;
+        }
+        .comparison-table-row strong { color: #fff; }
+        .comparison-table-row span:last-child {
+          color: #fff;
+          font-weight: 900;
+        }
+
         .faq-accordion {
           max-width: 880px;
           margin: 0 auto;
@@ -1488,7 +1649,8 @@ export default function HomeClient() {
           }
           .trust-micro,
           .problem-grid,
-          .steps {
+          .steps,
+          .compact-steps {
             grid-template-columns: repeat(2, 1fr);
           }
           .form-card {
@@ -1574,6 +1736,9 @@ export default function HomeClient() {
           .section-tight { padding: 44px 0; }
           .compare-columns { grid-template-columns: 1fr; }
           .compare-row { grid-template-columns: 1fr; gap: 5px; }
+          .comparison-compact { padding: 20px; border-radius: 24px; }
+          .comparison-compact-head { grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
+          .comparison-table-row { grid-template-columns: 1fr; gap: 5px; font-size: 13px; }
           .faq-item { display: block; }
           .faq-item h3 { margin-bottom: 7px; }
           .popular-grid {
@@ -1660,6 +1825,17 @@ export default function HomeClient() {
             font-weight: 850;
           }
           .trust-micro {
+            display: none;
+          }
+          .hero-proof-row {
+            gap: 6px;
+            margin-top: 11px;
+          }
+          .hero-proof-row span {
+            padding: 7px 9px;
+            font-size: 11px;
+          }
+          .hero-proof-row span:nth-child(4) {
             display: none;
           }
           .trust-micro div {
@@ -1800,10 +1976,25 @@ export default function HomeClient() {
             padding: 16px;
           }
           .home-compact-grid,
-          .compact-steps,
           .seo-compact,
           .seo-link-grid {
             grid-template-columns: 1fr;
+          }
+          .compact-steps {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            margin-left: -14px;
+            margin-right: -14px;
+            padding-left: 14px;
+            padding-right: 14px;
+            padding-bottom: 10px;
+          }
+          .compact-steps .step-card {
+            flex: 0 0 230px;
+            scroll-snap-align: start;
+            min-height: 160px;
           }
         }
       `}</style>
@@ -1825,6 +2016,14 @@ export default function HomeClient() {
 
           <nav className="nav" aria-label="Hoofdnavigatie">
             <a href="#situaties">Situaties</a>
+            <div className="nav-menu">
+              <span className="nav-trigger">Antwoorden</span>
+              <div className="nav-dropdown" aria-label="Antwoorden op veelgestelde vragen">
+                {answerMenuLinks.map(([href, label]) => (
+                  <a href={href} key={href}>{label}</a>
+                ))}
+              </div>
+            </div>
             <a href="#waarom">Waarom VDN?</a>
             <a href="#werkwijze">Werkwijze</a>
             <a href="#faq">FAQ</a>
@@ -1859,11 +2058,11 @@ export default function HomeClient() {
             <p className="micro-note">Niet eerst opknappen. Niet eerst leeghalen. Vrijblijvend voorstel.</p>
             <div className="mobile-proof-line">Niet eerst opknappen · Niet leeghalen · Vrijblijvend</div>
 
-            <div className="trust-micro" aria-label="Voordelen">
-              <div>✓ Gratis en vrijblijvend</div>
-              <div>✓ Niet eerst opknappen</div>
-              <div>✓ Niet eerst leeghalen</div>
-              <div>✓ Persoonlijk contact</div>
+            <div className="hero-proof-row" aria-label="Belangrijkste zekerheden">
+              <span>Niet eerst opknappen</span>
+              <span>Niet eerst leeghalen</span>
+              <span>Vrijblijvend voorstel</span>
+              <span>Persoonlijk contact</span>
             </div>
           </div>
 
@@ -1874,23 +2073,14 @@ export default function HomeClient() {
 
             {!submitted ? (
               <form onSubmit={submitLead}>
-                <div className="form-benefits">
-                  <span>Niet opknappen</span>
-                  <span>Niet leeghalen</span>
-                  <span>Vrijblijvend</span>
-                </div>
-                <div className="mobile-form-kicker">Binnen 1 minuut aangevraagd</div>
-
                 <p className="step-label">Stap {step} van 3</p>
                 <h2 className="form-title">Vertel kort om welke woning het gaat</h2>
                 <p className="form-sub form-sub-desktop">
-                  Vul uw adres en situatie in. Ook als de woning nog vol staat, onderhoud nodig heeft of niet
-                  verkoopklaar is.
+                  Vul uw adres en situatie in. Wij kijken met u mee en nemen persoonlijk contact met u op.
                 </p>
                 <p className="form-sub form-sub-mobile">
-                  Ook als de woning nog vol staat, onderhoud nodig heeft of niet verkoopklaar is.
+                  Adres en situatie zijn genoeg voor het eerste contact.
                 </p>
-                <div className="notice">Gratis en vrijblijvend. U hoeft de woning niet eerst op te knappen of leeg te halen.</div>
 
                 {step === 1 && (
                   <div className="form-stack">
@@ -1947,11 +2137,7 @@ export default function HomeClient() {
                       <button type="submit" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</button>
                     </div>
                     <p className="small-note">Wij gebruiken uw gegevens alleen om persoonlijk contact op te nemen over uw aanvraag.</p>
-                    <div className="form-assurance">
-                      <span>Niet eerst opknappen</span>
-                      <span>Niet eerst leeghalen</span>
-                      <span>Vrijblijvend</span>
-                    </div>
+
                   </div>
                 )}
               </form>
@@ -1964,12 +2150,6 @@ export default function HomeClient() {
               </div>
             )}
 
-            <div className="form-receive">
-              <strong>Wat u ontvangt:</strong>
-              <div><span>✓</span> Duidelijkheid zonder dat u eerst hoeft op te knappen</div>
-              <div><span>✓</span> Ook mogelijk als de woning nog vol spullen staat</div>
-              <div><span>✓</span> Persoonlijk contact zonder verplichting</div>
-            </div>
           </section>
         </div>
       </section>
@@ -2010,7 +2190,7 @@ export default function HomeClient() {
               <h2>Wat past bij uw woning?</h2>
             </div>
             <p>
-              Niet iedere verkoop vraagt om een lang traject. Kies de situatie die het meest lijkt op die van u.
+              Kies de situatie die het meest lijkt op uw woning. Dan leest u direct wat er mogelijk is.
             </p>
           </div>
 
@@ -2030,11 +2210,10 @@ export default function HomeClient() {
       <section id="waarom" className="section-tight different-section">
         <div className="container">
           <div className="section-head">
-            <p className="eyebrow">Waarom Vastgoed Direct Nederland?</p>
-            <h2>Rustig duidelijkheid, zonder onnodige stappen vooraf.</h2>
+            <p className="eyebrow">Geen standaard huizenopkoper</p>
+            <h2>Waarom Vastgoed Direct Nederland?</h2>
             <p>
-              De kern is eenvoudig: u hoeft niet eerst op te knappen,
-              leeg te halen of bezichtigingen te plannen om vrijblijvend te horen wat mogelijk is.
+              U krijgt eerst rustig duidelijkheid. Zonder verkoopdruk, zonder callcenter en zonder verplichting.
             </p>
           </div>
 
@@ -2052,9 +2231,9 @@ export default function HomeClient() {
       <section id="werkwijze" className="section section-white">
         <div className="container">
           <div className="section-head">
-            <p className="eyebrow">De werkwijze</p>
-            <h2>In drie stappen naar duidelijkheid.</h2>
-            <p>Een adres en korte toelichting zijn genoeg om te starten. U zit nergens aan vast.</p>
+            <p className="eyebrow">Hoe werkt het proces?</p>
+            <h2>In 5 duidelijke stappen weet u waar u aan toe bent.</h2>
+            <p>Een korte aanvraag is genoeg om rustig te starten. U zit nergens aan vast.</p>
           </div>
 
           <div className="compact-steps">
@@ -2069,6 +2248,32 @@ export default function HomeClient() {
 
           <div style={{ textAlign: "center", marginTop: 26 }}>
             <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-tight">
+        <div className="container">
+          <div className="comparison-compact">
+            <div className="comparison-compact-head">
+              <div>
+                <p className="eyebrow">Vergelijking</p>
+                <h2>Niet alleen de prijs telt. Ook rust, tijd en duidelijkheid.</h2>
+              </div>
+              <p>
+                Bij verkoop gaat het niet alleen om het hoogste bod. Ook kosten, bezichtigingen,
+                oplevering, spullen in de woning en duidelijke afspraken zijn belangrijk.
+              </p>
+            </div>
+            <div className="comparison-table" aria-label="Vergelijking tussen traditionele verkoop en Vastgoed Direct Nederland">
+              {comparisonRows.map(([label, traditional, direct]) => (
+                <div className="comparison-table-row" key={label}>
+                  <strong>{label}</strong>
+                  <span>Traditioneel: {traditional}</span>
+                  <span>VDN: {direct}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
