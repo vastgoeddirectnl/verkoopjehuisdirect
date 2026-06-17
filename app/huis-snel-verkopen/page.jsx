@@ -55,23 +55,24 @@ const page = {
     {
       "title": "Wanneer is directe verkoop logisch?",
       "paragraphs": [
-        "Directe verkoop kan logisch zijn als snelheid, rust en duidelijke voorwaarden belangrijker zijn dan een lang traject met meerdere bezichtigingen.",
-        "U krijgt eerst een voorstel met planning en voorwaarden. Daarna beslist u zelf of het past."
+        "Directe verkoop kan logisch zijn als snelheid, rust en duidelijkheid belangrijker zijn dan een lang traject met meerdere bezichtigingen.",
+        "U krijgt eerst een eerste vrijblijvend bod. Als dat passend lijkt, kan daarna een definitief voorstel volgen met planning en uitleg over het vervolg."
       ]
     },
     {
       "title": "Hoe werkt het proces?",
       "steps": [
-        "U vult kort uw adres en situatie in.",
-        "Wij nemen persoonlijk contact met u op.",
-        "U ontvangt een vrijblijvend voorstel met voorwaarden en planning.",
-        "Bij akkoord loopt de overdracht via de notaris."
+        "U vult kort uw woning en situatie in.",
+        "Op basis van de eerste gegevens ontvangt u een eerste vrijblijvend bod.",
+        "We bespreken uw situatie en bekijken de woning eventueel in de huidige staat.",
+        "Na beoordeling ontvangt u een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.",
+        "Bij akkoord worden de afspraken vastgelegd in een koopovereenkomst en volgt de overdracht via de notaris."
       ]
     },
     {
       "title": "Waar moet u op letten?",
       "paragraphs": [
-        "Vergelijk niet alleen het bedrag, maar ook voorwaarden, opleverdatum, eventuele spullen in de woning, kosten en zekerheid van afwikkeling."
+        "Vergelijk niet alleen het bedrag, maar ook de planning, opleverdatum, eventuele spullen in de woning, kosten en zekerheid van afwikkeling."
       ]
     }
   ],
@@ -84,7 +85,7 @@ const page = {
     [
       "Leeghalen",
       "Vaak nodig voor foto's en bezichtigingen",
-      "Kan worden besproken in de voorwaarden"
+      "Kan worden meegenomen in het voorstel"
     ],
     [
       "Bezichtigingen",
@@ -126,7 +127,7 @@ const page = {
     },
     {
       "question": "Krijg ik alleen een bedrag of ook uitleg?",
-      "answer": "U ontvangt niet alleen een bedrag, maar ook uitleg over de voorwaarden, planning, overdracht en vervolgstappen."
+      "answer": "U ontvangt niet alleen een bedrag, maar ook uitleg over het bod, de planning, de koopovereenkomst en de notariële overdracht."
     }
   ],
   "relatedLinks": [

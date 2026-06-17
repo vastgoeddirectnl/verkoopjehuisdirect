@@ -33,7 +33,7 @@ const page = {
   ],
   "exampleSituation": {
     "title": "Als u geen verkooptraject met kijkers wilt",
-    "text": "Een veelvoorkomende reden om zonder makelaar te willen verkopen is dat iemand geen reeks bezichtigingen wil of de woning niet eerst netjes kan maken. Dan kan een directe verkooproute rust geven, mits de voorwaarden duidelijk zijn."
+    "text": "Een veelvoorkomende reden om zonder makelaar te willen verkopen is dat iemand geen reeks bezichtigingen wil of de woning niet eerst netjes kan maken. Dan kan een directe verkooproute rust geven, mits de afspraken duidelijk zijn."
   },
   "sections": [
     {
@@ -55,22 +55,23 @@ const page = {
     {
       "title": "Nadelen van regulier verkopen",
       "paragraphs": [
-        "Regulier verkopen kan goed werken, maar vraagt vaak voorbereiding: opruimen, foto's, bezichtigingen, onderhandelen en wachten op financiering of voorwaarden."
+        "Regulier verkopen kan goed werken, maar vraagt vaak voorbereiding: opruimen, foto's, bezichtigingen, onderhandelen en wachten op financiering of zekerheid."
       ]
     },
     {
       "title": "Hoe werkt verkoop zonder makelaar?",
       "steps": [
-        "U vraagt vrijblijvend informatie aan.",
-        "Wij kijken naar uw woning en situatie.",
-        "U ontvangt een voorstel met duidelijke voorwaarden.",
-        "Bij akkoord wordt de overdracht notarieel vastgelegd."
+        "U vult kort uw woning en situatie in.",
+        "Op basis van de eerste gegevens ontvangt u een eerste vrijblijvend bod.",
+        "We bespreken uw situatie en bekijken de woning eventueel in de huidige staat.",
+        "Na beoordeling ontvangt u een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.",
+        "Bij akkoord worden de afspraken vastgelegd in een koopovereenkomst en volgt de overdracht via de notaris."
       ]
     },
     {
       "title": "Waar moet u op letten?",
       "paragraphs": [
-        "Zorg dat afspraken over prijs, oplevering, inboedel, datum en eventuele voorwaarden duidelijk op papier staan."
+        "Zorg dat afspraken over prijs, oplevering, inboedel en datum duidelijk op papier staan."
       ]
     }
   ],
@@ -83,7 +84,7 @@ const page = {
     [
       "Leeghalen",
       "Vaak nodig voor foto's en bezichtigingen",
-      "Kan worden besproken in de voorwaarden"
+      "Kan worden meegenomen in het voorstel"
     ],
     [
       "Bezichtigingen",

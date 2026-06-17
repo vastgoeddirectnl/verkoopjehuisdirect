@@ -66,10 +66,11 @@ const page = {
     {
       "title": "Hoe werkt het proces?",
       "steps": [
-        "U geeft aan dat de woning nog vol staat.",
-        "Wij bespreken de situatie en gewenste planning.",
-        "U ontvangt een voorstel met duidelijke afspraken over oplevering.",
-        "U beslist zelf of u verder wilt."
+        "U vult kort uw woning en situatie in.",
+        "Op basis van de eerste gegevens ontvangt u een eerste vrijblijvend bod.",
+        "We bespreken uw situatie en bekijken de woning eventueel in de huidige staat.",
+        "Na beoordeling ontvangt u een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.",
+        "Bij akkoord worden de afspraken vastgelegd in een koopovereenkomst en volgt de overdracht via de notaris."
       ]
     }
   ],
@@ -82,7 +83,7 @@ const page = {
     [
       "Leeghalen",
       "Vaak nodig voor foto's en bezichtigingen",
-      "Kan worden besproken in de voorwaarden"
+      "Kan worden meegenomen in het voorstel"
     ],
     [
       "Bezichtigingen",

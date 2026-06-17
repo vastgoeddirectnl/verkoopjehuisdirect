@@ -22,7 +22,7 @@ const page = {
   "eyebrow": "Huis direct verkopen",
   "h1": "Huis direct verkopen zonder verkoopstress",
   "lead": "Wilt u weten wat directe verkoop voor uw woning kan betekenen? Vraag vrijblijvend duidelijkheid aan. Ook als de woning nog vol staat, onderhoud nodig heeft of niet verkoopklaar is.",
-  "shortAnswer": "Direct verkopen betekent dat u niet eerst een volledig makelaarstraject hoeft te doorlopen. U vraagt vrijblijvend een voorstel aan en krijgt duidelijkheid over bedrag, voorwaarden en planning.",
+  "shortAnswer": "Direct verkopen betekent dat u niet eerst een volledig makelaarstraject hoeft te doorlopen. U vraagt vrijblijvend een voorstel aan en krijgt duidelijkheid over een eerste bod, de mogelijke planning en de vervolgstappen.",
   "benefits": [
     "Direct duidelijkheid",
     "Geen open huis",
@@ -61,16 +61,17 @@ const page = {
     {
       "title": "Hoe werkt het proces?",
       "steps": [
-        "U vult kort de woning en situatie in.",
-        "Wij bespreken wat belangrijk is: snelheid, staat, spullen en planning.",
-        "U ontvangt een voorstel met voorwaarden.",
-        "U beslist zelf of u verder wilt."
+        "U vult kort uw woning en situatie in.",
+        "Op basis van de eerste gegevens ontvangt u een eerste vrijblijvend bod.",
+        "We bespreken uw situatie en bekijken de woning eventueel in de huidige staat.",
+        "Na beoordeling ontvangt u een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.",
+        "Bij akkoord worden de afspraken vastgelegd in een koopovereenkomst en volgt de overdracht via de notaris."
       ]
     },
     {
       "title": "Waar moet u op letten?",
       "paragraphs": [
-        "Let op de voorwaarden rond oplevering, eventuele inboedel, overdrachtsdatum en kosten. Een duidelijk voorstel voorkomt misverstanden achteraf."
+        "Let op duidelijke afspraken rond oplevering, eventuele inboedel, overdrachtsdatum en kosten. Een duidelijk voorstel voorkomt misverstanden achteraf."
       ]
     }
   ],
@@ -83,7 +84,7 @@ const page = {
     [
       "Leeghalen",
       "Vaak nodig voor foto's en bezichtigingen",
-      "Kan worden besproken in de voorwaarden"
+      "Kan worden meegenomen in het voorstel"
     ],
     [
       "Bezichtigingen",
@@ -113,7 +114,7 @@ const page = {
     },
     {
       "question": "Is direct verkopen hetzelfde als verkopen aan een opkoper?",
-      "answer": "Dat kan, maar het belangrijkste verschil zit in de aanpak. Bij Vastgoed Direct Nederland krijgt u eerst rustig uitleg over de mogelijkheden, voorwaarden en vervolgstappen. U beslist zelf of dit bij uw situatie past."
+      "answer": "Dat kan, maar het belangrijkste verschil zit in de aanpak. Bij Vastgoed Direct Nederland krijgt u eerst rustig uitleg over de mogelijkheden, planning en vervolgstappen. U beslist zelf of dit bij uw situatie past."
     },
     {
       "question": "Kan ik ook direct verkopen als de woning onderhoud nodig heeft?",
@@ -121,7 +122,7 @@ const page = {
     },
     {
       "question": "Moet ik de woning eerst leeghalen?",
-      "answer": "Nee, dat hoeft niet altijd. Ook als de woning nog vol spullen staat, kunt u contact opnemen. In het voorstel kan worden meegenomen wat praktisch en haalbaar is."
+      "answer": "Nee, dat hoeft niet altijd. Ook als de woning nog vol spullen staat, kunt u contact opnemen. In het voorstel kan worden besproken wat praktisch en haalbaar is."
     },
     {
       "question": "Waarom kiezen mensen voor directe verkoop?",

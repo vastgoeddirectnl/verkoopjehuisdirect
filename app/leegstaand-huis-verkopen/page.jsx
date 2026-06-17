@@ -80,7 +80,7 @@ const page = {
     [
       "Leeghalen",
       "Vaak nodig voor foto's en bezichtigingen",
-      "Kan worden besproken in de voorwaarden"
+      "Kan worden meegenomen in het voorstel"
     ],
     [
       "Bezichtigingen",

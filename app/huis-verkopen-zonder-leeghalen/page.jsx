@@ -67,10 +67,11 @@ const page = {
     {
       "title": "Hoe werkt het proces?",
       "steps": [
-        "U geeft kort aan dat de woning nog niet leeg is.",
-        "Wij bespreken de staat, spullen en gewenste planning.",
-        "U ontvangt een voorstel waarin de praktische voorwaarden duidelijk staan.",
-        "U beslist zelf of u verder wilt."
+        "U vult kort uw woning en situatie in.",
+        "Op basis van de eerste gegevens ontvangt u een eerste vrijblijvend bod.",
+        "We bespreken uw situatie en bekijken de woning eventueel in de huidige staat.",
+        "Na beoordeling ontvangt u een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.",
+        "Bij akkoord worden de afspraken vastgelegd in een koopovereenkomst en volgt de overdracht via de notaris."
       ]
     },
     {
@@ -89,7 +90,7 @@ const page = {
     [
       "Leeghalen",
       "Vaak nodig voor foto's en bezichtigingen",
-      "Kan worden besproken in de voorwaarden"
+      "Kan worden meegenomen in het voorstel"
     ],
     [
       "Bezichtigingen",
@@ -126,8 +127,8 @@ const page = {
       "answer": "Ja, juist bij een erfenis kan dit rust geven. Nabestaanden hoeven dan niet direct alles uit te zoeken voordat zij de verkoopmogelijkheden bespreken."
     },
     {
-      "question": "Wat gebeurt er met achtergebleven spullen?",
-      "answer": "Dat moet vooraf duidelijk worden afgesproken. In het voorstel kan worden meegenomen wat blijft, wat wordt weggehaald en wat de voorwaarden zijn."
+      "question": "Wat gebeurt er met spullen die achterblijven?",
+      "answer": "Dat moet vooraf duidelijk worden afgesproken. In het voorstel kan worden meegenomen wat blijft, wat wordt weggehaald en hoe het vervolg praktisch wordt geregeld."
     },
     {
       "question": "Zit ik ergens aan vast na een aanvraag?",

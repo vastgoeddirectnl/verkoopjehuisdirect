@@ -396,11 +396,11 @@ export default function SeoLandingPage({ page }) {
             </div>
             <div className="why-card">
               <strong>Geen open huis of verkoopdruk</strong>
-              <p>U vraagt rustig informatie aan. Daarna beslist u zelf of het voorstel en de voorwaarden bij uw situatie passen.</p>
+              <p>U vraagt rustig informatie aan. Daarna beslist u zelf of het eerste bod en het vervolg bij uw situatie passen.</p>
             </div>
             <div className="why-card">
               <strong>Voorstel dat u kunt beoordelen</strong>
-              <p>U krijgt niet alleen een bedrag, maar ook duidelijkheid over voorwaarden, planning, overdracht en vervolgstappen.</p>
+              <p>U krijgt eerst een eerste vrijblijvend bod. Als beoordeling nodig is, volgt daarna een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.</p>
             </div>
           </div>
         </div>
@@ -451,11 +451,11 @@ export default function SeoLandingPage({ page }) {
             <div className="comparison-top">
               <div>
                 <p className="eyebrow">Vergelijking</p>
-                <h2>Niet alleen de prijs telt. Ook rust, tijd en voorwaarden.</h2>
+                <h2>Niet alleen de prijs telt. Ook rust, tijd en duidelijkheid.</h2>
               </div>
               <p>
                 Bij verkoop gaat het niet alleen om het hoogste bod. Ook kosten, bezichtigingen,
-                oplevering, spullen in de woning en gewenste overdrachtsdatum zijn belangrijk.
+                oplevering, spullen in de woning, koopovereenkomst en overdrachtsdatum zijn belangrijk.
               </p>
             </div>
 

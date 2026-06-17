@@ -29,7 +29,7 @@ const page = {
     "Ook bij onderhoud",
     "Vrijblijvend voorstel",
     "Geen open huis",
-    "Duidelijke voorwaarden"
+    "Duidelijke uitleg"
   ],
   "exampleSituation": {
     "title": "Als investeren niet logisch is",
@@ -66,10 +66,11 @@ const page = {
     {
       "title": "Hoe werkt het proces?",
       "steps": [
-        "U meldt kort de woning en staat van onderhoud.",
-        "Wij bespreken wat wel en niet is gedaan.",
-        "U ontvangt een voorstel gebaseerd op de huidige situatie.",
-        "U beslist zelf of u doorgaat."
+        "U vult kort uw woning en situatie in.",
+        "Op basis van de eerste gegevens ontvangt u een eerste vrijblijvend bod.",
+        "We bespreken uw situatie en bekijken de woning eventueel in de huidige staat.",
+        "Na beoordeling ontvangt u een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.",
+        "Bij akkoord worden de afspraken vastgelegd in een koopovereenkomst en volgt de overdracht via de notaris."
       ]
     },
     {
@@ -88,7 +89,7 @@ const page = {
     [
       "Leeghalen",
       "Vaak nodig voor foto's en bezichtigingen",
-      "Kan worden besproken in de voorwaarden"
+      "Kan worden meegenomen in het voorstel"
     ],
     [
       "Bezichtigingen",
