@@ -75,10 +75,11 @@ const situations = [
 ];
 
 const processSteps = [
-  ["01", "Aanvraag", "U vult kort uw adres en situatie in."],
-  ["02", "Contact", "Wij nemen persoonlijk contact met u op."],
-  ["03", "Voorstel", "U hoort wat er mogelijk is."],
-  ["04", "Notaris", "Bij akkoord wordt alles netjes vastgelegd."],
+  ["01", "Vrijblijvend aanvragen", "U vult kort uw woning en situatie in."],
+  ["02", "Eerste bod", "U ontvangt een eerste vrijblijvende indicatie van de mogelijkheden."],
+  ["03", "Eventueel bekijken", "Als dat nodig is, bekijken we de woning zoals deze nu is."],
+  ["04", "Definitief voorstel", "U ontvangt een definitief bod met planning en duidelijke uitleg over het vervolg."],
+  ["05", "Koopovereenkomst en notaris", "Bij akkoord worden de afspraken vastgelegd en volgt de overdracht via de notaris."],
 ];
 
 const comparisonRows = [
@@ -418,7 +419,7 @@ export default function HomeClient() {
         }
         .trust-micro {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(5, minmax(0, 1fr));
           gap: 9px;
           margin: 24px 0 0;
           max-width: 720px;
@@ -794,14 +795,14 @@ export default function HomeClient() {
 
         .problem-grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(5, minmax(0, 1fr));
           gap: 15px;
         }
         .problem-card {
           background: #fff;
           border: 1px solid #e8e3db;
           border-radius: 24px;
-          padding: 22px;
+          padding: 20px;
           box-shadow: 0 14px 38px rgba(7, 31, 58, .06);
           min-height: 184px;
         }
@@ -894,14 +895,14 @@ export default function HomeClient() {
 
         .steps {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(5, minmax(0, 1fr));
           gap: 14px;
         }
         .step-card {
           background: #fff;
           border: 1px solid #e8e3db;
           border-radius: 24px;
-          padding: 22px;
+          padding: 20px;
           box-shadow: 0 14px 38px rgba(7, 31, 58, .06);
         }
         .step-number {
@@ -922,7 +923,8 @@ export default function HomeClient() {
         }
         .step-card h3 {
           margin: 0 0 7px;
-          font-size: 22px;
+          font-size: 19px;
+          line-height: 1.18;
           color: #071f3a;
         }
         .step-card p {
@@ -1008,7 +1010,7 @@ export default function HomeClient() {
           background: #fff;
           border: 1px solid #e8e3db;
           border-radius: 24px;
-          padding: 22px;
+          padding: 20px;
           box-shadow: 0 14px 38px rgba(7, 31, 58, .06);
         }
         .example-card small {
@@ -1035,7 +1037,7 @@ export default function HomeClient() {
           background: #fff;
           border: 1px solid #e8e3db;
           border-radius: 24px;
-          padding: 22px;
+          padding: 20px;
           box-shadow: 0 14px 38px rgba(7, 31, 58, .06);
         }
         .popular-box h3 {
@@ -1873,8 +1875,8 @@ export default function HomeClient() {
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">De werkwijze</p>
-            <h2>Van korte aanvraag naar duidelijk voorstel.</h2>
-            <p>U hoeft nog niet alles klaar of opgeruimd te hebben. Een adres en korte toelichting zijn genoeg om te starten.</p>
+            <h2>Zo werkt verkopen zonder gedoe.</h2>
+            <p>Eerst ontvangt u een vrijblijvend eerste bod. Alleen als dat nodig is, bekijken we daarna de woning in huidige staat.</p>
           </div>
 
           <div className="steps">
