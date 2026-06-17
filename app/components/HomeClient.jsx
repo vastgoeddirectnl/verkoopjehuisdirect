@@ -74,6 +74,61 @@ const situations = [
   ["Erfenis, scheiding of leegstand", "Rust en overzicht zonder onnodige stappen vooraf."],
 ];
 
+const helpTiles = [
+  ["/woning-verkopen-die-nog-vol-staat", "Woning staat nog vol spullen", "Bekijk wat mogelijk is zonder eerst volledig leeg te halen."],
+  ["/huis-verkopen-zonder-opknappen", "Niet eerst opknappen", "Ook bij onderhoud, schade of een woning die niet verkoopklaar is."],
+  ["/leegstaand-huis-verkopen", "Leegstaande woning", "Rustig duidelijkheid bij leegstand, beheer of dubbele lasten."],
+  ["/geerfde-woning-verkopen-zonder-leeghalen", "Erfenis of nalatenschap", "Eerst overzicht voordat u gaat opruimen, herstellen of verkopen."],
+  ["/huis-verkopen-bij-dubbele-lasten", "Dubbele lasten", "Bespreek wat een snelle en duidelijke verkooproute kan betekenen."],
+  ["/huis-verkopen-zonder-bezichtigingen-uitleg", "Geen bezichtigingen", "Een discretere route zonder open huis of reeks kijkers."],
+];
+
+const afterRequestSteps = [
+  ["1", "Eerste vrijblijvend bod", "Op basis van uw gegevens ontvangt u een eerste indicatie."],
+  ["2", "Persoonlijk contact", "We bespreken rustig uw woning, situatie en gewenste planning."],
+  ["3", "Eventueel bekijken", "Alleen als dat nodig is, bekijken we de woning zoals deze nu is."],
+  ["4", "Definitief voorstel", "U ontvangt een definitief bod met planning en uitleg over het vervolg."],
+];
+
+const trustReasons = [
+  ["Persoonlijk contact", "Geen callcenter of standaardreactie. U spreekt met iemand die uw situatie rustig bekijkt."],
+  ["Afspraken op papier", "Bij akkoord worden afspraken vastgelegd in een koopovereenkomst en volgt de notariële overdracht."],
+  ["Niet eerst alles regelen", "Opknappen, stylen of leeghalen is niet altijd nodig om duidelijkheid te krijgen."],
+  ["Vrijblijvend beginnen", "Een aanvraag en eerste bod zijn vrijblijvend. U beslist zelf of u verder wilt."],
+];
+
+const fitGood = [
+  "de woning nog vol spullen staat",
+  "u niet eerst wilt opknappen of leeghalen",
+  "u geen open huis of bezichtigingsrondes wilt",
+  "er sprake is van leegstand, erfenis of dubbele lasten",
+  "u eerst rustig duidelijkheid wilt zonder verkoopdruk",
+];
+
+const fitLess = [
+  "u vooral de maximale opbrengst via de open markt wilt",
+  "u alle tijd heeft voor styling, bezichtigingen en onderhandelingen",
+  "u alleen een gratis waardebepaling zoekt",
+  "u nog helemaal niet over verkoop nadenkt",
+];
+
+const costRows = [
+  ["Makelaarskosten", "Geen traditionele makelaarskosten binnen deze verkooproute."],
+  ["Notaris", "Bij akkoord worden afspraken vastgelegd en loopt de overdracht via de notaris."],
+  ["Opknappen", "De woning hoeft niet altijd eerst opgeknapt of verkoopklaar gemaakt te worden."],
+  ["Leeghalen", "Ook als de woning nog vol spullen staat, kunt u vrijblijvend duidelijkheid aanvragen."],
+  ["Verplichting", "Een aanvraag en eerste bod zijn vrijblijvend. U beslist zelf of u verder wilt."],
+];
+
+const knowledgeLinks = [
+  ["/huis-verkopen-zonder-leeghalen", "Huis verkopen zonder leeghalen"],
+  ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen"],
+  ["/woning-verkopen-die-nog-vol-staat", "Woning verkopen die nog vol staat"],
+  ["/geerfde-woning-verkopen-zonder-leeghalen", "Geërfde woning zonder leeghalen"],
+  ["/leegstaand-huis-verkopen-wat-zijn-de-opties", "Leegstaand huis: wat zijn de opties?"],
+  ["/huis-verkopen-bij-dubbele-lasten", "Huis verkopen bij dubbele lasten"],
+];
+
 const processSteps = [
   ["01", "Vrijblijvend aanvragen", "U vult kort uw woning en situatie in."],
   ["02", "Eerste bod", "U ontvangt een eerste vrijblijvende indicatie van de mogelijkheden."],
@@ -793,6 +848,185 @@ export default function HomeClient() {
           line-height: 1.6;
         }
 
+        .help-section {
+          background: #fff;
+        }
+        .help-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 15px;
+        }
+        .help-card {
+          background: #fffdf9;
+          border: 1px solid #e8e3db;
+          border-radius: 24px;
+          padding: 22px;
+          box-shadow: 0 14px 38px rgba(7, 31, 58, .06);
+          transition: .18s ease;
+          min-height: 174px;
+        }
+        .help-card:hover {
+          transform: translateY(-2px);
+          border-color: #ffb06f;
+          box-shadow: 0 18px 48px rgba(7, 31, 58, .10);
+        }
+        .help-card span {
+          display: inline-flex;
+          color: #9a3d00;
+          background: #fff3e7;
+          border: 1px solid #ffd5b6;
+          border-radius: 999px;
+          padding: 6px 9px;
+          font-size: 11px;
+          font-weight: 900;
+          margin-bottom: 14px;
+        }
+        .help-card h3 {
+          margin: 0 0 8px;
+          font-size: 22px;
+          line-height: 1.15;
+          color: #071f3a;
+          letter-spacing: -.35px;
+        }
+        .help-card p {
+          margin: 0;
+          color: #647386;
+          line-height: 1.55;
+        }
+        .trust-section {
+          background: #f5f2ec;
+          border-top: 1px solid #eee8df;
+          border-bottom: 1px solid #eee8df;
+        }
+        .trust-wrap {
+          display: grid;
+          grid-template-columns: .82fr 1.18fr;
+          gap: 26px;
+          align-items: center;
+        }
+        .trust-copy p:not(.eyebrow) {
+          color: #647386;
+          line-height: 1.62;
+          font-size: 17px;
+        }
+        .trust-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+        .trust-card {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 22px;
+          padding: 19px;
+          box-shadow: 0 14px 38px rgba(7, 31, 58, .06);
+        }
+        .trust-dot {
+          width: 34px;
+          height: 34px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 13px;
+          background: #071f3a;
+          color: #fff;
+          font-weight: 900;
+          margin-bottom: 11px;
+        }
+        .trust-card:nth-child(2) .trust-dot,
+        .trust-card:nth-child(4) .trust-dot {
+          background: #ff6a00;
+        }
+        .trust-card h3 {
+          margin: 0 0 7px;
+          font-size: 19px;
+          line-height: 1.18;
+        }
+        .trust-card p {
+          margin: 0;
+          color: #647386;
+          line-height: 1.5;
+        }
+        .after-request-card div p {
+          margin: 0;
+          display: grid;
+          gap: 2px;
+        }
+        .after-request-card div b {
+          display: block;
+          color: #071f3a;
+        }
+        .fit-section {
+          padding-top: 0;
+        }
+        .fit-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+        }
+        .fit-card {
+          border-radius: 28px;
+          padding: 28px;
+          border: 1px solid #e8e3db;
+          box-shadow: 0 18px 54px rgba(7,31,58,.07);
+        }
+        .fit-card.good { background: #fff; }
+        .fit-card.less { background: #fffdf9; }
+        .fit-card h2 {
+          font-size: clamp(27px, 2.4vw, 36px);
+        }
+        .fit-card ul {
+          margin: 20px 0 0;
+          padding: 0;
+          list-style: none;
+          display: grid;
+          gap: 10px;
+        }
+        .fit-card li {
+          background: #f8f5ef;
+          border: 1px solid #eee8df;
+          border-radius: 14px;
+          padding: 11px 12px;
+          color: #24364a;
+          font-weight: 850;
+          line-height: 1.35;
+        }
+        .cost-section {
+          background: #fffdf9;
+          border-top: 1px solid #eee8df;
+          border-bottom: 1px solid #eee8df;
+        }
+        .cost-table {
+          max-width: 980px;
+          margin: 0 auto;
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 26px;
+          overflow: hidden;
+          box-shadow: 0 18px 54px rgba(7, 31, 58, .08);
+        }
+        .cost-row {
+          display: grid;
+          grid-template-columns: 240px 1fr;
+          gap: 18px;
+          padding: 17px 20px;
+          border-top: 1px solid #eee8df;
+          align-items: start;
+        }
+        .cost-row:first-child { border-top: 0; }
+        .cost-row strong { color: #071f3a; }
+        .cost-row span { color: #647386; line-height: 1.5; }
+        .popular-subtitle {
+          margin-top: 22px !important;
+          padding-top: 18px;
+          border-top: 1px solid #eee8df;
+        }
+        .compact-links {
+          max-height: 330px;
+          overflow: auto;
+          padding-right: 2px;
+        }
+
         .problem-grid {
           display: grid;
           grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1290,12 +1524,16 @@ export default function HomeClient() {
           .review-compact {
             grid-template-columns: 1fr;
           }
-          .different-grid {
+          .different-grid,
+          .help-grid,
+          .trust-wrap,
+          .fit-grid {
             grid-template-columns: 1fr;
           }
           .trust-micro,
           .problem-grid,
-          .steps {
+          .steps,
+          .trust-grid {
             grid-template-columns: repeat(2, 1fr);
           }
           .form-card {
@@ -1355,16 +1593,25 @@ export default function HomeClient() {
           .steps,
           .example-grid,
           .footer-grid,
-          .form-benefits {
+          .form-benefits,
+          .help-grid,
+          .trust-grid,
+          .fit-grid {
             grid-template-columns: 1fr;
           }
           .form-card,
           .comparison-wrap,
           .premium-card,
           .dark-card,
-          .popular-box {
+          .popular-box,
+          .fit-card {
             border-radius: 24px;
             padding: 22px;
+          }
+          .cost-row {
+            grid-template-columns: 1fr;
+            gap: 6px;
+            padding: 15px 16px;
           }
           .form-title { font-size: 26px; }
           .form-sub { font-size: 14px; }
@@ -1567,10 +1814,15 @@ export default function HomeClient() {
           .different-card,
           .problem-card,
           .step-card,
-          .example-card {
+          .example-card,
+          .help-card,
+          .trust-card {
             padding: 18px;
             border-radius: 20px;
           }
+          .help-card span { margin-bottom: 10px; }
+          .help-card h3, .trust-card h3 { font-size: 18px; }
+          .fit-card h2 { font-size: 24px; }
           .section { padding: 40px 0; }
           .section-tight { padding: 36px 0; }
           .mobile-bottom-cta {
@@ -1591,10 +1843,10 @@ export default function HomeClient() {
 
       <div className="top-strip">
         <div className="container top-strip-inner">
-          <span>✓ Vrijblijvend voorstel</span>
-          <span>✓ Geen makelaarskosten</span>
-          <span>✓ Geen open huis nodig</span>
-          <span>✓ Notariële afwikkeling</span>
+          <span>✓ Vrijblijvend eerste bod</span>
+          <span>✓ Niet eerst opknappen</span>
+          <span>✓ Niet eerst leeghalen</span>
+          <span>✓ Koopovereenkomst en notaris</span>
         </div>
       </div>
 
@@ -1605,10 +1857,10 @@ export default function HomeClient() {
           </a>
 
           <nav className="nav" aria-label="Hoofdnavigatie">
-            <a href="#wanneer">Wanneer geschikt?</a>
-            <a href="#vergelijking">Vergelijking</a>
+            <a href="#situaties">Situaties</a>
             <a href="#werkwijze">Werkwijze</a>
-            <a href="#over-ons">Over ons</a>
+            <a href="#kosten">Kosten</a>
+            <a href="#informatie">Informatie</a>
             <a href="#faq">FAQ</a>
           </nav>
 
@@ -1746,11 +1998,11 @@ export default function HomeClient() {
               </div>
             )}
 
-            <div className="form-receive">
-              <strong>Wat u ontvangt:</strong>
-              <div><span>✓</span> Duidelijkheid zonder dat u eerst hoeft op te knappen</div>
-              <div><span>✓</span> Ook mogelijk als de woning nog vol spullen staat</div>
-              <div><span>✓</span> Persoonlijk contact zonder verplichting</div>
+            <div className="form-receive after-request-card">
+              <strong>Wat gebeurt er na uw aanvraag?</strong>
+              {afterRequestSteps.map(([num, title, text]) => (
+                <div key={title}><span>{num}</span><p><b>{title}</b>{text}</p></div>
+              ))}
             </div>
           </section>
         </div>
@@ -1780,6 +2032,45 @@ export default function HomeClient() {
               <strong>Laura vd Zalm</strong>
               <span>via Google</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="situaties" className="section section-white help-section">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow">Waarmee kunnen wij u helpen?</p>
+            <h2>Herken uw situatie en lees direct wat mogelijk is.</h2>
+            <p>Veel woningeigenaren zoeken niet zomaar een opkoper, maar vooral duidelijkheid bij een praktische of persoonlijke situatie.</p>
+          </div>
+
+          <div className="help-grid">
+            {helpTiles.map(([href, title, text]) => (
+              <a href={href} className="help-card" key={href}>
+                <span>Bekijk situatie</span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section trust-section">
+        <div className="container trust-wrap">
+          <div className="trust-copy">
+            <p className="eyebrow">Waarom verkopers voor ons kiezen</p>
+            <h2>Rustig duidelijkheid krijgen, zonder direct ergens aan vast te zitten.</h2>
+            <p>De kracht zit niet in harde beloften, maar in een helder proces, persoonlijk contact en een voorstel dat past bij de woning zoals die nu is.</p>
+          </div>
+          <div className="trust-grid">
+            {trustReasons.map(([title, text]) => (
+              <article className="trust-card" key={title}>
+                <div className="trust-dot">✓</div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -1871,6 +2162,25 @@ export default function HomeClient() {
         </div>
       </section>
 
+      <section className="section section-white fit-section">
+        <div className="container fit-grid">
+          <div className="fit-card good">
+            <p className="eyebrow">Past vaak goed als...</p>
+            <h2>U vooral duidelijkheid en rust zoekt.</h2>
+            <ul>
+              {fitGood.map((item) => <li key={item}>✓ {item}</li>)}
+            </ul>
+          </div>
+          <div className="fit-card less">
+            <p className="eyebrow">Past mogelijk minder goed als...</p>
+            <h2>U vooral een reguliere verkoop wilt.</h2>
+            <ul>
+              {fitLess.map((item) => <li key={item}>• {item}</li>)}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <section id="werkwijze" className="section section-white">
         <div className="container">
           <div className="section-head">
@@ -1927,7 +2237,25 @@ export default function HomeClient() {
         </div>
       </section>
 
-      <section className="section section-white">
+      <section id="kosten" className="section-tight cost-section">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow">Kosten en afwikkeling</p>
+            <h2>Wat betekent deze verkooproute praktisch?</h2>
+            <p>Geen onduidelijke stappen vooraf. Hieronder ziet u wat u in hoofdlijnen kunt verwachten.</p>
+          </div>
+          <div className="cost-table">
+            {costRows.map(([label, text]) => (
+              <div className="cost-row" key={label}>
+                <strong>{label}</strong>
+                <span>{text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="informatie" className="section section-white">
         <div className="container examples-and-links">
           <div>
             <div className="section-head" style={{ textAlign: "left", margin: "0 0 22px" }}>
@@ -1954,10 +2282,16 @@ export default function HomeClient() {
           </div>
 
           <aside className="popular-box">
-            <p className="eyebrow">Verkoopinformatie</p>
-            <h3>Per situatie, regio of plaats</h3>
-            <div className="popular-grid">
-              {popularLinks.map(([href, label]) => (
+            <p className="eyebrow">Praktische kennisbank</p>
+            <h3>Veelgestelde situaties</h3>
+            <div className="popular-grid knowledge-grid">
+              {knowledgeLinks.map(([href, label]) => (
+                <a href={href} key={href}>✓ {label}</a>
+              ))}
+            </div>
+            <h3 className="popular-subtitle">Meer verkoopinformatie</h3>
+            <div className="popular-grid compact-links">
+              {popularLinks.slice(0, 14).map(([href, label]) => (
                 <a href={href} key={href}>✓ {label}</a>
               ))}
             </div>
