@@ -5,13 +5,13 @@ export const metadata = {
   description:
     "Woning verkopen zonder open huis, kijkdagen of verkoopstress? Vraag vrijblijvend een discreet verkoopvoorstel aan via Vastgoed Direct Nederland.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/woning-verkopen-zonder-open-huis",
+    canonical: "https://www.vastgoeddirectnederland.nl/woning-verkopen-zonder-open-huis",
   },
   openGraph: {
     title: "Woning verkopen zonder open huis",
     description:
       "Woning verkopen zonder open huis, kijkdagen of verkoopstress? Vraag vrijblijvend een discreet verkoopvoorstel aan via Vastgoed Direct Nederland.",
-    url: "https://www.verkoopjehuisdirect.nl/woning-verkopen-zonder-open-huis",
+    url: "https://www.vastgoeddirectnederland.nl/woning-verkopen-zonder-open-huis",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

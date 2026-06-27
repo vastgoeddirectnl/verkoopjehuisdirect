@@ -1,7 +1,9 @@
 import "./globals.css";
 
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.vastgoeddirectnederland.nl").replace(/\/$/, "");
+
 export const metadata = {
-  metadataBase: new URL("https://www.verkoopjehuisdirect.nl"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Vastgoed Direct Nederland",
     template: "%s | Vastgoed Direct Nederland",
@@ -20,7 +22,7 @@ export const metadata = {
     title: "Vastgoed Direct Nederland",
     description:
       "Uw woning snel verkopen? Ontvang een vrijblijvend verkoopvoorstel zonder makelaarskosten of open huis.",
-    url: "https://www.verkoopjehuisdirect.nl",
+    url: siteUrl,
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

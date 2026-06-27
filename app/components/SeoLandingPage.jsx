@@ -63,13 +63,13 @@ export default function SeoLandingPage({ page }) {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.verkoopjehuisdirect.nl",
+        item: "https://www.vastgoeddirectnederland.nl",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: page.breadcrumb,
-        item: `https://www.verkoopjehuisdirect.nl${page.slug}`,
+        item: `https://www.vastgoeddirectnederland.nl${page.slug}`,
       },
     ],
   };
@@ -542,7 +542,7 @@ export default function SeoLandingPage({ page }) {
 
           <div>
             <h3>Contact</h3>
-            <p>info@verkoopjehuisdirect.nl</p>
+            <p>info@vastgoeddirectnederland.nl</p>
             <p>06 12 23 80 51</p>
             <p><a href="tel:0612238051">Bel direct</a></p>
           </div>

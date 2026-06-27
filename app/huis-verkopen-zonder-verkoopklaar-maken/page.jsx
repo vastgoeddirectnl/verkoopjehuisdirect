@@ -5,13 +5,13 @@ export const metadata = {
   description:
     "Huis verkopen zonder eerst opknappen, verkoopstyling of verkoopklaar maken? Vraag gratis een persoonlijk voorstel aan.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-zonder-verkoopklaar-maken",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-verkoopklaar-maken",
   },
   openGraph: {
     title: "Huis verkopen zonder verkoopklaar maken",
     description:
       "Huis verkopen zonder eerst opknappen, verkoopstyling of verkoopklaar maken? Vraag gratis een persoonlijk voorstel aan.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-zonder-verkoopklaar-maken",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-verkoopklaar-maken",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

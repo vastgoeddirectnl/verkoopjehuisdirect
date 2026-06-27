@@ -5,13 +5,13 @@ export const metadata = {
   description:
     "Huis verkopen in Stadskanaal zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-stadskanaal",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-stadskanaal",
   },
   openGraph: {
     title: "Huis verkopen in Stadskanaal",
     description:
       "Huis verkopen in Stadskanaal zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-stadskanaal",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-stadskanaal",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

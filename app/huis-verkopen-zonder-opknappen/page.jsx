@@ -4,12 +4,12 @@ export const metadata = {
   "title": "Huis verkopen zonder opknappen",
   "description": "Uw huis verkopen zonder eerst te verbouwen of op te knappen? Lees welke opties u heeft en wanneer directe verkoop logisch kan zijn.",
   "alternates": {
-    "canonical": "https://www.verkoopjehuisdirect.nl/huis-verkopen-zonder-opknappen"
+    "canonical": "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-opknappen"
   },
   "openGraph": {
     "title": "Huis verkopen zonder opknappen",
     "description": "Uw huis verkopen zonder eerst te verbouwen of op te knappen? Lees welke opties u heeft en wanneer directe verkoop logisch kan zijn.",
-    "url": "https://www.verkoopjehuisdirect.nl/huis-verkopen-zonder-opknappen",
+    "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-opknappen",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
     "type": "website"

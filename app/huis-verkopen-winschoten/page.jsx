@@ -5,13 +5,13 @@ export const metadata = {
   description:
     "Huis verkopen in Winschoten zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-winschoten",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-winschoten",
   },
   openGraph: {
     title: "Huis verkopen in Winschoten",
     description:
       "Huis verkopen in Winschoten zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-winschoten",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-winschoten",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

@@ -5,13 +5,13 @@ export const metadata = {
   description:
     "Huis verkopen met spoed? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan zonder open huis of makelaarskosten.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-met-spoed",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-met-spoed",
   },
   openGraph: {
     title: "Huis verkopen met spoed",
     description:
       "Huis verkopen met spoed? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan zonder open huis of makelaarskosten.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-met-spoed",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-met-spoed",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

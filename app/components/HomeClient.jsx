@@ -10,11 +10,11 @@ const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   name: "Vastgoed Direct Nederland",
-  url: "https://www.verkoopjehuisdirect.nl",
-  logo: "https://www.verkoopjehuisdirect.nl/logo.png",
-  image: "https://www.verkoopjehuisdirect.nl/logo.png",
+  url: "https://www.vastgoeddirectnederland.nl",
+  logo: "https://www.vastgoeddirectnederland.nl/logo.png",
+  image: "https://www.vastgoeddirectnederland.nl/logo.png",
   telephone: "+31612238051",
-  email: "info@verkoopjehuisdirect.nl",
+  email: "info@vastgoeddirectnederland.nl",
   description:
     "Vastgoed Direct Nederland helpt woningeigenaren die hun woning zonder gedoe willen verkopen. Ook als de woning onderhoud nodig heeft, nog vol spullen staat of niet verkoopklaar is.",
   areaServed: ["Groningen", "Drenthe", "Friesland", "Overijssel", "Nederland"],
@@ -2339,7 +2339,7 @@ export default function HomeClient() {
 
           <div>
             <h3>Contact</h3>
-            <p>info@verkoopjehuisdirect.nl</p>
+            <p>info@vastgoeddirectnederland.nl</p>
             <p>06 12 23 80 51</p>
             <p><a href="tel:0612238051" onClick={() => trackGoogleAdsConversion("call")}>Bel direct</a></p>
           </div>

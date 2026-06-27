@@ -4,12 +4,12 @@ export const metadata = {
   "title": "Huis verkopen zonder leeghalen",
   "description": "Wilt u een huis verkopen dat nog vol spullen staat? Lees wanneer leeghalen niet altijd nodig is en hoe u vrijblijvend duidelijkheid krijgt.",
   "alternates": {
-    "canonical": "https://www.verkoopjehuisdirect.nl/huis-verkopen-zonder-leeghalen"
+    "canonical": "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-leeghalen"
   },
   "openGraph": {
     "title": "Huis verkopen zonder leeghalen",
     "description": "Wilt u een huis verkopen dat nog vol spullen staat? Lees wanneer leeghalen niet altijd nodig is en hoe u vrijblijvend duidelijkheid krijgt.",
-    "url": "https://www.verkoopjehuisdirect.nl/huis-verkopen-zonder-leeghalen",
+    "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-leeghalen",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
     "type": "website"

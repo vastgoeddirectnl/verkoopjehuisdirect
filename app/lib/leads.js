@@ -88,7 +88,7 @@ export async function createLead(input = {}) {
     await logMailEventSafe({
       lead_id: saved?.id,
       type: "interne melding",
-      recipient: process.env.LEAD_TO_EMAIL || "info@verkoopjehuisdirect.nl",
+      recipient: process.env.LEAD_TO_EMAIL || "info@vastgoeddirectnederland.nl",
       subject: `Nieuwe aanvraag verkoopvoorstel${saved?.postcode ? ` - ${saved.postcode}` : ""}`,
       status: mail.internal?.skipped ? "Overgeslagen" : "Verzonden",
       provider_id: mail.internal?.id,
@@ -100,7 +100,7 @@ export async function createLead(input = {}) {
     await logMailEventSafe({
       lead_id: saved?.id,
       type: "interne melding",
-      recipient: process.env.LEAD_TO_EMAIL || "info@verkoopjehuisdirect.nl",
+      recipient: process.env.LEAD_TO_EMAIL || "info@vastgoeddirectnederland.nl",
       subject: "Nieuwe aanvraag verkoopvoorstel",
       status: "Fout",
       error: error.message,

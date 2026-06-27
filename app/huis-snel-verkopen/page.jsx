@@ -4,12 +4,12 @@ export const metadata = {
   "title": "Huis snel verkopen zonder gedoe",
   "description": "Huis snel verkopen zonder open huis, verkoopdruk of eerst opknappen? Vraag vrijblijvend duidelijkheid aan.",
   "alternates": {
-    "canonical": "https://www.verkoopjehuisdirect.nl/huis-snel-verkopen"
+    "canonical": "https://www.vastgoeddirectnederland.nl/huis-snel-verkopen"
   },
   "openGraph": {
     "title": "Huis snel verkopen zonder gedoe",
     "description": "Huis snel verkopen zonder open huis, verkoopdruk of eerst opknappen? Vraag vrijblijvend duidelijkheid aan.",
-    "url": "https://www.verkoopjehuisdirect.nl/huis-snel-verkopen",
+    "url": "https://www.vastgoeddirectnederland.nl/huis-snel-verkopen",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
     "type": "website"

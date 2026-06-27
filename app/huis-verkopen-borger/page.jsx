@@ -5,13 +5,13 @@ export const metadata = {
   description:
     "Huis verkopen in Borger zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-borger",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-borger",
   },
   openGraph: {
     title: "Huis verkopen in Borger",
     description:
       "Huis verkopen in Borger zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-borger",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-borger",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

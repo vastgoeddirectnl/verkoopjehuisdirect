@@ -61,7 +61,7 @@ export async function GET(request) {
   return new NextResponse(`\ufeff${csv}`, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": `attachment; filename="verkoopjehuisdirect-leads.csv"`,
+      "Content-Disposition": `attachment; filename="vastgoeddirectnederland-leads.csv"`,
       "Cache-Control": "no-store",
     },
   });

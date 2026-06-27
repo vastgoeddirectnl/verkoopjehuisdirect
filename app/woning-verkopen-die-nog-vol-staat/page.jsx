@@ -4,12 +4,12 @@ export const metadata = {
   "title": "Woning verkopen die nog vol staat",
   "description": "Een woning verkopen die nog vol meubels of spullen staat? Lees wat mogelijk is en hoe u zonder verkoopdruk duidelijkheid krijgt.",
   "alternates": {
-    "canonical": "https://www.verkoopjehuisdirect.nl/woning-verkopen-die-nog-vol-staat"
+    "canonical": "https://www.vastgoeddirectnederland.nl/woning-verkopen-die-nog-vol-staat"
   },
   "openGraph": {
     "title": "Woning verkopen die nog vol staat",
     "description": "Een woning verkopen die nog vol meubels of spullen staat? Lees wat mogelijk is en hoe u zonder verkoopdruk duidelijkheid krijgt.",
-    "url": "https://www.verkoopjehuisdirect.nl/woning-verkopen-die-nog-vol-staat",
+    "url": "https://www.vastgoeddirectnederland.nl/woning-verkopen-die-nog-vol-staat",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
     "type": "website"

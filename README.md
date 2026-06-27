@@ -1,4 +1,4 @@
-# verkoopjehuisdirect.nl — Neon-versie
+# vastgoeddirectnederland.nl — Neon-versie
 
 Deze versie is gecontroleerd voor de overstap naar Neon Postgres.
 
@@ -22,15 +22,15 @@ Deze versie is gecontroleerd voor de overstap naar Neon Postgres.
 DATABASE_URL=postgresql://...
 ADMIN_PASSWORD=zelf-kiezen
 ADMIN_SESSION_SECRET=lange-willekeurige-tekst
-NEXT_PUBLIC_SITE_URL=https://www.verkoopjehuisdirect.nl
+NEXT_PUBLIC_SITE_URL=https://www.vastgoeddirectnederland.nl
 ```
 
 Optioneel voor e-mail via Resend:
 
 ```txt
 RESEND_API_KEY=re_...
-FROM_EMAIL=Vastgoed Direct Nederland <info@verkoopjehuisdirect.nl>
-LEAD_TO_EMAIL=info@verkoopjehuisdirect.nl
+FROM_EMAIL=Vastgoed Direct Nederland <info@vastgoeddirectnederland.nl>
+LEAD_TO_EMAIL=info@vastgoeddirectnederland.nl
 ```
 
 ## Controle na deploy

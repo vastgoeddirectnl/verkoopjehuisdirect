@@ -4,12 +4,12 @@ export const metadata = {
   title: "Verhuurde woning verkopen",
   description: "Verhuurde woning verkopen met duidelijke voorwaarden? Vraag vrijblijvend een verkoopvoorstel aan.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/verhuurde-woning-verkopen",
+    canonical: "https://www.vastgoeddirectnederland.nl/verhuurde-woning-verkopen",
   },
   openGraph: {
     title: "Verhuurde woning verkopen",
     description: "Verhuurde woning verkopen met duidelijke voorwaarden? Vraag vrijblijvend een verkoopvoorstel aan.",
-    url: "https://www.verkoopjehuisdirect.nl/verhuurde-woning-verkopen",
+    url: "https://www.vastgoeddirectnederland.nl/verhuurde-woning-verkopen",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

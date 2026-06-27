@@ -4,12 +4,12 @@ export const metadata = {
   title: "Woning verkopen Drenthe",
   description: "Woning of huis verkopen in Drenthe zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/woning-verkopen-drenthe",
+    canonical: "https://www.vastgoeddirectnederland.nl/woning-verkopen-drenthe",
   },
   openGraph: {
     title: "Woning verkopen Drenthe",
     description: "Woning of huis verkopen in Drenthe zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
-    url: "https://www.verkoopjehuisdirect.nl/woning-verkopen-drenthe",
+    url: "https://www.vastgoeddirectnederland.nl/woning-verkopen-drenthe",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

@@ -4,12 +4,12 @@ export const metadata = {
   "title": "Leegstaand huis verkopen: wat zijn de opties?",
   "description": "Een leegstaand huis verkopen? Lees welke verkoopmogelijkheden er zijn, wanneer directe verkoop logisch is en waar u op moet letten.",
   "alternates": {
-    "canonical": "https://www.verkoopjehuisdirect.nl/leegstaand-huis-verkopen-wat-zijn-de-opties"
+    "canonical": "https://www.vastgoeddirectnederland.nl/leegstaand-huis-verkopen-wat-zijn-de-opties"
   },
   "openGraph": {
     "title": "Leegstaand huis verkopen: wat zijn de opties?",
     "description": "Een leegstaand huis verkopen? Lees welke verkoopmogelijkheden er zijn, wanneer directe verkoop logisch is en waar u op moet letten.",
-    "url": "https://www.verkoopjehuisdirect.nl/leegstaand-huis-verkopen-wat-zijn-de-opties",
+    "url": "https://www.vastgoeddirectnederland.nl/leegstaand-huis-verkopen-wat-zijn-de-opties",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
     "type": "website"

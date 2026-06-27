@@ -5,13 +5,13 @@ export const metadata = {
   description:
     "Woning verkopen met schade, achterstallig onderhoud of renovatiebehoefte? Vraag vrijblijvend een verkoopvoorstel aan.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/woning-verkopen-met-schade",
+    canonical: "https://www.vastgoeddirectnederland.nl/woning-verkopen-met-schade",
   },
   openGraph: {
     title: "Woning verkopen met schade",
     description:
       "Woning verkopen met schade, achterstallig onderhoud of renovatiebehoefte? Vraag vrijblijvend een verkoopvoorstel aan.",
-    url: "https://www.verkoopjehuisdirect.nl/woning-verkopen-met-schade",
+    url: "https://www.vastgoeddirectnederland.nl/woning-verkopen-met-schade",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

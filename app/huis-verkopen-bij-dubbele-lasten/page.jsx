@@ -4,12 +4,12 @@ export const metadata = {
   "title": "Huis verkopen bij dubbele lasten",
   "description": "Dubbele woonlasten door een andere woning of verhuizing? Lees welke opties u heeft en wanneer directe verkoop rust kan geven.",
   "alternates": {
-    "canonical": "https://www.verkoopjehuisdirect.nl/huis-verkopen-bij-dubbele-lasten"
+    "canonical": "https://www.vastgoeddirectnederland.nl/huis-verkopen-bij-dubbele-lasten"
   },
   "openGraph": {
     "title": "Huis verkopen bij dubbele lasten",
     "description": "Dubbele woonlasten door een andere woning of verhuizing? Lees welke opties u heeft en wanneer directe verkoop rust kan geven.",
-    "url": "https://www.verkoopjehuisdirect.nl/huis-verkopen-bij-dubbele-lasten",
+    "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-bij-dubbele-lasten",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
     "type": "website"

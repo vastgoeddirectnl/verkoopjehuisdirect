@@ -4,12 +4,12 @@ export const metadata = {
   title: "Huis verkopen bij scheiding",
   description: "Huis verkopen bij scheiding? Vraag vrijblijvend een helder verkoopvoorstel aan en krijg duidelijkheid zonder verkoopstress.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-bij-scheiding",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-bij-scheiding",
   },
   openGraph: {
     title: "Huis verkopen bij scheiding",
     description: "Huis verkopen bij scheiding? Vraag vrijblijvend een helder verkoopvoorstel aan en krijg duidelijkheid zonder verkoopstress.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-bij-scheiding",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-bij-scheiding",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

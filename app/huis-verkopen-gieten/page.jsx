@@ -5,13 +5,13 @@ export const metadata = {
   description:
     "Huis verkopen in Gieten zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-gieten",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-gieten",
   },
   openGraph: {
     title: "Huis verkopen in Gieten",
     description:
       "Huis verkopen in Gieten zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-gieten",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-gieten",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

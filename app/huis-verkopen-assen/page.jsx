@@ -5,13 +5,13 @@ export const metadata = {
   description:
     "Huis verkopen in Assen zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-assen",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-assen",
   },
   openGraph: {
     title: "Huis verkopen in Assen",
     description:
       "Huis verkopen in Assen zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-assen",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-assen",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

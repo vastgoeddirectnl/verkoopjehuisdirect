@@ -4,12 +4,12 @@ export const metadata = {
   "title": "Opknapwoning verkopen zonder opknappen",
   "description": "Opknapwoning verkopen zonder eerst te verbouwen, herstellen of leeghalen? Vraag vrijblijvend duidelijkheid aan.",
   "alternates": {
-    "canonical": "https://www.verkoopjehuisdirect.nl/opknapwoning-verkopen"
+    "canonical": "https://www.vastgoeddirectnederland.nl/opknapwoning-verkopen"
   },
   "openGraph": {
     "title": "Opknapwoning verkopen zonder opknappen",
     "description": "Opknapwoning verkopen zonder eerst te verbouwen, herstellen of leeghalen? Vraag vrijblijvend duidelijkheid aan.",
-    "url": "https://www.verkoopjehuisdirect.nl/opknapwoning-verkopen",
+    "url": "https://www.vastgoeddirectnederland.nl/opknapwoning-verkopen",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
     "type": "website"

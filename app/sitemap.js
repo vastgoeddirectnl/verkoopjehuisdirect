@@ -1,4 +1,4 @@
-const baseUrl = "https://www.verkoopjehuisdirect.nl";
+const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.vastgoeddirectnederland.nl").replace(/\/$/, "");
 
 const pages = [
   { path: "/", priority: 1.0, changeFrequency: "weekly" },

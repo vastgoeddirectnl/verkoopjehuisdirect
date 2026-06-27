@@ -4,12 +4,12 @@ export const metadata = {
   title: "Huis verkopen Groningen",
   description: "Huis of woning verkopen in Groningen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-groningen",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-groningen",
   },
   openGraph: {
     title: "Huis verkopen Groningen",
     description: "Huis of woning verkopen in Groningen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-groningen",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-groningen",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

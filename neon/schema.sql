@@ -1,4 +1,4 @@
--- Neon Postgres schema voor verkoopjehuisdirect.nl
+-- Neon Postgres schema voor vastgoeddirectnederland.nl
 -- Uitvoeren in Neon Console > SQL Editor.
 
 create extension if not exists pgcrypto;

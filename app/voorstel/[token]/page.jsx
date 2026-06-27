@@ -288,8 +288,8 @@ export default async function PublicProposalPage({ params }) {
         <div className="contact-block">
           <strong>Vastgoed Direct Nederland</strong>
           <span>06 12 23 80 51</span>
-          <span>info@verkoopjehuisdirect.nl</span>
-          <span>verkoopjehuisdirect.nl</span>
+          <span>info@vastgoeddirectnederland.nl</span>
+          <span>vastgoeddirectnederland.nl</span>
         </div>
       </section>
 

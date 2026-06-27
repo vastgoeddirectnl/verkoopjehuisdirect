@@ -4,12 +4,12 @@ export const metadata = {
   title: "Huis verkopen bij erfenis",
   description: "Huis verkopen bij erfenis of nalatenschap? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-bij-erfenis",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-bij-erfenis",
   },
   openGraph: {
     title: "Huis verkopen bij erfenis",
     description: "Huis verkopen bij erfenis of nalatenschap? Vraag vrijblijvend een helder verkoopvoorstel aan.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-bij-erfenis",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-bij-erfenis",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

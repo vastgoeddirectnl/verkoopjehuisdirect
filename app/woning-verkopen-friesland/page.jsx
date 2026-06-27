@@ -4,12 +4,12 @@ export const metadata = {
   title: "Woning verkopen Friesland",
   description: "Woning of huis verkopen in Friesland zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/woning-verkopen-friesland",
+    canonical: "https://www.vastgoeddirectnederland.nl/woning-verkopen-friesland",
   },
   openGraph: {
     title: "Woning verkopen Friesland",
     description: "Woning of huis verkopen in Friesland zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
-    url: "https://www.verkoopjehuisdirect.nl/woning-verkopen-friesland",
+    url: "https://www.vastgoeddirectnederland.nl/woning-verkopen-friesland",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

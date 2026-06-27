@@ -1,4 +1,4 @@
--- Admin-app uitbreiding voor verkoopjehuisdirect.nl
+-- Admin-app uitbreiding voor vastgoeddirectnederland.nl
 -- Uitvoeren in Neon Console > SQL Editor.
 -- Veilig om meerdere keren uit te voeren.
 

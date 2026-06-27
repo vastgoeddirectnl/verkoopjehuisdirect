@@ -61,7 +61,7 @@ function cleanForField(field, value) {
 
 
 function siteUrl() {
-  return (process.env.NEXT_PUBLIC_SITE_URL || "https://www.verkoopjehuisdirect.nl").replace(/\/$/, "");
+  return (process.env.NEXT_PUBLIC_SITE_URL || "https://www.vastgoeddirectnederland.nl").replace(/\/$/, "");
 }
 
 function formatMoney(value) {
@@ -425,7 +425,7 @@ export async function POST(request) {
 
             <div style="padding:22px 32px;background:#071f3a;color:#d9e6f5;font-size:14px;line-height:1.55;">
               <strong style="display:block;color:#fff;margin-bottom:5px;">Vastgoed Direct Nederland</strong>
-              info@verkoopjehuisdirect.nl · 06 12 23 80 51 · verkoopjehuisdirect.nl
+              info@vastgoeddirectnederland.nl · 06 12 23 80 51 · vastgoeddirectnederland.nl
             </div>
           </div>
 
@@ -439,7 +439,7 @@ export async function POST(request) {
         to: proposal.lead_email,
         subject,
         html,
-        replyTo: process.env.LEAD_TO_EMAIL || "info@verkoopjehuisdirect.nl",
+        replyTo: process.env.LEAD_TO_EMAIL || "info@vastgoeddirectnederland.nl",
       });
 
       await logMailEventSafe({

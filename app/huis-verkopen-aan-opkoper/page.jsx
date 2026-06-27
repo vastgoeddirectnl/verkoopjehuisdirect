@@ -4,12 +4,12 @@ export const metadata = {
   title: "Huis verkopen aan opkoper",
   description: "Huis verkopen aan een opkoper zonder makelaar of lange verkoopperiode? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-aan-opkoper",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-aan-opkoper",
   },
   openGraph: {
     title: "Huis verkopen aan opkoper",
     description: "Huis verkopen aan een opkoper zonder makelaar of lange verkoopperiode? Vraag vrijblijvend een helder verkoopvoorstel aan.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-aan-opkoper",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-aan-opkoper",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

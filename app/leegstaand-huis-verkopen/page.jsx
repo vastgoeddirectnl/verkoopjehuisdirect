@@ -4,12 +4,12 @@ export const metadata = {
   "title": "Leegstaand huis verkopen zonder gedoe",
   "description": "Leegstaand huis verkopen zonder open huis of eerst opknappen? Vraag vrijblijvend duidelijkheid aan.",
   "alternates": {
-    "canonical": "https://www.verkoopjehuisdirect.nl/leegstaand-huis-verkopen"
+    "canonical": "https://www.vastgoeddirectnederland.nl/leegstaand-huis-verkopen"
   },
   "openGraph": {
     "title": "Leegstaand huis verkopen zonder gedoe",
     "description": "Leegstaand huis verkopen zonder open huis of eerst opknappen? Vraag vrijblijvend duidelijkheid aan.",
-    "url": "https://www.verkoopjehuisdirect.nl/leegstaand-huis-verkopen",
+    "url": "https://www.vastgoeddirectnederland.nl/leegstaand-huis-verkopen",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
     "type": "website"

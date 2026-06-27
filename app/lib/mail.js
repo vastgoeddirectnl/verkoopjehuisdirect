@@ -1,4 +1,4 @@
-const DEFAULT_TO = "info@verkoopjehuisdirect.nl";
+const DEFAULT_TO = "info@vastgoeddirectnederland.nl";
 
 function escapeHtml(value = "") {
   return String(value)
@@ -58,7 +58,7 @@ export async function sendLeadNotification(lead) {
 
   const html = `
     <div style="font-family:Arial,sans-serif;font-size:15px;color:#0b2341;line-height:1.5;">
-      <h2>Nieuwe aanvraag via verkoopjehuisdirect.nl</h2>
+      <h2>Nieuwe aanvraag via vastgoeddirectnederland.nl</h2>
       <table cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:15px;">
         <tr><td><strong>Naam</strong></td><td>${escapeHtml(lead.naam)}</td></tr>
         <tr><td><strong>E-mail</strong></td><td>${escapeHtml(lead.email)}</td></tr>
@@ -70,7 +70,7 @@ export async function sendLeadNotification(lead) {
         <tr><td><strong>Pagina</strong></td><td>${escapeHtml(lead.pagina)}</td></tr>
         <tr><td><strong>Bron</strong></td><td>${escapeHtml(lead.bron)}</td></tr>
       </table>
-      <p>Bekijk de lead in het interne dashboard: <a href="https://www.verkoopjehuisdirect.nl/admin">/admin</a></p>
+      <p>Bekijk de lead in het interne dashboard: <a href="https://www.vastgoeddirectnederland.nl/admin">/admin</a></p>
     </div>
   `;
 
@@ -108,8 +108,8 @@ export async function sendApplicantConfirmation(lead) {
 
       <p>
         <strong>Vastgoed Direct Nederland</strong><br />
-        <a href="https://www.verkoopjehuisdirect.nl">www.verkoopjehuisdirect.nl</a><br />
-        <a href="mailto:info@verkoopjehuisdirect.nl">info@verkoopjehuisdirect.nl</a>
+        <a href="https://www.vastgoeddirectnederland.nl">www.vastgoeddirectnederland.nl</a><br />
+        <a href="mailto:info@vastgoeddirectnederland.nl">info@vastgoeddirectnederland.nl</a>
       </p>
     </div>
   `;

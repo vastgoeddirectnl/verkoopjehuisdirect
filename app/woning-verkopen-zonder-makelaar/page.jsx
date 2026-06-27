@@ -4,12 +4,12 @@ export const metadata = {
   "title": "Woning verkopen zonder makelaar",
   "description": "Woning verkopen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een voorstel aan.",
   "alternates": {
-    "canonical": "https://www.verkoopjehuisdirect.nl/woning-verkopen-zonder-makelaar"
+    "canonical": "https://www.vastgoeddirectnederland.nl/woning-verkopen-zonder-makelaar"
   },
   "openGraph": {
     "title": "Woning verkopen zonder makelaar",
     "description": "Woning verkopen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een voorstel aan.",
-    "url": "https://www.verkoopjehuisdirect.nl/woning-verkopen-zonder-makelaar",
+    "url": "https://www.vastgoeddirectnederland.nl/woning-verkopen-zonder-makelaar",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
     "type": "website"

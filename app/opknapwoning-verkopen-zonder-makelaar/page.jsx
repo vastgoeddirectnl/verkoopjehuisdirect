@@ -4,12 +4,12 @@ export const metadata = {
   "title": "Opknapwoning verkopen zonder makelaar",
   "description": "Een opknapwoning verkopen zonder makelaar? Lees wanneer directe verkoop een alternatief kan zijn en waar u op moet letten.",
   "alternates": {
-    "canonical": "https://www.verkoopjehuisdirect.nl/opknapwoning-verkopen-zonder-makelaar"
+    "canonical": "https://www.vastgoeddirectnederland.nl/opknapwoning-verkopen-zonder-makelaar"
   },
   "openGraph": {
     "title": "Opknapwoning verkopen zonder makelaar",
     "description": "Een opknapwoning verkopen zonder makelaar? Lees wanneer directe verkoop een alternatief kan zijn en waar u op moet letten.",
-    "url": "https://www.verkoopjehuisdirect.nl/opknapwoning-verkopen-zonder-makelaar",
+    "url": "https://www.vastgoeddirectnederland.nl/opknapwoning-verkopen-zonder-makelaar",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
     "type": "website"

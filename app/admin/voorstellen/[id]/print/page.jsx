@@ -116,7 +116,7 @@ export default async function ProposalPrintPage({ params }) {
         </div>
 
         <div className="cover-footer">
-          <span>www.verkoopjehuisdirect.nl</span>
+          <span>www.vastgoeddirectnederland.nl</span>
           <span>06 12 23 80 51</span>
         </div>
       </article>
@@ -272,9 +272,9 @@ export default async function ProposalPrintPage({ params }) {
           <div className="contact-grid">
             <div>
               <strong>Vastgoed Direct Nederland</strong>
-              <span>info@verkoopjehuisdirect.nl</span>
+              <span>info@vastgoeddirectnederland.nl</span>
               <span>06 12 23 80 51</span>
-              <span>www.verkoopjehuisdirect.nl</span>
+              <span>www.vastgoeddirectnederland.nl</span>
             </div>
             <div>
               <strong>Contactpersoon: {proposal.contact_person || "Rob Schiphuis"}</strong>

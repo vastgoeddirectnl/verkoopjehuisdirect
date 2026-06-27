@@ -4,12 +4,12 @@ export const metadata = {
   "title": "Huis verkopen zonder bezichtigingen",
   "description": "Wilt u uw huis verkopen zonder reeks bezichtigingen of open huis? Lees hoe dit werkt en wanneer het passend kan zijn.",
   "alternates": {
-    "canonical": "https://www.verkoopjehuisdirect.nl/huis-verkopen-zonder-bezichtigingen-uitleg"
+    "canonical": "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-bezichtigingen-uitleg"
   },
   "openGraph": {
     "title": "Huis verkopen zonder bezichtigingen",
     "description": "Wilt u uw huis verkopen zonder reeks bezichtigingen of open huis? Lees hoe dit werkt en wanneer het passend kan zijn.",
-    "url": "https://www.verkoopjehuisdirect.nl/huis-verkopen-zonder-bezichtigingen-uitleg",
+    "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-bezichtigingen-uitleg",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
     "type": "website"

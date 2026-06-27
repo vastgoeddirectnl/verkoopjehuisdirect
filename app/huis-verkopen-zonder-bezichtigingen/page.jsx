@@ -4,12 +4,12 @@ export const metadata = {
   title: "Huis verkopen zonder bezichtigingen",
   description: "Huis verkopen zonder bezichtigingen, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-zonder-bezichtigingen",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-bezichtigingen",
   },
   openGraph: {
     title: "Huis verkopen zonder bezichtigingen",
     description: "Huis verkopen zonder bezichtigingen, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-zonder-bezichtigingen",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-bezichtigingen",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

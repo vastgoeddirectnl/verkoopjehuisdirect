@@ -4,12 +4,12 @@ export const metadata = {
   title: "Huis verkopen met achterstallig onderhoud",
   description: "Huis verkopen met achterstallig onderhoud, schade of verouderde staat zonder eerst te renoveren? Vraag vrijblijvend een voorstel aan.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-met-achterstallig-onderhoud",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-met-achterstallig-onderhoud",
   },
   openGraph: {
     title: "Huis verkopen met achterstallig onderhoud",
     description: "Huis verkopen met achterstallig onderhoud, schade of verouderde staat zonder eerst te renoveren? Vraag vrijblijvend een voorstel aan.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-met-achterstallig-onderhoud",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-met-achterstallig-onderhoud",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

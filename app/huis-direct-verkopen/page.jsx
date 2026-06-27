@@ -4,12 +4,12 @@ export const metadata = {
   "title": "Huis direct verkopen zonder verkoopstress",
   "description": "Huis direct verkopen zonder open huis, verkoopdruk of eerst leeghalen? Vraag vrijblijvend een helder voorstel aan.",
   "alternates": {
-    "canonical": "https://www.verkoopjehuisdirect.nl/huis-direct-verkopen"
+    "canonical": "https://www.vastgoeddirectnederland.nl/huis-direct-verkopen"
   },
   "openGraph": {
     "title": "Huis direct verkopen zonder verkoopstress",
     "description": "Huis direct verkopen zonder open huis, verkoopdruk of eerst leeghalen? Vraag vrijblijvend een helder voorstel aan.",
-    "url": "https://www.verkoopjehuisdirect.nl/huis-direct-verkopen",
+    "url": "https://www.vastgoeddirectnederland.nl/huis-direct-verkopen",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
     "type": "website"

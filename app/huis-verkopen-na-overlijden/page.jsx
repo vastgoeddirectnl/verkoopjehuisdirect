@@ -5,13 +5,13 @@ export const metadata = {
   description:
     "Huis verkopen na overlijden of erfenis? Vraag vrijblijvend een verkoopvoorstel aan met duidelijke afspraken en notariële afwikkeling.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-na-overlijden",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-na-overlijden",
   },
   openGraph: {
     title: "Huis verkopen na overlijden",
     description:
       "Huis verkopen na overlijden of erfenis? Vraag vrijblijvend een verkoopvoorstel aan met duidelijke afspraken en notariële afwikkeling.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-na-overlijden",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-na-overlijden",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

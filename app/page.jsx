@@ -5,13 +5,13 @@ export const metadata = {
   description:
     "Wilt u uw woning snel verkopen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl",
+    canonical: "https://www.vastgoeddirectnederland.nl",
   },
   openGraph: {
     title: "Vastgoed Direct Nederland | Huis snel verkopen zonder makelaar",
     description:
       "Vraag vrijblijvend een helder verkoopvoorstel aan. Geen makelaarskosten, geen open huis nodig en notariële afwikkeling.",
-    url: "https://www.verkoopjehuisdirect.nl",
+    url: "https://www.vastgoeddirectnederland.nl",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

@@ -5,13 +5,13 @@ export const metadata = {
   description:
     "Huis verkopen in Emmen zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-emmen",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-emmen",
   },
   openGraph: {
     title: "Huis verkopen in Emmen",
     description:
       "Huis verkopen in Emmen zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-emmen",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-emmen",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

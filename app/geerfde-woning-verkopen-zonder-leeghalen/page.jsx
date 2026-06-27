@@ -4,12 +4,12 @@ export const metadata = {
   "title": "Geërfde woning verkopen zonder leeghalen",
   "description": "Een geërfde woning verkopen die nog niet leeg is? Lees welke opties er zijn en hoe u vrijblijvend duidelijkheid krijgt.",
   "alternates": {
-    "canonical": "https://www.verkoopjehuisdirect.nl/geerfde-woning-verkopen-zonder-leeghalen"
+    "canonical": "https://www.vastgoeddirectnederland.nl/geerfde-woning-verkopen-zonder-leeghalen"
   },
   "openGraph": {
     "title": "Geërfde woning verkopen zonder leeghalen",
     "description": "Een geërfde woning verkopen die nog niet leeg is? Lees welke opties er zijn en hoe u vrijblijvend duidelijkheid krijgt.",
-    "url": "https://www.verkoopjehuisdirect.nl/geerfde-woning-verkopen-zonder-leeghalen",
+    "url": "https://www.vastgoeddirectnederland.nl/geerfde-woning-verkopen-zonder-leeghalen",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
     "type": "website"

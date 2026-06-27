@@ -4,12 +4,12 @@ export const metadata = {
   title: "Huis verkopen binnen 1 week",
   description: "Huis verkopen binnen 1 week of snel duidelijkheid over uw verkoopmogelijkheden? Vraag vrijblijvend een voorstel aan.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-binnen-1-week",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-binnen-1-week",
   },
   openGraph: {
     title: "Huis verkopen binnen 1 week",
     description: "Huis verkopen binnen 1 week of snel duidelijkheid over uw verkoopmogelijkheden? Vraag vrijblijvend een voorstel aan.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-binnen-1-week",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-binnen-1-week",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",

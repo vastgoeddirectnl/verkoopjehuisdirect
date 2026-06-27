@@ -5,13 +5,13 @@ export const metadata = {
   description:
     "Huis verkopen zonder Funda, open huis of openbaar verkooptraject? Vraag vrijblijvend een discreet verkoopvoorstel aan via Vastgoed Direct Nederland.",
   alternates: {
-    canonical: "https://www.verkoopjehuisdirect.nl/huis-verkopen-zonder-funda",
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-funda",
   },
   openGraph: {
     title: "Huis verkopen zonder Funda",
     description:
       "Huis verkopen zonder Funda, open huis of openbaar verkooptraject? Vraag vrijblijvend een discreet verkoopvoorstel aan via Vastgoed Direct Nederland.",
-    url: "https://www.verkoopjehuisdirect.nl/huis-verkopen-zonder-funda",
+    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-funda",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
