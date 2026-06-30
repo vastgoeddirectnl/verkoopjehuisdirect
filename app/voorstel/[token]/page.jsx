@@ -47,13 +47,17 @@ function firstName(name) {
   return raw.split(" ")[0];
 }
 
-export default async function PublicProposalPage({ params }) {
+export default async function PublicProposalPage({ params, searchParams }) {
   const { token } = await params;
+  const query = searchParams ? await searchParams : {};
+  const isAdminPreview = query?.admin_preview === "1" || query?.preview === "admin";
   const proposal = await queryOne("select * from proposals where public_token = $1::uuid", [token]);
 
   if (!proposal) notFound();
 
-  await markProposalViewed(proposal);
+  if (!isAdminPreview) {
+    await markProposalViewed(proposal);
+  }
 
   const address = formatAddress(proposal);
   const offerAmount = amount(proposal.amount_text);

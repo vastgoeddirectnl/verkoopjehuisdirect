@@ -22,8 +22,97 @@ function fmt(value) {
   }).format(new Date(value));
 }
 
+function proposalViewedAfterEmail(item) {
+  if (!item?.emailed_at || !item?.public_viewed_at) return false;
+  const emailedAt = new Date(item.emailed_at).getTime();
+  const viewedAt = new Date(item.public_viewed_at).getTime();
+  return Number.isFinite(emailedAt) && Number.isFinite(viewedAt) && viewedAt >= emailedAt;
+}
+
 function cleanPhone(value) {
   return String(value || "").replace(/[^\d+]/g, "");
+}
+
+
+function parseMoney(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return 0;
+  const cleaned = raw
+    .replace(/\s/g, "")
+    .replace(/€/g, "")
+    .replace(/[^0-9,.-]/g, "");
+
+  if (!cleaned) return 0;
+
+  let normalized = cleaned;
+  const hasComma = normalized.includes(",");
+  const hasDot = normalized.includes(".");
+
+  if (hasComma && hasDot) {
+    normalized = normalized.replace(/\./g, "").replace(",", ".");
+  } else if (hasComma) {
+    normalized = normalized.replace(",", ".");
+  } else if (hasDot) {
+    const dotParts = normalized.split(".");
+    const lastPart = dotParts[dotParts.length - 1];
+    if (lastPart.length === 3 && dotParts.length > 1) {
+      normalized = normalized.replace(/\./g, "");
+    }
+  }
+
+  const number = Number.parseFloat(normalized);
+  return Number.isFinite(number) ? Math.abs(number) : 0;
+}
+
+function formatMoney(value, negative = false) {
+  const number = Number(value || 0);
+  if (!Number.isFinite(number) || number <= 0) return "";
+  const formatted = new Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0,
+  }).format(Math.round(number));
+  return negative ? `- ${formatted}` : formatted;
+}
+
+function calculateNetComparison(proposal) {
+  const traditionalPrice = parseMoney(proposal?.traditional_price_text);
+  const agentExVat = parseMoney(proposal?.agent_costs_text);
+  const agentInclVat = agentExVat * 1.21;
+  const notaryCosts = parseMoney(proposal?.notary_costs_text);
+  const renovationCosts = parseMoney(proposal?.renovation_costs_text);
+  const otherExVat = parseMoney(proposal?.other_costs_text);
+  const otherInclVat = otherExVat * 1.21;
+  const directNet = parseMoney(proposal?.direct_net_text) || parseMoney(proposal?.amount_text);
+  const traditionalNet = traditionalPrice - agentInclVat - notaryCosts - renovationCosts - otherInclVat;
+  const difference = directNet - traditionalNet;
+
+  return {
+    traditionalPrice,
+    agentExVat,
+    agentInclVat,
+    notaryCosts,
+    renovationCosts,
+    otherExVat,
+    otherInclVat,
+    traditionalNet: traditionalNet > 0 ? traditionalNet : 0,
+    directNet,
+    difference,
+  };
+}
+
+function buildCalculatedProposalPayload(proposal) {
+  const calc = calculateNetComparison(proposal);
+  return {
+    ...proposal,
+    traditional_price_text: formatMoney(calc.traditionalPrice) || proposal.traditional_price_text,
+    agent_costs_text: formatMoney(calc.agentInclVat, true) || proposal.agent_costs_text,
+    notary_costs_text: formatMoney(calc.notaryCosts, true) || proposal.notary_costs_text,
+    renovation_costs_text: formatMoney(calc.renovationCosts, true) || proposal.renovation_costs_text,
+    other_costs_text: formatMoney(calc.otherInclVat, true) || proposal.other_costs_text,
+    traditional_net_text: formatMoney(calc.traditionalNet) || proposal.traditional_net_text,
+    direct_net_text: formatMoney(calc.directNet) || proposal.direct_net_text || proposal.amount_text,
+  };
 }
 
 function Info({ label, value }) {
@@ -127,13 +216,18 @@ export default function LeadDetailPage({ params }) {
     return (data?.proposals || [])[0] || null;
   }, [data?.proposals]);
 
+  const netComparison = useMemo(() => {
+    return calculateNetComparison(proposal || {});
+  }, [proposal]);
+
   function setProposalField(field, value) {
     setProposal((current) => ({ ...(current || {}), [field]: value }));
   }
 
   async function createProposal() {
     if (!proposal) return;
-    const result = await post({ action: "createProposal", ...proposal });
+    const calculatedProposal = buildCalculatedProposalPayload(proposal);
+    const result = await post({ action: "createProposal", ...calculatedProposal });
     if (result?.proposal?.id) {
       setNotice("Voorstel is aangemaakt. Controleer de print/PDF-versie voordat u het voorstel mailt.");
       window.open(`/admin/voorstellen/${result.proposal.id}/print`, "_blank", "noopener,noreferrer");
@@ -250,14 +344,22 @@ export default function LeadDetailPage({ params }) {
 
                 <div className="form-section">
                   <h3>3. Netto-opbrengstvergelijking</h3>
+                  <p className="calc-help">Vul de makelaarskosten en overige verkoopkosten exclusief btw in. Het adminportaal rekent automatisch 21% btw door en berekent de netto-opbrengst.</p>
                   <div className="form-grid">
-                    <Field label="Traditionele verkoopprijs"><input placeholder="Bijv. € 240.000" value={proposal.traditional_price_text} onChange={(e) => setProposalField("traditional_price_text", e.target.value)} /></Field>
-                    <Field label="Makelaarskosten"><input placeholder="Bijv. - € 4.356" value={proposal.agent_costs_text} onChange={(e) => setProposalField("agent_costs_text", e.target.value)} /></Field>
-                    <Field label="Notariskosten levering"><input placeholder="Bijv. - € 1.600" value={proposal.notary_costs_text} onChange={(e) => setProposalField("notary_costs_text", e.target.value)} /></Field>
-                    <Field label="Herstel-/renovatiekosten"><input placeholder="Bijv. - € 45.000" value={proposal.renovation_costs_text} onChange={(e) => setProposalField("renovation_costs_text", e.target.value)} /></Field>
-                    <Field label="Overige verkoopkosten"><input placeholder="Bijv. - € 1.150" value={proposal.other_costs_text} onChange={(e) => setProposalField("other_costs_text", e.target.value)} /></Field>
-                    <Field label="Netto traditioneel"><input placeholder="Bijv. € 187.894" value={proposal.traditional_net_text} onChange={(e) => setProposalField("traditional_net_text", e.target.value)} /></Field>
-                    <Field label="Netto Vastgoed Direct"><input placeholder="Bijv. € 190.000" value={proposal.direct_net_text} onChange={(e) => setProposalField("direct_net_text", e.target.value)} /></Field>
+                    <Field label="Traditionele verkoopprijs"><input inputMode="decimal" placeholder="Bijv. € 240.000" value={proposal.traditional_price_text} onChange={(e) => setProposalField("traditional_price_text", e.target.value)} /></Field>
+                    <Field label="Makelaarskosten excl. btw"><input inputMode="decimal" placeholder="Bijv. € 3.600" value={proposal.agent_costs_text} onChange={(e) => setProposalField("agent_costs_text", e.target.value)} /></Field>
+                    <Field label="Notariskosten levering"><input inputMode="decimal" placeholder="Bijv. € 1.600" value={proposal.notary_costs_text} onChange={(e) => setProposalField("notary_costs_text", e.target.value)} /></Field>
+                    <Field label="Herstel-/renovatiekosten"><input inputMode="decimal" placeholder="Bijv. € 45.000" value={proposal.renovation_costs_text} onChange={(e) => setProposalField("renovation_costs_text", e.target.value)} /></Field>
+                    <Field label="Overige verkoopkosten excl. btw"><input inputMode="decimal" placeholder="Bijv. € 950" value={proposal.other_costs_text} onChange={(e) => setProposalField("other_costs_text", e.target.value)} /></Field>
+                    <Field label="Netto Vastgoed Direct"><input inputMode="decimal" placeholder="Automatisch uit voorgesteld bedrag" value={proposal.direct_net_text} onChange={(e) => setProposalField("direct_net_text", e.target.value)} /></Field>
+                  </div>
+
+                  <div className="calc-summary">
+                    <div><span>Makelaarskosten incl. 21% btw</span><strong>{formatMoney(netComparison.agentInclVat, true) || "-"}</strong></div>
+                    <div><span>Overige verkoopkosten incl. 21% btw</span><strong>{formatMoney(netComparison.otherInclVat, true) || "-"}</strong></div>
+                    <div><span>Netto traditioneel</span><strong>{formatMoney(netComparison.traditionalNet) || "-"}</strong></div>
+                    <div><span>Netto Vastgoed Direct</span><strong>{formatMoney(netComparison.directNet) || "-"}</strong></div>
+                    <div className={netComparison.difference >= 0 ? "positive" : "negative"}><span>Verschil netto</span><strong>{netComparison.directNet && netComparison.traditionalNet ? formatMoney(Math.abs(netComparison.difference), netComparison.difference < 0) : "-"}</strong></div>
                   </div>
                 </div>
 
@@ -296,7 +398,7 @@ export default function LeadDetailPage({ params }) {
 
           <section className="grid three">
             <article className="card"><h2>Taken</h2>{(data.tasks || []).map((item) => <div className="item" key={item.id}><strong>{item.title}</strong><span>{item.status} · {item.due_date || "geen datum"}</span><select value={item.status || "Open"} onChange={(e) => post({ action: "updateTask", id: item.id, status: e.target.value })}>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select></div>)}</article>
-            <article className="card"><h2>Voorstellen</h2>{(data.proposals || []).map((item) => <div className="item" key={item.id}><strong>{item.amount_text || "Voorstel"}</strong><span>{item.status} · {fmt(item.created_at)}</span><a href={`/admin/voorstellen/${item.id}/print`} target="_blank">Interne print/PDF</a>{item.public_token ? <a href={`/voorstel/${item.public_token}`} target="_blank">Klantversie</a> : null}<button className="small" onClick={() => sendProposal(item.id)}>Mail voorstel naar klant</button>{item.emailed_at ? <small>Laatst gemaild: {fmt(item.emailed_at)}</small> : null}{item.public_viewed_at ? <small>Bekeken door klant: {fmt(item.public_viewed_at)}</small> : null}</div>)}</article>
+            <article className="card"><h2>Voorstellen</h2>{(data.proposals || []).map((item) => <div className="item" key={item.id}><strong>{item.amount_text || "Voorstel"}</strong><span>{item.status} · {fmt(item.created_at)}</span><a href={`/admin/voorstellen/${item.id}/print`} target="_blank">Interne print/PDF</a>{item.public_token ? <a href={`/voorstel/${item.public_token}?admin_preview=1`} target="_blank">Klantversie bekijken</a> : null}<button className="small" onClick={() => sendProposal(item.id)}>Mail voorstel naar klant</button>{item.emailed_at ? <small>Laatst gemaild: {fmt(item.emailed_at)}</small> : null}{proposalViewedAfterEmail(item) ? <small>Bekeken door klant: {fmt(item.public_viewed_at)}</small> : null}</div>)}</article>
             <article className="card"><h2>Mailhistorie</h2>{(data.mailLogs || []).map((item) => <div className="item" key={item.id}><strong>{item.type}</strong><span>{item.status} · {item.recipient}</span><small>{fmt(item.created_at)}</small></div>)}</article>
           </section>
         </>
@@ -306,5 +408,5 @@ export default function LeadDetailPage({ params }) {
 }
 
 const styles = `
-:root{--navy:#071f3a;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#ff6a00;--green:#20c768;--shadow:0 22px 70px rgba(7,31,58,.12)}body{margin:0;background:radial-gradient(circle at top right,#fff3e7,transparent 34%),var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.detail-page{max-width:1280px;margin:0 auto;padding:28px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}header a{color:var(--navy);font-weight:900;text-decoration:none}header img{width:220px;background:#fff;border-radius:18px;padding:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero span,.section-head span{color:#a64200;background:#fff3e7;border:1px solid #ffd5b6;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase}.hero h1{font-size:42px;letter-spacing:-.04em;margin:12px 0 6px}.hero p,.section-head p{color:var(--muted);font-size:18px}.actions,.proposal-actions{display:flex;gap:10px;flex-wrap:wrap}.actions a,.actions button,.card button,.item a,.secondary-link{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer;display:inline-block;margin-right:8px;margin-top:8px}.actions a:first-child{background:var(--navy)}.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:18px}.grid.three{grid-template-columns:repeat(3,1fr)}h2{margin:0 0 18px;font-size:24px;letter-spacing:-.03em}h3{margin:0 0 16px;font-size:20px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}.info{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.info span,.item span,.item small,label span{display:block;color:var(--muted);font-size:13px}.info strong{display:block;margin-top:6px;word-break:break-word}label{display:grid;gap:8px;font-weight:900;margin-top:12px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}.item{border-bottom:1px solid var(--line);padding:12px 0}.item:last-child{border-bottom:0}.item strong{display:block}.item a{margin-top:8px;background:var(--navy)}.item button.small{margin-top:8px;margin-left:8px;padding:9px 12px;font-size:13px}.error,.notice-top{border-radius:16px;padding:12px 14px;margin-bottom:16px}.error{background:#fff3f0;color:#9b1c00;border:1px solid #ffd1c4}.notice-top{background:#f0fff6;color:#075c2a;border:1px solid #bff3d0}.proposal-card{margin:18px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.section-head h2{font-size:34px;margin:12px 0 8px}.secondary-link{background:var(--navy);white-space:nowrap}.proposal-form{display:grid;gap:20px}.form-section{border:1px solid var(--line);border-radius:24px;background:#fff;padding:20px}.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.form-section textarea{min-height:96px}.proposal-actions button{padding:14px 20px}.proposal-actions .ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}@media(max-width:1100px){.form-grid{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:1fr}}@media(max-width:900px){.grid,.hero,.section-head{grid-template-columns:1fr;display:grid}.info-grid,.form-grid{grid-template-columns:1fr}.detail-page{padding:18px}}
+:root{--navy:#071f3a;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#ff6a00;--green:#20c768;--shadow:0 22px 70px rgba(7,31,58,.12)}body{margin:0;background:radial-gradient(circle at top right,#fff3e7,transparent 34%),var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.detail-page{max-width:1280px;margin:0 auto;padding:28px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}header a{color:var(--navy);font-weight:900;text-decoration:none}header img{width:220px;background:#fff;border-radius:18px;padding:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero span,.section-head span{color:#a64200;background:#fff3e7;border:1px solid #ffd5b6;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase}.hero h1{font-size:42px;letter-spacing:-.04em;margin:12px 0 6px}.hero p,.section-head p{color:var(--muted);font-size:18px}.actions,.proposal-actions{display:flex;gap:10px;flex-wrap:wrap}.actions a,.actions button,.card button,.item a,.secondary-link{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer;display:inline-block;margin-right:8px;margin-top:8px}.actions a:first-child{background:var(--navy)}.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:18px}.grid.three{grid-template-columns:repeat(3,1fr)}h2{margin:0 0 18px;font-size:24px;letter-spacing:-.03em}h3{margin:0 0 16px;font-size:20px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}.info{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.info span,.item span,.item small,label span{display:block;color:var(--muted);font-size:13px}.info strong{display:block;margin-top:6px;word-break:break-word}label{display:grid;gap:8px;font-weight:900;margin-top:12px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}.item{border-bottom:1px solid var(--line);padding:12px 0}.item:last-child{border-bottom:0}.item strong{display:block}.item a{margin-top:8px;background:var(--navy)}.item button.small{margin-top:8px;margin-left:8px;padding:9px 12px;font-size:13px}.error,.notice-top{border-radius:16px;padding:12px 14px;margin-bottom:16px}.error{background:#fff3f0;color:#9b1c00;border:1px solid #ffd1c4}.notice-top{background:#f0fff6;color:#075c2a;border:1px solid #bff3d0}.proposal-card{margin:18px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.section-head h2{font-size:34px;margin:12px 0 8px}.secondary-link{background:var(--navy);white-space:nowrap}.proposal-form{display:grid;gap:20px}.form-section{border:1px solid var(--line);border-radius:24px;background:#fff;padding:20px}.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.form-section textarea{min-height:96px}.calc-help{margin:-4px 0 14px;color:var(--muted);font-weight:700}.calc-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}.calc-summary div{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.calc-summary span{display:block;color:var(--muted);font-size:12px;font-weight:900}.calc-summary strong{display:block;margin-top:6px;font-size:18px}.calc-summary .positive{background:#f0fff6;border-color:#bff3d0}.calc-summary .negative{background:#fff5f1;border-color:#ffd5c4}.proposal-actions button{padding:14px 20px}.proposal-actions .ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}@media(max-width:1100px){.form-grid{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:1fr}.calc-summary{grid-template-columns:repeat(2,1fr)}}@media(max-width:900px){.grid,.hero,.section-head{grid-template-columns:1fr;display:grid}.info-grid,.form-grid,.calc-summary{grid-template-columns:1fr}.detail-page{padding:18px}}
 `;
