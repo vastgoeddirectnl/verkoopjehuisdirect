@@ -364,7 +364,7 @@ export default function HomeClient() {
           font-size: 14px;
           font-weight: 900;
         }
-        .nav a:hover { color: #ff6a00; }
+        .nav a:hover { color: #9A5A2E; }
         .nav-menu {
           position: relative;
           display: inline-flex;
@@ -382,7 +382,7 @@ export default function HomeClient() {
         }
         .nav-trigger:after {
           content: "▾";
-          color: #ff6a00;
+          color: #9A5A2E;
           font-size: 11px;
           margin-top: 1px;
         }
@@ -421,8 +421,8 @@ export default function HomeClient() {
           line-height: 1.2;
         }
         .nav-dropdown a:hover {
-          background: #fff3e7;
-          border-color: #ffd5b6;
+          background: #F3E8DD;
+          border-color: #E2C7AF;
         }
         .header-actions { display: flex; align-items: center; gap: 8px; }
 
@@ -441,14 +441,14 @@ export default function HomeClient() {
         }
         .btn:hover { transform: translateY(-1px); }
         .btn-orange {
-          background: #ff6a00;
+          background: #9A5A2E;
           color: #fff;
-          box-shadow: 0 12px 28px rgba(255, 106, 0, .23);
+          box-shadow: 0 12px 28px rgba(154,90,46,.23);
         }
         .btn-blue { background: #071f3a; color: #fff; }
         .btn-light { background: #fff; color: #071f3a; border: 1px solid #e3ded6; }
         .btn-green {
-          background: #25d366;
+          background: #3E8F5E;
           color: #fff;
           box-shadow: 0 12px 28px rgba(37, 211, 102, .2);
         }
@@ -457,7 +457,7 @@ export default function HomeClient() {
           position: relative;
           overflow: hidden;
           background:
-            radial-gradient(circle at 84% 6%, rgba(255, 106, 0, .15), transparent 30%),
+            radial-gradient(circle at 84% 6%, rgba(154, 90, 46, .13), transparent 30%),
             linear-gradient(180deg, #fffdf9 0%, #f6f2eb 100%);
         }
         .hero-grid {
@@ -470,8 +470,8 @@ export default function HomeClient() {
         .badge {
           display: inline-flex;
           color: #9a3d00;
-          background: #fff3e7;
-          border: 1px solid #ffd5b6;
+          background: #F3E8DD;
+          border: 1px solid #E2C7AF;
           border-radius: 999px;
           padding: 9px 14px;
           font-size: 12px;
@@ -548,7 +548,7 @@ export default function HomeClient() {
         }
         .hero-proof-row span:before {
           content: "✓";
-          color: #ff6a00;
+          color: #9A5A2E;
           font-weight: 900;
         }
 
@@ -580,8 +580,8 @@ export default function HomeClient() {
           margin: 0 0 15px;
         }
         .form-benefits span {
-          background: #fff7ef;
-          border: 1px solid #ffd5b6;
+          background: #F7F2EC;
+          border: 1px solid #E2C7AF;
           color: #8c3a00;
           border-radius: 999px;
           padding: 8px 9px;
@@ -593,7 +593,7 @@ export default function HomeClient() {
         .form-sub-mobile { display: none; }
         .step-label {
           margin: 0;
-          color: #ff6a00;
+          color: #9A5A2E;
           font-weight: 900;
           text-transform: uppercase;
           letter-spacing: .06em;
@@ -627,9 +627,9 @@ export default function HomeClient() {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: #fff3e7;
-          color: #ff6a00;
-          border: 1px solid #ffd5b6;
+          background: #F3E8DD;
+          color: #9A5A2E;
+          border: 1px solid #E2C7AF;
           font-size: 12px;
         }
         .field-label {
@@ -712,7 +712,7 @@ export default function HomeClient() {
           font-size: 13px;
           font-weight: 850;
         }
-        .form-receive span { color: #ff6a00; font-weight: 900; }
+        .form-receive span { color: #9A5A2E; font-weight: 900; }
         .success { text-align: center; padding: 28px 8px; }
         .success-icon {
           width: 62px;
@@ -818,7 +818,7 @@ export default function HomeClient() {
           text-align: center;
         }
         .eyebrow {
-          color: #ff6a00;
+          color: #9A5A2E;
           font-weight: 900;
           text-transform: uppercase;
           letter-spacing: .08em;
@@ -841,7 +841,7 @@ export default function HomeClient() {
 
         .different-section {
           background:
-            radial-gradient(circle at 10% 8%, rgba(255, 106, 0, .10), transparent 28%),
+            radial-gradient(circle at 10% 8%, rgba(154,90,46,.10), transparent 28%),
             linear-gradient(180deg, #fffdf9 0%, #f5f2ec 100%);
           border-top: 1px solid #eee8df;
           border-bottom: 1px solid #eee8df;
@@ -882,7 +882,7 @@ export default function HomeClient() {
           inset: 0 auto auto 0;
           width: 100%;
           height: 4px;
-          background: linear-gradient(90deg, #ff6a00, rgba(255, 106, 0, .12));
+          background: linear-gradient(90deg, #9A5A2E, rgba(154, 90, 46, .12));
         }
         .different-number {
           width: 42px;
@@ -896,7 +896,7 @@ export default function HomeClient() {
           font-weight: 900;
           margin-bottom: 16px;
         }
-        .different-card:nth-child(2) .different-number { background: #ff6a00; }
+        .different-card:nth-child(2) .different-number { background: #9A5A2E; }
         .different-card h3 {
           margin: 0 0 10px;
           color: #071f3a;
@@ -927,8 +927,8 @@ export default function HomeClient() {
           width: 38px;
           height: 38px;
           border-radius: 14px;
-          background: #fff3e7;
-          color: #ff6a00;
+          background: #F3E8DD;
+          color: #9A5A2E;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -989,7 +989,7 @@ export default function HomeClient() {
           font-weight: 900;
           text-align: center;
         }
-        .compare-title.orange { background: #ff6a00; }
+        .compare-title.orange { background: #9A5A2E; }
         .compare-list { display: grid; }
         .compare-row {
           display: grid;
@@ -1036,7 +1036,7 @@ export default function HomeClient() {
         }
         .step-card:nth-child(2) .step-number,
         .step-card:nth-child(4) .step-number {
-          background: #ff6a00;
+          background: #9A5A2E;
         }
         .step-card h3 {
           margin: 0 0 7px;
@@ -1078,7 +1078,7 @@ export default function HomeClient() {
           color: #24364a;
           line-height: 1.35;
         }
-        .premium-list span { color: #ff6a00; }
+        .premium-list span { color: #9A5A2E; }
         .dark-card {
           background: #071f3a;
           color: #fff;
@@ -1131,8 +1131,8 @@ export default function HomeClient() {
         }
         .example-card small {
           display: inline-flex;
-          background: #fff3e7;
-          border: 1px solid #ffd5b6;
+          background: #F3E8DD;
+          border: 1px solid #E2C7AF;
           color: #8c3a00;
           border-radius: 999px;
           padding: 6px 9px;
@@ -1173,7 +1173,7 @@ export default function HomeClient() {
           font-weight: 900;
         }
         .popular-grid a:hover {
-          border-color: #ff6a00;
+          border-color: #9A5A2E;
         }
 
         .route-section {
@@ -1228,8 +1228,8 @@ export default function HomeClient() {
           width: 36px;
           height: 36px;
           border-radius: 14px;
-          background: #fff3e7;
-          color: #ff6a00;
+          background: #F3E8DD;
+          color: #9A5A2E;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -1250,7 +1250,7 @@ export default function HomeClient() {
         }
         .route-card span:last-child {
           margin-top: auto;
-          color: #ff6a00;
+          color: #9A5A2E;
           font-weight: 900;
           font-size: 14px;
         }
@@ -1367,7 +1367,7 @@ export default function HomeClient() {
           gap: 16px;
         }
         .faq-accordion summary::-webkit-details-marker { display: none; }
-        .faq-accordion summary:after { content: "+"; color: #ff6a00; font-weight: 900; }
+        .faq-accordion summary:after { content: "+"; color: #9A5A2E; font-weight: 900; }
         .faq-accordion details[open] summary:after { content: "–"; }
         .faq-accordion p {
           margin: 0;
@@ -1412,7 +1412,7 @@ export default function HomeClient() {
           font-weight: 900;
           color: #24364a;
         }
-        .seo-link-grid a:hover { border-color: #ff6a00; }
+        .seo-link-grid a:hover { border-color: #9A5A2E; }
 
         .faq {
           display: grid;
@@ -1496,12 +1496,12 @@ export default function HomeClient() {
           right: 18px;
           bottom: 18px;
           z-index: 80;
-          background: #25d366;
+          background: #3E8F5E;
           color: #fff;
           border-radius: 999px;
           padding: 13px 17px;
           font-weight: 900;
-          box-shadow: 0 14px 32px rgba(37,211,102,.32);
+          box-shadow: 0 14px 32px rgba(62,143,94,.24);
           font-size: 14px;
         }
         .mobile-bottom-cta { display: none; }

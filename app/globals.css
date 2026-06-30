@@ -6,8 +6,8 @@
 :root {
   --color-navy: #0a2540;
   --color-navy-dark: #071827;
-  --color-orange: #ff6a00;
-  --color-green: #25d366;
+  --color-orange: #9A5A2E;
+  --color-green: #3E8F5E;
   --color-bg: #f7f5f0;
   --color-text: #0a2540;
   --color-muted: #647386;
@@ -61,12 +61,12 @@ img {
 }
 
 :focus-visible {
-  outline: 3px solid rgba(255, 106, 0, 0.45);
+  outline: 3px solid rgba(154, 90, 46, 0.38);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: rgba(255, 106, 0, 0.22);
+  background: rgba(154, 90, 46, 0.18);
   color: var(--color-navy);
 }
 

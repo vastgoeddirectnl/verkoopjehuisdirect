@@ -98,12 +98,12 @@ export default function SeoLandingPage({ page }) {
         .seo-page{
           --navy:#071f3a;
           --navy2:#123a67;
-          --orange:#ff6a00;
+          --orange:#9A5A2E;
           --cream:#f5f2ec;
           --card:#fffdf9;
           --line:#e8e3db;
           --muted:#5f7083;
-          --soft:#fff3e7;
+          --soft:#F3E8DD;
           font-family:Arial,Helvetica,sans-serif;
           color:var(--navy);
           background:linear-gradient(180deg,#fffdf9 0%,#f5f2ec 100%);
@@ -121,13 +121,13 @@ export default function SeoLandingPage({ page }) {
         .header-actions{display:flex;align-items:center;gap:8px}
         .btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:999px;padding:13px 19px;font-weight:900;cursor:pointer;transition:.18s ease;white-space:nowrap;line-height:1;text-decoration:none}
         .btn:hover{transform:translateY(-1px)}
-        .btn-orange{background:var(--orange);color:#fff;box-shadow:0 12px 28px rgba(255,106,0,.23)}
+        .btn-orange{background:var(--orange);color:#fff;box-shadow:0 12px 28px rgba(154,90,46,.20)}
         .btn-blue{background:var(--navy);color:#fff}
         .btn-light{background:#fff;color:var(--navy);border:1px solid #e3ded6}
-        .btn-green{background:#25d366;color:#fff;box-shadow:0 12px 28px rgba(37,211,102,.2)}
-        .hero{position:relative;overflow:hidden;background:radial-gradient(circle at 84% 6%,rgba(255,106,0,.15),transparent 30%),linear-gradient(180deg,#fffdf9 0%,#f6f2eb 100%)}
+        .btn-green{background:#3E8F5E;color:#fff;box-shadow:0 12px 28px rgba(62,143,94,.18)}
+        .hero{position:relative;overflow:hidden;background:radial-gradient(circle at 84% 6%,rgba(154,90,46,.13),transparent 30%),linear-gradient(180deg,#fffdf9 0%,#f6f2eb 100%)}
         .hero-grid{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(350px,.74fr);gap:42px;align-items:center;padding:54px 0 56px}
-        .badge{display:inline-flex;color:#9a3d00;background:var(--soft);border:1px solid #ffd5b6;border-radius:999px;padding:9px 14px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:17px}
+        .badge{display:inline-flex;color:#9a3d00;background:var(--soft);border:1px solid #E2C7AF;border-radius:999px;padding:9px 14px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:17px}
         h1{font-size:clamp(40px,4.4vw,62px);line-height:.98;letter-spacing:-2.2px;margin:0;color:var(--navy);max-width:760px}
         .lead{font-size:19px;line-height:1.62;color:#526274;max-width:720px;margin:20px 0 0}
         .hero-cta-row{display:flex;gap:11px;flex-wrap:wrap;align-items:center;margin:25px 0 0}
@@ -169,7 +169,7 @@ export default function SeoLandingPage({ page }) {
         .content-block h2{font-size:clamp(24px,2vw,32px);line-height:1.14;letter-spacing:-.7px;margin:0 0 12px}
         .content-block p{color:#647386;font-size:16px;line-height:1.62;margin:0 0 12px}
         .content-block p:last-child{margin-bottom:0}
-        .example-card{background:linear-gradient(135deg,#fff7ef 0%,#ffffff 100%);border:1px solid #ffd9bd;border-radius:28px;padding:28px;box-shadow:0 16px 44px rgba(255,106,0,.08)}
+        .example-card{background:linear-gradient(135deg,#F7F2EC 0%,#ffffff 100%);border:1px solid #E2C7AF;border-radius:28px;padding:28px;box-shadow:0 16px 44px rgba(154,90,46,.08)}
         .example-card h2{font-size:clamp(24px,2.1vw,33px);line-height:1.12;letter-spacing:-.75px;margin-bottom:10px}
         .example-card p{color:#5f7083;font-size:16px;line-height:1.62;margin:0}
         .list{display:grid;gap:10px;margin:12px 0 0;padding:0;list-style:none}
@@ -205,7 +205,7 @@ export default function SeoLandingPage({ page }) {
         .footer p{margin:6px 0;color:#b8c3d0;line-height:1.42}
         .footer a{color:inherit;text-decoration:none}
         .footer a:hover{color:#fff}
-        .whatsapp-float{position:fixed;right:18px;bottom:18px;z-index:80;background:#25d366;color:#fff;border-radius:999px;padding:13px 17px;font-weight:900;box-shadow:0 14px 32px rgba(37,211,102,.32);font-size:14px;text-decoration:none}
+        .whatsapp-float{position:fixed;right:18px;bottom:18px;z-index:80;background:#3E8F5E;color:#fff;border-radius:999px;padding:13px 17px;font-weight:900;box-shadow:0 14px 32px rgba(62,143,94,.24);font-size:14px;text-decoration:none}
         .mobile-bottom-cta{display:none}
 
         @media(min-width:761px){

@@ -381,8 +381,8 @@ export async function POST(request) {
         ? `Vrijblijvend verkoopvoorstel voor ${address}`
         : "Uw vrijblijvende verkoopvoorstel van Vastgoed Direct Nederland";
 
-      const previewText = address && offerAmount
-        ? `Wij hebben een vrijblijvend verkoopvoorstel klaargezet voor ${address}: ${offerAmount}.`
+      const previewText = address && address !== "-"
+        ? `Wij hebben een vrijblijvend verkoopvoorstel klaargezet voor ${address}.`
         : "Wij hebben uw vrijblijvende verkoopvoorstel klaargezet.";
 
       const html = `
@@ -398,7 +398,7 @@ export async function POST(request) {
                 Uw persoonlijke voorstel staat klaar
               </h1>
               <p style="margin:14px 0 0;font-size:16px;line-height:1.65;color:#d9e6f5;">
-                Wij hebben het voorstel overzichtelijk voor u uitgewerkt, inclusief bedrag, uitgangspunten,
+                Wij hebben het voorstel overzichtelijk voor u klaargezet. In de klantversie vindt u de uitgangspunten,
                 voorwaarden en vervolgstappen.
               </p>
             </div>
@@ -412,10 +412,10 @@ export async function POST(request) {
                 Vastgoed Direct Nederland.
               </p>
 
-              <div style="background:#fff7ef;border:1px solid #ffd5b6;border-radius:22px;padding:22px;margin:22px 0;">
-                <div style="font-size:12px;color:#7c4a24;text-transform:uppercase;font-weight:bold;letter-spacing:.07em;">Woning</div>
+              <div style="background:#F7F2EC;border:1px solid #E2C7AF;border-radius:22px;padding:22px;margin:22px 0;">
+                <div style="font-size:12px;color:#7C4727;text-transform:uppercase;font-weight:bold;letter-spacing:.07em;">Woning</div>
                 <div style="font-size:20px;font-weight:bold;margin-top:6px;color:#071f3a;line-height:1.3;">${address || "-"}</div>
-                <div style="font-size:38px;font-weight:bold;margin-top:12px;color:#ff6a00;letter-spacing:-.03em;">${offerAmount || "In overleg"}</div>
+                <div style="font-size:15px;line-height:1.6;margin-top:12px;color:#48586b;">Het voorstel staat klaar in een aparte klantversie. U kunt het rustig bekijken via de knop hieronder.</div>
                 ${validity ? `<div style="font-size:14px;color:#48586b;margin-top:10px;">Geldig tot: ${validity}</div>` : ""}
               </div>
 
@@ -441,8 +441,8 @@ export async function POST(request) {
               </table>
 
               <p style="margin:0 0 26px;">
-                <a href="${publicUrl}" style="display:inline-block;background:#ff6a00;color:#fff;text-decoration:none;border-radius:999px;padding:15px 24px;font-weight:bold;box-shadow:0 14px 30px rgba(255,106,0,.24);">
-                  Voorstel bekijken
+                <a href="${publicUrl}" style="display:block;width:100%;max-width:320px;box-sizing:border-box;background:#9A5A2E;color:#fff;text-decoration:none;border-radius:999px;padding:15px 24px;font-weight:bold;text-align:center;box-shadow:0 12px 26px rgba(154,90,46,.18);">
+                  Verkoopvoorstel inzien
                 </a>
               </p>
 

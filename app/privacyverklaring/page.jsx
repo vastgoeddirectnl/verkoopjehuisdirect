@@ -16,7 +16,7 @@ export default function Privacyverklaring() {
           />
         </a>
 
-        <p style={{ color: "#ff6a00", fontWeight: "900", textTransform: "uppercase" }}>
+        <p style={{ color: "#9A5A2E", fontWeight: "900", textTransform: "uppercase" }}>
           Privacy
         </p>
 
