@@ -38,7 +38,7 @@ export async function POST(request) {
     const notitie = clean(body.notitie, 3000);
     const pagina = clean(body.pagina, 160) || "Telefonische aanvraag";
     const bron = clean(body.bron, 120) || "Telefonisch";
-    const status = clean(body.status, 80) || "Nieuw";
+    const status = clean(body.status, 80) || "In behandeling";
 
     if (!naam && !telefoon && !email) {
       return NextResponse.json(

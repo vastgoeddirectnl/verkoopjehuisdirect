@@ -8,8 +8,25 @@ import { markProposalSentAutomation, refreshLeadAutomation, refreshAllLeadAutoma
 
 export const runtime = "nodejs";
 
-const STATUSES = ["Nieuw", "Contact opgenomen", "In beoordeling", "Voorstel verzonden", "Voorstel bekeken", "Akkoord", "Afgewezen", "Afgerond", "Gearchiveerd"];
-const ARCHIVE_LEAD_STATUSES = ["Akkoord", "Afgewezen", "Afgerond", "Gearchiveerd"];
+const STATUSES = [
+  "Nieuw",
+  "Nieuwe aanvraag",
+  "Contact opgenomen",
+  "In behandeling",
+  "In beoordeling",
+  "Eerste bod gedaan",
+  "Beoordeling gepland",
+  "Voorstel opgesteld",
+  "Voorstel verzonden",
+  "Voorstel bekeken",
+  "In onderhandeling",
+  "Akkoord",
+  "Afgewezen",
+  "Afgewezen / vervallen",
+  "Afgerond",
+  "Gearchiveerd",
+];
+const ARCHIVE_LEAD_STATUSES = ["Akkoord", "Afgewezen", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
 const ARCHIVE_PROPOSAL_STATUSES = ["Akkoord", "Gearchiveerd", "Afgewezen", "Verlopen"];
 const PROPOSAL_STATUSES = ["Concept", "Verzonden", "Bekeken", "Akkoord", "Afgewezen", "Verlopen", "Gearchiveerd"];
 
@@ -200,7 +217,7 @@ export async function GET(request) {
           select
             count(*) filter (where coalesce(status, 'Nieuw') <> all($1))::int as total_leads,
             count(*) filter (where created_at >= now() - interval '30 days' and coalesce(status, 'Nieuw') <> all($1))::int as leads_30d,
-            count(*) filter (where status = 'Nieuw')::int as new_leads,
+            count(*) filter (where coalesce(status, 'Nieuw') in ('Nieuw','Nieuwe aanvraag'))::int as new_leads,
             count(*) filter (where coalesce(status, 'Nieuw') = any($1))::int as archived_leads,
             (select count(*)::int from tasks where status <> 'Afgerond') as open_tasks,
             count(*) filter (where lead_priority = 'Hoog' and coalesce(status, 'Nieuw') <> all($1))::int as high_priority_leads,
@@ -264,7 +281,7 @@ export async function POST(request) {
       for (const field of allowed) {
         if (Object.prototype.hasOwnProperty.call(body, field)) {
           let value = body[field];
-          if (field === "status" && value && !STATUSES.includes(value)) value = "Nieuw";
+          if (field === "status" && value && !STATUSES.includes(value)) value = "Nieuwe aanvraag";
           params.push(value || null);
           updates.push(`${field} = $${params.length}`);
         }
@@ -378,8 +395,8 @@ export async function POST(request) {
       const offerAmount = formatMoney(proposal.amount_text);
       const validity = formatDateShort(proposal.validity_date);
       const subject = address && address !== "-"
-        ? `Vrijblijvend verkoopvoorstel voor ${address}`
-        : "Uw vrijblijvende verkoopvoorstel van Vastgoed Direct Nederland";
+        ? `Uw persoonlijke verkoopvoorstel staat klaar`
+        : "Uw persoonlijke verkoopvoorstel staat klaar";
 
       const previewText = address && address !== "-"
         ? `Wij hebben een vrijblijvend verkoopvoorstel klaargezet voor ${address}.`
@@ -399,7 +416,7 @@ export async function POST(request) {
               </h1>
               <p style="margin:14px 0 0;font-size:16px;line-height:1.65;color:#d9e6f5;">
                 Wij hebben het voorstel overzichtelijk voor u klaargezet. In de klantversie vindt u de uitgangspunten,
-                voorwaarden en vervolgstappen.
+                voorwaarden, planning en vervolgstappen. Het bedrag staat bewust alleen in de beveiligde klantversie.
               </p>
             </div>
 
@@ -497,7 +514,7 @@ export async function POST(request) {
 
         if (proposal.lead_id) {
           await query(
-            "update leads set status = 'Voorstel verzonden', next_follow_up_at = current_date + interval '2 days', updated_at = now() where id = $1 and status not in ('Akkoord','Afgewezen')",
+            "update leads set status = 'Voorstel verzonden', next_follow_up_at = current_date + interval '2 days', updated_at = now() where id = $1 and status not in ('Akkoord','Afgewezen','Afgewezen / vervallen','Afgerond','Gearchiveerd')",
             [proposal.lead_id]
           );
           await markProposalSentAutomation(proposal);

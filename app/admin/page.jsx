@@ -2,8 +2,27 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-const STATUSES = ["Nieuw", "Contact opgenomen", "In beoordeling", "Voorstel verzonden", "Voorstel bekeken", "Akkoord", "Afgewezen", "Afgerond", "Gearchiveerd"];
-const ARCHIVE_STATUSES = ["Akkoord", "Afgewezen", "Afgerond", "Gearchiveerd"];
+const STATUSES = [
+  "Nieuwe aanvraag",
+  "In behandeling",
+  "Eerste bod gedaan",
+  "Beoordeling gepland",
+  "Voorstel opgesteld",
+  "Voorstel verzonden",
+  "Voorstel bekeken",
+  "In onderhandeling",
+  "Akkoord",
+  "Afgewezen / vervallen",
+  "Afgerond",
+  "Gearchiveerd",
+];
+const LEGACY_STATUS_LABELS = {
+  "Nieuw": "Nieuwe aanvraag",
+  "Contact opgenomen": "In behandeling",
+  "In beoordeling": "Beoordeling gepland",
+  "Afgewezen": "Afgewezen / vervallen",
+};
+const ARCHIVE_STATUSES = ["Akkoord", "Afgewezen", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
 const TASK_STATUSES = ["Open", "In behandeling", "Afgerond"];
 
 function todayPlus(days) {
@@ -21,6 +40,33 @@ function fmt(value) {
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(value));
+}
+
+
+function displayStatus(status) {
+  return LEGACY_STATUS_LABELS[status] || status || "Nieuwe aanvraag";
+}
+
+function selectStatusValue(status) {
+  const label = displayStatus(status);
+  return STATUSES.includes(label) ? label : "Nieuwe aanvraag";
+}
+
+function statusClass(status) {
+  return `status-${displayStatus(status).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+}
+
+function PipelineButtons({ value, onChange }) {
+  const active = displayStatus(value);
+  return (
+    <div className="pipeline-buttons" aria-label="Pipeline status">
+      {STATUSES.filter((status) => !["Afgerond", "Gearchiveerd"].includes(status)).map((status) => (
+        <button key={status} type="button" className={active === status ? "active" : ""} onClick={() => onChange(status)}>
+          {status}
+        </button>
+      ))}
+    </div>
+  );
 }
 
 function cleanPhone(value) {
@@ -249,7 +295,7 @@ export default function AdminDashboard() {
   }
 
   async function restoreLeadFromArchive(id) {
-    const data = await apiPost({ action: "updateLead", id, status: "In beoordeling" });
+    const data = await apiPost({ action: "updateLead", id, status: "In behandeling" });
     if (!data?.lead) return;
     await Promise.all([loadLeads(), loadArchive(), loadReport()]);
   }
@@ -292,7 +338,7 @@ export default function AdminDashboard() {
       ...proposalForm,
     });
     if (!data?.proposal) return;
-    await updateLead(selected.id, { status: "Voorstel verzonden" });
+    await updateLead(selected.id, { status: "Voorstel opgesteld" });
     await Promise.all([loadProposals(), loadLeadDetail(selected.id), loadReport()]);
     setProposalForm(emptyProposal());
     setView("proposals");
@@ -402,10 +448,10 @@ export default function AdminDashboard() {
         <section className="kpi-grid">
           <Kpi label="Actieve leads" value={report.kpis?.total_leads} hint="Niet gearchiveerd" />
           <Kpi label="Laatste 30 dagen" value={report.kpis?.leads_30d} hint="Nieuwe aanvragen" />
-          <Kpi label="Nieuwe leads" value={report.kpis?.new_leads} hint="Nog opvolgen" />
+          <Kpi label="Nieuwe aanvragen" value={report.kpis?.new_leads} hint="Nog opvolgen" />
           <Kpi label="Kansrijke leads" value={report.kpis?.high_priority_leads} hint="Automatische score hoog" />
           <Kpi label="Vandaag opvolgen" value={report.kpis?.followups_due} hint="Volgens opvolgdatum" />
-          <Kpi label="Voorstel bekeken" value={report.kpis?.proposal_viewed_leads} hint="Warme opvolging" />
+          <Kpi label="Voorstellen bekeken" value={report.kpis?.proposal_viewed_leads} hint="Warme opvolging" />
           <Kpi label="Open taken" value={report.kpis?.open_tasks} hint="Actieve reminders" />
           <Kpi label="Archief leads" value={report.kpis?.archived_leads} hint="Afgerond of afgewezen" />
           <Kpi label="Archief voorstellen" value={report.kpis?.archived_proposals} hint="Niet actief" />
@@ -420,9 +466,21 @@ export default function AdminDashboard() {
                   <button key={lead.id} onClick={() => { setView("leads"); loadLeadDetail(lead.id); }}>
                     <strong>{lead.naam || "Naam onbekend"}</strong>
                     <span>{lead.postcode || "-"} {lead.huisnummer || ""}</span>
-                    <em>{lead.status || "Nieuw"}</em>
+                    <em className={statusClass(lead.status)}>{displayStatus(lead.status)}</em>
                     <small>{fmt(lead.created_at)}</small>
                   </button>
+                ))}
+              </div>
+            </article>
+
+            <article className="panel">
+              <h2>Pipeline</h2>
+              <div className="pipeline-summary">
+                {(report.byStatus || []).map((row) => (
+                  <div key={row.label}>
+                    <span>{displayStatus(row.label)}</span>
+                    <strong>{row.total}</strong>
+                  </div>
                 ))}
               </div>
             </article>
@@ -448,7 +506,7 @@ export default function AdminDashboard() {
                     <strong>{lead.naam || "Naam onbekend"}</strong>
                     <span>{lead.telefoon || "-"}</span>
                     <span>{lead.postcode || "-"} {lead.huisnummer || ""}</span>
-                    <em>{lead.status || "Nieuw"}</em>
+                    <em className={statusClass(lead.status)}>{displayStatus(lead.status)}</em>
                     <small>{fmt(lead.created_at)}</small>
                   </button>
                 ))}
@@ -479,12 +537,13 @@ export default function AdminDashboard() {
                     {selected.telefoon ? <a href={`tel:${cleanPhone(selected.telefoon)}`}>Bellen</a> : null}
                     {selected.telefoon ? <a className="green" href={whatsappUrl(selected.telefoon, selected.naam)} target="_blank">WhatsApp</a> : null}
                     {selected.email ? <a href={`mailto:${selected.email}`}>Mailen</a> : null}
-                    <button onClick={() => updateLead(selected.id, { last_contact_at: new Date().toISOString(), status: selected.status === "Nieuw" ? "Contact opgenomen" : selected.status })}>Contact gehad</button>
+                    <button onClick={() => updateLead(selected.id, { last_contact_at: new Date().toISOString(), status: ["Nieuw", "Nieuwe aanvraag"].includes(selected.status) ? "In behandeling" : selected.status })}>Contact gehad</button>
                     <button className="secondary" onClick={() => moveLeadToArchive(selected.id, "Afgerond")}>Afgerond archiveren</button>
                     <button className="muted-btn" onClick={() => moveLeadToArchive(selected.id, "Gearchiveerd")}>Naar archief</button>
                   </div>
 
-                  <label className="field">Status<select value={selected.status || "Nieuw"} onChange={(event) => updateLead(selected.id, { status: event.target.value })}>{STATUSES.map((status) => <option key={status}>{status}</option>)}</select></label>
+                  <label className="field">Status<select value={selectStatusValue(selected.status)} onChange={(event) => updateLead(selected.id, { status: event.target.value })}>{STATUSES.map((status) => <option key={status}>{status}</option>)}</select></label>
+                  <div className="pipeline-panel"><strong>Pipeline</strong><PipelineButtons value={selected.status} onChange={(status) => updateLead(selected.id, { status })} /></div>
                   <label className="field">Volgende opvolging<input type="date" value={selected.next_follow_up_at || ""} onChange={(event) => updateLead(selected.id, { next_follow_up_at: event.target.value })} /></label>
                   <label className="field">Notitie<textarea value={selected.notitie || ""} onChange={(event) => setSelected({ ...selected, notitie: event.target.value })} onBlur={(event) => updateLead(selected.id, { notitie: event.target.value })} placeholder="Interne notitie, bijzonderheden, afspraken..." /></label>
 
@@ -536,7 +595,7 @@ export default function AdminDashboard() {
           <section className="archive-grid">
             <article className="panel">
               <div className="panel-head"><h2>Afgeronde en gearchiveerde leads</h2><span>{archivedLeads.length} lead(s)</span></div>
-              <p className="panel-intro">Hier staan leads met status Akkoord, Afgewezen, Afgerond of Gearchiveerd. Zo blijft de actieve leadlijst overzichtelijk.</p>
+              <p className="panel-intro">Hier staan leads met status Akkoord, Afgewezen / vervallen, Afgerond of Gearchiveerd. Zo blijft de actieve leadlijst overzichtelijk.</p>
               <div className="archive-list">
                 {archivedLeads.map((lead) => (
                   <article key={lead.id}>
@@ -580,6 +639,18 @@ export default function AdminDashboard() {
 
         {view === "reports" ? (
           <section className="dashboard-grid">
+
+            <article className="panel">
+              <h2>Pipeline</h2>
+              <div className="pipeline-summary">
+                {(report.byStatus || []).map((row) => (
+                  <div key={row.label}>
+                    <span>{displayStatus(row.label)}</span>
+                    <strong>{row.total}</strong>
+                  </div>
+                ))}
+              </div>
+            </article>
             <article className="panel"><h2>Leads per pagina</h2>{(report.byPage || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={maxPage} />)}</article>
             <article className="panel"><h2>Leads per bron</h2>{(report.bySource || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={maxSource} />)}</article>
             <article className="panel"><h2>Statusverdeling</h2>{(report.byStatus || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={Math.max(1, report.kpis?.total_leads || 1)} />)}</article>
@@ -593,5 +664,16 @@ export default function AdminDashboard() {
 
 const styles = `
 :root{--navy:#071f3a;--navy2:#0d3159;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#D96A1C;--green:#3E8F5E;--shadow:0 22px 70px rgba(7,31,58,.12)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.admin-shell{min-height:100vh;background:radial-gradient(circle at top right,#FFF1E6,transparent 38%),var(--bg);display:flex}.login-bg{align-items:center;justify-content:center}.login-card{width:min(460px,calc(100% - 32px));background:rgba(255,253,249,.92);border:1px solid rgba(232,227,219,.9);border-radius:32px;padding:34px;box-shadow:var(--shadow);backdrop-filter:blur(10px)}.login-card img{width:220px;max-width:100%;margin-bottom:24px}.login-card h1,.topbar h1{margin:4px 0 8px;font-size:38px;letter-spacing:-.04em}.login-card p{color:var(--muted);line-height:1.55}.login-card form{display:grid;gap:12px;margin-top:24px}.login-card input,.filters input,.filters select,.field select,.field input,.field textarea,.sub-panel input,.sub-panel textarea,.panel-head select{width:100%;border:1px solid var(--line);border-radius:16px;padding:14px 16px;font:inherit;background:#fff}.login-card button,.filters button,.sub-panel button,.quick-actions a,.quick-actions button,.export,.automation-btn,.panel-head button,.row-actions a,.row-actions button{border:0;border-radius:999px;background:var(--orange);color:white;text-decoration:none;padding:13px 18px;font-weight:900;cursor:pointer}.eyebrow{display:inline-flex;align-items:center;border:1px solid #F2B885;background:#FFF1E6;color:#B85216;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.sidebar{width:286px;background:#061b32;color:#fff;padding:28px;display:flex;flex-direction:column;gap:28px;position:sticky;top:0;height:100vh}.sidebar img{width:205px;background:#fff;border-radius:18px;padding:12px}.sidebar nav{display:grid;gap:10px}.sidebar button{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;border-radius:16px;padding:14px 16px;text-align:left;font-weight:850;cursor:pointer}.sidebar button.active,.sidebar button:hover{background:#fff;color:var(--navy)}.sidebar .logout{margin-top:auto;background:rgba(217,106,28,.14);border-color:rgba(217,106,28,.45)}.workspace{flex:1;padding:34px;min-width:0}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px}.topbar-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.export{background:var(--navy)}.automation-btn{background:#fff;color:var(--navy);border:1px solid var(--line);box-shadow:none}.automation-btn:disabled{opacity:.65;cursor:not-allowed}.add-lead{border:0;border-radius:999px;background:var(--orange);color:#fff;text-decoration:none;padding:13px 18px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap}.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:22px}.kpi-card,.panel,.detail-panel{background:var(--card);border:1px solid var(--line);border-radius:26px;box-shadow:0 12px 42px rgba(7,31,58,.08)}.kpi-card{padding:22px}.kpi-card span,.info-card span,.bar-row span,.proposal-list small,.task-list span,.history-item span,.history-item small{color:var(--muted);font-size:13px}.kpi-card strong{display:block;font-size:34px;letter-spacing:-.04em;margin:8px 0}.dashboard-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.panel{padding:22px}.panel.wide{grid-row:span 2}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}.panel h2,.detail-panel h2{margin:0 0 14px;font-size:24px;letter-spacing:-.03em}.lead-layout{display:grid;grid-template-columns:minmax(420px,.9fr) minmax(520px,1.1fr);gap:18px;align-items:start}.filters{display:grid;grid-template-columns:1fr 170px auto;gap:10px;margin-bottom:16px}.lead-table{display:grid;gap:9px;max-height:72vh;overflow:auto;padding-right:4px}.lead-table button{border:1px solid var(--line);background:#fff;border-radius:18px;padding:14px;display:grid;grid-template-columns:1.2fr .85fr .8fr .7fr .85fr;gap:10px;align-items:center;text-align:left;color:var(--navy);cursor:pointer}.lead-table.compact button{grid-template-columns:1.2fr .8fr .7fr .8fr}.lead-table button.selected,.lead-table button:hover{border-color:#E57A25;box-shadow:0 10px 26px rgba(217,106,28,.12)}.lead-table em{font-style:normal;background:#eef4ff;border-radius:999px;padding:6px 10px;text-align:center;font-weight:850;color:#164575}.detail-panel{padding:24px;position:sticky;top:24px}.detail-title{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:20px}.detail-title h2{font-size:32px;margin:6px 0 4px}.detail-title a{color:var(--orange);font-weight:900}.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.info-card{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.info-card strong{display:block;margin-top:6px;word-break:break-word}.quick-actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}.quick-actions a,.quick-actions button{background:var(--navy)}.quick-actions a.green{background:var(--green)}.quick-actions button.secondary,.row-actions button.secondary{background:#e9f1fb;color:var(--navy)}.quick-actions button.muted-btn{background:#f2eee7;color:var(--navy);border:1px solid var(--line)}.field{display:grid;gap:8px;font-weight:900;margin:12px 0}.field textarea{min-height:110px;resize:vertical}.split,.history-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.sub-panel{background:#f8f5ef;border:1px solid var(--line);border-radius:22px;padding:16px;display:grid;gap:10px}.sub-panel h3,.history-grid h3{margin:0 0 4px}.sub-panel textarea{min-height:86px;resize:vertical}.history-grid article{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px}.history-item,.task-mini{border-bottom:1px solid var(--line);padding:10px 0}.history-item:last-child,.task-mini:last-child{border-bottom:0}.history-item strong,.history-item span,.history-item small,.task-mini strong,.task-mini span{display:block}.task-list,.proposal-list,.archive-list{display:grid;gap:12px}.task-list article,.proposal-list article,.archive-list article{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:18px}.task-list article.done{opacity:.62}.task-list p{margin:6px 0 0;color:var(--muted)}.proposal-list strong,.task-list strong,.archive-list strong{display:block;font-size:17px}.proposal-list span,.archive-list span{display:block;color:var(--muted);margin:6px 0}.archive-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel-intro{color:var(--muted);line-height:1.55;margin:-4px 0 18px}.empty-state{color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:18px;padding:16px}.row-actions{display:flex;gap:8px;white-space:nowrap;flex-wrap:wrap}.row-actions a{background:var(--navy)}.bar-row{display:grid;gap:8px;margin:14px 0}.bar-row div{display:flex;justify-content:space-between;gap:16px}.bar-row em{height:10px;background:#eee8df;border-radius:999px;overflow:hidden}.bar-row i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),#E57A25);border-radius:999px}.error{background:#F8EEE9;color:#7C2D20;border:1px solid #E8C7BC;border-radius:16px;padding:12px 14px;margin-top:14px}.error.floating{margin:0 0 16px;display:flex;justify-content:space-between;gap:12px}.error button{border:0;background:transparent;font-size:20px;color:inherit;cursor:pointer}@media(max-width:1100px){.admin-shell{display:block}.sidebar{position:relative;width:auto;height:auto}.sidebar nav{grid-template-columns:repeat(3,1fr)}.kpi-grid{grid-template-columns:repeat(2,1fr)}.lead-layout,.dashboard-grid,.archive-grid{grid-template-columns:1fr}.detail-panel{position:relative;top:0}}@media(max-width:700px){.workspace{padding:18px}.filters,.split,.history-grid,.info-grid,.kpi-grid{grid-template-columns:1fr}.lead-table button{grid-template-columns:1fr}.topbar{display:grid}.topbar-actions{justify-content:flex-start}.add-lead,.export{width:auto}.sidebar nav{grid-template-columns:1fr}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.admin-shell{min-height:100vh;background:radial-gradient(circle at top right,#FFF1E6,transparent 38%),var(--bg);display:flex}.login-bg{align-items:center;justify-content:center}.login-card{width:min(460px,calc(100% - 32px));background:rgba(255,253,249,.92);border:1px solid rgba(232,227,219,.9);border-radius:32px;padding:34px;box-shadow:var(--shadow);backdrop-filter:blur(10px)}.login-card img{width:220px;max-width:100%;margin-bottom:24px}.login-card h1,.topbar h1{margin:4px 0 8px;font-size:38px;letter-spacing:-.04em}.login-card p{color:var(--muted);line-height:1.55}.login-card form{display:grid;gap:12px;margin-top:24px}.login-card input,.filters input,.filters select,.field select,.field input,.field textarea,.sub-panel input,.sub-panel textarea,.panel-head select{width:100%;border:1px solid var(--line);border-radius:16px;padding:14px 16px;font:inherit;background:#fff}.login-card button,.filters button,.sub-panel button,.quick-actions a,.quick-actions button,.export,.automation-btn,.panel-head button,.row-actions a,.row-actions button{border:0;border-radius:999px;background:var(--orange);color:white;text-decoration:none;padding:13px 18px;font-weight:900;cursor:pointer}.eyebrow{display:inline-flex;align-items:center;border:1px solid #F2B885;background:#FFF1E6;color:#B85216;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.sidebar{width:286px;background:#061b32;color:#fff;padding:28px;display:flex;flex-direction:column;gap:28px;position:sticky;top:0;height:100vh}.sidebar img{width:205px;background:#fff;border-radius:18px;padding:12px}.sidebar nav{display:grid;gap:10px}.sidebar button{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;border-radius:16px;padding:14px 16px;text-align:left;font-weight:850;cursor:pointer}.sidebar button.active,.sidebar button:hover{background:#fff;color:var(--navy)}.sidebar .logout{margin-top:auto;background:rgba(217,106,28,.14);border-color:rgba(217,106,28,.45)}.workspace{flex:1;padding:34px;min-width:0}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px}.topbar-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.export{background:var(--navy)}.automation-btn{background:#fff;color:var(--navy);border:1px solid var(--line);box-shadow:none}.automation-btn:disabled{opacity:.65;cursor:not-allowed}.add-lead{border:0;border-radius:999px;background:var(--orange);color:#fff;text-decoration:none;padding:13px 18px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap}.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:22px}.kpi-card,.panel,.detail-panel{background:var(--card);border:1px solid var(--line);border-radius:26px;box-shadow:0 12px 42px rgba(7,31,58,.08)}.kpi-card{padding:22px}.kpi-card span,.info-card span,.bar-row span,.proposal-list small,.task-list span,.history-item span,.history-item small{color:var(--muted);font-size:13px}.kpi-card strong{display:block;font-size:34px;letter-spacing:-.04em;margin:8px 0}.dashboard-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.panel{padding:22px}.panel.wide{grid-row:span 2}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}.panel h2,.detail-panel h2{margin:0 0 14px;font-size:24px;letter-spacing:-.03em}.lead-layout{display:grid;grid-template-columns:minmax(420px,.9fr) minmax(520px,1.1fr);gap:18px;align-items:start}.filters{display:grid;grid-template-columns:1fr 170px auto;gap:10px;margin-bottom:16px}.lead-table{display:grid;gap:9px;max-height:72vh;overflow:auto;padding-right:4px}.lead-table button{border:1px solid var(--line);background:#fff;border-radius:18px;padding:14px;display:grid;grid-template-columns:1.2fr .85fr .8fr .7fr .85fr;gap:10px;align-items:center;text-align:left;color:var(--navy);cursor:pointer}.lead-table.compact button{grid-template-columns:1.2fr .8fr .7fr .8fr}.lead-table button.selected,.lead-table button:hover{border-color:#E57A25;box-shadow:0 10px 26px rgba(217,106,28,.12)}.lead-table em{font-style:normal;background:#eef4ff;border-radius:999px;padding:6px 10px;text-align:center;font-weight:850;color:#164575}.detail-panel{padding:24px;position:sticky;top:24px}.detail-title{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:20px}.detail-title h2{font-size:32px;margin:6px 0 4px}.detail-title a{color:var(--orange);font-weight:900}.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.info-card{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.info-card strong{display:block;margin-top:6px;word-break:break-word}.quick-actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}.quick-actions a,.quick-actions button{background:var(--navy)}.quick-actions a.green{background:var(--green)}.quick-actions button.secondary,.row-actions button.secondary{background:#e9f1fb;color:var(--navy)}.quick-actions button.muted-btn{background:#f2eee7;color:var(--navy);border:1px solid var(--line)}.field{display:grid;gap:8px;font-weight:900;margin:12px 0}.field textarea{min-height:110px;resize:vertical}.split,.history-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.sub-panel{background:#f8f5ef;border:1px solid var(--line);border-radius:22px;padding:16px;display:grid;gap:10px}.sub-panel h3,.history-grid h3{margin:0 0 4px}.sub-panel textarea{min-height:86px;resize:vertical}.history-grid article{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px}.history-item,.task-mini{border-bottom:1px solid var(--line);padding:10px 0}.history-item:last-child,.task-mini:last-child{border-bottom:0}.history-item strong,.history-item span,.history-item small,.task-mini strong,.task-mini span{display:block}.task-list,.proposal-list,.archive-list{display:grid;gap:12px}.task-list article,.proposal-list article,.archive-list article{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:18px}.task-list article.done{opacity:.62}.task-list p{margin:6px 0 0;color:var(--muted)}.proposal-list strong,.task-list strong,.archive-list strong{display:block;font-size:17px}.proposal-list span,.archive-list span{display:block;color:var(--muted);margin:6px 0}.archive-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel-intro{color:var(--muted);line-height:1.55;margin:-4px 0 18px}.empty-state{color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:18px;padding:16px}.row-actions{display:flex;gap:8px;white-space:nowrap;flex-wrap:wrap}.row-actions a{background:var(--navy)}.bar-row{display:grid;gap:8px;margin:14px 0}.bar-row div{display:flex;justify-content:space-between;gap:16px}.bar-row em{height:10px;background:#eee8df;border-radius:999px;overflow:hidden}.bar-row i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),#E57A25);border-radius:999px}.pipeline-panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;margin:12px 0}
+.pipeline-panel>strong{display:block;margin-bottom:10px;color:var(--navy)}
+.pipeline-buttons{display:flex;flex-wrap:wrap;gap:7px}
+.pipeline-buttons button{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:999px;padding:9px 11px;font-size:12px;font-weight:900;cursor:pointer}
+.pipeline-buttons button.active{background:var(--orange);color:#fff;border-color:var(--orange)}
+.pipeline-summary{display:grid;gap:8px}
+.pipeline-summary div{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:15px;padding:10px 12px}
+.pipeline-summary span{color:var(--muted);font-weight:850;font-size:13px}
+.pipeline-summary strong{font-size:20px;color:var(--navy)}
+em[class^="status-"]{background:#eef4ff;color:#164575}
+.status-akkoord{background:#eaf7ef!important;color:#23643f!important}.status-afgewezen-vervallen,.status-afgewezen{background:#f8eeee!important;color:#8a2d2d!important}.status-voorstel-bekeken,.status-in-onderhandeling{background:#fff1e6!important;color:#b85216!important}.status-gearchiveerd,.status-afgerond{background:#f2eee7!important;color:#617184!important}
+.error{background:#F8EEE9;color:#7C2D20;border:1px solid #E8C7BC;border-radius:16px;padding:12px 14px;margin-top:14px}.error.floating{margin:0 0 16px;display:flex;justify-content:space-between;gap:12px}.error button{border:0;background:transparent;font-size:20px;color:inherit;cursor:pointer}@media(max-width:1100px){.admin-shell{display:block}.sidebar{position:relative;width:auto;height:auto}.sidebar nav{grid-template-columns:repeat(3,1fr)}.kpi-grid{grid-template-columns:repeat(2,1fr)}.lead-layout,.dashboard-grid,.archive-grid{grid-template-columns:1fr}.detail-panel{position:relative;top:0}}@media(max-width:700px){.workspace{padding:18px}.filters,.split,.history-grid,.info-grid,.kpi-grid{grid-template-columns:1fr}.lead-table button{grid-template-columns:1fr}.topbar{display:grid}.topbar-actions{justify-content:flex-start}.add-lead,.export{width:auto}.sidebar nav{grid-template-columns:1fr}}
 `;

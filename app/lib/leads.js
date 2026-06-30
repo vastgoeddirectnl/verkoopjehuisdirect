@@ -61,7 +61,7 @@ export async function createLead(input = {}) {
   const saved = await queryOne(
     `insert into leads (
       naam, email, telefoon, postcode, huisnummer, woningtype, staat, reden, pagina, bron, status
-    ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'Nieuw') returning *`,
+    ) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'Nieuwe aanvraag') returning *`,
     [
       lead.naam,
       lead.email || null,
@@ -134,7 +134,7 @@ export async function createLead(input = {}) {
   return { lead: automatedLead || saved, mail };
 }
 
-const ARCHIVE_LEAD_STATUSES = ["Akkoord", "Afgewezen", "Afgerond", "Gearchiveerd"];
+const ARCHIVE_LEAD_STATUSES = ["Akkoord", "Afgewezen", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
 
 export async function listLeads({ status, search, limit = 300, archive = "active" } = {}) {
   const where = [];

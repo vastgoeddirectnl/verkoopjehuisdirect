@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-const STATUSES = ["Nieuw", "Contact opgenomen", "In beoordeling", "Voorstel verzonden", "Akkoord", "Afgewezen"];
+const STATUSES = ["Nieuwe aanvraag", "In behandeling", "Eerste bod gedaan", "Beoordeling gepland", "Voorstel opgesteld", "Voorstel verzonden", "Voorstel bekeken", "In onderhandeling", "Akkoord", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
+const LEGACY_STATUS_LABELS = { "Nieuw": "Nieuwe aanvraag", "Contact opgenomen": "In behandeling", "In beoordeling": "Beoordeling gepland", "Afgewezen": "Afgewezen / vervallen" };
+function selectStatusValue(status){ const label = LEGACY_STATUS_LABELS[status] || status || "Nieuwe aanvraag"; return STATUSES.includes(label) ? label : "Nieuwe aanvraag"; }
 const TASK_STATUSES = ["Open", "In behandeling", "Afgerond"];
 
 function todayPlus(days) {
@@ -266,7 +268,7 @@ export default function LeadDetailPage({ params }) {
             <div className="actions">
               {lead.telefoon ? <a href={`tel:${cleanPhone(lead.telefoon)}`}>Bellen</a> : null}
               {lead.email ? <a href={`mailto:${lead.email}`}>Mailen</a> : null}
-              <button disabled={saving} onClick={() => post({ action: "updateLead", id: lead.id, last_contact_at: new Date().toISOString(), status: lead.status === "Nieuw" ? "Contact opgenomen" : lead.status })}>Contact gehad</button>
+              <button disabled={saving} onClick={() => post({ action: "updateLead", id: lead.id, last_contact_at: new Date().toISOString(), status: ["Nieuw", "Nieuwe aanvraag"].includes(lead.status) ? "In behandeling" : lead.status })}>Contact gehad</button>
             </div>
           </section>
 
@@ -284,7 +286,7 @@ export default function LeadDetailPage({ params }) {
                 <Info label="Aangemaakt" value={fmt(lead.created_at)} />
               </div>
               <Field label="Status">
-                <select value={lead.status || "Nieuw"} onChange={(e) => post({ action: "updateLead", id: lead.id, status: e.target.value })}>
+                <select value={selectStatusValue(lead.status)} onChange={(e) => post({ action: "updateLead", id: lead.id, status: e.target.value })}>
                   {STATUSES.map((status) => <option key={status}>{status}</option>)}
                 </select>
               </Field>

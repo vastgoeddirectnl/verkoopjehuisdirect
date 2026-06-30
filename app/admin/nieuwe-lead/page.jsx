@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const STATUSES = ["Nieuw", "Contact opgenomen", "In beoordeling", "Voorstel verzonden", "Akkoord", "Afgewezen"];
+const STATUSES = ["Nieuwe aanvraag", "In behandeling", "Eerste bod gedaan", "Beoordeling gepland", "Voorstel opgesteld", "Voorstel verzonden", "Voorstel bekeken", "In onderhandeling", "Akkoord", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
 const woningtypes = ["", "Vrijstaand", "Twee-onder-een-kap", "Hoekwoning", "Tussenwoning", "Appartement", "Benedenwoning", "Bovenwoning", "Woonboerderij", "Anders"];
 const situaties = ["", "Normale verkoop", "Leegstaand", "Opknapwoning", "Achterstallig onderhoud", "Verhuurde woning", "Erfenis", "Scheiding", "Snelle verkoop gewenst", "Financiële situatie", "Anders"];
 
@@ -16,7 +16,7 @@ function initialForm() {
     woningtype: "",
     staat: "",
     reden: "",
-    status: "Contact opgenomen",
+    status: "In behandeling",
     bron: "Telefonisch",
     pagina: "Handmatig ingevoerd",
     notitie: "",

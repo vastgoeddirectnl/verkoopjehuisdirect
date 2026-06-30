@@ -1,7 +1,7 @@
 import { query, queryOne } from "./neonDb";
 
 const HIGH_VALUE_REGIONS = ["groningen", "drenthe", "friesland", "overijssel", "borger", "stadskanaal", "assen", "emmen", "veendam", "winschoten", "musselkanaal"];
-const INACTIVE_LEAD_STATUSES = ["Akkoord", "Afgewezen", "Afgerond", "Gearchiveerd"];
+const INACTIVE_LEAD_STATUSES = ["Akkoord", "Afgewezen", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
 
 function clean(value) {
   return String(value || "").trim();
@@ -96,9 +96,9 @@ export function calculateLeadAutomation(lead = {}) {
   let nextFollowUpAt = null;
   const status = clean(lead.status) || "Nieuw";
 
-  if (status === "Nieuw") nextFollowUpAt = todayPlus(0);
-  else if (status === "Contact opgenomen" || status === "In beoordeling") nextFollowUpAt = todayPlus(1);
-  else if (status === "Voorstel verzonden") nextFollowUpAt = todayPlus(2);
+  if (status === "Nieuw" || status === "Nieuwe aanvraag") nextFollowUpAt = todayPlus(0);
+  else if (["Contact opgenomen", "In behandeling", "In beoordeling", "Eerste bod gedaan", "Beoordeling gepland", "Voorstel opgesteld"].includes(status)) nextFollowUpAt = todayPlus(1);
+  else if (status === "Voorstel verzonden" || status === "Voorstel bekeken" || status === "In onderhandeling") nextFollowUpAt = todayPlus(2);
   else if (status === "Voorstel bekeken") nextFollowUpAt = todayPlus(0);
   else if (priority === "Hoog" && !INACTIVE_LEAD_STATUSES.includes(status)) nextFollowUpAt = todayPlus(0);
 
@@ -184,7 +184,7 @@ export async function refreshLeadAutomation(inputLead) {
 
     const status = lead.status || "Nieuw";
 
-    if (status === "Nieuw") {
+    if (status === "Nieuw" || status === "Nieuwe aanvraag") {
       await upsertAutomationTask({
         lead,
         key: "auto-new-lead",
@@ -254,7 +254,7 @@ export async function markProposalViewed(proposal) {
     if (!INACTIVE_LEAD_STATUSES.includes(lead.status || "")) {
       await query(
         `update leads
-         set status = case when status = 'Voorstel verzonden' then 'Voorstel bekeken' else status end,
+         set status = case when status in ('Voorstel verzonden','Voorstel opgesteld') then 'Voorstel bekeken' else status end,
              proposal_viewed_at = coalesce(proposal_viewed_at, now()),
              next_follow_up_at = current_date,
              updated_at = now()
