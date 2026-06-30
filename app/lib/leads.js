@@ -134,13 +134,21 @@ export async function createLead(input = {}) {
   return { lead: automatedLead || saved, mail };
 }
 
-export async function listLeads({ status, search, limit = 300 } = {}) {
+const ARCHIVE_LEAD_STATUSES = ["Akkoord", "Afgewezen", "Afgerond", "Gearchiveerd"];
+
+export async function listLeads({ status, search, limit = 300, archive = "active" } = {}) {
   const where = [];
   const params = [];
 
   if (status && status !== "Alle") {
     params.push(status);
     where.push(`l.status = $${params.length}`);
+  } else if (archive === "archive") {
+    params.push(ARCHIVE_LEAD_STATUSES);
+    where.push(`l.status = any($${params.length})`);
+  } else if (archive !== "all") {
+    params.push(ARCHIVE_LEAD_STATUSES);
+    where.push(`coalesce(l.status, 'Nieuw') <> all($${params.length})`);
   }
 
   const cleanedSearch = cleanText(search, 120);

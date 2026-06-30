@@ -1,6 +1,7 @@
 import { query, queryOne } from "./neonDb";
 
 const HIGH_VALUE_REGIONS = ["groningen", "drenthe", "friesland", "overijssel", "borger", "stadskanaal", "assen", "emmen", "veendam", "winschoten", "musselkanaal"];
+const INACTIVE_LEAD_STATUSES = ["Akkoord", "Afgewezen", "Afgerond", "Gearchiveerd"];
 
 function clean(value) {
   return String(value || "").trim();
@@ -99,7 +100,7 @@ export function calculateLeadAutomation(lead = {}) {
   else if (status === "Contact opgenomen" || status === "In beoordeling") nextFollowUpAt = todayPlus(1);
   else if (status === "Voorstel verzonden") nextFollowUpAt = todayPlus(2);
   else if (status === "Voorstel bekeken") nextFollowUpAt = todayPlus(0);
-  else if (priority === "Hoog" && status !== "Akkoord" && status !== "Afgewezen") nextFollowUpAt = todayPlus(0);
+  else if (priority === "Hoog" && !INACTIVE_LEAD_STATUSES.includes(status)) nextFollowUpAt = todayPlus(0);
 
   return {
     score,
@@ -193,7 +194,7 @@ export async function refreshLeadAutomation(inputLead) {
       });
     }
 
-    if (automation.priority === "Hoog" && status !== "Akkoord" && status !== "Afgewezen") {
+    if (automation.priority === "Hoog" && !INACTIVE_LEAD_STATUSES.includes(status)) {
       await upsertAutomationTask({
         lead,
         key: "auto-high-priority",
@@ -250,7 +251,7 @@ export async function markProposalViewed(proposal) {
     const lead = await queryOne("select * from leads where id = $1", [proposal.lead_id]);
     if (!lead) return null;
 
-    if (lead.status !== "Akkoord" && lead.status !== "Afgewezen") {
+    if (!INACTIVE_LEAD_STATUSES.includes(lead.status || "")) {
       await query(
         `update leads
          set status = case when status = 'Voorstel verzonden' then 'Voorstel bekeken' else status end,

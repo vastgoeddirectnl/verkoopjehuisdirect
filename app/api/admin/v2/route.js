@@ -8,7 +8,10 @@ import { markProposalSentAutomation, refreshLeadAutomation, refreshAllLeadAutoma
 
 export const runtime = "nodejs";
 
-const STATUSES = ["Nieuw", "Contact opgenomen", "In beoordeling", "Voorstel verzonden", "Voorstel bekeken", "Akkoord", "Afgewezen"];
+const STATUSES = ["Nieuw", "Contact opgenomen", "In beoordeling", "Voorstel verzonden", "Voorstel bekeken", "Akkoord", "Afgewezen", "Afgerond", "Gearchiveerd"];
+const ARCHIVE_LEAD_STATUSES = ["Akkoord", "Afgewezen", "Afgerond", "Gearchiveerd"];
+const ARCHIVE_PROPOSAL_STATUSES = ["Akkoord", "Gearchiveerd", "Afgewezen", "Verlopen"];
+const PROPOSAL_STATUSES = ["Concept", "Verzonden", "Bekeken", "Akkoord", "Afgewezen", "Verlopen", "Gearchiveerd"];
 
 const PROPOSAL_FIELDS = [
   "proposal_variant",
@@ -118,6 +121,7 @@ export async function GET(request) {
         status: searchParams.get("status"),
         search: searchParams.get("search"),
         limit: Number(searchParams.get("limit") || 300),
+        archive: searchParams.get("archive") || "active",
       });
       return NextResponse.json({ leads });
     }
@@ -152,7 +156,19 @@ export async function GET(request) {
     }
 
     if (action === "proposals") {
-      const { rows } = await query("select * from proposals order by created_at desc limit 300");
+      const archive = searchParams.get("archive") || "active";
+      const params = [];
+      let where = "";
+
+      if (archive === "archive") {
+        params.push(ARCHIVE_PROPOSAL_STATUSES);
+        where = `where coalesce(status, 'Concept') = any($${params.length})`;
+      } else if (archive !== "all") {
+        params.push(ARCHIVE_PROPOSAL_STATUSES);
+        where = `where coalesce(status, 'Concept') <> all($${params.length})`;
+      }
+
+      const { rows } = await query(`select * from proposals ${where} order by created_at desc limit 300`, params);
       return NextResponse.json({ proposals: rows });
     }
 
@@ -182,33 +198,35 @@ export async function GET(request) {
       const [kpis, byPage, bySource, byStatus, byMonth, recentTasks] = await Promise.all([
         queryOne(`
           select
-            count(*)::int as total_leads,
-            count(*) filter (where created_at >= now() - interval '30 days')::int as leads_30d,
+            count(*) filter (where coalesce(status, 'Nieuw') <> all($1))::int as total_leads,
+            count(*) filter (where created_at >= now() - interval '30 days' and coalesce(status, 'Nieuw') <> all($1))::int as leads_30d,
             count(*) filter (where status = 'Nieuw')::int as new_leads,
+            count(*) filter (where coalesce(status, 'Nieuw') = any($1))::int as archived_leads,
             (select count(*)::int from tasks where status <> 'Afgerond') as open_tasks,
-            count(*) filter (where lead_priority = 'Hoog')::int as high_priority_leads,
-            count(*) filter (where next_follow_up_at is not null and next_follow_up_at <= current_date and status not in ('Akkoord','Afgewezen'))::int as followups_due,
+            count(*) filter (where lead_priority = 'Hoog' and coalesce(status, 'Nieuw') <> all($1))::int as high_priority_leads,
+            count(*) filter (where next_follow_up_at is not null and next_follow_up_at <= current_date and coalesce(status, 'Nieuw') <> all($1))::int as followups_due,
             count(*) filter (where status = 'Voorstel bekeken')::int as proposal_viewed_leads,
-            (select count(*)::int from proposals) as total_proposals,
+            (select count(*)::int from proposals where coalesce(status, 'Concept') <> all($2)) as total_proposals,
+            (select count(*)::int from proposals where coalesce(status, 'Concept') = any($2)) as archived_proposals,
             (select count(*)::int from mail_logs where status = 'Verzonden') as sent_mails
           from leads
-        `),
+        `, [ARCHIVE_LEAD_STATUSES, ARCHIVE_PROPOSAL_STATUSES]),
         query(`
           select coalesce(nullif(pagina, ''), '/') as label, count(*)::int as total
-          from leads group by 1 order by total desc, label asc limit 20
-        `),
+          from leads where coalesce(status, 'Nieuw') <> all($1) group by 1 order by total desc, label asc limit 20
+        `, [ARCHIVE_LEAD_STATUSES]),
         query(`
           select coalesce(nullif(bron, ''), 'onbekend') as label, count(*)::int as total
-          from leads group by 1 order by total desc, label asc limit 20
-        `),
+          from leads where coalesce(status, 'Nieuw') <> all($1) group by 1 order by total desc, label asc limit 20
+        `, [ARCHIVE_LEAD_STATUSES]),
         query(`
           select coalesce(nullif(status, ''), 'Onbekend') as label, count(*)::int as total
-          from leads group by 1 order by total desc, label asc
-        `),
+          from leads where coalesce(status, 'Nieuw') <> all($1) group by 1 order by total desc, label asc
+        `, [ARCHIVE_LEAD_STATUSES]),
         query(`
           select to_char(date_trunc('month', created_at), 'YYYY-MM') as label, count(*)::int as total
-          from leads group by 1 order by label desc limit 12
-        `),
+          from leads where coalesce(status, 'Nieuw') <> all($1) group by 1 order by label desc limit 12
+        `, [ARCHIVE_LEAD_STATUSES]),
         query(`
           select * from tasks where status <> 'Afgerond' order by due_date asc nulls last, created_at desc limit 10
         `),
@@ -331,6 +349,17 @@ export async function POST(request) {
       const proposal = await queryOne(
         `update proposals set ${updates.join(", ")}, updated_at = now() where id = $${params.length} returning *`,
         params
+      );
+      if (!proposal) return NextResponse.json({ error: "Voorstel niet gevonden." }, { status: 404 });
+      return NextResponse.json({ proposal });
+    }
+
+
+    if (action === "updateProposalStatus") {
+      const status = PROPOSAL_STATUSES.includes(body.status) ? body.status : "Concept";
+      const proposal = await queryOne(
+        "update proposals set status = $1, updated_at = now() where id = $2 returning *",
+        [status, body.id]
       );
       if (!proposal) return NextResponse.json({ error: "Voorstel niet gevonden." }, { status: 404 });
       return NextResponse.json({ proposal });
