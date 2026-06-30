@@ -412,8 +412,8 @@ export async function POST(request) {
                 Vastgoed Direct Nederland.
               </p>
 
-              <div style="background:#F7F2EC;border:1px solid #E2C7AF;border-radius:22px;padding:22px;margin:22px 0;">
-                <div style="font-size:12px;color:#7C4727;text-transform:uppercase;font-weight:bold;letter-spacing:.07em;">Woning</div>
+              <div style="background:#F7F2EC;border:1px solid #F2B885;border-radius:22px;padding:22px;margin:22px 0;">
+                <div style="font-size:12px;color:#B85216;text-transform:uppercase;font-weight:bold;letter-spacing:.07em;">Woning</div>
                 <div style="font-size:20px;font-weight:bold;margin-top:6px;color:#071f3a;line-height:1.3;">${address || "-"}</div>
                 <div style="font-size:15px;line-height:1.6;margin-top:12px;color:#48586b;">Het voorstel staat klaar in een aparte klantversie. U kunt het rustig bekijken via de knop hieronder.</div>
                 ${validity ? `<div style="font-size:14px;color:#48586b;margin-top:10px;">Geldig tot: ${validity}</div>` : ""}
@@ -441,7 +441,7 @@ export async function POST(request) {
               </table>
 
               <p style="margin:0 0 26px;">
-                <a href="${publicUrl}" style="display:block;width:100%;max-width:320px;box-sizing:border-box;background:#9A5A2E;color:#fff;text-decoration:none;border-radius:999px;padding:15px 24px;font-weight:bold;text-align:center;box-shadow:0 12px 26px rgba(154,90,46,.18);">
+                <a href="${publicUrl}" style="display:block;width:100%;max-width:320px;box-sizing:border-box;background:#D96A1C;color:#fff;text-decoration:none;border-radius:999px;padding:15px 24px;font-weight:bold;text-align:center;box-shadow:0 12px 26px rgba(217,106,28,.18);">
                   Verkoopvoorstel inzien
                 </a>
               </p>
