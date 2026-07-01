@@ -443,6 +443,10 @@ export default function SeoLandingPage({ page }) {
         .footer a{color:inherit;text-decoration:none}
         .footer a:hover{color:#fff}
         .whatsapp-float{position:fixed;right:18px;bottom:18px;z-index:80;background:#3E8F5E;color:#fff;border-radius:999px;padding:13px 17px;font-weight:900;box-shadow:0 14px 32px rgba(62,143,94,.22);font-size:14px;text-decoration:none}
+        .mobile-bottom-cta{display:none}
+        .mobile-bottom-cta .mobile-cta-btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;border-radius:14px;font-size:13.5px;line-height:1;font-weight:900;text-decoration:none;transition:.16s ease}
+        .mobile-bottom-cta .mobile-cta-whatsapp{background:#edf8f1;border:1px solid #cdebd7;color:#237045}
+        .mobile-bottom-cta .mobile-cta-request{background:var(--orange);border:1px solid var(--orange);color:#fff;box-shadow:0 9px 20px rgba(217,106,28,.20)}
 
         @media(min-width:761px){
           .section{padding:46px 0}
@@ -517,7 +521,8 @@ export default function SeoLandingPage({ page }) {
           .link-panel-head{display:block}
           .footer-grid{grid-template-columns:1fr}
           .whatsapp-float{display:none}
-          .footer{padding-bottom:42px}
+          .mobile-bottom-cta{position:fixed;left:18px;right:18px;bottom:12px;z-index:90;display:grid;grid-template-columns:1fr 1fr;gap:7px;max-width:440px;margin:0 auto;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:18px;padding:6px;box-shadow:0 16px 42px rgba(7,31,58,.16);backdrop-filter:blur(14px)}
+          .footer{padding-bottom:106px}
         }
       `}</style>
 
@@ -898,6 +903,15 @@ export default function SeoLandingPage({ page }) {
           </div>
         </div>
       </footer>
+
+      <nav className="mobile-bottom-cta" aria-label="Snelle acties mobiel">
+        <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="mobile-cta-btn mobile-cta-whatsapp">
+          WhatsApp
+        </a>
+        <a href="/#aanvraag" className="mobile-cta-btn mobile-cta-request">
+          Aanvraag
+        </a>
+      </nav>
 
       <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
     </main>

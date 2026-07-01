@@ -394,13 +394,11 @@ export async function POST(request) {
       const address = formatAddress(proposal);
       const offerAmount = formatMoney(proposal.amount_text);
       const validity = formatDateShort(proposal.validity_date);
-      const subject = address && address !== "-"
-        ? `Uw persoonlijke verkoopvoorstel staat klaar`
-        : "Uw persoonlijke verkoopvoorstel staat klaar";
+      const subject = "Uw verkoopvoorstel staat klaar";
 
       const previewText = address && address !== "-"
-        ? `Wij hebben een vrijblijvend verkoopvoorstel klaargezet voor ${address}.`
-        : "Wij hebben uw vrijblijvende verkoopvoorstel klaargezet.";
+        ? `Wij hebben uw verkoopvoorstel klaargezet voor ${address}.`
+        : "Wij hebben uw verkoopvoorstel klaargezet.";
 
       const html = `
         <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${previewText}</div>
@@ -416,7 +414,7 @@ export async function POST(request) {
               </h1>
               <p style="margin:14px 0 0;font-size:16px;line-height:1.65;color:#d9e6f5;">
                 Wij hebben het voorstel overzichtelijk voor u klaargezet. In de klantversie vindt u de uitgangspunten,
-                voorwaarden, planning en vervolgstappen. Het bedrag staat bewust alleen in de beveiligde klantversie.
+                voorwaarden, planning en vervolgstappen.
               </p>
             </div>
 
@@ -424,15 +422,15 @@ export async function POST(request) {
               <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#48586b;">Beste ${proposal.lead_naam || "heer/mevrouw"},</p>
 
               <p style="margin:0 0 20px;font-size:16px;line-height:1.7;color:#48586b;">
-                Naar aanleiding van uw aanvraag hebben wij een vrijblijvend verkoopvoorstel voor u klaargezet.
-                Het voorstel is bedoeld om u snel en helder inzicht te geven in een mogelijke verkooproute via
-                Vastgoed Direct Nederland.
+                Naar aanleiding van uw aanvraag hebben wij een verkoopvoorstel voor u klaargezet.
+                Het voorstel is bedoeld om rustig inzicht te geven in de mogelijke verkooproute, de uitgangspunten
+                en de vervolgstappen via Vastgoed Direct Nederland.
               </p>
 
               <div style="background:#F7F2EC;border:1px solid #F2B885;border-radius:22px;padding:22px;margin:22px 0;">
                 <div style="font-size:12px;color:#B85216;text-transform:uppercase;font-weight:bold;letter-spacing:.07em;">Woning</div>
                 <div style="font-size:20px;font-weight:bold;margin-top:6px;color:#071f3a;line-height:1.3;">${address || "-"}</div>
-                <div style="font-size:15px;line-height:1.6;margin-top:12px;color:#48586b;">Het voorstel staat klaar in een aparte klantversie. U kunt het rustig bekijken via de knop hieronder.</div>
+                <div style="font-size:15px;line-height:1.6;margin-top:12px;color:#48586b;">U kunt het voorstel rustig bekijken via de knop hieronder. Daarna kunt u eventuele vragen met ons bespreken.</div>
                 ${validity ? `<div style="font-size:14px;color:#48586b;margin-top:10px;">Geldig tot: ${validity}</div>` : ""}
               </div>
 
@@ -452,7 +450,7 @@ export async function POST(request) {
                 <tr>
                   <td style="background:#ffffff;border:1px solid #e8e3db;border-radius:16px;padding:15px;">
                     <strong style="display:block;color:#071f3a;font-size:15px;">Geen verplichting</strong>
-                    <span style="display:block;color:#5f7083;font-size:14px;line-height:1.5;margin-top:4px;">Het voorstel is vrijblijvend en onder voorbehoud van definitieve controle.</span>
+                    <span style="display:block;color:#5f7083;font-size:14px;line-height:1.5;margin-top:4px;">U zit nergens aan vast; pas bij akkoord worden afspraken definitief vastgelegd.</span>
                   </td>
                 </tr>
               </table>
@@ -465,7 +463,7 @@ export async function POST(request) {
 
               <p style="margin:0;font-size:15px;line-height:1.65;color:#48586b;">
                 Heeft u vragen of wilt u het voorstel bespreken? Reageer gerust op deze e-mail of bel/WhatsApp via
-                <strong>06 12 23 80 51</strong>.
+                <strong>06 12 23 80 51</strong>. U zit nergens aan vast en kunt het voorstel eerst rustig beoordelen.
               </p>
             </div>
 

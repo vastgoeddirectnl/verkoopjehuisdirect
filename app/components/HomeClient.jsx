@@ -1654,6 +1654,29 @@ export default function HomeClient() {
           font-size: 14px;
         }
         .mobile-bottom-cta { display: none; }
+        .mobile-bottom-cta .mobile-cta-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 42px;
+          border-radius: 14px;
+          font-size: 14px;
+          line-height: 1;
+          font-weight: 900;
+          text-decoration: none;
+          transition: .16s ease;
+        }
+        .mobile-bottom-cta .mobile-cta-whatsapp {
+          background: #edf8f1;
+          border: 1px solid #cdebd7;
+          color: #237045;
+        }
+        .mobile-bottom-cta .mobile-cta-request {
+          background: #D96A1C;
+          border: 1px solid #D96A1C;
+          color: #fff;
+          box-shadow: 0 9px 20px rgba(217,106,28,.20);
+        }
 
 
         @media (min-width: 1141px) and (max-height: 850px) {
@@ -2095,17 +2118,20 @@ export default function HomeClient() {
           .section { padding: 40px 0; }
           .section-tight { padding: 36px 0; }
           .mobile-bottom-cta {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             left: 18px;
             right: 18px;
             bottom: 12px;
             padding: 6px;
             border-radius: 18px;
+            max-width: 440px;
+            margin: 0 auto;
           }
           .mobile-bottom-cta a {
             width: 100%;
-            min-height: 44px;
-            font-size: 14px;
+            min-height: 42px;
+            font-size: 13.5px;
           }
 
           .route-head {
@@ -2205,7 +2231,12 @@ export default function HomeClient() {
           .review-band { display: none; }
           .professional-band { padding: 34px 0; }
           .professional-cards { grid-template-columns: 1fr; }
-          .whatsapp-float { bottom: 18px; }
+          .whatsapp-float { display: none; }
+          .mobile-bottom-cta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+          }
+          .footer { padding-bottom: 106px; }
         }
 
       `}</style>
@@ -2655,6 +2686,21 @@ export default function HomeClient() {
           </div>
         </div>
       </footer>
+
+      <nav className="mobile-bottom-cta" aria-label="Snelle acties mobiel">
+        <a
+          href={whatsappLink}
+          onClick={() => trackGoogleAdsConversion("whatsapp")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mobile-cta-btn mobile-cta-whatsapp"
+        >
+          WhatsApp
+        </a>
+        <a href="#aanvraag" className="mobile-cta-btn mobile-cta-request">
+          Aanvraag
+        </a>
+      </nav>
 
       <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
 

@@ -122,11 +122,11 @@ export default async function PublicProposalPage({ params, searchParams }) {
       <section className="cover">
         <div className="cover-copy">
           <span className="label">Vrijblijvend & persoonlijk</span>
-          <h1>Verkoopvoorstel voor uw woning</h1>
+          <h1>Uw persoonlijke verkoopvoorstel</h1>
           <p>
             Beste {firstName(proposal.lead_naam)}, op basis van de beschikbare informatie hebben wij
-            een concreet en overzichtelijk voorstel uitgewerkt. Het doel: duidelijkheid over bedrag,
-            voorwaarden en vervolgstappen zonder onnodige verkoopdruk.
+            een persoonlijk verkoopvoorstel voor u uitgewerkt. U kunt het voorstel rustig bekijken,
+            de uitgangspunten controleren en eventuele vragen met ons bespreken voordat u een keuze maakt.
           </p>
         </div>
 
@@ -180,6 +180,31 @@ export default async function PublicProposalPage({ params, searchParams }) {
         </article>
       </section>
 
+      <section className="decision-guide card soft-card">
+        <div>
+          <span className="section-kicker">Beoordelen</span>
+          <h2>Waar u vooral op kunt letten</h2>
+          <p>
+            Een verkoopvoorstel bestaat uit meer dan alleen het bedrag. Kijk ook naar de netto-opbrengst,
+            de gewenste planning, de voorwaarden en de mate waarin u zelf nog voorbereidingen moet treffen.
+          </p>
+        </div>
+        <div className="decision-points">
+          <article>
+            <strong>Netto-opbrengst</strong>
+            <span>Welke kosten, voorbereiding en onzekerheden blijven over?</span>
+          </article>
+          <article>
+            <strong>Planning</strong>
+            <span>Past de overdracht bij uw gewenste termijn en situatie?</span>
+          </article>
+          <article>
+            <strong>Voorwaarden</strong>
+            <span>Zijn de uitgangspunten duidelijk en praktisch haalbaar?</span>
+          </article>
+        </div>
+      </section>
+
       <section className="card">
         <span className="section-kicker">Woninggegevens</span>
         <h2>Uitgangspunt woning</h2>
@@ -222,6 +247,9 @@ export default async function PublicProposalPage({ params, searchParams }) {
         <p className="intro">
           Bij een woningverkoop gaat het niet alleen om de verkoopprijs, maar ook om kosten, voorbereiding,
           doorlooptijd en zekerheid. Onderstaand overzicht helpt om het voorstel naast een regulier traject te leggen.
+        </p>
+        <p className="note-line">
+          Bedragen en kostenposten zijn bedoeld als vergelijking op hoofdlijnen en worden bij akkoord definitief gecontroleerd.
         </p>
         <div className="comparison">
           <div className="head">Onderdeel</div>
@@ -302,7 +330,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
           <h2>Voorstel bespreken?</h2>
           <p>
             Wij lichten het voorstel graag toe en kunnen samen bekijken of deze verkooproute aansluit
-            bij uw situatie en planning.
+            bij uw situatie, planning en gewenste mate van zekerheid.
           </p>
         </div>
         <div className="contact-block">
@@ -361,6 +389,15 @@ body{margin:0;background:radial-gradient(circle at 82% 0,#FFF1E6 0,transparent 3
 .proposal-assurance strong,.proposal-assurance span{display:block}
 .proposal-assurance strong{font-size:17px;color:var(--navy);margin-bottom:8px}
 .proposal-assurance span{font-size:14.5px;line-height:1.5;color:var(--muted)}
+.soft-card{background:linear-gradient(135deg,#fffdf9 0,#F7F2EC 100%)}
+.decision-guide{display:grid;grid-template-columns:1.02fr .98fr;gap:22px;align-items:center}
+.decision-guide h2{margin-bottom:10px}
+.decision-points{display:grid;gap:10px}
+.decision-points article{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px 16px}
+.decision-points strong,.decision-points span{display:block}
+.decision-points strong{color:var(--navy);font-size:16px;margin-bottom:5px}
+.decision-points span{color:var(--muted);font-size:14.5px;line-height:1.45}
+.note-line{background:#fff7ef;border:1px solid #f2c19b;color:#8b491b;border-radius:16px;padding:12px 14px;font-size:14.5px;margin:12px 0 0}
 .contact-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .contact-actions a{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--orange);color:#fff;text-decoration:none;font-weight:900;padding:11px 14px;font-size:14px}
 .contact-actions a:nth-child(2){background:#fff;color:var(--navy);border:1px solid rgba(255,255,255,.25)}
@@ -411,7 +448,7 @@ p,.intro,li{font-size:16.5px;line-height:1.68;color:var(--muted)}
 .contact-block strong{font-size:20px;margin-bottom:10px}
 .contact-block span{color:#d9e6f5;margin-top:6px}
 .disclaimer{background:#F7F2EC;color:#415168;line-height:1.65;font-size:14px;box-shadow:none}
-@media(max-width:900px){.cover,.executive-summary,.two-columns,.signature,.proposal-assurance{grid-template-columns:1fr}.benefits{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3n){border-right:1px solid var(--line)}.facts div:nth-child(2n){border-right:0}.comparison{grid-template-columns:1fr}.comparison .head{text-align:left}.comparison>div{border-right:0}.checks,.reservations{grid-template-columns:1fr}}
+@media(max-width:900px){.cover,.executive-summary,.two-columns,.signature,.proposal-assurance,.decision-guide{grid-template-columns:1fr}.benefits{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3n){border-right:1px solid var(--line)}.facts div:nth-child(2n){border-right:0}.comparison{grid-template-columns:1fr}.comparison .head{text-align:left}.comparison>div{border-right:0}.checks,.reservations{grid-template-columns:1fr}}
 @media(max-width:640px){.proposal-page{padding:12px}.topbar{display:grid}.top-actions{justify-content:stretch}.top-actions span{display:none}.topbar img{width:215px}.topbar button{width:100%}.cover,.executive-summary,.card,.signature,.disclaimer{border-radius:24px;padding:20px}.cover h1{font-size:39px}.cover p{font-size:16px}.offer-panel strong{font-size:36px}.benefits,.facts{grid-template-columns:1fr}.facts div{border-right:0!important}.timeline-step{grid-template-columns:54px 1fr}.section-kicker{font-size:11px}h2{font-size:28px}}
 @media print{body{background:#fff}.proposal-page{max-width:none;padding:0}.topbar button,.top-actions span{display:none}.topbar img{box-shadow:none}.cover,.executive-summary,.card,.signature,.disclaimer{box-shadow:none;page-break-inside:avoid;border-radius:18px}.cover{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.offer-panel{box-shadow:none}.comparison .head,.timeline-step strong,.contact-block{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.comparison .orange{background:#D96A1C!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 `;
