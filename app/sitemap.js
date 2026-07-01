@@ -3,6 +3,8 @@ const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.vastgoeddirect
 const pages = [
   // Hoofdpagina
   { path: "/", priority: 1.0, changeFrequency: "weekly" },
+  { path: "/situaties", priority: 0.82, changeFrequency: "monthly" },
+  { path: "/regios", priority: 0.78, changeFrequency: "monthly" },
 
   // Belangrijkste commerciële landingspagina's
   { path: "/huis-direct-verkopen", priority: 0.95, changeFrequency: "monthly" },

@@ -6,6 +6,9 @@ import { trackGoogleAdsConversion } from "../lib/googleAds";
 const whatsappLink =
   "https://wa.me/31612238051?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F";
 
+const googleReviewUrl =
+  "https://www.google.com/search?q=reviews+voor+Vastgoed+Direct+Nederland";
+
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
@@ -223,6 +226,22 @@ const popularLinks = [
   ["/huis-verkopen-emmen", "Huis verkopen in Emmen"],
   ["/huis-verkopen-borger", "Huis verkopen in Borger"],
   ["/huis-verkopen-gieten", "Huis verkopen in Gieten"],
+];
+
+const situationOverviewCards = [
+  { href: "/huis-verkopen-met-achterstallig-onderhoud", icon: "Onderhoud", title: "Achterstallig onderhoud", text: "Bekijk wat er mogelijk is als verbouwen of verkoopklaar maken niet wenselijk is." },
+  { href: "/leegstaand-huis-verkopen", icon: "Leegstand", title: "Leegstaande woning", text: "Rustig duidelijkheid krijgen als kosten, zorgen of dubbele lasten blijven doorlopen." },
+  { href: "/huis-verkopen-bij-erfenis", icon: "Erfenis", title: "Erfenis of nalatenschap", text: "Een overzichtelijke route wanneer meerdere belangen of praktische zaken meespelen." },
+  { href: "/huis-verkopen-bij-scheiding", icon: "Scheiding", title: "Scheiding", text: "Inzicht in verkoopmogelijkheden zonder onnodige druk of extra bezichtigingen." },
+  { href: "/verhuurde-woning-verkopen", icon: "Verhuur", title: "Verhuurde woning", text: "Bekijk de mogelijkheden wanneer er huur, gebruik of beperkte toegang speelt." },
+  { href: "/huis-verkopen-bij-dubbele-lasten", icon: "Lasten", title: "Dubbele lasten", text: "Duidelijkheid wanneer verkooptermijn, kosten en zekerheid belangrijk zijn." },
+];
+
+const regionOverviewCards = [
+  { href: "/huis-verkopen-groningen", icon: "Groningen", title: "Groningen", text: "Voor woningen in Groningen en omliggende plaatsen." },
+  { href: "/woning-verkopen-drenthe", icon: "Drenthe", title: "Drenthe", text: "Voor woningen in Drenthe, waaronder Assen, Emmen, Borger en Gieten." },
+  { href: "/woning-verkopen-friesland", icon: "Friesland", title: "Friesland", text: "Voor woningeigenaren die rustig willen bekijken wat er mogelijk is." },
+  { href: "/woning-verkopen-overijssel", icon: "Overijssel", title: "Overijssel", text: "Voor situaties waarin snelheid, duidelijkheid of privacy belangrijk zijn." },
 ];
 
 export default function HomeClient() {
@@ -1433,6 +1452,117 @@ export default function HomeClient() {
         }
         .seo-link-grid a:hover { border-color: #D96A1C; }
 
+        .review-link {
+          color: inherit;
+          text-decoration: none;
+          border-radius: 24px;
+          transition: .18s ease;
+        }
+        .review-link:hover .review-score {
+          border-color: #D96A1C;
+          box-shadow: 0 10px 28px rgba(217,106,28,.10);
+        }
+        .overview-section {
+          background: #fff;
+        }
+        .overview-head {
+          margin-bottom: 26px;
+        }
+        .overview-head p {
+          max-width: 720px;
+          margin-left: auto;
+          margin-right: auto;
+          color: #647386;
+          line-height: 1.6;
+        }
+        .overview-block {
+          background: #fffdf9;
+          border: 1px solid #e8e3db;
+          border-radius: 28px;
+          padding: 24px;
+          box-shadow: 0 12px 34px rgba(7,31,58,.055);
+        }
+        .overview-block + .overview-block {
+          margin-top: 18px;
+        }
+        .overview-block-soft {
+          background: #f8f5ef;
+          box-shadow: none;
+        }
+        .overview-block-head {
+          display: flex;
+          justify-content: space-between;
+          gap: 22px;
+          align-items: end;
+          margin-bottom: 16px;
+        }
+        .overview-block-head h3 {
+          margin: 0 0 6px;
+          font-size: 25px;
+          color: #071f3a;
+          letter-spacing: -.45px;
+        }
+        .overview-block-head p {
+          margin: 0;
+          color: #647386;
+          line-height: 1.5;
+          max-width: 620px;
+        }
+        .overview-block-head a {
+          flex: 0 0 auto;
+          font-weight: 900;
+          color: #D96A1C;
+          font-size: 14px;
+        }
+        .overview-card-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 12px;
+        }
+        .overview-region-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+        .overview-card {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 20px;
+          padding: 17px;
+          min-height: 168px;
+          display: grid;
+          gap: 9px;
+          transition: .18s ease;
+        }
+        .overview-card:hover {
+          border-color: #F2B885;
+          transform: translateY(-1px);
+          box-shadow: 0 10px 28px rgba(7,31,58,.07);
+        }
+        .overview-card-icon {
+          display: inline-flex;
+          width: max-content;
+          max-width: 100%;
+          min-height: 32px;
+          align-items: center;
+          border-radius: 999px;
+          background: #FFF1E6;
+          color: #B85216;
+          padding: 8px 10px;
+          font-size: 12px;
+          font-weight: 900;
+        }
+        .overview-card strong {
+          display: block;
+          color: #071f3a;
+          font-size: 18px;
+          line-height: 1.18;
+        }
+        .overview-card p {
+          margin: 0;
+          color: #647386;
+          line-height: 1.48;
+          font-size: 14px;
+        }
+
         .faq {
           display: grid;
           gap: 10px;
@@ -2002,6 +2132,25 @@ export default function HomeClient() {
           .seo-link-grid {
             grid-template-columns: 1fr;
           }
+          .overview-block {
+            padding: 18px;
+            border-radius: 22px;
+          }
+          .overview-block-head {
+            display: block;
+            margin-bottom: 14px;
+          }
+          .overview-block-head a {
+            display: inline-flex;
+            margin-top: 10px;
+          }
+          .overview-card-grid,
+          .overview-region-grid {
+            grid-template-columns: 1fr;
+          }
+          .overview-card {
+            min-height: 0;
+          }
           .compact-steps {
             display: flex;
             gap: 12px;
@@ -2217,7 +2366,13 @@ export default function HomeClient() {
       </section>
 
       <section className="review-band">
-        <div className="container review-compact">
+        <a
+          href={googleReviewUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="container review-compact review-link"
+          aria-label="Bekijk de Google-reviews van Vastgoed Direct Nederland"
+        >
           <div className="review-score">
             <strong>5,0</strong>
             <div>
@@ -2237,11 +2392,11 @@ export default function HomeClient() {
           <div className="review-author">
             <div className="avatar">G</div>
             <div>
-              <strong>Google-beoordeling</strong>
-              <span>Gebaseerd op 2 reviews</span>
+              <strong>Bekijk op Google</strong>
+              <span>Opent in een nieuw venster</span>
             </div>
           </div>
-        </div>
+        </a>
       </section>
 
 
@@ -2388,21 +2543,53 @@ export default function HomeClient() {
         </div>
       </section>
 
-      <section className="section section-white">
-        <div className="container seo-compact">
-          <div className="seo-compact-intro">
+      <section className="section section-white overview-section">
+        <div className="container">
+          <div className="section-head overview-head">
             <p className="eyebrow">Meer informatie</p>
-            <h2>Verdiep u per situatie of regio.</h2>
+            <h2>Bekijk rustig welke route bij uw situatie past.</h2>
             <p>
-              Wilt u meer weten over een specifieke situatie? Hieronder vindt u de belangrijkste
-              pagina’s met extra uitleg per situatie, regio of plaats.
+              In plaats van een lange lijst met links tonen we de belangrijkste situaties en regio’s overzichtelijk.
+              Meer verdieping staat op aparte overzichtspagina’s.
             </p>
           </div>
 
-          <div className="seo-link-grid">
-            {popularLinks.map(([href, label]) => (
-              <a href={href} key={href}>✓ {label}</a>
-            ))}
+          <div className="overview-block">
+            <div className="overview-block-head">
+              <div>
+                <h3>Situaties</h3>
+                <p>Herkenbare verkoopvragen waarbij rust, duidelijkheid of privacy belangrijk kan zijn.</p>
+              </div>
+              <a href="/situaties">Bekijk alle situaties →</a>
+            </div>
+            <div className="overview-card-grid">
+              {situationOverviewCards.map((card) => (
+                <a href={card.href} className="overview-card" key={card.href}>
+                  <span className="overview-card-icon">{card.icon}</span>
+                  <strong>{card.title}</strong>
+                  <p>{card.text}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="overview-block overview-block-soft">
+            <div className="overview-block-head">
+              <div>
+                <h3>Regio’s</h3>
+                <p>Vastgoed Direct Nederland is actief in meerdere regio’s in Noord- en Oost-Nederland.</p>
+              </div>
+              <a href="/regios">Bekijk alle regio’s →</a>
+            </div>
+            <div className="overview-card-grid overview-region-grid">
+              {regionOverviewCards.map((card) => (
+                <a href={card.href} className="overview-card region-card" key={card.href}>
+                  <span className="overview-card-icon">{card.icon}</span>
+                  <strong>{card.title}</strong>
+                  <p>{card.text}</p>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
