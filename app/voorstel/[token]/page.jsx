@@ -164,6 +164,22 @@ export default async function PublicProposalPage({ params, searchParams }) {
         </div>
       </section>
 
+
+      <section className="proposal-assurance">
+        <article>
+          <strong>Rustig beoordelen</strong>
+          <span>U hoeft niet direct te beslissen. Het voorstel is bedoeld om helderheid te geven.</span>
+        </article>
+        <article>
+          <strong>Vragen bespreken</strong>
+          <span>Wij lichten bedragen, uitgangspunten en planning graag persoonlijk toe.</span>
+        </article>
+        <article>
+          <strong>Vrijblijvend</strong>
+          <span>Pas bij akkoord worden afspraken definitief vastgelegd via de notaris.</span>
+        </article>
+      </section>
+
       <section className="card">
         <span className="section-kicker">Woninggegevens</span>
         <h2>Uitgangspunt woning</h2>
@@ -294,6 +310,12 @@ export default async function PublicProposalPage({ params, searchParams }) {
           <span>06 12 23 80 51</span>
           <span>info@vastgoeddirectnederland.nl</span>
           <span>vastgoeddirectnederland.nl</span>
+
+          <div className="contact-actions">
+            <a href="tel:0612238051">Bel direct</a>
+            <a href="mailto:info@vastgoeddirectnederland.nl">Stel een vraag</a>
+            <a href="https://wa.me/31612238051" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          </div>
         </div>
       </section>
 
@@ -332,6 +354,18 @@ body{margin:0;background:radial-gradient(circle at 82% 0,#FFF1E6 0,transparent 3
 .micro-grid em,.micro-grid b{display:block;font-style:normal}
 .micro-grid em{font-size:12px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.06em}
 .micro-grid b{font-size:16px;margin-top:4px}
+
+.proposal-assurance{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.proposal-assurance article{background:#fffdf9;border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:0 14px 40px rgba(7,31,58,.07)}
+.proposal-assurance article:before{content:"";display:block;width:42px;height:5px;border-radius:999px;background:var(--orange);margin-bottom:14px}
+.proposal-assurance strong,.proposal-assurance span{display:block}
+.proposal-assurance strong{font-size:17px;color:var(--navy);margin-bottom:8px}
+.proposal-assurance span{font-size:14.5px;line-height:1.5;color:var(--muted)}
+.contact-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.contact-actions a{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--orange);color:#fff;text-decoration:none;font-weight:900;padding:11px 14px;font-size:14px}
+.contact-actions a:nth-child(2){background:#fff;color:var(--navy);border:1px solid rgba(255,255,255,.25)}
+.contact-actions a:nth-child(3){background:#3E8F5E}
+
 .executive-summary,.card,.signature,.disclaimer{background:var(--card);border:1px solid var(--line);border-radius:30px;padding:28px;box-shadow:var(--shadow);margin-bottom:18px}
 .executive-summary{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:center}
 h2{font-size:34px;line-height:1.05;letter-spacing:-.045em;margin:14px 0 14px}
@@ -377,7 +411,7 @@ p,.intro,li{font-size:16.5px;line-height:1.68;color:var(--muted)}
 .contact-block strong{font-size:20px;margin-bottom:10px}
 .contact-block span{color:#d9e6f5;margin-top:6px}
 .disclaimer{background:#F7F2EC;color:#415168;line-height:1.65;font-size:14px;box-shadow:none}
-@media(max-width:900px){.cover,.executive-summary,.two-columns,.signature{grid-template-columns:1fr}.benefits{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3n){border-right:1px solid var(--line)}.facts div:nth-child(2n){border-right:0}.comparison{grid-template-columns:1fr}.comparison .head{text-align:left}.comparison>div{border-right:0}.checks,.reservations{grid-template-columns:1fr}}
+@media(max-width:900px){.cover,.executive-summary,.two-columns,.signature,.proposal-assurance{grid-template-columns:1fr}.benefits{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3n){border-right:1px solid var(--line)}.facts div:nth-child(2n){border-right:0}.comparison{grid-template-columns:1fr}.comparison .head{text-align:left}.comparison>div{border-right:0}.checks,.reservations{grid-template-columns:1fr}}
 @media(max-width:640px){.proposal-page{padding:12px}.topbar{display:grid}.top-actions{justify-content:stretch}.top-actions span{display:none}.topbar img{width:215px}.topbar button{width:100%}.cover,.executive-summary,.card,.signature,.disclaimer{border-radius:24px;padding:20px}.cover h1{font-size:39px}.cover p{font-size:16px}.offer-panel strong{font-size:36px}.benefits,.facts{grid-template-columns:1fr}.facts div{border-right:0!important}.timeline-step{grid-template-columns:54px 1fr}.section-kicker{font-size:11px}h2{font-size:28px}}
 @media print{body{background:#fff}.proposal-page{max-width:none;padding:0}.topbar button,.top-actions span{display:none}.topbar img{box-shadow:none}.cover,.executive-summary,.card,.signature,.disclaimer{box-shadow:none;page-break-inside:avoid;border-radius:18px}.cover{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.offer-panel{box-shadow:none}.comparison .head,.timeline-step strong,.contact-block{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.comparison .orange{background:#D96A1C!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 `;

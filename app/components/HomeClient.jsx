@@ -6,6 +6,9 @@ import { trackGoogleAdsConversion } from "../lib/googleAds";
 const whatsappLink =
   "https://wa.me/31612238051?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F";
 
+const googleReviewUrl =
+  "https://www.google.com/search?q=reviews+voor+Vastgoed+Direct+Nederland";
+
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
@@ -53,7 +56,7 @@ const faqSchema = {
       name: "Zit ik ergens aan vast?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Nee. Een aanvraag is gratis en vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
+        text: "Nee. Een aanvraag is vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
       },
     },
     {
@@ -100,8 +103,8 @@ const comparisonRows = [
 
 const whyDifferent = [
   [
-    "Geen verkoopdruk",
-    "U vraagt vrijblijvend informatie aan en beslist zelf of u verder wilt.",
+    "Rustig beoordelen",
+    "U vraagt informatie aan en beslist daarna zelf of u verder wilt.",
   ],
   [
     "Niet eerst opknappen of leeghalen",
@@ -111,6 +114,19 @@ const whyDifferent = [
     "Persoonlijk en discreet",
     "Geen callcenter, maar persoonlijk contact en duidelijke afspraken.",
   ],
+];
+
+
+const professionalTrust = [
+  ["Heldere uitgangspunten", "We leggen duidelijk uit waarop een eerste bod of verkoopvoorstel is gebaseerd."],
+  ["Rustig beoordelen", "U krijgt ruimte om het voorstel rustig te bekijken en vragen te stellen."],
+  ["Notariële afwikkeling", "Bij akkoord worden afspraken vastgelegd en loopt de overdracht via de notaris."],
+  ["Discreet en persoonlijk", "Geen open huis, geen callcenter en geen onnodige ruis rond uw woning."],
+];
+
+const trustQuotes = [
+  ["Duidelijke communicatie", "Het contact werd als snel en duidelijk ervaren, waardoor verkopers wisten waar zij aan toe waren."],
+  ["Zonder veel gedoe", "Verkopers waarderen vooral de duidelijke en snelle manier om de woning te verkopen."],
 ];
 
 const routeCards = [
@@ -134,7 +150,7 @@ const answerMenuLinks = [
 const faqItems = [
   ["Moet mijn woning eerst leeg zijn?", "Nee, dat hoeft niet altijd. Ook als de woning nog vol spullen staat, kunt u vrijblijvend laten bekijken wat er mogelijk is."],
   ["Moet ik eerst opknappen?", "Nee, dat hoeft niet altijd. Ook bij onderhoud, schade of een woning die niet verkoopklaar is, kunt u vrijblijvend een voorstel aanvragen."],
-  ["Zit ik ergens aan vast?", "Nee. Een aanvraag is gratis en vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."],
+  ["Zit ik ergens aan vast?", "Nee. Een aanvraag is vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."],
   ["Kan dit zonder open huis?", "Ja, in veel situaties is een open huis niet nodig. Wij bespreken rustig wat bij uw woning en situatie past."],
   ["Wat gebeurt er na mijn aanvraag?", "Wij nemen persoonlijk contact met u op, bespreken kort de situatie en geven aan welke vervolgstappen mogelijk zijn."],
 ];
@@ -212,6 +228,22 @@ const popularLinks = [
   ["/huis-verkopen-gieten", "Huis verkopen in Gieten"],
 ];
 
+const situationOverviewCards = [
+  { href: "/huis-verkopen-met-achterstallig-onderhoud", icon: "Onderhoud", title: "Achterstallig onderhoud", text: "Bekijk wat er mogelijk is als verbouwen of verkoopklaar maken niet wenselijk is." },
+  { href: "/leegstaand-huis-verkopen", icon: "Leegstand", title: "Leegstaande woning", text: "Rustig duidelijkheid krijgen als kosten, zorgen of dubbele lasten blijven doorlopen." },
+  { href: "/huis-verkopen-bij-erfenis", icon: "Erfenis", title: "Erfenis of nalatenschap", text: "Een overzichtelijke route wanneer meerdere belangen of praktische zaken meespelen." },
+  { href: "/huis-verkopen-bij-scheiding", icon: "Scheiding", title: "Scheiding", text: "Inzicht in verkoopmogelijkheden zonder onnodige druk of extra bezichtigingen." },
+  { href: "/verhuurde-woning-verkopen", icon: "Verhuur", title: "Verhuurde woning", text: "Bekijk de mogelijkheden wanneer er huur, gebruik of beperkte toegang speelt." },
+  { href: "/huis-verkopen-bij-dubbele-lasten", icon: "Lasten", title: "Dubbele lasten", text: "Duidelijkheid wanneer verkooptermijn, kosten en zekerheid belangrijk zijn." },
+];
+
+const regionOverviewCards = [
+  { href: "/huis-verkopen-groningen", icon: "Groningen", title: "Groningen", text: "Voor woningen in Groningen en omliggende plaatsen." },
+  { href: "/woning-verkopen-drenthe", icon: "Drenthe", title: "Drenthe", text: "Voor woningen in Drenthe, waaronder Assen, Emmen, Borger en Gieten." },
+  { href: "/woning-verkopen-friesland", icon: "Friesland", title: "Friesland", text: "Voor woningeigenaren die rustig willen bekijken wat er mogelijk is." },
+  { href: "/woning-verkopen-overijssel", icon: "Overijssel", title: "Overijssel", text: "Voor situaties waarin snelheid, duidelijkheid of privacy belangrijk zijn." },
+];
+
 export default function HomeClient() {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
@@ -226,14 +258,6 @@ export default function HomeClient() {
     email: "",
     telefoon: "",
   });
-  const [showMobileSticky, setShowMobileSticky] = useState(false);
-
-  React.useEffect(() => {
-    const handleScroll = () => setShowMobileSticky(window.scrollY > 720);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const updateForm = (event) => setForm({ ...form, [event.target.name]: event.target.value });
   const nextStep = () => {
@@ -808,6 +832,20 @@ export default function HomeClient() {
           margin-top: 2px;
           font-weight: 850;
         }
+
+
+        .professional-band{background:#fff;padding:56px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+        .professional-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:start}
+        .professional-copy h2{font-size:clamp(30px,3vw,44px);line-height:1.06;letter-spacing:-1.2px;margin:0 0 14px;color:var(--navy)}
+        .professional-copy p:not(.eyebrow){color:#647386;font-size:16px;line-height:1.65;margin:0}
+        .professional-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+        .professional-cards article{background:#fffdf9;border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 12px 34px rgba(7,31,58,.055)}
+        .professional-cards strong{display:block;color:var(--navy);font-size:17px;margin-bottom:8px}
+        .professional-cards span{display:block;color:#647386;font-size:14.5px;line-height:1.5}
+        .quote-row{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:2px}
+        .quote-row blockquote{margin:0;background:#F7F2EC;border:1px solid #F2B885;border-radius:22px;padding:20px;color:var(--navy)}
+        .quote-row blockquote strong{display:block;font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:#B85216;margin-bottom:8px}
+        .quote-row blockquote p{margin:0;color:#425266;line-height:1.55;font-size:15px}
 
         .section { padding: 62px 0; }
         .section-tight { padding: 52px 0; }
@@ -1414,6 +1452,117 @@ export default function HomeClient() {
         }
         .seo-link-grid a:hover { border-color: #D96A1C; }
 
+        .review-link {
+          color: inherit;
+          text-decoration: none;
+          border-radius: 24px;
+          transition: .18s ease;
+        }
+        .review-link:hover .review-score {
+          border-color: #D96A1C;
+          box-shadow: 0 10px 28px rgba(217,106,28,.10);
+        }
+        .overview-section {
+          background: #fff;
+        }
+        .overview-head {
+          margin-bottom: 26px;
+        }
+        .overview-head p {
+          max-width: 720px;
+          margin-left: auto;
+          margin-right: auto;
+          color: #647386;
+          line-height: 1.6;
+        }
+        .overview-block {
+          background: #fffdf9;
+          border: 1px solid #e8e3db;
+          border-radius: 28px;
+          padding: 24px;
+          box-shadow: 0 12px 34px rgba(7,31,58,.055);
+        }
+        .overview-block + .overview-block {
+          margin-top: 18px;
+        }
+        .overview-block-soft {
+          background: #f8f5ef;
+          box-shadow: none;
+        }
+        .overview-block-head {
+          display: flex;
+          justify-content: space-between;
+          gap: 22px;
+          align-items: end;
+          margin-bottom: 16px;
+        }
+        .overview-block-head h3 {
+          margin: 0 0 6px;
+          font-size: 25px;
+          color: #071f3a;
+          letter-spacing: -.45px;
+        }
+        .overview-block-head p {
+          margin: 0;
+          color: #647386;
+          line-height: 1.5;
+          max-width: 620px;
+        }
+        .overview-block-head a {
+          flex: 0 0 auto;
+          font-weight: 900;
+          color: #D96A1C;
+          font-size: 14px;
+        }
+        .overview-card-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 12px;
+        }
+        .overview-region-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+        .overview-card {
+          background: #fff;
+          border: 1px solid #e8e3db;
+          border-radius: 20px;
+          padding: 17px;
+          min-height: 168px;
+          display: grid;
+          gap: 9px;
+          transition: .18s ease;
+        }
+        .overview-card:hover {
+          border-color: #F2B885;
+          transform: translateY(-1px);
+          box-shadow: 0 10px 28px rgba(7,31,58,.07);
+        }
+        .overview-card-icon {
+          display: inline-flex;
+          width: max-content;
+          max-width: 100%;
+          min-height: 32px;
+          align-items: center;
+          border-radius: 999px;
+          background: #FFF1E6;
+          color: #B85216;
+          padding: 8px 10px;
+          font-size: 12px;
+          font-weight: 900;
+        }
+        .overview-card strong {
+          display: block;
+          color: #071f3a;
+          font-size: 18px;
+          line-height: 1.18;
+        }
+        .overview-card p {
+          margin: 0;
+          color: #647386;
+          line-height: 1.48;
+          font-size: 14px;
+        }
+
         .faq {
           display: grid;
           gap: 10px;
@@ -1917,6 +2066,9 @@ export default function HomeClient() {
             margin-bottom: 0;
           }
           .review-quote p { display: none; }
+          .professional-band{padding:34px 0}
+          .professional-cards,.quote-row{grid-template-columns:1fr}
+          .professional-copy h2{font-size:28px}
           .review-author {
             gap: 8px;
           }
@@ -1980,6 +2132,25 @@ export default function HomeClient() {
           .seo-link-grid {
             grid-template-columns: 1fr;
           }
+          .overview-block {
+            padding: 18px;
+            border-radius: 22px;
+          }
+          .overview-block-head {
+            display: block;
+            margin-bottom: 14px;
+          }
+          .overview-block-head a {
+            display: inline-flex;
+            margin-top: 10px;
+          }
+          .overview-card-grid,
+          .overview-region-grid {
+            grid-template-columns: 1fr;
+          }
+          .overview-card {
+            min-height: 0;
+          }
           .compact-steps {
             display: flex;
             gap: 12px;
@@ -1997,6 +2168,46 @@ export default function HomeClient() {
             min-height: 160px;
           }
         }
+
+
+        /* Rustigere preview: minder opdringerig, meer overzicht */
+        .review-band {
+          padding: 16px 0;
+          background: #fffdf9;
+        }
+        .review-compact {
+          grid-template-columns: .7fr 1.5fr;
+        }
+        .review-author {
+          display: none;
+        }
+        .review-score {
+          background: #fff;
+          color: #071f3a;
+          border: 1px solid var(--line);
+          padding: 14px 16px;
+          border-radius: 18px;
+        }
+        .review-score span { color: #647386; }
+        .review-score strong { font-size: 31px; }
+        .review-quote h2 { font-size: 24px; letter-spacing: -.5px; }
+        .review-quote p { font-size: 14.5px; line-height: 1.55; }
+        .professional-band { padding: 42px 0; }
+        .professional-grid { grid-template-columns: 1fr; gap: 18px; }
+        .professional-copy { max-width: 760px; }
+        .professional-copy h2 { font-size: clamp(28px,2.6vw,38px); }
+        .professional-cards article { box-shadow: none; }
+        .quote-row { display: none; }
+        .hero-cta-row .btn, .final-cta .btn { min-width: 0; }
+        .final-cta { padding: 54px 0; }
+        .final-cta h2 { font-size: clamp(28px,3vw,40px); }
+        @media(max-width:760px){
+          .review-band { display: none; }
+          .professional-band { padding: 34px 0; }
+          .professional-cards { grid-template-columns: 1fr; }
+          .whatsapp-float { bottom: 18px; }
+        }
+
       `}</style>
 
       <div className="top-strip">
@@ -2032,7 +2243,7 @@ export default function HomeClient() {
           <div className="header-actions">
             <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
             <a href="tel:0612238051" onClick={() => trackGoogleAdsConversion("call")} className="btn btn-blue">Bel direct</a>
-            <a href="#aanvraag" className="btn btn-orange">Start aanvraag</a>
+            <a href="#aanvraag" className="btn btn-orange">Voorstel aanvragen</a>
           </div>
         </div>
       </header>
@@ -2051,7 +2262,7 @@ export default function HomeClient() {
             </p>
 
             <div className="hero-cta-row">
-              <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
+              <a href="#aanvraag" className="btn btn-orange">Verkoopmogelijkheden bekijken</a>
               <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
             </div>
 
@@ -2134,7 +2345,7 @@ export default function HomeClient() {
                     <input name="email" value={form.email} onChange={updateForm} placeholder="E-mailadres" type="email" className="field" required />
                     <div className="form-actions">
                       <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
-                      <button type="submit" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</button>
+                      <button type="submit" className="btn btn-orange">Verkoopmogelijkheden bekijken</button>
                     </div>
                     <p className="small-note">Wij gebruiken uw gegevens alleen om persoonlijk contact op te nemen over uw aanvraag.</p>
 
@@ -2155,29 +2366,65 @@ export default function HomeClient() {
       </section>
 
       <section className="review-band">
-        <div className="container review-compact">
+        <a
+          href={googleReviewUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="container review-compact review-link"
+          aria-label="Bekijk de Google-reviews van Vastgoed Direct Nederland"
+        >
           <div className="review-score">
             <strong>5,0</strong>
             <div>
               <div className="stars">★★★★★</div>
-              <span>Google-review</span>
+              <span>Google · 2 reviews</span>
             </div>
           </div>
 
           <div className="review-quote">
-            <h2>“Precies de oplossing die ik zocht.”</h2>
+            <h2>Rustig en duidelijk geholpen</h2>
             <p>
-              “Het contact was prettig en duidelijk. Er werd goed uitgelegd hoe het proces zou verlopen
-              en afspraken werden snel opgepakt. De woning is uiteindelijk binnen enkele weken verkocht.”
+              Verkopers waarderen vooral de duidelijke communicatie, het persoonlijke contact
+              en de rustige manier waarop de mogelijkheden worden besproken.
             </p>
           </div>
 
           <div className="review-author">
-            <div className="avatar">L</div>
+            <div className="avatar">G</div>
             <div>
-              <strong>Laura vd Zalm</strong>
-              <span>via Google</span>
+              <strong>Bekijk op Google</strong>
+              <span>Opent in een nieuw venster</span>
             </div>
+          </div>
+        </a>
+      </section>
+
+
+      <section className="professional-band">
+        <div className="container professional-grid">
+          <div className="professional-copy">
+            <p className="eyebrow">Professionele werkwijze</p>
+            <h2>Een verkoopvoorstel moet vooral duidelijk en betrouwbaar voelen.</h2>
+            <p>
+              Daarom tonen we niet alleen een bedrag, maar ook de uitgangspunten, mogelijke planning,
+              kostenvergelijking en vervolgstappen. Zo kunt u rustig beoordelen of deze verkooproute bij uw situatie past.
+            </p>
+          </div>
+          <div className="professional-cards">
+            {professionalTrust.map(([title, text]) => (
+              <article key={title}>
+                <strong>{title}</strong>
+                <span>{text}</span>
+              </article>
+            ))}
+          </div>
+          <div className="quote-row">
+            {trustQuotes.map(([title, text]) => (
+              <blockquote key={title}>
+                <strong>{title}</strong>
+                <p>“{text}”</p>
+              </blockquote>
+            ))}
           </div>
         </div>
       </section>
@@ -2247,7 +2494,7 @@ export default function HomeClient() {
           </div>
 
           <div style={{ textAlign: "center", marginTop: 26 }}>
-            <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
+            <a href="#aanvraag" className="btn btn-orange">Verkoopmogelijkheden bekijken</a>
           </div>
         </div>
       </section>
@@ -2296,21 +2543,53 @@ export default function HomeClient() {
         </div>
       </section>
 
-      <section className="section section-white">
-        <div className="container seo-compact">
-          <div className="seo-compact-intro">
+      <section className="section section-white overview-section">
+        <div className="container">
+          <div className="section-head overview-head">
             <p className="eyebrow">Meer informatie</p>
-            <h2>Verdiep u per situatie of regio.</h2>
+            <h2>Bekijk rustig welke route bij uw situatie past.</h2>
             <p>
-              Wilt u meer weten over een specifieke situatie? Hieronder vindt u de belangrijkste
-              pagina’s met extra uitleg per situatie, regio of plaats.
+              In plaats van een lange lijst met links tonen we de belangrijkste situaties en regio’s overzichtelijk.
+              Meer verdieping staat op aparte overzichtspagina’s.
             </p>
           </div>
 
-          <div className="seo-link-grid">
-            {popularLinks.map(([href, label]) => (
-              <a href={href} key={href}>✓ {label}</a>
-            ))}
+          <div className="overview-block">
+            <div className="overview-block-head">
+              <div>
+                <h3>Situaties</h3>
+                <p>Herkenbare verkoopvragen waarbij rust, duidelijkheid of privacy belangrijk kan zijn.</p>
+              </div>
+              <a href="/situaties">Bekijk alle situaties →</a>
+            </div>
+            <div className="overview-card-grid">
+              {situationOverviewCards.map((card) => (
+                <a href={card.href} className="overview-card" key={card.href}>
+                  <span className="overview-card-icon">{card.icon}</span>
+                  <strong>{card.title}</strong>
+                  <p>{card.text}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="overview-block overview-block-soft">
+            <div className="overview-block-head">
+              <div>
+                <h3>Regio’s</h3>
+                <p>Vastgoed Direct Nederland is actief in meerdere regio’s in Noord- en Oost-Nederland.</p>
+              </div>
+              <a href="/regios">Bekijk alle regio’s →</a>
+            </div>
+            <div className="overview-card-grid overview-region-grid">
+              {regionOverviewCards.map((card) => (
+                <a href={card.href} className="overview-card region-card" key={card.href}>
+                  <span className="overview-card-icon">{card.icon}</span>
+                  <strong>{card.title}</strong>
+                  <p>{card.text}</p>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -2319,12 +2598,11 @@ export default function HomeClient() {
         <div className="container">
           <h2>Wilt u weten wat er mogelijk is met uw woning?</h2>
           <p>
-            Ook als de woning nog vol spullen staat, onderhoud nodig heeft of niet verkoopklaar is. Vraag vrijblijvend een voorstel aan.
+            Ook als de woning nog vol spullen staat, onderhoud nodig heeft of niet verkoopklaar is. U kunt vrijblijvend laten meekijken wanneer u daar aan toe bent.
           </p>
           <div className="cta-buttons">
-            <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
-            <a href="tel:0612238051" onClick={() => trackGoogleAdsConversion("call")} className="btn btn-light">Bel direct</a>
-            <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+            <a href="#aanvraag" className="btn btn-orange">Verkoopmogelijkheden bekijken</a>
+            <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst overleggen</a>
           </div>
         </div>
       </section>
@@ -2380,11 +2658,6 @@ export default function HomeClient() {
 
       <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
 
-      {showMobileSticky && (
-        <div className="mobile-bottom-cta">
-          <a href="#aanvraag" className="btn btn-orange">Gratis voorstel aanvragen</a>
-        </div>
-      )}
     </main>
   );
 }
