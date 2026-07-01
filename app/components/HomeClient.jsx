@@ -113,6 +113,19 @@ const whyDifferent = [
   ],
 ];
 
+
+const professionalTrust = [
+  ["Heldere uitgangspunten", "We leggen duidelijk uit waarop een eerste bod of verkoopvoorstel is gebaseerd."],
+  ["Geen verkoopdruk", "U krijgt ruimte om het voorstel rustig te beoordelen en vragen te stellen."],
+  ["Notariële afwikkeling", "Bij akkoord worden afspraken vastgelegd en loopt de overdracht via de notaris."],
+  ["Discreet en persoonlijk", "Geen open huis, geen callcenter en geen onnodige ruis rond uw woning."],
+];
+
+const trustQuotes = [
+  ["Rustig proces", "Prettig contact, duidelijke uitleg en geen druk om direct te beslissen."],
+  ["Duidelijkheid vooraf", "Fijn dat er eerst helder werd uitgelegd wat wel en niet mogelijk was."],
+];
+
 const routeCards = [
   ["/huis-verkopen-zonder-opknappen", "Niet eerst opknappen", "Ook bij onderhoud of schade kunt u vrijblijvend laten bekijken wat mogelijk is.", "Bekijk mogelijkheden"],
   ["/huis-verkopen-zonder-leeghalen", "Niet eerst leeghalen", "De woning hoeft niet altijd eerst leeggehaald te worden.", "Lees meer"],
@@ -808,6 +821,20 @@ export default function HomeClient() {
           margin-top: 2px;
           font-weight: 850;
         }
+
+
+        .professional-band{background:#fff;padding:56px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+        .professional-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:start}
+        .professional-copy h2{font-size:clamp(30px,3vw,44px);line-height:1.06;letter-spacing:-1.2px;margin:0 0 14px;color:var(--navy)}
+        .professional-copy p:not(.eyebrow){color:#647386;font-size:16px;line-height:1.65;margin:0}
+        .professional-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+        .professional-cards article{background:#fffdf9;border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 12px 34px rgba(7,31,58,.055)}
+        .professional-cards strong{display:block;color:var(--navy);font-size:17px;margin-bottom:8px}
+        .professional-cards span{display:block;color:#647386;font-size:14.5px;line-height:1.5}
+        .quote-row{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:2px}
+        .quote-row blockquote{margin:0;background:#F7F2EC;border:1px solid #F2B885;border-radius:22px;padding:20px;color:var(--navy)}
+        .quote-row blockquote strong{display:block;font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:#B85216;margin-bottom:8px}
+        .quote-row blockquote p{margin:0;color:#425266;line-height:1.55;font-size:15px}
 
         .section { padding: 62px 0; }
         .section-tight { padding: 52px 0; }
@@ -1917,6 +1944,9 @@ export default function HomeClient() {
             margin-bottom: 0;
           }
           .review-quote p { display: none; }
+          .professional-band{padding:34px 0}
+          .professional-cards,.quote-row{grid-template-columns:1fr}
+          .professional-copy h2{font-size:28px}
           .review-author {
             gap: 8px;
           }
@@ -2178,6 +2208,36 @@ export default function HomeClient() {
               <strong>Laura vd Zalm</strong>
               <span>via Google</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section className="professional-band">
+        <div className="container professional-grid">
+          <div className="professional-copy">
+            <p className="eyebrow">Professionele werkwijze</p>
+            <h2>Een verkoopvoorstel moet vooral duidelijk en betrouwbaar voelen.</h2>
+            <p>
+              Daarom tonen we niet alleen een bedrag, maar ook de uitgangspunten, mogelijke planning,
+              kostenvergelijking en vervolgstappen. Zo kunt u rustig beoordelen of deze verkooproute bij uw situatie past.
+            </p>
+          </div>
+          <div className="professional-cards">
+            {professionalTrust.map(([title, text]) => (
+              <article key={title}>
+                <strong>{title}</strong>
+                <span>{text}</span>
+              </article>
+            ))}
+          </div>
+          <div className="quote-row">
+            {trustQuotes.map(([title, text]) => (
+              <blockquote key={title}>
+                <strong>{title}</strong>
+                <p>“{text}”</p>
+              </blockquote>
+            ))}
           </div>
         </div>
       </section>
