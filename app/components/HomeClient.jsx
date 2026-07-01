@@ -53,7 +53,7 @@ const faqSchema = {
       name: "Zit ik ergens aan vast?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Nee. Een aanvraag is gratis en vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
+        text: "Nee. Een aanvraag is vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
       },
     },
     {
@@ -100,8 +100,8 @@ const comparisonRows = [
 
 const whyDifferent = [
   [
-    "Geen verkoopdruk",
-    "U vraagt vrijblijvend informatie aan en beslist zelf of u verder wilt.",
+    "Rustig beoordelen",
+    "U vraagt informatie aan en beslist daarna zelf of u verder wilt.",
   ],
   [
     "Niet eerst opknappen of leeghalen",
@@ -116,14 +116,14 @@ const whyDifferent = [
 
 const professionalTrust = [
   ["Heldere uitgangspunten", "We leggen duidelijk uit waarop een eerste bod of verkoopvoorstel is gebaseerd."],
-  ["Geen verkoopdruk", "U krijgt ruimte om het voorstel rustig te beoordelen en vragen te stellen."],
+  ["Rustig beoordelen", "U krijgt ruimte om het voorstel rustig te bekijken en vragen te stellen."],
   ["Notariële afwikkeling", "Bij akkoord worden afspraken vastgelegd en loopt de overdracht via de notaris."],
   ["Discreet en persoonlijk", "Geen open huis, geen callcenter en geen onnodige ruis rond uw woning."],
 ];
 
 const trustQuotes = [
-  ["Rustig proces", "Prettig contact, duidelijke uitleg en geen druk om direct te beslissen."],
-  ["Duidelijkheid vooraf", "Fijn dat er eerst helder werd uitgelegd wat wel en niet mogelijk was."],
+  ["Duidelijke communicatie", "Het contact werd als snel en duidelijk ervaren, waardoor verkopers wisten waar zij aan toe waren."],
+  ["Zonder veel gedoe", "Verkopers waarderen vooral de duidelijke en snelle manier om de woning te verkopen."],
 ];
 
 const routeCards = [
@@ -147,7 +147,7 @@ const answerMenuLinks = [
 const faqItems = [
   ["Moet mijn woning eerst leeg zijn?", "Nee, dat hoeft niet altijd. Ook als de woning nog vol spullen staat, kunt u vrijblijvend laten bekijken wat er mogelijk is."],
   ["Moet ik eerst opknappen?", "Nee, dat hoeft niet altijd. Ook bij onderhoud, schade of een woning die niet verkoopklaar is, kunt u vrijblijvend een voorstel aanvragen."],
-  ["Zit ik ergens aan vast?", "Nee. Een aanvraag is gratis en vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."],
+  ["Zit ik ergens aan vast?", "Nee. Een aanvraag is vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."],
   ["Kan dit zonder open huis?", "Ja, in veel situaties is een open huis niet nodig. Wij bespreken rustig wat bij uw woning en situatie past."],
   ["Wat gebeurt er na mijn aanvraag?", "Wij nemen persoonlijk contact met u op, bespreken kort de situatie en geven aan welke vervolgstappen mogelijk zijn."],
 ];
@@ -239,14 +239,6 @@ export default function HomeClient() {
     email: "",
     telefoon: "",
   });
-  const [showMobileSticky, setShowMobileSticky] = useState(false);
-
-  React.useEffect(() => {
-    const handleScroll = () => setShowMobileSticky(window.scrollY > 720);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const updateForm = (event) => setForm({ ...form, [event.target.name]: event.target.value });
   const nextStep = () => {
@@ -2027,6 +2019,46 @@ export default function HomeClient() {
             min-height: 160px;
           }
         }
+
+
+        /* Rustigere preview: minder opdringerig, meer overzicht */
+        .review-band {
+          padding: 16px 0;
+          background: #fffdf9;
+        }
+        .review-compact {
+          grid-template-columns: .7fr 1.5fr;
+        }
+        .review-author {
+          display: none;
+        }
+        .review-score {
+          background: #fff;
+          color: #071f3a;
+          border: 1px solid var(--line);
+          padding: 14px 16px;
+          border-radius: 18px;
+        }
+        .review-score span { color: #647386; }
+        .review-score strong { font-size: 31px; }
+        .review-quote h2 { font-size: 24px; letter-spacing: -.5px; }
+        .review-quote p { font-size: 14.5px; line-height: 1.55; }
+        .professional-band { padding: 42px 0; }
+        .professional-grid { grid-template-columns: 1fr; gap: 18px; }
+        .professional-copy { max-width: 760px; }
+        .professional-copy h2 { font-size: clamp(28px,2.6vw,38px); }
+        .professional-cards article { box-shadow: none; }
+        .quote-row { display: none; }
+        .hero-cta-row .btn, .final-cta .btn { min-width: 0; }
+        .final-cta { padding: 54px 0; }
+        .final-cta h2 { font-size: clamp(28px,3vw,40px); }
+        @media(max-width:760px){
+          .review-band { display: none; }
+          .professional-band { padding: 34px 0; }
+          .professional-cards { grid-template-columns: 1fr; }
+          .whatsapp-float { bottom: 18px; }
+        }
+
       `}</style>
 
       <div className="top-strip">
@@ -2062,7 +2094,7 @@ export default function HomeClient() {
           <div className="header-actions">
             <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
             <a href="tel:0612238051" onClick={() => trackGoogleAdsConversion("call")} className="btn btn-blue">Bel direct</a>
-            <a href="#aanvraag" className="btn btn-orange">Start aanvraag</a>
+            <a href="#aanvraag" className="btn btn-orange">Voorstel aanvragen</a>
           </div>
         </div>
       </header>
@@ -2081,7 +2113,7 @@ export default function HomeClient() {
             </p>
 
             <div className="hero-cta-row">
-              <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
+              <a href="#aanvraag" className="btn btn-orange">Verkoopmogelijkheden bekijken</a>
               <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
             </div>
 
@@ -2164,7 +2196,7 @@ export default function HomeClient() {
                     <input name="email" value={form.email} onChange={updateForm} placeholder="E-mailadres" type="email" className="field" required />
                     <div className="form-actions">
                       <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
-                      <button type="submit" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</button>
+                      <button type="submit" className="btn btn-orange">Verkoopmogelijkheden bekijken</button>
                     </div>
                     <p className="small-note">Wij gebruiken uw gegevens alleen om persoonlijk contact op te nemen over uw aanvraag.</p>
 
@@ -2190,23 +2222,23 @@ export default function HomeClient() {
             <strong>5,0</strong>
             <div>
               <div className="stars">★★★★★</div>
-              <span>Google-review</span>
+              <span>Google · 2 reviews</span>
             </div>
           </div>
 
           <div className="review-quote">
-            <h2>“Precies de oplossing die ik zocht.”</h2>
+            <h2>Rustig en duidelijk geholpen</h2>
             <p>
-              “Het contact was prettig en duidelijk. Er werd goed uitgelegd hoe het proces zou verlopen
-              en afspraken werden snel opgepakt. De woning is uiteindelijk binnen enkele weken verkocht.”
+              Verkopers waarderen vooral de duidelijke communicatie, het persoonlijke contact
+              en de rustige manier waarop de mogelijkheden worden besproken.
             </p>
           </div>
 
           <div className="review-author">
-            <div className="avatar">L</div>
+            <div className="avatar">G</div>
             <div>
-              <strong>Laura vd Zalm</strong>
-              <span>via Google</span>
+              <strong>Google-beoordeling</strong>
+              <span>Gebaseerd op 2 reviews</span>
             </div>
           </div>
         </div>
@@ -2307,7 +2339,7 @@ export default function HomeClient() {
           </div>
 
           <div style={{ textAlign: "center", marginTop: 26 }}>
-            <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
+            <a href="#aanvraag" className="btn btn-orange">Verkoopmogelijkheden bekijken</a>
           </div>
         </div>
       </section>
@@ -2379,12 +2411,11 @@ export default function HomeClient() {
         <div className="container">
           <h2>Wilt u weten wat er mogelijk is met uw woning?</h2>
           <p>
-            Ook als de woning nog vol spullen staat, onderhoud nodig heeft of niet verkoopklaar is. Vraag vrijblijvend een voorstel aan.
+            Ook als de woning nog vol spullen staat, onderhoud nodig heeft of niet verkoopklaar is. U kunt vrijblijvend laten meekijken wanneer u daar aan toe bent.
           </p>
           <div className="cta-buttons">
-            <a href="#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
-            <a href="tel:0612238051" onClick={() => trackGoogleAdsConversion("call")} className="btn btn-light">Bel direct</a>
-            <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+            <a href="#aanvraag" className="btn btn-orange">Verkoopmogelijkheden bekijken</a>
+            <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst overleggen</a>
           </div>
         </div>
       </section>
@@ -2440,11 +2471,6 @@ export default function HomeClient() {
 
       <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
 
-      {showMobileSticky && (
-        <div className="mobile-bottom-cta">
-          <a href="#aanvraag" className="btn btn-orange">Gratis voorstel aanvragen</a>
-        </div>
-      )}
     </main>
   );
 }
