@@ -347,6 +347,14 @@ export default async function PublicProposalPage({ params, searchParams }) {
         </section>
       </section>
 
+      {proposal.notes ? (
+        <section className="card notes-card">
+          <span className="section-kicker">Aanvullend</span>
+          <h2>Aanvullende opmerkingen</h2>
+          <p className="notes-copy">{proposal.notes}</p>
+        </section>
+      ) : null}
+
       <section className="card">
         <span className="section-kicker">Voorbehouden</span>
         <h2>Nog te controleren vóór definitieve vastlegging</h2>
@@ -448,6 +456,7 @@ p,.intro,li{font-size:16.5px;line-height:1.68;color:var(--muted)}
 .summary-list strong{font-size:24px;color:var(--navy)}
 .summary-list span{color:var(--muted);margin-top:5px}
 .special-card{background:linear-gradient(135deg,#fffdf9 0,#F7F2EC 100%)}.construct-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}.construct-grid div{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px}.construct-grid strong,.construct-grid span{display:block}.construct-grid strong{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}.construct-grid span{margin-top:6px;color:var(--navy);font-weight:800;line-height:1.35}.mini-checks{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}.mini-checks div{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;font-weight:800;line-height:1.4}.mini-checks span{color:var(--orange);font-weight:900}.bridge-copy{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0 0}
+.notes-card{background:linear-gradient(135deg,#fffdf9 0,#F7F2EC 100%)}.notes-copy{white-space:pre-line;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0 0;color:var(--navy);font-weight:700}
 .facts{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff}
 .facts div{padding:17px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:92px}
 .facts div:nth-child(3n){border-right:0}
