@@ -33,12 +33,89 @@ function relatedLinksFor(page) {
   return internalLinks.filter(([href]) => href !== page.slug).slice(0, 12);
 }
 
+const linkDescriptions = {
+  "/huis-snel-verkopen": "Wanneer snelheid en duidelijkheid belangrijk zijn.",
+  "/huis-direct-verkopen": "Rechtstreeks duidelijkheid over de verkoopmogelijkheden.",
+  "/woning-verkopen-zonder-makelaar": "Zonder traditioneel makelaarstraject verkopen.",
+  "/opknapwoning-verkopen": "Voor woningen met onderhoud of renovatiebehoefte.",
+  "/leegstaand-huis-verkopen": "Bij leegstand, zorgen of doorlopende lasten.",
+  "/huis-verkopen-zonder-leeghalen": "Ook wanneer de woning nog niet leeg is.",
+  "/huis-verkopen-zonder-opknappen": "Bekijk mogelijkheden zonder eerst te verbouwen.",
+  "/woning-verkopen-die-nog-vol-staat": "Voor woningen met spullen of inboedel in de woning.",
+  "/geerfde-woning-verkopen-zonder-leeghalen": "Rustig overzicht bij een geërfde woning.",
+  "/opknapwoning-verkopen-zonder-makelaar": "Opknapwoning verkopen zonder regulier verkooptraject.",
+  "/leegstaand-huis-verkopen-wat-zijn-de-opties": "Bekijk welke routes passen bij leegstand.",
+  "/huis-verkopen-bij-dubbele-lasten": "Wanneer planning, zekerheid en lasten meespelen.",
+  "/huis-verkopen-zonder-bezichtigingen-uitleg": "Meer rust en privacy tijdens het verkoopproces.",
+  "/huis-verkopen-bij-erfenis": "Praktische oplossing bij een erfenis of nalatenschap.",
+  "/verhuurde-woning-verkopen": "Ook mogelijk wanneer huur of gebruik een rol speelt.",
+  "/huis-verkopen-met-achterstallig-onderhoud": "Als onderhoud of herstel niet wenselijk is voor verkoop.",
+  "/huis-verkopen-zonder-bezichtigingen": "Geen open huis of reeks kijkers nodig.",
+  "/huis-verkopen-aan-opkoper": "Vergelijk rustig wat direct verkopen betekent.",
+  "/huis-verkopen-groningen": "Verkoopmogelijkheden in Groningen en omgeving.",
+  "/woning-verkopen-drenthe": "Voor woningen in Drenthe, dorpen en buitengebieden.",
+  "/woning-verkopen-friesland": "Persoonlijke verkoopoplossing in Friesland.",
+  "/woning-verkopen-overijssel": "Ook actief in Overijssel en omliggende regio’s.",
+  "/huis-verkopen-stadskanaal": "Lokale verkoopmogelijkheden in en rond Stadskanaal.",
+  "/huis-verkopen-veendam": "Voor verkoopvragen in Veendam en omgeving.",
+  "/huis-verkopen-winschoten": "Rustig inzicht in verkoopmogelijkheden rond Winschoten.",
+  "/huis-verkopen-assen": "Voor verkoopvragen in Assen en omgeving.",
+  "/huis-verkopen-emmen": "Voor woningen in Emmen en Zuidoost-Drenthe.",
+  "/huis-verkopen-borger": "Voor woningeigenaren in Borger en de Hondsrug-regio.",
+  "/huis-verkopen-gieten": "Voor verkoopvragen in Gieten en omgeving.",
+};
+
+const geoSlugs = new Set([
+  "/huis-verkopen-groningen",
+  "/woning-verkopen-drenthe",
+  "/woning-verkopen-friesland",
+  "/woning-verkopen-overijssel",
+  "/huis-verkopen-stadskanaal",
+  "/huis-verkopen-veendam",
+  "/huis-verkopen-winschoten",
+  "/huis-verkopen-assen",
+  "/huis-verkopen-emmen",
+  "/huis-verkopen-borger",
+  "/huis-verkopen-gieten",
+]);
+
+function isGeoPage(page) {
+  return geoSlugs.has(page.slug);
+}
+
+function relatedSectionCopy(page) {
+  if (isGeoPage(page)) {
+    return {
+      eyebrow: "Ook relevant",
+      title: "Veelvoorkomende situaties in deze regio",
+      text: "Bekijk verwante verkoopsituaties of nabijgelegen regio’s zonder dat het een losse linklijst wordt.",
+      action: "Bekijk meer →",
+    };
+  }
+
+  return {
+    eyebrow: "Ook relevant",
+    title: "Gerelateerde verkoopsituaties en regio’s",
+    text: "Een paar logische vervolgstappen als u zich verder wilt oriënteren.",
+    action: "Lees meer →",
+  };
+}
+
+function relatedCardsFor(page) {
+  return relatedLinksFor(page).map(([href, label, text]) => ({
+    href,
+    label,
+    text: text || linkDescriptions[href] || "Bekijk rustig welke verkooproute hierbij past.",
+  }));
+}
+
 export default function SeoLandingPage({ page }) {
   const faqs = Array.isArray(page.faqs) ? page.faqs : [];
   const sections = Array.isArray(page.sections) ? page.sections : [];
   const benefits = Array.isArray(page.benefits) ? page.benefits : [];
   const comparisonRows = Array.isArray(page.comparisonRows) ? page.comparisonRows : [];
-  const relatedLinks = relatedLinksFor(page);
+  const relatedCards = relatedCardsFor(page);
+  const relatedCopy = relatedSectionCopy(page);
   const example = page.exampleSituation;
   const showFaqSchema = faqs.length > 0;
 
@@ -191,9 +268,17 @@ export default function SeoLandingPage({ page }) {
         .faq{display:grid;gap:10px;max-width:940px;margin:0 auto}
         .faq-item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px 18px;display:grid;grid-template-columns:minmax(220px,.42fr) 1fr;gap:22px;align-items:start}
         .faq-item p{margin:0;color:#647386;font-size:15px;line-height:1.55}
-        .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-        .related-grid a{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 13px;font-size:15px;font-weight:900;color:#071f3a;text-decoration:none;box-shadow:0 10px 24px rgba(7,31,58,.045)}
-        .related-grid a:hover{border-color:var(--orange)}
+        .related-wrap{background:#fffdf9;border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:0 12px 34px rgba(7,31,58,.055)}
+        .related-wrap .section-head{margin-bottom:22px}
+        .related-wrap .section-head p:not(.eyebrow){max-width:720px;margin-left:auto;margin-right:auto;color:#526274}
+        .related-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+        .related-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px;min-height:116px;display:grid;grid-template-columns:34px 1fr;gap:13px;align-items:start;color:#071f3a;text-decoration:none;box-shadow:0 10px 24px rgba(7,31,58,.045);transition:.18s ease}
+        .related-card:hover{border-color:#F2B885;transform:translateY(-1px);box-shadow:0 10px 28px rgba(7,31,58,.07)}
+        .related-card-icon{display:inline-flex;width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,#FFF1E6 0%,#F8D3B5 100%);border:1px solid #F2B885;margin-top:2px}
+        .related-card-content{display:grid;gap:6px}
+        .related-card strong{display:block;font-size:17px;line-height:1.2;color:#071f3a}
+        .related-card p{margin:0;color:#526274;line-height:1.5;font-size:14px;font-weight:400}
+        .related-card span:not(.related-card-icon):not(.related-card-content){margin-top:2px;color:var(--orange);font-weight:900;font-size:14px}
         .final-cta{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:58px 0;text-align:center}
         .final-cta h2{color:#fff}
         .final-cta p{color:#d7e3ef;font-size:18px;line-height:1.6;max-width:730px;margin:16px auto 0}
@@ -230,7 +315,8 @@ export default function SeoLandingPage({ page }) {
           .faq-item{padding:14px 16px;gap:18px;border-radius:16px}
           .faq-item h3{font-size:17px;line-height:1.25;letter-spacing:-.2px;margin:0}
           .faq-item p{font-size:14.5px;line-height:1.5}
-          .related-grid a{font-size:14px;padding:11px 12px;border-radius:14px}
+          .related-wrap{padding:20px;border-radius:24px}
+          .related-card{font-size:14px;padding:14px;border-radius:16px}
         }
         @media(max-width:1040px){
           .header-inner{grid-template-columns:auto auto}
@@ -262,7 +348,7 @@ export default function SeoLandingPage({ page }) {
           .micro-note{display:none}
           .mobile-trust-line{display:block;font-size:13px;color:#647386;font-weight:900;margin-top:12px;line-height:1.45}
           .trust-micro{display:none}
-          .benefit-grid,.compare-columns,.related-grid{grid-template-columns:1fr}
+          .benefit-grid,.compare-columns,.related-card-grid{grid-template-columns:1fr}
           .section{padding:42px 0}.section-tight{padding:38px 0}
           .section-head{text-align:left;margin-bottom:20px}
           .card,.content-block,.cta-card,.comparison-wrap,.why-card,.example-card{border-radius:22px;padding:20px}
@@ -504,17 +590,27 @@ export default function SeoLandingPage({ page }) {
         </section>
       )}
 
-      {relatedLinks.length > 0 && (
+      {relatedCards.length > 0 && (
         <section className="section-tight">
           <div className="container">
-            <div className="section-head">
-              <p className="eyebrow">Meer informatie</p>
-              <h2>Verkoopinformatie per situatie of regio</h2>
-            </div>
-            <div className="related-grid">
-              {relatedLinks.map(([href, label]) => (
-                <a href={href} key={href}>✓ {label}</a>
-              ))}
+            <div className="related-wrap">
+              <div className="section-head">
+                <p className="eyebrow">{relatedCopy.eyebrow}</p>
+                <h2>{relatedCopy.title}</h2>
+                <p>{relatedCopy.text}</p>
+              </div>
+              <div className="related-card-grid">
+                {relatedCards.map((card) => (
+                  <a href={card.href} key={card.href} className="related-card">
+                    <span className="related-card-icon" aria-hidden="true" />
+                    <span className="related-card-content">
+                      <strong>{card.label}</strong>
+                      <p>{card.text}</p>
+                      <span>{relatedCopy.action}</span>
+                    </span>
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </section>

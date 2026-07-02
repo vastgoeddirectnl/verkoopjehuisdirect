@@ -62,6 +62,19 @@ const PROPOSAL_FIELDS = [
   "reservations_text",
   "next_steps_text",
   "contact_person",
+  "proposal_type",
+  "delivery_term_text",
+  "desired_transfer_date",
+  "buyer_text",
+  "allow_kadaster_registration",
+  "allow_abc_resale",
+  "seller_cooperates_resale",
+  "delivery_free_of_claims",
+  "property_same_state",
+  "bridge_current_home",
+  "bridge_old_home",
+  "bridge_goal_text",
+  "bridge_explanation_text",
   "notes",
 ];
 
@@ -71,9 +84,19 @@ function clean(value, max = 1500) {
 
 function cleanForField(field, value) {
   if (field === "lead_id") return value || null;
-  if (field === "validity_date") return value || null;
+  if (["validity_date", "desired_transfer_date"].includes(field)) return value || null;
   if (field === "proposal_variant") return clean(value, 40) || "Uitgebreid";
-  if (["conditions_text", "assumptions_text", "included_items", "short_comparison_text", "reservations_text", "next_steps_text", "notes"].includes(field)) {
+  if (field === "proposal_type") return clean(value, 80) || "Standaard aankoop";
+  if ([
+    "allow_kadaster_registration",
+    "allow_abc_resale",
+    "seller_cooperates_resale",
+    "delivery_free_of_claims",
+    "property_same_state",
+  ].includes(field)) {
+    return Boolean(value);
+  }
+  if (["conditions_text", "assumptions_text", "included_items", "short_comparison_text", "reservations_text", "next_steps_text", "bridge_explanation_text", "notes"].includes(field)) {
     return clean(value, 2500) || null;
   }
   return clean(value, 300) || null;

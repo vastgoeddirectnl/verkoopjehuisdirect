@@ -229,19 +229,21 @@ const popularLinks = [
 ];
 
 const situationOverviewCards = [
-  { href: "/huis-verkopen-met-achterstallig-onderhoud", icon: "Onderhoud", title: "Achterstallig onderhoud", text: "Bekijk wat er mogelijk is als verbouwen of verkoopklaar maken niet wenselijk is." },
-  { href: "/leegstaand-huis-verkopen", icon: "Leegstand", title: "Leegstaande woning", text: "Rustig duidelijkheid krijgen als kosten, zorgen of dubbele lasten blijven doorlopen." },
-  { href: "/huis-verkopen-bij-erfenis", icon: "Erfenis", title: "Erfenis of nalatenschap", text: "Een overzichtelijke route wanneer meerdere belangen of praktische zaken meespelen." },
-  { href: "/huis-verkopen-bij-scheiding", icon: "Scheiding", title: "Scheiding", text: "Inzicht in verkoopmogelijkheden zonder onnodige druk of extra bezichtigingen." },
-  { href: "/verhuurde-woning-verkopen", icon: "Verhuur", title: "Verhuurde woning", text: "Bekijk de mogelijkheden wanneer er huur, gebruik of beperkte toegang speelt." },
-  { href: "/huis-verkopen-bij-dubbele-lasten", icon: "Lasten", title: "Dubbele lasten", text: "Duidelijkheid wanneer verkooptermijn, kosten en zekerheid belangrijk zijn." },
+  { href: "/opknapwoning-verkopen", title: "Opknapwoning verkopen", text: "Voor woningen met achterstallig onderhoud of renovatiebehoefte." },
+  { href: "/huis-snel-verkopen", title: "Huis snel verkopen", text: "Wanneer duidelijkheid en snelheid belangrijk zijn." },
+  { href: "/woning-verkopen-zonder-makelaar", title: "Woning verkopen zonder makelaar", text: "Rechtstreeks verkopen zonder traditioneel verkooptraject." },
+  { href: "/leegstaand-huis-verkopen", title: "Leegstaand huis verkopen", text: "Voor woningen die leegstaan of niet meer worden gebruikt." },
+  { href: "/huis-verkopen-bij-erfenis", title: "Huis verkopen bij erfenis", text: "Praktische oplossing bij een geërfde woning." },
+  { href: "/verhuurde-woning-verkopen", title: "Verhuurde woning verkopen", text: "Ook mogelijk wanneer de woning verhuurd is." },
 ];
 
 const regionOverviewCards = [
-  { href: "/huis-verkopen-groningen", icon: "Groningen", title: "Groningen", text: "Voor woningen in Groningen en omliggende plaatsen." },
-  { href: "/woning-verkopen-drenthe", icon: "Drenthe", title: "Drenthe", text: "Voor woningen in Drenthe, waaronder Assen, Emmen, Borger en Gieten." },
-  { href: "/woning-verkopen-friesland", icon: "Friesland", title: "Friesland", text: "Voor woningeigenaren die rustig willen bekijken wat er mogelijk is." },
-  { href: "/woning-verkopen-overijssel", icon: "Overijssel", title: "Overijssel", text: "Voor situaties waarin snelheid, duidelijkheid of privacy belangrijk zijn." },
+  { href: "/huis-verkopen-groningen", title: "Huis verkopen in Groningen", text: "Direct duidelijkheid bij verkoop in Groningen en omgeving." },
+  { href: "/woning-verkopen-drenthe", title: "Huis verkopen in Drenthe", text: "Voor woningen in Drenthe, dorpen en buitengebieden." },
+  { href: "/woning-verkopen-friesland", title: "Huis verkopen in Friesland", text: "Persoonlijke verkoopoplossing in Friesland." },
+  { href: "/woning-verkopen-overijssel", title: "Huis verkopen in Overijssel", text: "Ook actief in Overijssel en omliggende regio’s." },
+  { href: "/huis-verkopen-assen", title: "Huis verkopen in Assen", text: "Voor woningen in Assen en directe omgeving." },
+  { href: "/huis-verkopen-emmen", title: "Huis verkopen in Emmen", text: "Voor woningen in Emmen en Zuidoost-Drenthe." },
 ];
 
 export default function HomeClient() {
@@ -1466,14 +1468,20 @@ export default function HomeClient() {
           background: #fff;
         }
         .overview-head {
-          margin-bottom: 26px;
+          margin-bottom: 34px;
         }
         .overview-head p {
-          max-width: 720px;
+          max-width: 760px;
           margin-left: auto;
           margin-right: auto;
-          color: #647386;
-          line-height: 1.6;
+          color: #526274;
+          line-height: 1.66;
+        }
+        .overview-columns {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 18px;
+          align-items: stretch;
         }
         .overview-block {
           background: #fffdf9;
@@ -1481,55 +1489,44 @@ export default function HomeClient() {
           border-radius: 28px;
           padding: 24px;
           box-shadow: 0 12px 34px rgba(7,31,58,.055);
-        }
-        .overview-block + .overview-block {
-          margin-top: 18px;
+          display: flex;
+          flex-direction: column;
+          min-height: 100%;
         }
         .overview-block-soft {
           background: #f8f5ef;
           box-shadow: none;
         }
         .overview-block-head {
-          display: flex;
-          justify-content: space-between;
-          gap: 22px;
-          align-items: end;
-          margin-bottom: 16px;
+          margin-bottom: 18px;
         }
         .overview-block-head h3 {
-          margin: 0 0 6px;
+          margin: 0 0 7px;
           font-size: 25px;
           color: #071f3a;
           letter-spacing: -.45px;
         }
         .overview-block-head p {
           margin: 0;
-          color: #647386;
-          line-height: 1.5;
+          color: #526274;
+          line-height: 1.56;
           max-width: 620px;
-        }
-        .overview-block-head a {
-          flex: 0 0 auto;
-          font-weight: 900;
-          color: #D96A1C;
-          font-size: 14px;
         }
         .overview-card-grid {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 12px;
-        }
-        .overview-region-grid {
-          grid-template-columns: repeat(4, minmax(0, 1fr));
+          grid-template-columns: 1fr;
+          gap: 10px;
         }
         .overview-card {
           background: #fff;
           border: 1px solid #e8e3db;
-          border-radius: 20px;
-          padding: 17px;
-          min-height: 168px;
+          border-radius: 18px;
+          padding: 15px;
+          min-height: 118px;
           display: grid;
-          gap: 9px;
+          grid-template-columns: 34px 1fr;
+          gap: 13px;
+          align-items: start;
           transition: .18s ease;
         }
         .overview-card:hover {
@@ -1539,28 +1536,48 @@ export default function HomeClient() {
         }
         .overview-card-icon {
           display: inline-flex;
-          width: max-content;
-          max-width: 100%;
-          min-height: 32px;
-          align-items: center;
-          border-radius: 999px;
-          background: #FFF1E6;
-          color: #B85216;
-          padding: 8px 10px;
-          font-size: 12px;
-          font-weight: 900;
+          width: 28px;
+          height: 28px;
+          border-radius: 9px;
+          background: linear-gradient(135deg, #FFF1E6 0%, #F8D3B5 100%);
+          border: 1px solid #F2B885;
+          margin-top: 2px;
+        }
+        .overview-card-content {
+          display: grid;
+          gap: 6px;
         }
         .overview-card strong {
           display: block;
           color: #071f3a;
-          font-size: 18px;
-          line-height: 1.18;
+          font-size: 17px;
+          line-height: 1.2;
         }
         .overview-card p {
           margin: 0;
-          color: #647386;
-          line-height: 1.48;
+          color: #526274;
+          line-height: 1.5;
           font-size: 14px;
+        }
+        .overview-block-cta {
+          margin-top: auto;
+          padding-top: 18px;
+        }
+        .overview-block-cta a {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 40px;
+          border-radius: 999px;
+          background: #fff;
+          border: 1px solid #eadfd3;
+          color: #D96A1C;
+          padding: 0 15px;
+          font-weight: 900;
+          font-size: 14px;
+        }
+        .overview-block-cta a:hover {
+          border-color: #D96A1C;
         }
 
         .faq {
@@ -2132,24 +2149,23 @@ export default function HomeClient() {
           .seo-link-grid {
             grid-template-columns: 1fr;
           }
+          .overview-head {
+            margin-bottom: 22px;
+          }
+          .overview-columns {
+            grid-template-columns: 1fr;
+            gap: 14px;
+          }
           .overview-block {
             padding: 18px;
             border-radius: 22px;
           }
           .overview-block-head {
-            display: block;
             margin-bottom: 14px;
-          }
-          .overview-block-head a {
-            display: inline-flex;
-            margin-top: 10px;
-          }
-          .overview-card-grid,
-          .overview-region-grid {
-            grid-template-columns: 1fr;
           }
           .overview-card {
             min-height: 0;
+            padding: 14px;
           }
           .compact-steps {
             display: flex;
@@ -2546,49 +2562,54 @@ export default function HomeClient() {
       <section className="section section-white overview-section">
         <div className="container">
           <div className="section-head overview-head">
-            <p className="eyebrow">Meer informatie</p>
-            <h2>Bekijk rustig welke route bij uw situatie past.</h2>
+            <p className="eyebrow">Verder oriënteren</p>
+            <h2>Bekijk rustig wat past bij uw situatie of regio</h2>
             <p>
-              In plaats van een lange lijst met links tonen we de belangrijkste situaties en regio’s overzichtelijk.
-              Meer verdieping staat op aparte overzichtspagina’s.
+              Geen lange linklijst, maar een paar logische ingangen. Kies hieronder wat het beste aansluit op uw woning, situatie of regio.
             </p>
           </div>
 
-          <div className="overview-block">
-            <div className="overview-block-head">
-              <div>
+          <div className="overview-columns">
+            <div className="overview-block">
+              <div className="overview-block-head">
                 <h3>Situaties</h3>
                 <p>Herkenbare verkoopvragen waarbij rust, duidelijkheid of privacy belangrijk kan zijn.</p>
               </div>
-              <a href="/situaties">Bekijk alle situaties →</a>
+              <div className="overview-card-grid">
+                {situationOverviewCards.map((card) => (
+                  <a href={card.href} className="overview-card" key={card.href}>
+                    <span className="overview-card-icon" aria-hidden="true" />
+                    <span className="overview-card-content">
+                      <strong>{card.title}</strong>
+                      <p>{card.text}</p>
+                    </span>
+                  </a>
+                ))}
+              </div>
+              <div className="overview-block-cta">
+                <a href="/situaties">Bekijk alle situaties →</a>
+              </div>
             </div>
-            <div className="overview-card-grid">
-              {situationOverviewCards.map((card) => (
-                <a href={card.href} className="overview-card" key={card.href}>
-                  <span className="overview-card-icon">{card.icon}</span>
-                  <strong>{card.title}</strong>
-                  <p>{card.text}</p>
-                </a>
-              ))}
-            </div>
-          </div>
 
-          <div className="overview-block overview-block-soft">
-            <div className="overview-block-head">
-              <div>
+            <div className="overview-block overview-block-soft">
+              <div className="overview-block-head">
                 <h3>Regio’s</h3>
                 <p>Vastgoed Direct Nederland is actief in meerdere regio’s in Noord- en Oost-Nederland.</p>
               </div>
-              <a href="/regios">Bekijk alle regio’s →</a>
-            </div>
-            <div className="overview-card-grid overview-region-grid">
-              {regionOverviewCards.map((card) => (
-                <a href={card.href} className="overview-card region-card" key={card.href}>
-                  <span className="overview-card-icon">{card.icon}</span>
-                  <strong>{card.title}</strong>
-                  <p>{card.text}</p>
-                </a>
-              ))}
+              <div className="overview-card-grid">
+                {regionOverviewCards.map((card) => (
+                  <a href={card.href} className="overview-card region-card" key={card.href}>
+                    <span className="overview-card-icon" aria-hidden="true" />
+                    <span className="overview-card-content">
+                      <strong>{card.title}</strong>
+                      <p>{card.text}</p>
+                    </span>
+                  </a>
+                ))}
+              </div>
+              <div className="overview-block-cta">
+                <a href="/regios">Bekijk alle regio’s →</a>
+              </div>
             </div>
           </div>
         </div>
