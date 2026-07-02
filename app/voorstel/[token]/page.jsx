@@ -47,6 +47,22 @@ function firstName(name) {
   return raw.split(" ")[0];
 }
 
+const SPECIAL_PROPOSAL_TYPES = ["Uitgestelde levering", "Overbruggingsoplossing", "ABC-doorverkoop mogelijk"];
+
+function isSpecialProposalType(type) {
+  return SPECIAL_PROPOSAL_TYPES.includes(String(type || "").trim());
+}
+
+function constructieChecks(proposal) {
+  const checks = [];
+  if (proposal.allow_kadaster_registration) checks.push("Koopovereenkomst mag worden ingeschreven bij het Kadaster");
+  if (proposal.allow_abc_resale) checks.push("ABC-doorverkoop mogelijk");
+  if (proposal.seller_cooperates_resale) checks.push("Verkoper werkt mee aan taxatie, bezichtiging en voorbereiding doorverkoop");
+  if (proposal.delivery_free_of_claims) checks.push("Levering vrij van huur, gebruik, beslagen en hypotheken");
+  if (proposal.property_same_state) checks.push("Woning blijft tot levering in huidige staat");
+  return checks;
+}
+
 export default async function PublicProposalPage({ params, searchParams }) {
   const { token } = await params;
   const query = searchParams ? await searchParams : {};
@@ -107,6 +123,11 @@ export default async function PublicProposalPage({ params, searchParams }) {
     "Een verkooproute die vooral gericht is op rust, snelheid en overzicht.",
   ]);
 
+  const proposalType = value(proposal.proposal_type, proposal.proposal_variant || "Standaard aankoop");
+  const specialProposal = isSpecialProposalType(proposalType);
+  const checks = constructieChecks(proposal);
+  const showBridge = specialProposal && (proposal.bridge_current_home || proposal.bridge_old_home || proposal.bridge_goal_text || proposal.bridge_explanation_text);
+
   return (
     <main className="proposal-page">
       <style>{styles}</style>
@@ -164,6 +185,26 @@ export default async function PublicProposalPage({ params, searchParams }) {
         </div>
       </section>
 
+      {specialProposal ? (
+        <section className="card special-card">
+          <span className="section-kicker">Levering & constructie</span>
+          <h2>{proposalType}</h2>
+          <div className="construct-grid">
+            <div><strong>Passeertermijn</strong><span>{value(proposal.delivery_term_text, transfer)}</span></div>
+            <div><strong>Gewenste leverdatum</strong><span>{formatDate(proposal.desired_transfer_date)}</span></div>
+            <div><strong>Koper</strong><span>{value(proposal.buyer_text, "Vastgoed Direct Nederland of nader te noemen meester")}</span></div>
+            {showBridge ? <div><strong>Huidige woning klant</strong><span>{value(proposal.bridge_current_home)}</span></div> : null}
+            {showBridge ? <div><strong>Oude woning / te verkopen woning</strong><span>{value(proposal.bridge_old_home)}</span></div> : null}
+            {showBridge ? <div><strong>Doel constructie</strong><span>{value(proposal.bridge_goal_text)}</span></div> : null}
+          </div>
+          {checks.length ? (
+            <div className="mini-checks">
+              {checks.map((item) => <div key={item}><span>✓</span>{item}</div>)}
+            </div>
+          ) : null}
+          {proposal.bridge_explanation_text ? <p className="bridge-copy">{proposal.bridge_explanation_text}</p> : null}
+        </section>
+      ) : null}
 
       <section className="proposal-assurance">
         <article>
@@ -375,6 +416,7 @@ p,.intro,li{font-size:16.5px;line-height:1.68;color:var(--muted)}
 .summary-list strong,.summary-list span{display:block}
 .summary-list strong{font-size:24px;color:var(--navy)}
 .summary-list span{color:var(--muted);margin-top:5px}
+.special-card{background:linear-gradient(135deg,#fffdf9 0,#F7F2EC 100%)}.construct-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}.construct-grid div{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px}.construct-grid strong,.construct-grid span{display:block}.construct-grid strong{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}.construct-grid span{margin-top:6px;color:var(--navy);font-weight:800;line-height:1.35}.mini-checks{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}.mini-checks div{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;font-weight:800;line-height:1.4}.mini-checks span{color:var(--orange);font-weight:900}.bridge-copy{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0 0}
 .facts{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff}
 .facts div{padding:17px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:92px}
 .facts div:nth-child(3n){border-right:0}
@@ -411,7 +453,7 @@ p,.intro,li{font-size:16.5px;line-height:1.68;color:var(--muted)}
 .contact-block strong{font-size:20px;margin-bottom:10px}
 .contact-block span{color:#d9e6f5;margin-top:6px}
 .disclaimer{background:#F7F2EC;color:#415168;line-height:1.65;font-size:14px;box-shadow:none}
-@media(max-width:900px){.cover,.executive-summary,.two-columns,.signature,.proposal-assurance{grid-template-columns:1fr}.benefits{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3n){border-right:1px solid var(--line)}.facts div:nth-child(2n){border-right:0}.comparison{grid-template-columns:1fr}.comparison .head{text-align:left}.comparison>div{border-right:0}.checks,.reservations{grid-template-columns:1fr}}
+@media(max-width:900px){.cover,.executive-summary,.two-columns,.signature,.proposal-assurance{grid-template-columns:1fr}.benefits{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3n){border-right:1px solid var(--line)}.facts div:nth-child(2n){border-right:0}.comparison{grid-template-columns:1fr}.comparison .head{text-align:left}.comparison>div{border-right:0}.checks,.reservations,.construct-grid,.mini-checks{grid-template-columns:1fr}}
 @media(max-width:640px){.proposal-page{padding:12px}.topbar{display:grid}.top-actions{justify-content:stretch}.top-actions span{display:none}.topbar img{width:215px}.topbar button{width:100%}.cover,.executive-summary,.card,.signature,.disclaimer{border-radius:24px;padding:20px}.cover h1{font-size:39px}.cover p{font-size:16px}.offer-panel strong{font-size:36px}.benefits,.facts{grid-template-columns:1fr}.facts div{border-right:0!important}.timeline-step{grid-template-columns:54px 1fr}.section-kicker{font-size:11px}h2{font-size:28px}}
 @media print{body{background:#fff}.proposal-page{max-width:none;padding:0}.topbar button,.top-actions span{display:none}.topbar img{box-shadow:none}.cover,.executive-summary,.card,.signature,.disclaimer{box-shadow:none;page-break-inside:avoid;border-radius:18px}.cover{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.offer-panel{box-shadow:none}.comparison .head,.timeline-step strong,.contact-block{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.comparison .orange{background:#D96A1C!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 `;

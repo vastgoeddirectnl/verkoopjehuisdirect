@@ -7,6 +7,19 @@ const LEGACY_STATUS_LABELS = { "Nieuw": "Nieuwe aanvraag", "Contact opgenomen": 
 function selectStatusValue(status){ const label = LEGACY_STATUS_LABELS[status] || status || "Nieuwe aanvraag"; return STATUSES.includes(label) ? label : "Nieuwe aanvraag"; }
 const TASK_STATUSES = ["Open", "In behandeling", "Afgerond"];
 
+const PROPOSAL_TYPES = [
+  "Standaard aankoop",
+  "Uitgestelde levering",
+  "Overbruggingsoplossing",
+  "ABC-doorverkoop mogelijk",
+];
+
+const SPECIAL_PROPOSAL_TYPES = ["Uitgestelde levering", "Overbruggingsoplossing", "ABC-doorverkoop mogelijk"];
+
+function isSpecialProposalType(type) {
+  return SPECIAL_PROPOSAL_TYPES.includes(type);
+}
+
 function todayPlus(days) {
   const date = new Date();
   date.setDate(date.getDate() + days);
@@ -159,6 +172,19 @@ function defaultProposalForLead(lead) {
     reservations_text: "Controle woninggegevens\nControle eigendomssituatie\nControle beschikbare documenten\nControle eventuele huur-, gebruiks- of beslaggegevens\nNotariële toetsing\nAkkoord op voorwaarden\nGeen bijzondere belemmeringen\nDefinitieve schriftelijke vastlegging",
     next_steps_text: "U beoordeelt het voorstel rustig.\nWij bespreken eventuele vragen, bijzonderheden en voorwaarden.\nIndien gewenst verzamelen wij aanvullende gegevens over de woning.\nBij akkoord worden de afspraken schriftelijk bevestigd.\nDe overdracht en betaling verlopen via de notaris.",
     contact_person: "Rob Schiphuis",
+    proposal_type: "Standaard aankoop",
+    delivery_term_text: "Uiterlijk binnen 6 maanden",
+    desired_transfer_date: "",
+    buyer_text: "Vastgoed Direct Nederland of nader te noemen meester",
+    allow_kadaster_registration: false,
+    allow_abc_resale: false,
+    seller_cooperates_resale: false,
+    delivery_free_of_claims: false,
+    property_same_state: false,
+    bridge_current_home: "",
+    bridge_old_home: "",
+    bridge_goal_text: "",
+    bridge_explanation_text: "",
     notes: "",
   };
 }
@@ -224,6 +250,37 @@ export default function LeadDetailPage({ params }) {
 
   function setProposalField(field, value) {
     setProposal((current) => ({ ...(current || {}), [field]: value }));
+  }
+
+  const specialProposalType = isSpecialProposalType(proposal?.proposal_type);
+
+  function handleProposalTypeChange(type) {
+    setProposal((current) => {
+      const base = { ...(current || {}), proposal_type: type };
+      if (!isSpecialProposalType(type)) {
+        return base;
+      }
+
+      return {
+        ...base,
+        delivery_term_text: base.delivery_term_text || "Uiterlijk binnen 6 maanden",
+        transfer_date_text: base.transfer_date_text && base.transfer_date_text !== "In overleg" ? base.transfer_date_text : "Uiterlijk binnen 6 maanden",
+        buyer_text: base.buyer_text || "Vastgoed Direct Nederland of nader te noemen meester",
+        // Juridisch relevante keuzes niet automatisch aanvinken.
+        // Alleen ABC wordt logisch gekoppeld aan het voorsteltype; overige punten moeten bewust worden aangevinkt.
+        allow_kadaster_registration: Boolean(base.allow_kadaster_registration),
+        allow_abc_resale: type === "ABC-doorverkoop mogelijk" ? true : Boolean(base.allow_abc_resale),
+        seller_cooperates_resale: Boolean(base.seller_cooperates_resale),
+        delivery_free_of_claims: Boolean(base.delivery_free_of_claims),
+        property_same_state: Boolean(base.property_same_state),
+        bridge_goal_text: type === "Overbruggingsoplossing" && !base.bridge_goal_text
+          ? "De verkoop is bedoeld om de lopende overbrugging af te lossen en de huidige woonsituatie te behouden."
+          : base.bridge_goal_text,
+        bridge_explanation_text: type === "Overbruggingsoplossing" && !base.bridge_explanation_text
+          ? "Dit voorstel geeft verkoper duidelijkheid over de verkoop van de oude woning. De definitieve afspraken worden vastgelegd in een koopovereenkomst."
+          : base.bridge_explanation_text,
+      };
+    });
   }
 
   async function createProposal() {
@@ -366,7 +423,50 @@ export default function LeadDetailPage({ params }) {
                 </div>
 
                 <div className="form-section">
-                  <h3>4. Teksten en voorwaarden</h3>
+                  <h3>4. Levering & constructie</h3>
+                  <div className="form-grid">
+                    <Field label="Type voorstel">
+                      <select value={proposal.proposal_type || "Standaard aankoop"} onChange={(e) => handleProposalTypeChange(e.target.value)}>
+                        {PROPOSAL_TYPES.map((type) => <option key={type}>{type}</option>)}
+                      </select>
+                    </Field>
+                    {specialProposalType ? (
+                      <>
+                        <Field label="Passeertermijn"><input value={proposal.delivery_term_text} onChange={(e) => setProposalField("delivery_term_text", e.target.value)} /></Field>
+                        <Field label="Gewenste leverdatum"><input type="date" value={proposal.desired_transfer_date || ""} onChange={(e) => setProposalField("desired_transfer_date", e.target.value)} /></Field>
+                        <Field label="Koper"><input value={proposal.buyer_text} onChange={(e) => setProposalField("buyer_text", e.target.value)} /></Field>
+                      </>
+                    ) : null}
+                  </div>
+                  {specialProposalType ? (
+                    <div className="checkbox-grid">
+                      <label className="checkbox-label"><input type="checkbox" checked={Boolean(proposal.allow_kadaster_registration)} onChange={(e) => setProposalField("allow_kadaster_registration", e.target.checked)} /><span>Koopovereenkomst mag worden ingeschreven bij het Kadaster</span></label>
+                      <label className="checkbox-label"><input type="checkbox" checked={Boolean(proposal.allow_abc_resale)} onChange={(e) => setProposalField("allow_abc_resale", e.target.checked)} /><span>ABC-doorverkoop mogelijk</span></label>
+                      <label className="checkbox-label"><input type="checkbox" checked={Boolean(proposal.seller_cooperates_resale)} onChange={(e) => setProposalField("seller_cooperates_resale", e.target.checked)} /><span>Verkoper werkt mee aan taxatie, bezichtiging en voorbereiding doorverkoop</span></label>
+                      <label className="checkbox-label"><input type="checkbox" checked={Boolean(proposal.delivery_free_of_claims)} onChange={(e) => setProposalField("delivery_free_of_claims", e.target.checked)} /><span>Levering vrij van huur, gebruik, beslagen en hypotheken</span></label>
+                      <label className="checkbox-label"><input type="checkbox" checked={Boolean(proposal.property_same_state)} onChange={(e) => setProposalField("property_same_state", e.target.checked)} /><span>Woning blijft tot levering in huidige staat</span></label>
+                    </div>
+                  ) : (
+                    <p className="calc-help">Kies uitgestelde levering, overbruggingsoplossing of ABC-doorverkoop om aanvullende constructievelden te tonen.</p>
+                  )}
+                </div>
+
+                {specialProposalType ? (
+                  <div className="form-section">
+                    <h3>5. Overbruggingssituatie</h3>
+                    <div className="form-grid">
+                      <Field label="Huidige woning klant"><input placeholder="Bijv. Tivoliweg 22, 4561 HL Hulst" value={proposal.bridge_current_home} onChange={(e) => setProposalField("bridge_current_home", e.target.value)} /></Field>
+                      <Field label="Oude woning / te verkopen woning"><input placeholder="Bijv. Achtereindstraat 26, 4569 AZ Graauw" value={proposal.bridge_old_home} onChange={(e) => setProposalField("bridge_old_home", e.target.value)} /></Field>
+                      <Field label="Doel van de constructie"><input value={proposal.bridge_goal_text} onChange={(e) => setProposalField("bridge_goal_text", e.target.value)} /></Field>
+                    </div>
+                    <Field label="Toelichting voor in het voorstel">
+                      <textarea value={proposal.bridge_explanation_text} onChange={(e) => setProposalField("bridge_explanation_text", e.target.value)} />
+                    </Field>
+                  </div>
+                ) : null}
+
+                <div className="form-section">
+                  <h3>6. Teksten en voorwaarden</h3>
                   <Field label="Uitgangspunten van dit voorstel">
                     <textarea value={proposal.assumptions_text} onChange={(e) => setProposalField("assumptions_text", e.target.value)} />
                   </Field>
@@ -410,5 +510,5 @@ export default function LeadDetailPage({ params }) {
 }
 
 const styles = `
-:root{--navy:#071f3a;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#D96A1C;--green:#3E8F5E;--shadow:0 22px 70px rgba(7,31,58,.12)}body{margin:0;background:radial-gradient(circle at top right,#FFF1E6,transparent 34%),var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.detail-page{max-width:1280px;margin:0 auto;padding:28px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}header a{color:var(--navy);font-weight:900;text-decoration:none}header img{width:220px;background:#fff;border-radius:18px;padding:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero span,.section-head span{color:#B85216;background:#FFF1E6;border:1px solid #F2B885;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase}.hero h1{font-size:42px;letter-spacing:-.04em;margin:12px 0 6px}.hero p,.section-head p{color:var(--muted);font-size:18px}.actions,.proposal-actions{display:flex;gap:10px;flex-wrap:wrap}.actions a,.actions button,.card button,.item a,.secondary-link{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer;display:inline-block;margin-right:8px;margin-top:8px}.actions a:first-child{background:var(--navy)}.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:18px}.grid.three{grid-template-columns:repeat(3,1fr)}h2{margin:0 0 18px;font-size:24px;letter-spacing:-.03em}h3{margin:0 0 16px;font-size:20px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}.info{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.info span,.item span,.item small,label span{display:block;color:var(--muted);font-size:13px}.info strong{display:block;margin-top:6px;word-break:break-word}label{display:grid;gap:8px;font-weight:900;margin-top:12px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}.item{border-bottom:1px solid var(--line);padding:12px 0}.item:last-child{border-bottom:0}.item strong{display:block}.item a{margin-top:8px;background:var(--navy)}.item button.small{margin-top:8px;margin-left:8px;padding:9px 12px;font-size:13px}.error,.notice-top{border-radius:16px;padding:12px 14px;margin-bottom:16px}.error{background:#F8EEE9;color:#7C2D20;border:1px solid #E8C7BC}.notice-top{background:#f0fff6;color:#075c2a;border:1px solid #bff3d0}.proposal-card{margin:18px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.section-head h2{font-size:34px;margin:12px 0 8px}.secondary-link{background:var(--navy);white-space:nowrap}.proposal-form{display:grid;gap:20px}.form-section{border:1px solid var(--line);border-radius:24px;background:#fff;padding:20px}.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.form-section textarea{min-height:96px}.calc-help{margin:-4px 0 14px;color:var(--muted);font-weight:700}.calc-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}.calc-summary div{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.calc-summary span{display:block;color:var(--muted);font-size:12px;font-weight:900}.calc-summary strong{display:block;margin-top:6px;font-size:18px}.calc-summary .positive{background:#f0fff6;border-color:#bff3d0}.calc-summary .negative{background:#fff5f1;border-color:#ffd5c4}.proposal-actions button{padding:14px 20px}.proposal-actions .ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}@media(max-width:1100px){.form-grid{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:1fr}.calc-summary{grid-template-columns:repeat(2,1fr)}}@media(max-width:900px){.grid,.hero,.section-head{grid-template-columns:1fr;display:grid}.info-grid,.form-grid,.calc-summary{grid-template-columns:1fr}.detail-page{padding:18px}}
+:root{--navy:#071f3a;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#D96A1C;--green:#3E8F5E;--shadow:0 22px 70px rgba(7,31,58,.12)}body{margin:0;background:radial-gradient(circle at top right,#FFF1E6,transparent 34%),var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.detail-page{max-width:1280px;margin:0 auto;padding:28px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}header a{color:var(--navy);font-weight:900;text-decoration:none}header img{width:220px;background:#fff;border-radius:18px;padding:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero span,.section-head span{color:#B85216;background:#FFF1E6;border:1px solid #F2B885;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase}.hero h1{font-size:42px;letter-spacing:-.04em;margin:12px 0 6px}.hero p,.section-head p{color:var(--muted);font-size:18px}.actions,.proposal-actions{display:flex;gap:10px;flex-wrap:wrap}.actions a,.actions button,.card button,.item a,.secondary-link{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer;display:inline-block;margin-right:8px;margin-top:8px}.actions a:first-child{background:var(--navy)}.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:18px}.grid.three{grid-template-columns:repeat(3,1fr)}h2{margin:0 0 18px;font-size:24px;letter-spacing:-.03em}h3{margin:0 0 16px;font-size:20px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}.info{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.info span,.item span,.item small,label span{display:block;color:var(--muted);font-size:13px}.info strong{display:block;margin-top:6px;word-break:break-word}label{display:grid;gap:8px;font-weight:900;margin-top:12px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}.item{border-bottom:1px solid var(--line);padding:12px 0}.item:last-child{border-bottom:0}.item strong{display:block}.item a{margin-top:8px;background:var(--navy)}.item button.small{margin-top:8px;margin-left:8px;padding:9px 12px;font-size:13px}.error,.notice-top{border-radius:16px;padding:12px 14px;margin-bottom:16px}.error{background:#F8EEE9;color:#7C2D20;border:1px solid #E8C7BC}.notice-top{background:#f0fff6;color:#075c2a;border:1px solid #bff3d0}.proposal-card{margin:18px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.section-head h2{font-size:34px;margin:12px 0 8px}.secondary-link{background:var(--navy);white-space:nowrap}.proposal-form{display:grid;gap:20px}.form-section{border:1px solid var(--line);border-radius:24px;background:#fff;padding:20px}.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.form-section textarea{min-height:96px}.calc-help{margin:14px 0 0;color:var(--muted);font-weight:700}.checkbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.checkbox-label{display:flex;align-items:flex-start;gap:10px;margin:0;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:13px 14px;font-weight:900}.checkbox-label input{width:auto;margin-top:2px;accent-color:var(--orange)}.checkbox-label span{display:block;color:var(--navy);font-size:13px;line-height:1.35}.calc-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}.calc-summary div{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.calc-summary span{display:block;color:var(--muted);font-size:12px;font-weight:900}.calc-summary strong{display:block;margin-top:6px;font-size:18px}.calc-summary .positive{background:#f0fff6;border-color:#bff3d0}.calc-summary .negative{background:#fff5f1;border-color:#ffd5c4}.proposal-actions button{padding:14px 20px}.proposal-actions .ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}@media(max-width:1100px){.form-grid{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:1fr}.calc-summary{grid-template-columns:repeat(2,1fr)}.checkbox-grid{grid-template-columns:1fr}}@media(max-width:900px){.grid,.hero,.section-head{grid-template-columns:1fr;display:grid}.info-grid,.form-grid,.calc-summary{grid-template-columns:1fr}.detail-page{padding:18px}}
 `;
