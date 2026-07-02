@@ -27,6 +27,14 @@ function value(value, fallback = "-") {
   return String(value || "").trim() || fallback;
 }
 
+function areaValue(value, fallback = "Nog te controleren") {
+  const raw = String(value || "").trim();
+  if (!raw) return fallback;
+  if (/m²|m2|㎡/i.test(raw)) return raw.replace(/m2/i, "m²");
+  if (/^\d+(?:[,.]\d+)?$/.test(raw)) return `${raw} m²`;
+  return raw;
+}
+
 function lines(value, fallback = []) {
   const raw = String(value || "").trim();
   if (!raw) return fallback;
@@ -47,6 +55,22 @@ function firstName(name) {
   return raw.split(" ")[0];
 }
 
+const SPECIAL_PROPOSAL_TYPES = ["Uitgestelde levering", "Overbruggingsoplossing", "ABC-doorverkoop mogelijk"];
+
+function isSpecialProposalType(type) {
+  return SPECIAL_PROPOSAL_TYPES.includes(String(type || "").trim());
+}
+
+function constructieChecks(proposal) {
+  const checks = [];
+  if (proposal.allow_kadaster_registration) checks.push("Koopovereenkomst mag worden ingeschreven bij het Kadaster");
+  if (proposal.allow_abc_resale) checks.push("ABC-doorverkoop mogelijk");
+  if (proposal.seller_cooperates_resale) checks.push("Verkoper werkt mee aan taxatie, bezichtiging en voorbereiding doorverkoop");
+  if (proposal.delivery_free_of_claims) checks.push("Levering vrij van huur, gebruik, beslagen en hypotheken");
+  if (proposal.property_same_state) checks.push("Woning blijft tot levering in huidige staat");
+  return checks;
+}
+
 export default async function PublicProposalPage({ params, searchParams }) {
   const { token } = await params;
   const query = searchParams ? await searchParams : {};
@@ -63,7 +87,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
   const offerAmount = amount(proposal.amount_text);
   const validity = formatDate(proposal.validity_date);
   const transfer = value(proposal.transfer_date_text, "In overleg");
-  const deposit = value(proposal.deposit_text, "In overleg bespreekbaar");
+  const deposit = amount(proposal.deposit_text, "In overleg bespreekbaar");
 
   const assumptions = value(
     proposal.assumptions_text,
@@ -98,6 +122,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
     "Als het voorstel passend is, leggen wij de afspraken helder vast.",
     "De juridische en notariële afwikkeling wordt opgestart.",
     "De overdracht vindt plaats op de afgesproken datum via de notaris.",
+    "Bij akkoord werken wij de afspraken uit in een koopovereenkomst. De definitieve overdracht en betaling verlopen via de notaris.",
   ]);
 
   const shortComparison = lines(proposal.short_comparison_text, [
@@ -106,6 +131,24 @@ export default async function PublicProposalPage({ params, searchParams }) {
     "Meer duidelijkheid over voorwaarden, planning en afwikkeling.",
     "Een verkooproute die vooral gericht is op rust, snelheid en overzicht.",
   ]);
+
+  const proposalType = value(proposal.proposal_type, proposal.proposal_variant || "Standaard aankoop");
+  const specialProposal = isSpecialProposalType(proposalType);
+  const checks = constructieChecks(proposal);
+  const hasDeliveryData = Boolean(
+    proposal.delivery_term_text ||
+    proposal.desired_transfer_date ||
+    proposal.buyer_text ||
+    checks.length
+  );
+  const hasBridgeData = Boolean(
+    proposal.bridge_current_home ||
+    proposal.bridge_old_home ||
+    proposal.bridge_goal_text ||
+    proposal.bridge_explanation_text
+  );
+  const showDeliveryConstructie = specialProposal || hasDeliveryData;
+  const showBridge = proposalType === "Overbruggingsoplossing" || hasBridgeData;
 
   return (
     <main className="proposal-page">
@@ -122,11 +165,11 @@ export default async function PublicProposalPage({ params, searchParams }) {
       <section className="cover">
         <div className="cover-copy">
           <span className="label">Vrijblijvend & persoonlijk</span>
-          <h1>Uw persoonlijke verkoopvoorstel</h1>
+          <h1>Verkoopvoorstel voor uw woning</h1>
           <p>
             Beste {firstName(proposal.lead_naam)}, op basis van de beschikbare informatie hebben wij
-            een persoonlijk verkoopvoorstel voor u uitgewerkt. U kunt het voorstel rustig bekijken,
-            de uitgangspunten controleren en eventuele vragen met ons bespreken voordat u een keuze maakt.
+            een concreet en overzichtelijk voorstel uitgewerkt. Het doel: duidelijkheid over bedrag,
+            voorwaarden en vervolgstappen zonder onnodige verkoopdruk.
           </p>
         </div>
 
@@ -164,6 +207,35 @@ export default async function PublicProposalPage({ params, searchParams }) {
         </div>
       </section>
 
+      {showDeliveryConstructie ? (
+        <section className="card special-card">
+          <span className="section-kicker">Levering & constructie</span>
+          <h2>{proposalType}</h2>
+          <div className="construct-grid">
+            <div><strong>Passeertermijn</strong><span>{value(proposal.delivery_term_text, transfer)}</span></div>
+            <div><strong>Gewenste leverdatum</strong><span>{formatDate(proposal.desired_transfer_date)}</span></div>
+            <div><strong>Koper</strong><span>{value(proposal.buyer_text, "Vastgoed Direct Nederland of nader te noemen meester")}</span></div>
+          </div>
+          {checks.length ? (
+            <div className="mini-checks">
+              {checks.map((item) => <div key={item}><span>✓</span>{item}</div>)}
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
+      {showBridge ? (
+        <section className="card special-card">
+          <span className="section-kicker">Overbruggingssituatie</span>
+          <h2>Verkooproute met overbrugging</h2>
+          <div className="construct-grid">
+            <div><strong>Huidige woning klant</strong><span>{value(proposal.bridge_current_home, "In overleg / niet ingevuld")}</span></div>
+            <div><strong>Oude woning / te verkopen woning</strong><span>{value(proposal.bridge_old_home, "In overleg / niet ingevuld")}</span></div>
+            <div><strong>Doel constructie</strong><span>{value(proposal.bridge_goal_text, "Duidelijkheid over verkoop, planning en aflossing van de overbruggingssituatie.")}</span></div>
+          </div>
+          {proposal.bridge_explanation_text ? <p className="bridge-copy">{proposal.bridge_explanation_text}</p> : null}
+        </section>
+      ) : null}
 
       <section className="proposal-assurance">
         <article>
@@ -180,39 +252,14 @@ export default async function PublicProposalPage({ params, searchParams }) {
         </article>
       </section>
 
-      <section className="decision-guide card soft-card">
-        <div>
-          <span className="section-kicker">Beoordelen</span>
-          <h2>Waar u vooral op kunt letten</h2>
-          <p>
-            Een verkoopvoorstel bestaat uit meer dan alleen het bedrag. Kijk ook naar de netto-opbrengst,
-            de gewenste planning, de voorwaarden en de mate waarin u zelf nog voorbereidingen moet treffen.
-          </p>
-        </div>
-        <div className="decision-points">
-          <article>
-            <strong>Netto-opbrengst</strong>
-            <span>Welke kosten, voorbereiding en onzekerheden blijven over?</span>
-          </article>
-          <article>
-            <strong>Planning</strong>
-            <span>Past de overdracht bij uw gewenste termijn en situatie?</span>
-          </article>
-          <article>
-            <strong>Voorwaarden</strong>
-            <span>Zijn de uitgangspunten duidelijk en praktisch haalbaar?</span>
-          </article>
-        </div>
-      </section>
-
       <section className="card">
         <span className="section-kicker">Woninggegevens</span>
         <h2>Uitgangspunt woning</h2>
         <div className="facts">
           <div><strong>Adres / object</strong><span>{address}</span></div>
           <div><strong>Type woning</strong><span>{value(proposal.property_type, "Nog te controleren")}</span></div>
-          <div><strong>Woonoppervlakte</strong><span>{value(proposal.living_area_text, "Nog te controleren")}</span></div>
-          <div><strong>Perceel</strong><span>{value(proposal.plot_area_text, "Nog te controleren")}</span></div>
+          <div><strong>Woonoppervlakte</strong><span>{areaValue(proposal.living_area_text)}</span></div>
+          <div><strong>Perceel</strong><span>{areaValue(proposal.plot_area_text)}</span></div>
           <div><strong>Bouwjaar</strong><span>{value(proposal.build_year_text, "Nog te controleren")}</span></div>
           <div><strong>Huidige situatie</strong><span>{value(proposal.current_situation, "Op basis van uw aanvraag te beoordelen")}</span></div>
         </div>
@@ -247,9 +294,6 @@ export default async function PublicProposalPage({ params, searchParams }) {
         <p className="intro">
           Bij een woningverkoop gaat het niet alleen om de verkoopprijs, maar ook om kosten, voorbereiding,
           doorlooptijd en zekerheid. Onderstaand overzicht helpt om het voorstel naast een regulier traject te leggen.
-        </p>
-        <p className="note-line">
-          Bedragen en kostenposten zijn bedoeld als vergelijking op hoofdlijnen en worden bij akkoord definitief gecontroleerd.
         </p>
         <div className="comparison">
           <div className="head">Onderdeel</div>
@@ -330,7 +374,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
           <h2>Voorstel bespreken?</h2>
           <p>
             Wij lichten het voorstel graag toe en kunnen samen bekijken of deze verkooproute aansluit
-            bij uw situatie, planning en gewenste mate van zekerheid.
+            bij uw situatie en planning.
           </p>
         </div>
         <div className="contact-block">
@@ -389,15 +433,6 @@ body{margin:0;background:radial-gradient(circle at 82% 0,#FFF1E6 0,transparent 3
 .proposal-assurance strong,.proposal-assurance span{display:block}
 .proposal-assurance strong{font-size:17px;color:var(--navy);margin-bottom:8px}
 .proposal-assurance span{font-size:14.5px;line-height:1.5;color:var(--muted)}
-.soft-card{background:linear-gradient(135deg,#fffdf9 0,#F7F2EC 100%)}
-.decision-guide{display:grid;grid-template-columns:1.02fr .98fr;gap:22px;align-items:center}
-.decision-guide h2{margin-bottom:10px}
-.decision-points{display:grid;gap:10px}
-.decision-points article{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px 16px}
-.decision-points strong,.decision-points span{display:block}
-.decision-points strong{color:var(--navy);font-size:16px;margin-bottom:5px}
-.decision-points span{color:var(--muted);font-size:14.5px;line-height:1.45}
-.note-line{background:#fff7ef;border:1px solid #f2c19b;color:#8b491b;border-radius:16px;padding:12px 14px;font-size:14.5px;margin:12px 0 0}
 .contact-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .contact-actions a{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--orange);color:#fff;text-decoration:none;font-weight:900;padding:11px 14px;font-size:14px}
 .contact-actions a:nth-child(2){background:#fff;color:var(--navy);border:1px solid rgba(255,255,255,.25)}
@@ -412,6 +447,7 @@ p,.intro,li{font-size:16.5px;line-height:1.68;color:var(--muted)}
 .summary-list strong,.summary-list span{display:block}
 .summary-list strong{font-size:24px;color:var(--navy)}
 .summary-list span{color:var(--muted);margin-top:5px}
+.special-card{background:linear-gradient(135deg,#fffdf9 0,#F7F2EC 100%)}.construct-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}.construct-grid div{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px}.construct-grid strong,.construct-grid span{display:block}.construct-grid strong{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}.construct-grid span{margin-top:6px;color:var(--navy);font-weight:800;line-height:1.35}.mini-checks{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}.mini-checks div{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;font-weight:800;line-height:1.4}.mini-checks span{color:var(--orange);font-weight:900}.bridge-copy{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0 0}
 .facts{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff}
 .facts div{padding:17px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:92px}
 .facts div:nth-child(3n){border-right:0}
@@ -448,7 +484,7 @@ p,.intro,li{font-size:16.5px;line-height:1.68;color:var(--muted)}
 .contact-block strong{font-size:20px;margin-bottom:10px}
 .contact-block span{color:#d9e6f5;margin-top:6px}
 .disclaimer{background:#F7F2EC;color:#415168;line-height:1.65;font-size:14px;box-shadow:none}
-@media(max-width:900px){.cover,.executive-summary,.two-columns,.signature,.proposal-assurance,.decision-guide{grid-template-columns:1fr}.benefits{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3n){border-right:1px solid var(--line)}.facts div:nth-child(2n){border-right:0}.comparison{grid-template-columns:1fr}.comparison .head{text-align:left}.comparison>div{border-right:0}.checks,.reservations{grid-template-columns:1fr}}
+@media(max-width:900px){.cover,.executive-summary,.two-columns,.signature,.proposal-assurance{grid-template-columns:1fr}.benefits{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3n){border-right:1px solid var(--line)}.facts div:nth-child(2n){border-right:0}.comparison{grid-template-columns:1fr}.comparison .head{text-align:left}.comparison>div{border-right:0}.checks,.reservations,.construct-grid,.mini-checks{grid-template-columns:1fr}}
 @media(max-width:640px){.proposal-page{padding:12px}.topbar{display:grid}.top-actions{justify-content:stretch}.top-actions span{display:none}.topbar img{width:215px}.topbar button{width:100%}.cover,.executive-summary,.card,.signature,.disclaimer{border-radius:24px;padding:20px}.cover h1{font-size:39px}.cover p{font-size:16px}.offer-panel strong{font-size:36px}.benefits,.facts{grid-template-columns:1fr}.facts div{border-right:0!important}.timeline-step{grid-template-columns:54px 1fr}.section-kicker{font-size:11px}h2{font-size:28px}}
 @media print{body{background:#fff}.proposal-page{max-width:none;padding:0}.topbar button,.top-actions span{display:none}.topbar img{box-shadow:none}.cover,.executive-summary,.card,.signature,.disclaimer{box-shadow:none;page-break-inside:avoid;border-radius:18px}.cover{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.offer-panel{box-shadow:none}.comparison .head,.timeline-step strong,.contact-block{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.comparison .orange{background:#D96A1C!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 `;
