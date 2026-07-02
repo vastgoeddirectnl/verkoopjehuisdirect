@@ -27,6 +27,14 @@ function value(value, fallback = "-") {
   return String(value || "").trim() || fallback;
 }
 
+function areaValue(value, fallback = "Nog te controleren") {
+  const raw = String(value || "").trim();
+  if (!raw) return fallback;
+  if (/m²|m2|㎡/i.test(raw)) return raw.replace(/m2/i, "m²");
+  if (/^\d+(?:[,.]\d+)?$/.test(raw)) return `${raw} m²`;
+  return raw;
+}
+
 function lines(value, fallback = []) {
   const raw = String(value || "").trim();
   if (!raw) return fallback;
@@ -79,7 +87,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
   const offerAmount = amount(proposal.amount_text);
   const validity = formatDate(proposal.validity_date);
   const transfer = value(proposal.transfer_date_text, "In overleg");
-  const deposit = value(proposal.deposit_text, "In overleg bespreekbaar");
+  const deposit = amount(proposal.deposit_text, "In overleg bespreekbaar");
 
   const assumptions = value(
     proposal.assumptions_text,
@@ -114,6 +122,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
     "Als het voorstel passend is, leggen wij de afspraken helder vast.",
     "De juridische en notariële afwikkeling wordt opgestart.",
     "De overdracht vindt plaats op de afgesproken datum via de notaris.",
+    "Bij akkoord werken wij de afspraken uit in een koopovereenkomst. De definitieve overdracht en betaling verlopen via de notaris.",
   ]);
 
   const shortComparison = lines(proposal.short_comparison_text, [
@@ -126,7 +135,20 @@ export default async function PublicProposalPage({ params, searchParams }) {
   const proposalType = value(proposal.proposal_type, proposal.proposal_variant || "Standaard aankoop");
   const specialProposal = isSpecialProposalType(proposalType);
   const checks = constructieChecks(proposal);
-  const showBridge = specialProposal && (proposal.bridge_current_home || proposal.bridge_old_home || proposal.bridge_goal_text || proposal.bridge_explanation_text);
+  const hasDeliveryData = Boolean(
+    proposal.delivery_term_text ||
+    proposal.desired_transfer_date ||
+    proposal.buyer_text ||
+    checks.length
+  );
+  const hasBridgeData = Boolean(
+    proposal.bridge_current_home ||
+    proposal.bridge_old_home ||
+    proposal.bridge_goal_text ||
+    proposal.bridge_explanation_text
+  );
+  const showDeliveryConstructie = specialProposal || hasDeliveryData;
+  const showBridge = proposalType === "Overbruggingsoplossing" || hasBridgeData;
 
   return (
     <main className="proposal-page">
@@ -185,7 +207,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
         </div>
       </section>
 
-      {specialProposal ? (
+      {showDeliveryConstructie ? (
         <section className="card special-card">
           <span className="section-kicker">Levering & constructie</span>
           <h2>{proposalType}</h2>
@@ -193,15 +215,24 @@ export default async function PublicProposalPage({ params, searchParams }) {
             <div><strong>Passeertermijn</strong><span>{value(proposal.delivery_term_text, transfer)}</span></div>
             <div><strong>Gewenste leverdatum</strong><span>{formatDate(proposal.desired_transfer_date)}</span></div>
             <div><strong>Koper</strong><span>{value(proposal.buyer_text, "Vastgoed Direct Nederland of nader te noemen meester")}</span></div>
-            {showBridge ? <div><strong>Huidige woning klant</strong><span>{value(proposal.bridge_current_home)}</span></div> : null}
-            {showBridge ? <div><strong>Oude woning / te verkopen woning</strong><span>{value(proposal.bridge_old_home)}</span></div> : null}
-            {showBridge ? <div><strong>Doel constructie</strong><span>{value(proposal.bridge_goal_text)}</span></div> : null}
           </div>
           {checks.length ? (
             <div className="mini-checks">
               {checks.map((item) => <div key={item}><span>✓</span>{item}</div>)}
             </div>
           ) : null}
+        </section>
+      ) : null}
+
+      {showBridge ? (
+        <section className="card special-card">
+          <span className="section-kicker">Overbruggingssituatie</span>
+          <h2>Verkooproute met overbrugging</h2>
+          <div className="construct-grid">
+            <div><strong>Huidige woning klant</strong><span>{value(proposal.bridge_current_home, "In overleg / niet ingevuld")}</span></div>
+            <div><strong>Oude woning / te verkopen woning</strong><span>{value(proposal.bridge_old_home, "In overleg / niet ingevuld")}</span></div>
+            <div><strong>Doel constructie</strong><span>{value(proposal.bridge_goal_text, "Duidelijkheid over verkoop, planning en aflossing van de overbruggingssituatie.")}</span></div>
+          </div>
           {proposal.bridge_explanation_text ? <p className="bridge-copy">{proposal.bridge_explanation_text}</p> : null}
         </section>
       ) : null}
@@ -227,8 +258,8 @@ export default async function PublicProposalPage({ params, searchParams }) {
         <div className="facts">
           <div><strong>Adres / object</strong><span>{address}</span></div>
           <div><strong>Type woning</strong><span>{value(proposal.property_type, "Nog te controleren")}</span></div>
-          <div><strong>Woonoppervlakte</strong><span>{value(proposal.living_area_text, "Nog te controleren")}</span></div>
-          <div><strong>Perceel</strong><span>{value(proposal.plot_area_text, "Nog te controleren")}</span></div>
+          <div><strong>Woonoppervlakte</strong><span>{areaValue(proposal.living_area_text)}</span></div>
+          <div><strong>Perceel</strong><span>{areaValue(proposal.plot_area_text)}</span></div>
           <div><strong>Bouwjaar</strong><span>{value(proposal.build_year_text, "Nog te controleren")}</span></div>
           <div><strong>Huidige situatie</strong><span>{value(proposal.current_situation, "Op basis van uw aanvraag te beoordelen")}</span></div>
         </div>

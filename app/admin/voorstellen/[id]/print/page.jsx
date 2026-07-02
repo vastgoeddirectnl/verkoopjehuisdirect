@@ -20,24 +20,34 @@ function formatPostal(value) {
 function amount(value, fallback = "In overleg") {
   const raw = String(value || "").trim();
   if (!raw) return fallback;
+  if (raw.includes("€")) return raw;
 
   const cleaned = raw.replace(/\s/g, "");
   const numberLike = cleaned.replace(/[^\d]/g, "");
 
-  if (numberLike && /^[€]?\d+$/.test(cleaned.replace(/\./g, ""))) {
+  if (!numberLike) return raw;
+
+  if (/^\d+$/.test(cleaned.replace(/\./g, "").replace(/,/g, ""))) {
     const formatted = new Intl.NumberFormat("nl-NL", {
       maximumFractionDigits: 0,
     }).format(Number(numberLike));
     return `€ ${formatted}`;
   }
 
-  if (raw.includes("€")) return raw;
-  return `€ ${raw}`;
+  return raw;
 }
 
 function value(value, fallback = "-") {
   const raw = String(value || "").trim();
   return raw || fallback;
+}
+
+function areaValue(value, fallback = "-") {
+  const raw = String(value || "").trim();
+  if (!raw) return fallback;
+  if (/m²|m2|㎡/i.test(raw)) return raw.replace(/m2/i, "m²");
+  if (/^\d+(?:[,.]\d+)?$/.test(raw)) return `${raw} m²`;
+  return raw;
 }
 
 function lines(value, fallback = []) {
@@ -53,6 +63,12 @@ function formatAddress(proposal) {
   if (proposal.property_address) return formatPostal(proposal.property_address);
   const parts = [proposal.property_postcode, proposal.property_house_number].filter(Boolean);
   return formatPostal(parts.join(" ")) || "-";
+}
+
+function proposalNumber(proposal) {
+  const raw = String(proposal?.id || proposal?.public_token || "").replace(/[^a-zA-Z0-9]/g, "").slice(0, 8).toUpperCase();
+  const year = proposal?.created_at ? new Date(proposal.created_at).getFullYear() : new Date().getFullYear();
+  return raw ? `VDN-${year}-${raw}` : `VDN-${year}`;
 }
 
 const SPECIAL_PROPOSAL_TYPES = ["Uitgestelde levering", "Overbruggingsoplossing", "ABC-doorverkoop mogelijk"];
@@ -105,17 +121,34 @@ export default async function ProposalPrintPage({ params }) {
     "Wij bespreken vragen, bijzonderheden en eventuele voorwaarden.",
     "Bij akkoord worden afspraken juridisch en notarieel vastgelegd.",
     "De overdracht vindt plaats via de notaris.",
+    "Bij akkoord werken wij de afspraken uit in een koopovereenkomst; de definitieve overdracht en betaling verlopen via de notaris.",
   ]);
 
   const proposalType = value(proposal.proposal_type, proposal.proposal_variant || "Standaard aankoop");
   const specialProposal = isSpecialProposalType(proposalType);
   const checks = constructieChecks(proposal);
-  const showBridge = specialProposal && (proposal.bridge_current_home || proposal.bridge_old_home || proposal.bridge_goal_text || proposal.bridge_explanation_text);
-  const netSectionNumber = specialProposal ? "5" : "4";
-  const comparisonSectionNumber = specialProposal ? "6" : "5";
-  const reservationsSectionNumber = specialProposal ? "7" : "6";
-  const nextStepsSectionNumber = specialProposal ? "8" : "7";
-  const contactSectionNumber = specialProposal ? "9" : "8";
+  const hasDeliveryData = Boolean(
+    proposal.delivery_term_text ||
+    proposal.desired_transfer_date ||
+    proposal.buyer_text ||
+    checks.length
+  );
+  const hasBridgeData = Boolean(
+    proposal.bridge_current_home ||
+    proposal.bridge_old_home ||
+    proposal.bridge_goal_text ||
+    proposal.bridge_explanation_text
+  );
+  const showDeliveryConstructie = specialProposal || hasDeliveryData;
+  const showBridge = proposalType === "Overbruggingsoplossing" || hasBridgeData;
+  const deliverySectionNumber = showDeliveryConstructie ? 4 : null;
+  const bridgeSectionNumber = showBridge ? (showDeliveryConstructie ? 5 : 4) : null;
+  const offset = (showDeliveryConstructie ? 1 : 0) + (showBridge ? 1 : 0);
+  const netSectionNumber = String(4 + offset);
+  const comparisonSectionNumber = String(5 + offset);
+  const reservationsSectionNumber = String(6 + offset);
+  const nextStepsSectionNumber = String(7 + offset);
+  const contactSectionNumber = String(8 + offset);
 
   return (
     <main className="print-root">
@@ -151,7 +184,8 @@ export default async function ProposalPrintPage({ params }) {
         <header className="doc-header">
           <img src="/logo.png" alt="Vastgoed Direct Nederland" />
           <div>
-            <strong>Vrijblijvend voorstel</strong>
+            <strong>{value(proposal.status, "Concept")} voorstel</strong>
+            <span>Voorstelnummer: {proposalNumber(proposal)}</span>
             <span>Datum: {formatDate(proposal.created_at)}</span>
             <span>Geldig tot: {formatDate(proposal.validity_date)}</span>
           </div>
@@ -176,7 +210,7 @@ export default async function ProposalPrintPage({ params }) {
             <div className="facts">
               <div><span>Overdrachtsdatum / oplevering</span><strong>{value(proposal.transfer_date_text, "In overleg")}</strong></div>
               <div><span>Geldigheid voorstel</span><strong>{formatDate(proposal.validity_date)}</strong></div>
-              <div><span>Aanbetaling / voorschot</span><strong>{value(proposal.deposit_text, "In overleg bespreekbaar")}</strong></div>
+              <div><span>Aanbetaling / voorschot</span><strong>{amount(proposal.deposit_text, "In overleg bespreekbaar")}</strong></div>
             </div>
           </div>
         </section>
@@ -187,8 +221,8 @@ export default async function ProposalPrintPage({ params }) {
             <div><strong>Adres / woning</strong><span>{formatAddress(proposal)}</span></div>
             <div><strong>Postcode / huisnummer</strong><span>{value([formatPostal(proposal.property_postcode), proposal.property_house_number].filter(Boolean).join(" "))}</span></div>
             <div><strong>Type woning</strong><span>{value(proposal.property_type)}</span></div>
-            <div><strong>Woonoppervlakte</strong><span>{value(proposal.living_area_text)}</span></div>
-            <div><strong>Perceeloppervlakte</strong><span>{value(proposal.plot_area_text)}</span></div>
+            <div><strong>Woonoppervlakte</strong><span>{areaValue(proposal.living_area_text)}</span></div>
+            <div><strong>Perceeloppervlakte</strong><span>{areaValue(proposal.plot_area_text)}</span></div>
             <div><strong>Bouwjaar</strong><span>{value(proposal.build_year_text)}</span></div>
             <div className="wide"><strong>Huidige situatie</strong><span>{value(proposal.current_situation)}</span></div>
           </div>
@@ -201,23 +235,31 @@ export default async function ProposalPrintPage({ params }) {
           </div>
         </section>
 
-        {specialProposal ? (
+        {showDeliveryConstructie ? (
           <section className="section">
-            <div className="section-title navy"><span>4</span><strong>Levering & constructie</strong></div>
+            <div className="section-title navy"><span>{deliverySectionNumber}</span><strong>Levering & constructie</strong></div>
             <div className="table two">
               <div><strong>Type voorstel</strong><span>{proposalType}</span></div>
               <div><strong>Passeertermijn</strong><span>{value(proposal.delivery_term_text, value(proposal.transfer_date_text, "In overleg"))}</span></div>
               <div><strong>Gewenste leverdatum</strong><span>{formatDate(proposal.desired_transfer_date)}</span></div>
               <div><strong>Koper</strong><span>{value(proposal.buyer_text, "Vastgoed Direct Nederland of nader te noemen meester")}</span></div>
-              {showBridge ? <div className="wide"><strong>Huidige woning klant</strong><span>{value(proposal.bridge_current_home)}</span></div> : null}
-              {showBridge ? <div className="wide"><strong>Oude woning / te verkopen woning</strong><span>{value(proposal.bridge_old_home)}</span></div> : null}
-              {showBridge ? <div className="wide"><strong>Doel van de constructie</strong><span>{value(proposal.bridge_goal_text)}</span></div> : null}
             </div>
             {checks.length ? (
               <div className="checks compact-checks">
                 {checks.map((item) => <div key={item}>✓ {item}</div>)}
               </div>
             ) : null}
+          </section>
+        ) : null}
+
+        {showBridge ? (
+          <section className="section">
+            <div className="section-title navy"><span>{bridgeSectionNumber}</span><strong>Overbruggingssituatie</strong></div>
+            <div className="table two">
+              <div className="wide"><strong>Huidige woning klant</strong><span>{value(proposal.bridge_current_home, "In overleg / niet ingevuld")}</span></div>
+              <div className="wide"><strong>Oude woning / te verkopen woning</strong><span>{value(proposal.bridge_old_home, "In overleg / niet ingevuld")}</span></div>
+              <div className="wide"><strong>Doel van de constructie</strong><span>{value(proposal.bridge_goal_text, "Duidelijkheid over verkoop, planning en aflossing van de overbruggingssituatie.")}</span></div>
+            </div>
             {proposal.bridge_explanation_text ? <p className="notice"><strong>Toelichting:</strong> {proposal.bridge_explanation_text}</p> : null}
           </section>
         ) : null}
