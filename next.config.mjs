@@ -6,6 +6,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/huis-verkopen-zonder-bezichtigingen-uitleg",
+        destination: "/huis-verkopen-zonder-bezichtigingen",
+        permanent: true,
+      },
+      {
         source: "/:path*",
         has: [{ type: "host", value: "verkoopjehuisdirect.nl" }],
         destination: "https://www.vastgoeddirectnederland.nl/:path*",

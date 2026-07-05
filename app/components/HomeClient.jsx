@@ -144,7 +144,7 @@ const answerMenuLinks = [
   ["/woning-verkopen-die-nog-vol-staat", "Woning die nog vol staat"],
   ["/opknapwoning-verkopen", "Opknapwoning verkopen"],
   ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen"],
-  ["/huis-verkopen-zonder-bezichtigingen-uitleg", "Huis verkopen zonder bezichtigingen"],
+  ["/huis-verkopen-zonder-bezichtigingen", "Huis verkopen zonder bezichtigingen"],
 ];
 
 const faqItems = [

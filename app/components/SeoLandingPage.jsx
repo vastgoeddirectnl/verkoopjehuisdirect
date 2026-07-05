@@ -13,7 +13,6 @@ const internalLinks = [
   ["/opknapwoning-verkopen-zonder-makelaar", "Opknapwoning verkopen zonder makelaar"],
   ["/leegstaand-huis-verkopen-wat-zijn-de-opties", "Leegstaand huis verkopen: opties"],
   ["/huis-verkopen-bij-dubbele-lasten", "Huis verkopen bij dubbele lasten"],
-  ["/huis-verkopen-zonder-bezichtigingen-uitleg", "Huis verkopen zonder bezichtigingen"],
   ["/huis-verkopen-bij-erfenis", "Huis verkopen bij erfenis"],
   ["/verhuurde-woning-verkopen", "Verhuurde woning verkopen"],
   ["/huis-verkopen-met-achterstallig-onderhoud", "Huis verkopen met achterstallig onderhoud"],

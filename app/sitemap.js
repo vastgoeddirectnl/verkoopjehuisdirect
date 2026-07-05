@@ -37,7 +37,6 @@ const pages = [
   { path: "/geerfde-woning-verkopen-zonder-leeghalen", priority: 0.8, changeFrequency: "monthly" },
   { path: "/opknapwoning-verkopen-zonder-makelaar", priority: 0.8, changeFrequency: "monthly" },
   { path: "/leegstaand-huis-verkopen-wat-zijn-de-opties", priority: 0.8, changeFrequency: "monthly" },
-  { path: "/huis-verkopen-zonder-bezichtigingen-uitleg", priority: 0.8, changeFrequency: "monthly" },
 
   // Regiopagina's
   { path: "/huis-verkopen-groningen", priority: 0.75, changeFrequency: "monthly" },

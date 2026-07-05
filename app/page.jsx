@@ -1,14 +1,14 @@
 import HomeClient from "./components/HomeClient";
 
 export const metadata = {
-  title: "Vastgoed Direct Nederland | Huis snel verkopen zonder makelaar",
+  title: "Huis snel verkopen zonder makelaar | VDN",
   description:
     "Wilt u uw woning snel verkopen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl",
   },
   openGraph: {
-    title: "Vastgoed Direct Nederland | Huis snel verkopen zonder makelaar",
+    title: "Huis snel verkopen zonder makelaar | VDN",
     description:
       "Vraag vrijblijvend een helder verkoopvoorstel aan. Geen makelaarskosten, geen open huis nodig en notariële afwikkeling.",
     url: "https://www.vastgoeddirectnederland.nl",
@@ -18,7 +18,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vastgoed Direct Nederland | Huis snel verkopen zonder makelaar",
+    title: "Huis snel verkopen zonder makelaar | VDN",
     description:
       "Vraag vrijblijvend een helder verkoopvoorstel aan. Geen makelaarskosten, geen open huis nodig en notariële afwikkeling.",
   },
