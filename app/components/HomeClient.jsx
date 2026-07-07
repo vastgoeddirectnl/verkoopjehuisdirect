@@ -130,6 +130,7 @@ const trustQuotes = [
 ];
 
 const routeCards = [
+  ["/huis-verkopen-in-huidige-staat", "Huis verkopen in huidige staat", "Verkoop zoals het is, zonder eerst verkoopklaar maken.", "Bekijk mogelijkheden"],
   ["/huis-verkopen-zonder-opknappen", "Niet eerst opknappen", "Ook bij onderhoud of schade kunt u vrijblijvend laten bekijken wat mogelijk is.", "Bekijk mogelijkheden"],
   ["/huis-verkopen-zonder-leeghalen", "Niet eerst leeghalen", "De woning hoeft niet altijd eerst leeggehaald te worden.", "Lees meer"],
   ["/woning-verkopen-die-nog-vol-staat", "Woning staat nog vol spullen", "Ook bij inboedel of achtergebleven spullen kijken wij met u mee.", "Meer hierover"],
@@ -140,6 +141,7 @@ const routeCards = [
 
 const answerMenuLinks = [
   ["/huis-verkopen-zonder-leeghalen", "Huis verkopen zonder leeghalen"],
+  ["/huis-verkopen-in-huidige-staat", "Huis verkopen in huidige staat"],
   ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen"],
   ["/woning-verkopen-die-nog-vol-staat", "Woning die nog vol staat"],
   ["/opknapwoning-verkopen", "Opknapwoning verkopen"],
@@ -205,6 +207,7 @@ const popularLinks = [
   ["/woning-verkopen-zonder-makelaar", "Zonder makelaar verkopen"],
   ["/huis-verkopen-zonder-bezichtigingen", "Zonder bezichtigingen"],
   ["/huis-verkopen-zonder-funda", "Zonder Funda verkopen"],
+  ["/huis-verkopen-in-huidige-staat", "Huidige staat verkopen"],
   ["/huis-verkopen-zonder-verkoopklaar-maken", "Zonder verkoopklaar maken"],
   ["/woning-verkopen-met-schade", "Woning met schade verkopen"],
   ["/huis-verkopen-met-spoed", "Huis verkopen met spoed"],
@@ -2116,7 +2119,9 @@ export default function HomeClient() {
           .section { padding: 40px 0; }
           .section-tight { padding: 36px 0; }
           .mobile-bottom-cta {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr .72fr;
+            gap: 7px;
             left: 18px;
             right: 18px;
             bottom: 12px;
@@ -2282,7 +2287,7 @@ export default function HomeClient() {
             </p>
 
             <div className="hero-cta-row">
-              <a href="#aanvraag" className="btn btn-orange">Verkoopmogelijkheden bekijken</a>
+              <a href="#aanvraag" className="btn btn-orange">Vraag vrijblijvend voorstel aan</a>
               <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
             </div>
 
@@ -2365,7 +2370,7 @@ export default function HomeClient() {
                     <input name="email" value={form.email} onChange={updateForm} placeholder="E-mailadres" type="email" className="field" required />
                     <div className="form-actions">
                       <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
-                      <button type="submit" className="btn btn-orange">Verkoopmogelijkheden bekijken</button>
+                      <button type="submit" className="btn btn-orange">Vraag vrijblijvend voorstel aan</button>
                     </div>
                     <p className="small-note">Wij gebruiken uw gegevens alleen om persoonlijk contact op te nemen over uw aanvraag.</p>
 
@@ -2514,7 +2519,7 @@ export default function HomeClient() {
           </div>
 
           <div style={{ textAlign: "center", marginTop: 26 }}>
-            <a href="#aanvraag" className="btn btn-orange">Verkoopmogelijkheden bekijken</a>
+            <a href="#aanvraag" className="btn btn-orange">Vraag vrijblijvend voorstel aan</a>
           </div>
         </div>
       </section>
@@ -2626,7 +2631,7 @@ export default function HomeClient() {
             Ook als de woning nog vol spullen staat, onderhoud nodig heeft of niet verkoopklaar is. U kunt vrijblijvend laten meekijken wanneer u daar aan toe bent.
           </p>
           <div className="cta-buttons">
-            <a href="#aanvraag" className="btn btn-orange">Verkoopmogelijkheden bekijken</a>
+            <a href="#aanvraag" className="btn btn-orange">Vraag vrijblijvend voorstel aan</a>
             <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst overleggen</a>
           </div>
         </div>
@@ -2636,8 +2641,8 @@ export default function HomeClient() {
         <div className="container footer-grid">
           <div>
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="footer-logo" />
-            <p>Verkoopjehuisdirect.nl is de website van Vastgoed Direct Nederland.</p>
-            <p>Voor woningeigenaren die willen weten wat er mogelijk is, ook als de woning niet verkoopklaar is.</p>
+            <p>Vastgoed Direct Nederland helpt woningeigenaren die duidelijkheid willen zonder traditioneel verkooptraject.</p>
+            <p>Ook actief via VerkoopJeHuisDirect.nl als ondersteunend domein.</p>
           </div>
 
           <div>
@@ -2682,6 +2687,11 @@ export default function HomeClient() {
       </footer>
 
       <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
+
+      <div className="mobile-bottom-cta">
+        <a href="#aanvraag" className="btn btn-orange">Voorstel aanvragen</a>
+        <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+      </div>
 
     </main>
   );

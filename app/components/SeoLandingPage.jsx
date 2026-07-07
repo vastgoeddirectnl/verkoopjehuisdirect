@@ -1,3 +1,4 @@
+import AdsLeadMiniForm from "./AdsLeadMiniForm";
 const whatsappBase = "https://wa.me/31612238051";
 
 const internalLinks = [
@@ -8,6 +9,7 @@ const internalLinks = [
   ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen"],
   ["/huis-verkopen-zonder-leeghalen", "Huis verkopen zonder leeghalen"],
   ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen"],
+  ["/huis-verkopen-in-huidige-staat", "Huis verkopen in huidige staat"],
   ["/woning-verkopen-die-nog-vol-staat", "Woning verkopen die nog vol staat"],
   ["/geerfde-woning-verkopen-zonder-leeghalen", "Geërfde woning verkopen zonder leeghalen"],
   ["/opknapwoning-verkopen-zonder-makelaar", "Opknapwoning verkopen zonder makelaar"],
@@ -40,6 +42,7 @@ const linkDescriptions = {
   "/leegstaand-huis-verkopen": "Bij leegstand, zorgen of doorlopende lasten.",
   "/huis-verkopen-zonder-leeghalen": "Ook wanneer de woning nog niet leeg is.",
   "/huis-verkopen-zonder-opknappen": "Bekijk mogelijkheden zonder eerst te verbouwen.",
+  "/huis-verkopen-in-huidige-staat": "Verkoopmogelijkheden zonder eerst verkoopklaar maken.",
   "/woning-verkopen-die-nog-vol-staat": "Voor woningen met spullen of inboedel in de woning.",
   "/geerfde-woning-verkopen-zonder-leeghalen": "Rustig overzicht bij een geërfde woning.",
   "/opknapwoning-verkopen-zonder-makelaar": "Opknapwoning verkopen zonder regulier verkooptraject.",
@@ -218,6 +221,19 @@ export default function SeoLandingPage({ page }) {
         .mini-checks{display:grid;gap:8px;margin:16px 0}
         .mini-checks div{display:flex;gap:8px;background:#f8f5ef;border:1px solid #eee8df;border-radius:14px;padding:10px 12px;color:#24364a;font-size:13px;font-weight:850;line-height:1.35}
         .mini-checks span{color:var(--orange);font-weight:900}
+        .ad-mini-form{display:grid;gap:10px;margin-top:14px}
+        .ad-mini-form label{display:grid;gap:5px;color:#24364a;font-size:12px;font-weight:900}
+        .ad-mini-form input,.ad-mini-form select{width:100%;border:1px solid #ddd4c8;border-radius:13px;background:#fff;padding:11px 12px;color:#071f3a;font-size:14px;outline:none}
+        .ad-mini-form input:focus,.ad-mini-form select:focus{border-color:#D96A1C;box-shadow:0 0 0 3px rgba(217,106,28,.12)}
+        .ad-mini-form-row.two{display:grid;grid-template-columns:1fr .65fr;gap:9px}
+        .ad-mini-submit{width:100%;margin-top:2px}
+        .ad-mini-note{font-size:12px!important;line-height:1.35!important;margin:0!important;color:#647386!important;text-align:center}
+        .ad-mini-error{background:#fff1f1;border:1px solid #f2b4b4;color:#8b1c1c!important;border-radius:12px;padding:9px 11px;font-size:13px!important;margin:0!important;line-height:1.35!important;font-weight:850}
+        .ad-mini-success{background:#f0fff5;border:1px solid #bfe7cc;border-radius:16px;padding:14px;color:#103b22;margin-top:14px}
+        .ad-mini-success strong{display:block;margin-bottom:5px;color:#103b22}
+        .ad-mini-success p{margin:0!important;color:#315b3f!important;font-size:14px!important;line-height:1.45!important}
+        .after-request{display:grid;gap:4px;margin-top:14px;background:#f8f5ef;border:1px solid #eee8df;border-radius:16px;padding:13px;color:#24364a;font-size:13px;line-height:1.42}
+        .after-request strong{color:#071f3a;font-size:14px}
         .review-mini{margin-top:14px;background:#071f3a;color:#fff;border-radius:20px;padding:16px}
         .review-mini strong{display:block;font-size:17px;margin-bottom:4px}
         .stars{color:#f5a400;letter-spacing:1.5px;font-weight:900}
@@ -362,7 +378,7 @@ export default function SeoLandingPage({ page }) {
           .faq-item h3{margin-bottom:7px}
           .footer-grid{grid-template-columns:1fr}
           .whatsapp-float{display:none}
-          .mobile-bottom-cta{position:fixed;left:10px;right:10px;bottom:10px;z-index:90;display:block;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:22px;padding:8px;box-shadow:0 18px 50px rgba(7,31,58,.18);backdrop-filter:blur(14px)}
+          .mobile-bottom-cta{position:fixed;left:10px;right:10px;bottom:10px;z-index:90;display:grid;grid-template-columns:1fr .72fr;gap:7px;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:22px;padding:8px;box-shadow:0 18px 50px rgba(7,31,58,.18);backdrop-filter:blur(14px)}
           .mobile-bottom-cta a{width:100%;min-height:48px;padding:12px 10px;font-size:14px}
           .final-cta{padding-bottom:100px}
           .footer{padding-bottom:102px}
@@ -385,8 +401,8 @@ export default function SeoLandingPage({ page }) {
           </a>
 
           <nav className="nav" aria-label="Navigatie">
-            <a href="/#aanvraag">Aanvraag</a>
-            <a href="#waarom-anders">Waarom anders</a>
+            <a href="#aanvraag">Aanvraag</a>
+            <a href="#voordelen">Voordelen</a>
             <a href="#vergelijking">Vergelijking</a>
             <a href="#faq">FAQ</a>
           </nav>
@@ -394,7 +410,7 @@ export default function SeoLandingPage({ page }) {
           <div className="header-actions">
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
             <a href="tel:0612238051" className="btn btn-blue">Bel direct</a>
-            <a href="/#aanvraag" className="btn btn-orange">Start aanvraag</a>
+            <a href="#aanvraag" className="btn btn-orange">Vraag voorstel aan</a>
           </div>
         </div>
       </header>
@@ -407,7 +423,7 @@ export default function SeoLandingPage({ page }) {
             <p className="lead">{page.lead}</p>
 
             <div className="hero-cta-row">
-              <a href="/#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
+              <a href="#aanvraag" className="btn btn-orange">Vraag vrijblijvend voorstel aan</a>
               <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
             </div>
 
@@ -422,23 +438,20 @@ export default function SeoLandingPage({ page }) {
             </div>
           </div>
 
-          <aside className="cta-card">
+          <aside className="cta-card" id="aanvraag">
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="cta-logo" />
-            <h2>Vertel kort om welke woning het gaat</h2>
+            <h2>Vraag direct vrijblijvend duidelijkheid aan</h2>
             <p>
-              Postcode, type woning en uw situatie zijn genoeg voor het eerste contact. Ook als de woning nog vol staat, onderhoud nodig heeft of niet verkoopklaar is.
+              Vul alleen de belangrijkste gegevens in. Wij nemen persoonlijk contact op en bespreken rustig wat bij uw woning past.
             </p>
-            <div className="mini-checks">
-              <div><span>✓</span> Geen makelaarskosten</div>
-              <div><span>✓</span> U hoeft de woning niet eerst leeg te halen</div>
-              <div><span>✓</span> U beslist zelf of u verder wilt</div>
-            </div>
-            <a href="/#aanvraag" className="btn btn-orange" style={{ width: "100%" }}>Start vrijblijvende aanvraag</a>
-
-            <div className="review-mini">
-              <strong>5,0 Google-review</strong>
-              <div className="stars">★★★★★</div>
-              <p>“Precies de oplossing die ik zocht.” — Laura vd Zalm</p>
+            <AdsLeadMiniForm
+              pageTitle={page.breadcrumb}
+              pageSlug={page.slug}
+              defaultSituation={page.defaultSituation || page.breadcrumb}
+            />
+            <div className="after-request">
+              <strong>Wat gebeurt er daarna?</strong>
+              <span>We nemen persoonlijk contact op, bespreken kort de situatie en geven aan welke vervolgstappen mogelijk zijn.</span>
             </div>
           </aside>
         </div>
@@ -464,10 +477,10 @@ export default function SeoLandingPage({ page }) {
         </div>
       </section>
 
-      <section id="waarom-anders" className="section-tight">
+      <section id="waarom-vdn" className="section-tight">
         <div className="container">
           <div className="section-head">
-            <p className="eyebrow">Waarom anders</p>
+            <p className="eyebrow">Waarom VDN</p>
             <h2>Geen standaard verkooptraject. Eerst rustig duidelijkheid.</h2>
             <p>
               Veel verkopers willen vooral weten waar ze aan toe zijn. Daarom maken we het laagdrempelig: u hoeft de woning niet eerst op te knappen, leeg te halen of verkoopklaar te maken om een voorstel aan te vragen.
@@ -620,7 +633,7 @@ export default function SeoLandingPage({ page }) {
           <h2>{page.ctaTitle}</h2>
           <p>{page.ctaText}</p>
           <div className="cta-buttons">
-            <a href="/#aanvraag" className="btn btn-orange">Bekijk mijn verkoopmogelijkheden</a>
+            <a href="#aanvraag" className="btn btn-orange">Vraag vrijblijvend voorstel aan</a>
             <a href="tel:0612238051" className="btn btn-light">Bel direct</a>
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
           </div>
@@ -631,8 +644,8 @@ export default function SeoLandingPage({ page }) {
         <div className="container footer-grid">
           <div>
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="footer-logo" />
-            <p>Verkoopjehuisdirect.nl is de website van Vastgoed Direct Nederland.</p>
-            <p>Voor woningeigenaren die duidelijkheid willen zonder gedoe.</p>
+            <p>Vastgoed Direct Nederland helpt woningeigenaren die duidelijkheid willen zonder traditioneel verkooptraject.</p>
+            <p>Ook actief via VerkoopJeHuisDirect.nl als ondersteunend domein.</p>
           </div>
 
           <div>
@@ -663,7 +676,8 @@ export default function SeoLandingPage({ page }) {
       <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
 
       <div className="mobile-bottom-cta">
-        <a href="/#aanvraag" className="btn btn-orange">Vrijblijvend voorstel aanvragen</a>
+        <a href="#aanvraag" className="btn btn-orange">Voorstel aanvragen</a>
+        <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
       </div>
     </main>
   );
