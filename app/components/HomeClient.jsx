@@ -312,7 +312,11 @@ export default function HomeClient() {
         throw new Error(result.error || "Aanvraag verzenden mislukt.");
       }
 
-      trackGoogleAdsConversion("lead");
+      trackGoogleAdsConversion("lead", {
+        value: 1,
+        currency: "EUR",
+        transactionId: result?.lead?.id ? `lead-${result.lead.id}` : undefined,
+      });
       setSubmitted(true);
     } catch (error) {
       alert("Er ging iets mis. Probeer opnieuw of neem contact op via WhatsApp.");

@@ -1,5 +1,6 @@
 import "./globals.css";
 import GoogleAdsTag from "./components/GoogleAdsTag";
+import GoogleAdsClickTracker from "./components/GoogleAdsClickTracker";
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.vastgoeddirectnederland.nl").replace(/\/$/, "");
 
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
     <html lang="nl">
       <body>
         <GoogleAdsTag />
+        <GoogleAdsClickTracker />
         {children}
       </body>
     </html>
