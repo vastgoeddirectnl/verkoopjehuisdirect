@@ -283,13 +283,13 @@ export default function SeoLandingPage({ page }) {
         .faq{display:grid;gap:10px;max-width:940px;margin:0 auto}
         .faq-item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px 18px;display:grid;grid-template-columns:minmax(220px,.42fr) 1fr;gap:22px;align-items:start}
         .faq-item p{margin:0;color:#647386;font-size:15px;line-height:1.55}
-        .related-wrap{background:#fffdf9;border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:0 12px 34px rgba(7,31,58,.055)}
+        .related-wrap{background:linear-gradient(180deg,#fff 0%,#fffaf4 100%);border:1px solid #dccbb8;border-radius:28px;padding:24px;box-shadow:0 18px 46px rgba(7,31,58,.085)}
         .related-wrap .section-head{margin-bottom:22px}
         .related-wrap .section-head p:not(.eyebrow){max-width:720px;margin-left:auto;margin-right:auto;color:#526274}
         .related-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-        .related-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px;min-height:116px;display:grid;grid-template-columns:34px 1fr;gap:13px;align-items:start;color:#071f3a;text-decoration:none;box-shadow:0 10px 24px rgba(7,31,58,.045);transition:.18s ease}
-        .related-card:hover{border-color:#F2B885;transform:translateY(-1px);box-shadow:0 10px 28px rgba(7,31,58,.07)}
-        .related-card-icon{display:inline-flex;width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,#FFF1E6 0%,#F8D3B5 100%);border:1px solid #F2B885;margin-top:2px}
+        .related-card{background:linear-gradient(180deg,#fff 0%,#fffaf4 100%);border:1px solid #dfd2c4;border-left:4px solid #F2B885;border-radius:18px;padding:17px 18px;min-height:108px;display:grid;grid-template-columns:1fr;gap:0;align-items:start;color:#071f3a;text-decoration:none;box-shadow:0 10px 26px rgba(7,31,58,.055);transition:.18s ease}
+        .related-card:hover{border-color:#D96A1C;border-left-color:#D96A1C;transform:translateY(-1px);box-shadow:0 14px 32px rgba(7,31,58,.10)}
+        .related-card-icon{display:none}
         .related-card-content{display:grid;gap:6px}
         .related-card strong{display:block;font-size:17px;line-height:1.2;color:#071f3a}
         .related-card p{margin:0;color:#526274;line-height:1.5;font-size:14px;font-weight:400}
@@ -614,7 +614,6 @@ export default function SeoLandingPage({ page }) {
               <div className="related-card-grid">
                 {relatedCards.map((card) => (
                   <a href={card.href} key={card.href} className="related-card">
-                    <span className="related-card-icon" aria-hidden="true" />
                     <span className="related-card-content">
                       <strong>{card.label}</strong>
                       <p>{card.text}</p>

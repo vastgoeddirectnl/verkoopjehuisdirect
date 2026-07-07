@@ -843,18 +843,30 @@ export default function HomeClient() {
         }
 
 
-        .professional-band{background:#fff;padding:56px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-        .professional-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:start}
+        .professional-band{
+          background:linear-gradient(180deg,#fff 0%,#fbf3e8 100%);
+          padding:62px 0;
+          border-top:1px solid #eadfd3;
+          border-bottom:1px solid #e4d3c0;
+        }
+        .professional-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:30px;align-items:start}
         .professional-copy h2{font-size:clamp(30px,3vw,44px);line-height:1.06;letter-spacing:-1.2px;margin:0 0 14px;color:var(--navy)}
-        .professional-copy p:not(.eyebrow){color:#647386;font-size:16px;line-height:1.65;margin:0}
-        .professional-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-        .professional-cards article{background:#fffdf9;border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 12px 34px rgba(7,31,58,.055)}
+        .professional-copy p:not(.eyebrow){color:#425266;font-size:16px;line-height:1.65;margin:0;max-width:680px}
+        .professional-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+        .professional-cards article{
+          background:#ffffff;
+          border:1px solid #dfd2c4;
+          border-left:4px solid #D96A1C;
+          border-radius:22px;
+          padding:20px 21px;
+          box-shadow:0 16px 38px rgba(7,31,58,.085);
+        }
         .professional-cards strong{display:block;color:var(--navy);font-size:17px;margin-bottom:8px}
-        .professional-cards span{display:block;color:#647386;font-size:14.5px;line-height:1.5}
-        .quote-row{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:2px}
-        .quote-row blockquote{margin:0;background:#F7F2EC;border:1px solid #F2B885;border-radius:22px;padding:20px;color:var(--navy)}
-        .quote-row blockquote strong{display:block;font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:#B85216;margin-bottom:8px}
-        .quote-row blockquote p{margin:0;color:#425266;line-height:1.55;font-size:15px}
+        .professional-cards span{display:block;color:#4f6074;font-size:14.5px;line-height:1.5}
+        .quote-row{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin-top:2px}
+        .quote-row blockquote{margin:0;background:#071f3a;border:1px solid rgba(7,31,58,.14);border-radius:22px;padding:20px;color:#fff;box-shadow:0 16px 38px rgba(7,31,58,.12)}
+        .quote-row blockquote strong{display:block;font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:#F2B885;margin-bottom:8px}
+        .quote-row blockquote p{margin:0;color:#e7eef6;line-height:1.55;font-size:15px}
 
         .section { padding: 62px 0; }
         .section-tight { padding: 52px 0; }
@@ -1224,10 +1236,10 @@ export default function HomeClient() {
         }
 
         .route-section {
-          padding: 46px 0 42px;
-          background: #fff;
-          border-top: 1px solid #e8e3db;
-          border-bottom: 1px solid #eee8df;
+          padding: 54px 0 52px;
+          background: linear-gradient(180deg, #fffaf3 0%, #f7efe5 100%);
+          border-top: 1px solid #e4d3c0;
+          border-bottom: 1px solid #e4d3c0;
         }
         .route-head {
           display: flex;
@@ -1243,29 +1255,37 @@ export default function HomeClient() {
         .route-head p {
           max-width: 430px;
           margin: 0;
-          color: #647386;
+          color: #425266;
           line-height: 1.55;
           font-size: 16px;
         }
         .route-slider {
-          display: flex;
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
           gap: 14px;
-          overflow-x: auto;
-          scroll-snap-type: x mandatory;
-          padding: 3px 0 10px;
-          scrollbar-width: thin;
+          overflow: visible;
+          padding: 3px 0 0;
         }
         .route-card {
-          flex: 0 0 286px;
-          scroll-snap-align: start;
-          background: #fffdf9;
-          border: 1px solid #e8e3db;
+          position: relative;
+          background: linear-gradient(180deg, #fff 0%, #fffaf4 100%);
+          border: 1px solid #dccbb8;
           border-radius: 22px;
-          padding: 18px;
-          box-shadow: 0 12px 30px rgba(7, 31, 58, .06);
+          padding: 19px;
+          box-shadow: 0 16px 38px rgba(7, 31, 58, .09);
           display: grid;
           gap: 10px;
-          min-height: 198px;
+          min-height: 202px;
+          overflow: hidden;
+        }
+        .route-card:before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(90deg, #D96A1C 0%, #F2B885 100%);
         }
         .route-card:hover {
           border-color: #ffc49a;
@@ -1291,7 +1311,7 @@ export default function HomeClient() {
         }
         .route-card p {
           margin: 0;
-          color: #647386;
+          color: #4f6074;
           line-height: 1.48;
           font-size: 14px;
         }
@@ -1472,7 +1492,8 @@ export default function HomeClient() {
           box-shadow: 0 10px 28px rgba(217,106,28,.10);
         }
         .overview-section {
-          background: #fff;
+          background: linear-gradient(180deg, #fff 0%, #fbf3e8 100%);
+          border-top: 1px solid #eadfd3;
         }
         .overview-head {
           margin-bottom: 34px;
@@ -1491,18 +1512,18 @@ export default function HomeClient() {
           align-items: stretch;
         }
         .overview-block {
-          background: #fffdf9;
-          border: 1px solid #e8e3db;
+          background: #ffffff;
+          border: 1px solid #dccbb8;
           border-radius: 28px;
           padding: 24px;
-          box-shadow: 0 12px 34px rgba(7,31,58,.055);
+          box-shadow: 0 18px 46px rgba(7,31,58,.085);
           display: flex;
           flex-direction: column;
           min-height: 100%;
         }
         .overview-block-soft {
-          background: #f8f5ef;
-          box-shadow: none;
+          background: #fffaf4;
+          box-shadow: 0 18px 46px rgba(7,31,58,.075);
         }
         .overview-block-head {
           margin-bottom: 18px;
@@ -1525,31 +1546,26 @@ export default function HomeClient() {
           gap: 10px;
         }
         .overview-card {
-          background: #fff;
-          border: 1px solid #e8e3db;
+          background: linear-gradient(180deg, #fff 0%, #fffaf4 100%);
+          border: 1px solid #dfd2c4;
+          border-left: 4px solid #F2B885;
           border-radius: 18px;
-          padding: 15px;
-          min-height: 118px;
+          padding: 17px 18px;
+          min-height: 108px;
           display: grid;
-          grid-template-columns: 34px 1fr;
-          gap: 13px;
+          grid-template-columns: 1fr;
+          gap: 0;
           align-items: start;
           transition: .18s ease;
+          box-shadow: 0 10px 26px rgba(7,31,58,.045);
         }
         .overview-card:hover {
-          border-color: #F2B885;
+          border-color: #D96A1C;
+          border-left-color: #D96A1C;
           transform: translateY(-1px);
-          box-shadow: 0 10px 28px rgba(7,31,58,.07);
+          box-shadow: 0 14px 32px rgba(7,31,58,.10);
         }
-        .overview-card-icon {
-          display: inline-flex;
-          width: 28px;
-          height: 28px;
-          border-radius: 9px;
-          background: linear-gradient(135deg, #FFF1E6 0%, #F8D3B5 100%);
-          border: 1px solid #F2B885;
-          margin-top: 2px;
-        }
+        .overview-card-icon { display: none; }
         .overview-card-content {
           display: grid;
           gap: 6px;
@@ -1562,7 +1578,7 @@ export default function HomeClient() {
         }
         .overview-card p {
           margin: 0;
-          color: #526274;
+          color: #4f6074;
           line-height: 1.5;
           font-size: 14px;
         }
@@ -1574,15 +1590,17 @@ export default function HomeClient() {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          min-height: 40px;
+          min-height: 42px;
           border-radius: 999px;
-          background: #fff;
-          border: 1px solid #eadfd3;
-          color: #D96A1C;
-          padding: 0 15px;
+          background: #071f3a;
+          border: 1px solid #071f3a;
+          color: #fff;
+          padding: 0 16px;
           font-weight: 900;
           font-size: 14px;
+          box-shadow: 0 12px 28px rgba(7,31,58,.12);
         }
+        .overview-block-cta a:hover { background:#D96A1C; border-color:#D96A1C; }
         .overview-block-cta a:hover {
           border-color: #D96A1C;
         }
@@ -2143,13 +2161,20 @@ export default function HomeClient() {
             font-size: 14px;
           }
           .route-slider {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
             margin-left: -14px;
             margin-right: -14px;
             padding-left: 14px;
             padding-right: 14px;
+            padding-bottom: 10px;
+            scrollbar-width: thin;
           }
           .route-card {
-            flex-basis: 254px;
+            flex: 0 0 254px;
+            scroll-snap-align: start;
             min-height: 178px;
             padding: 16px;
           }
@@ -2587,7 +2612,6 @@ export default function HomeClient() {
               <div className="overview-card-grid">
                 {situationOverviewCards.map((card) => (
                   <a href={card.href} className="overview-card" key={card.href}>
-                    <span className="overview-card-icon" aria-hidden="true" />
                     <span className="overview-card-content">
                       <strong>{card.title}</strong>
                       <p>{card.text}</p>
@@ -2608,7 +2632,6 @@ export default function HomeClient() {
               <div className="overview-card-grid">
                 {regionOverviewCards.map((card) => (
                   <a href={card.href} className="overview-card region-card" key={card.href}>
-                    <span className="overview-card-icon" aria-hidden="true" />
                     <span className="overview-card-content">
                       <strong>{card.title}</strong>
                       <p>{card.text}</p>
