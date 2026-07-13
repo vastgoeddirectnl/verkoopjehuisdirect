@@ -72,7 +72,7 @@ const faqSchema = {
       name: "Wat gebeurt er na mijn aanvraag?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Wij nemen persoonlijk contact met u op, bespreken kort de situatie en geven aan welke vervolgstappen mogelijk zijn.",
+        text: "Wij bekijken uw woninggegevens en situatie. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel.",
       },
     },
   ],
@@ -154,7 +154,7 @@ const faqItems = [
   ["Moet ik eerst opknappen?", "Nee, dat hoeft niet altijd. Ook bij onderhoud, schade of een woning die niet verkoopklaar is, kunt u vrijblijvend een voorstel aanvragen."],
   ["Zit ik ergens aan vast?", "Nee. Een aanvraag is vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."],
   ["Kan dit zonder open huis?", "Ja, in veel situaties is een open huis niet nodig. Wij bespreken rustig wat bij uw woning en situatie past."],
-  ["Wat gebeurt er na mijn aanvraag?", "Wij nemen persoonlijk contact met u op, bespreken kort de situatie en geven aan welke vervolgstappen mogelijk zijn."],
+  ["Wat gebeurt er na mijn aanvraag?", "Wij bekijken uw woninggegevens en situatie. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel."],
 ];
 
 const woningTypes = [
@@ -2337,10 +2337,10 @@ export default function HomeClient() {
                 <p className="step-label">Stap {step} van 3</p>
                 <h2 className="form-title">Vertel kort om welke woning het gaat</h2>
                 <p className="form-sub form-sub-desktop">
-                  Vul uw adres en situatie in. Wij kijken met u mee en nemen persoonlijk contact met u op.
+                  Vul uw adres en situatie in. Wij bekijken wat er mogelijk is en sturen waar mogelijk een eerste voorstel.
                 </p>
                 <p className="form-sub form-sub-mobile">
-                  Adres en situatie zijn genoeg voor het eerste contact.
+                  Adres en situatie zijn genoeg voor een eerste beoordeling.
                 </p>
 
                 {step === 1 && (
@@ -2397,7 +2397,7 @@ export default function HomeClient() {
                       <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
                       <button type="submit" className="btn btn-orange">Vraag vrijblijvend voorstel aan</button>
                     </div>
-                    <p className="small-note">Wij gebruiken uw gegevens alleen om persoonlijk contact op te nemen over uw aanvraag.</p>
+                    <p className="small-note">Wij gebruiken uw gegevens alleen om uw aanvraag te beoordelen en hierover contact op te nemen.</p>
 
                   </div>
                 )}
@@ -2406,7 +2406,7 @@ export default function HomeClient() {
               <div className="success">
                 <div className="success-icon">✓</div>
                 <h2 className="form-title">Aanvraag ontvangen</h2>
-                <p className="form-sub">Wij nemen zo snel mogelijk persoonlijk contact met u op.</p>
+                <p className="form-sub">Wij bekijken uw aanvraag en sturen waar mogelijk een eerste vrijblijvende inschatting of voorstel.</p>
                 <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">Aanvullen via WhatsApp</a>
               </div>
             )}

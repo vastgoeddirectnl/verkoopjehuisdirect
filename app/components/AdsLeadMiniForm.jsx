@@ -95,7 +95,7 @@ export default function AdsLeadMiniForm({ pageTitle = "Advertentiepagina", pageS
     return (
       <div className="ad-mini-success" role="status">
         <strong>Bedankt, uw aanvraag is ontvangen.</strong>
-        <p>We nemen persoonlijk contact met u op om de situatie rustig door te nemen.</p>
+        <p>Wij bekijken uw gegevens en sturen waar mogelijk een eerste vrijblijvende inschatting of voorstel. Als er nog iets nodig is, nemen wij kort contact op.</p>
       </div>
     );
   }

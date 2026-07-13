@@ -440,9 +440,9 @@ export default function SeoLandingPage({ page }) {
 
           <aside className="cta-card" id="aanvraag">
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="cta-logo" />
-            <h2>Vraag direct vrijblijvend duidelijkheid aan</h2>
+            <h2>Vraag vrijblijvend een voorstel aan</h2>
             <p>
-              Vul alleen de belangrijkste gegevens in. Wij nemen persoonlijk contact op en bespreken rustig wat bij uw woning past.
+              Vul de belangrijkste gegevens in. Wij bekijken uw woning en situatie. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel.
             </p>
             <AdsLeadMiniForm
               pageTitle={page.breadcrumb}
@@ -450,8 +450,8 @@ export default function SeoLandingPage({ page }) {
               defaultSituation={page.defaultSituation || page.breadcrumb}
             />
             <div className="after-request">
-              <strong>Wat gebeurt er daarna?</strong>
-              <span>We nemen persoonlijk contact op, bespreken kort de situatie en geven aan welke vervolgstappen mogelijk zijn.</span>
+              <strong>Wat gebeurt er na uw aanvraag?</strong>
+              <span>Na uw aanvraag bekijken wij de woninggegevens en uw situatie. Als er nog informatie nodig is om dit goed te beoordelen, nemen wij kort contact met u op. U zit nergens aan vast.</span>
             </div>
           </aside>
         </div>
