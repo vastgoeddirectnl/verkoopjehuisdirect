@@ -75,6 +75,21 @@ const PROPOSAL_FIELDS = [
   "bridge_old_home",
   "bridge_goal_text",
   "bridge_explanation_text",
+  "seller_work_enabled",
+  "seller_work_description",
+  "seller_work_deadline",
+  "seller_work_amount_text",
+  "seller_work_base_price_text",
+  "seller_work_total_price_text",
+  "seller_work_conditions_text",
+  "resale_payment_enabled",
+  "resale_threshold_text",
+  "resale_percentage_text",
+  "resale_deduct_courtage",
+  "resale_period_months",
+  "resale_cap_text",
+  "resale_explanation_text",
+  "nonbinding_text",
   "notes",
 ];
 
@@ -82,9 +97,48 @@ function clean(value, max = 1500) {
   return String(value || "").trim().slice(0, max);
 }
 
+function parseNonNegativeNumber(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return 0;
+  const cleaned = raw
+    .replace(/€/g, "")
+    .replace(/%/g, "")
+    .replace(/\s/g, "")
+    .replace(/[^0-9,.-]/g, "");
+  if (!cleaned) return 0;
+  let normalized = cleaned;
+  const hasComma = normalized.includes(",");
+  const hasDot = normalized.includes(".");
+  if (hasComma && hasDot) {
+    normalized = normalized.replace(/\./g, "").replace(",", ".");
+  } else if (hasComma) {
+    normalized = normalized.replace(",", ".");
+  } else if (hasDot) {
+    const dotParts = normalized.split(".");
+    const lastPart = dotParts[dotParts.length - 1];
+    if (lastPart.length === 3 && dotParts.length > 1) {
+      normalized = normalized.replace(/\./g, "");
+    }
+  }
+  const number = Number.parseFloat(normalized);
+  return Number.isFinite(number) ? Math.abs(number) : 0;
+}
+
+function euroText(value) {
+  const number = parseNonNegativeNumber(value);
+  if (!number) return null;
+  return `€ ${new Intl.NumberFormat("nl-NL", { maximumFractionDigits: 0 }).format(Math.round(number))}`;
+}
+
+function percentText(value) {
+  const number = Math.min(100, Math.max(0, parseNonNegativeNumber(value)));
+  if (!number) return null;
+  return String(number).replace(".", ",");
+}
+
 function cleanForField(field, value) {
   if (field === "lead_id") return value || null;
-  if (["validity_date", "desired_transfer_date"].includes(field)) return value || null;
+  if (["validity_date", "desired_transfer_date", "seller_work_deadline"].includes(field)) return value || null;
   if (field === "proposal_variant") return clean(value, 40) || "Uitgebreid";
   if (field === "proposal_type") return clean(value, 80) || "Standaard aankoop";
   if ([
@@ -93,11 +147,35 @@ function cleanForField(field, value) {
     "seller_cooperates_resale",
     "delivery_free_of_claims",
     "property_same_state",
+    "seller_work_enabled",
+    "resale_payment_enabled",
+    "resale_deduct_courtage",
   ].includes(field)) {
     return Boolean(value);
   }
-  if (["conditions_text", "assumptions_text", "included_items", "short_comparison_text", "reservations_text", "next_steps_text", "bridge_explanation_text", "notes"].includes(field)) {
-    return clean(value, 2500) || null;
+  if ([
+    "conditions_text",
+    "assumptions_text",
+    "included_items",
+    "short_comparison_text",
+    "reservations_text",
+    "next_steps_text",
+    "bridge_explanation_text",
+    "seller_work_description",
+    "seller_work_conditions_text",
+    "resale_explanation_text",
+    "nonbinding_text",
+    "notes",
+  ].includes(field)) {
+    return clean(value, 3500) || null;
+  }
+  if (["seller_work_amount_text", "seller_work_base_price_text", "seller_work_total_price_text", "resale_threshold_text", "resale_cap_text"].includes(field)) {
+    return euroText(value);
+  }
+  if (field === "resale_percentage_text") return percentText(value);
+  if (field === "resale_period_months") {
+    const months = Math.round(parseNonNegativeNumber(value));
+    return months > 0 ? months : null;
   }
   return clean(value, 300) || null;
 }
@@ -362,7 +440,13 @@ export async function POST(request) {
 
     if (action === "createProposal") {
       const columns = PROPOSAL_FIELDS;
-      const params = columns.map((field) => cleanForField(field, body[field]));
+      const proposalBody = { ...body };
+      if (proposalBody.seller_work_enabled) {
+        const base = parseNonNegativeNumber(proposalBody.seller_work_base_price_text);
+        const work = parseNonNegativeNumber(proposalBody.seller_work_amount_text);
+        proposalBody.seller_work_total_price_text = base || work ? euroText(base + work) : null;
+      }
+      const params = columns.map((field) => cleanForField(field, proposalBody[field]));
       const placeholders = columns.map((_, index) => `$${index + 1}`).join(",");
       const proposal = await queryOne(
         `insert into proposals (${columns.join(",")}, status) values (${placeholders}, 'Concept') returning *`,
@@ -372,6 +456,11 @@ export async function POST(request) {
     }
 
     if (action === "updateProposal") {
+      if (body.seller_work_enabled) {
+        const base = parseNonNegativeNumber(body.seller_work_base_price_text);
+        const work = parseNonNegativeNumber(body.seller_work_amount_text);
+        body.seller_work_total_price_text = base || work ? euroText(base + work) : null;
+      }
       const updates = [];
       const params = [];
       for (const field of PROPOSAL_FIELDS) {
@@ -499,7 +588,7 @@ export async function POST(request) {
           </div>
 
           <p style="max-width:720px;margin:14px auto 0;font-size:12px;line-height:1.5;color:#7a8797;text-align:center;">
-            Dit voorstel is vrijblijvend en onder voorbehoud van definitieve controle, akkoord van betrokken partijen en notariële vastlegging.
+            ${proposal.nonbinding_text || "Dit voorstel is vrijblijvend en onder voorbehoud van definitieve controle, akkoord van betrokken partijen en notariële vastlegging."}
           </p>
         </div>
       `;

@@ -14,6 +14,8 @@ const PROPOSAL_TYPES = [
   "ABC-doorverkoop mogelijk",
 ];
 
+const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid.";
+
 const SPECIAL_PROPOSAL_TYPES = ["Uitgestelde levering", "Overbruggingsoplossing", "ABC-doorverkoop mogelijk"];
 
 function isSpecialProposalType(type) {
@@ -90,6 +92,67 @@ function formatMoney(value, negative = false) {
   return negative ? `- ${formatted}` : formatted;
 }
 
+function parsePercentage(value) {
+  const number = parseMoney(value);
+  if (!Number.isFinite(number)) return 0;
+  return Math.min(100, Math.max(0, number));
+}
+
+function formatPercent(value) {
+  const number = parsePercentage(value);
+  if (!number) return "";
+  return String(number).replace(".", ",");
+}
+
+function applyAdditionalAgreementDefaults(current = {}) {
+  return {
+    ...current,
+    seller_work_enabled: Boolean(current.seller_work_enabled),
+    seller_work_description: current.seller_work_description || "",
+    seller_work_deadline: current.seller_work_deadline || "",
+    seller_work_amount_text: current.seller_work_amount_text || "€ 5.700",
+    seller_work_base_price_text: current.seller_work_base_price_text || current.amount_text || "€ 300.000",
+    seller_work_total_price_text: current.seller_work_total_price_text || "€ 305.700",
+    seller_work_conditions_text: current.seller_work_conditions_text || "Wanneer de werkzaamheden niet, niet volledig of niet deugdelijk zijn uitgevoerd, kan de aanvullende koopprijs worden verminderd met de redelijkerwijs benodigde kosten om de werkzaamheden alsnog te voltooien of te herstellen.",
+    resale_payment_enabled: Boolean(current.resale_payment_enabled),
+    resale_threshold_text: current.resale_threshold_text || "€ 350.000",
+    resale_percentage_text: current.resale_percentage_text || "20",
+    resale_deduct_courtage: current.resale_deduct_courtage === undefined || current.resale_deduct_courtage === null ? true : Boolean(current.resale_deduct_courtage),
+    resale_period_months: current.resale_period_months || 12,
+    resale_cap_text: current.resale_cap_text || "",
+    resale_explanation_text: current.resale_explanation_text || "",
+    nonbinding_text: current.nonbinding_text || DEFAULT_NONBINDING_TEXT,
+  };
+}
+
+function calculateSellerWorkTotal(proposal) {
+  const base = parseMoney(proposal?.seller_work_base_price_text);
+  const work = parseMoney(proposal?.seller_work_amount_text);
+  return base || work ? formatMoney(base + work) : "";
+}
+
+function calculateResaleExample(proposal) {
+  const salePrice = 400000;
+  const courtage = proposal?.resale_deduct_courtage ? 4000 : 0;
+  const threshold = parseMoney(proposal?.resale_threshold_text) || 350000;
+  const percentage = parsePercentage(proposal?.resale_percentage_text) || 20;
+  const netResale = salePrice - courtage;
+  const surplus = Math.max(0, netResale - threshold);
+  const payment = surplus * (percentage / 100);
+  return { salePrice, courtage, netResale, surplus, percentage, payment };
+}
+
+function normalizeProposalForForm(item, lead) {
+  const base = { ...defaultProposalForLead(lead), ...(item || {}) };
+  return applyAdditionalAgreementDefaults({
+    ...base,
+    lead_id: lead?.id || base.lead_id || "",
+    validity_date: base.validity_date ? String(base.validity_date).slice(0, 10) : todayPlus(14),
+    desired_transfer_date: base.desired_transfer_date ? String(base.desired_transfer_date).slice(0, 10) : "",
+    seller_work_deadline: base.seller_work_deadline ? String(base.seller_work_deadline).slice(0, 10) : "",
+  });
+}
+
 function calculateNetComparison(proposal) {
   const traditionalPrice = parseMoney(proposal?.traditional_price_text);
   const agentExVat = parseMoney(proposal?.agent_costs_text);
@@ -118,8 +181,11 @@ function calculateNetComparison(proposal) {
 
 function buildCalculatedProposalPayload(proposal) {
   const calc = calculateNetComparison(proposal);
+  const sellerWorkTotal = calculateSellerWorkTotal(proposal);
   return {
     ...proposal,
+    seller_work_total_price_text: sellerWorkTotal || proposal.seller_work_total_price_text,
+    resale_percentage_text: formatPercent(proposal.resale_percentage_text) || proposal.resale_percentage_text,
     traditional_price_text: formatMoney(calc.traditionalPrice) || proposal.traditional_price_text,
     agent_costs_text: formatMoney(calc.agentInclVat, true) || proposal.agent_costs_text,
     notary_costs_text: formatMoney(calc.notaryCosts, true) || proposal.notary_costs_text,
@@ -185,6 +251,21 @@ function defaultProposalForLead(lead) {
     bridge_old_home: "",
     bridge_goal_text: "",
     bridge_explanation_text: "",
+    seller_work_enabled: false,
+    seller_work_description: "",
+    seller_work_deadline: "",
+    seller_work_amount_text: "€ 5.700",
+    seller_work_base_price_text: "€ 300.000",
+    seller_work_total_price_text: "€ 305.700",
+    seller_work_conditions_text: "Wanneer de werkzaamheden niet, niet volledig of niet deugdelijk zijn uitgevoerd, kan de aanvullende koopprijs worden verminderd met de redelijkerwijs benodigde kosten om de werkzaamheden alsnog te voltooien of te herstellen.",
+    resale_payment_enabled: false,
+    resale_threshold_text: "€ 350.000",
+    resale_percentage_text: "20",
+    resale_deduct_courtage: true,
+    resale_period_months: 12,
+    resale_cap_text: "",
+    resale_explanation_text: "",
+    nonbinding_text: DEFAULT_NONBINDING_TEXT,
     notes: "",
   };
 }
@@ -211,7 +292,7 @@ export default function LeadDetailPage({ params }) {
       return;
     }
     setData(json);
-    if (json.lead) setProposal(defaultProposalForLead(json.lead));
+    if (json.lead) setProposal(applyAdditionalAgreementDefaults(defaultProposalForLead(json.lead)));
   }
 
   async function post(body) {
@@ -248,8 +329,30 @@ export default function LeadDetailPage({ params }) {
     return calculateNetComparison(proposal || {});
   }, [proposal]);
 
+  const sellerWorkTotal = useMemo(() => calculateSellerWorkTotal(proposal || {}), [proposal]);
+  const resaleExample = useMemo(() => calculateResaleExample(proposal || {}), [proposal]);
+
   function setProposalField(field, value) {
-    setProposal((current) => ({ ...(current || {}), [field]: value }));
+    setProposal((current) => {
+      const next = { ...(current || {}), [field]: value };
+      if (["seller_work_base_price_text", "seller_work_amount_text", "seller_work_enabled"].includes(field)) {
+        if (field === "seller_work_enabled" && value) {
+          next.seller_work_base_price_text = next.seller_work_base_price_text || next.amount_text || "€ 300.000";
+          next.seller_work_amount_text = next.seller_work_amount_text || "€ 5.700";
+        }
+        next.seller_work_total_price_text = calculateSellerWorkTotal(next);
+      }
+      if (field === "resale_payment_enabled" && value) {
+        next.resale_threshold_text = next.resale_threshold_text || "€ 350.000";
+        next.resale_percentage_text = next.resale_percentage_text || "20";
+        next.resale_period_months = next.resale_period_months || 12;
+        next.resale_deduct_courtage = next.resale_deduct_courtage === undefined || next.resale_deduct_courtage === null ? true : next.resale_deduct_courtage;
+      }
+      if (field === "resale_percentage_text") {
+        next.resale_percentage_text = formatPercent(value) || value;
+      }
+      return next;
+    });
   }
 
   const specialProposalType = isSpecialProposalType(proposal?.proposal_type);
@@ -285,7 +388,7 @@ export default function LeadDetailPage({ params }) {
 
   async function createProposal() {
     if (!proposal) return;
-    const calculatedProposal = buildCalculatedProposalPayload(proposal);
+    const calculatedProposal = buildCalculatedProposalPayload(applyAdditionalAgreementDefaults(proposal));
     const result = await post({ action: "createProposal", ...calculatedProposal });
     if (result?.proposal?.id) {
       setNotice("Voorstel is aangemaakt. Controleer de print/PDF-versie voordat u het voorstel mailt.");
@@ -302,6 +405,12 @@ export default function LeadDetailPage({ params }) {
         ? "Mail is overgeslagen omdat Resend niet actief is ingesteld. De klantlink is wel beschikbaar."
         : "Voorstel is naar de klant gemaild en vastgelegd in de mailhistorie.");
     }
+  }
+
+  function useProposalAsBase(item) {
+    setProposal(normalizeProposalForForm(item, lead));
+    setNotice("Bestaand voorstel is geladen als basis. Controleer de velden en maak daarna een nieuw voorstel aan.");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   return (
@@ -465,8 +574,63 @@ export default function LeadDetailPage({ params }) {
                   </div>
                 ) : null}
 
+                <div className="form-section additional-agreements-section">
+                  <h3>6. Aanvullende afspraken</h3>
+                  <p className="calc-help">Schakel alleen de afspraken in die in dit voorstel moeten worden opgenomen. Uitgeschakelde onderdelen verschijnen niet in de klantversie of PDF.</p>
+
+                  <div className="agreement-block">
+                    <label className="checkbox-label wide-check"><input type="checkbox" checked={Boolean(proposal.seller_work_enabled)} onChange={(e) => setProposalField("seller_work_enabled", e.target.checked)} /><span>Werkzaamheden door verkoper opnemen</span></label>
+                    {proposal.seller_work_enabled ? (
+                      <>
+                        <div className="form-grid">
+                          <Field label="Basiskoopprijs"><input inputMode="decimal" value={proposal.seller_work_base_price_text || ""} onChange={(e) => setProposalField("seller_work_base_price_text", e.target.value)} /></Field>
+                          <Field label="Bedrag werkzaamheden"><input inputMode="decimal" value={proposal.seller_work_amount_text || ""} onChange={(e) => setProposalField("seller_work_amount_text", e.target.value)} /></Field>
+                          <Field label="Totale koopprijs na uitvoering"><input value={sellerWorkTotal || proposal.seller_work_total_price_text || ""} readOnly /></Field>
+                          <Field label="Uiterste uitvoeringsdatum"><input type="date" value={proposal.seller_work_deadline || ""} onChange={(e) => setProposalField("seller_work_deadline", e.target.value)} /></Field>
+                        </div>
+                        <Field label="Omschrijving werkzaamheden">
+                          <textarea placeholder="Omschrijf concreet welke herstelwerkzaamheden verkoper uitvoert." value={proposal.seller_work_description || ""} onChange={(e) => setProposalField("seller_work_description", e.target.value)} />
+                        </Field>
+                        <Field label="Aanvullende voorwaarden/opmerkingen werkzaamheden">
+                          <textarea value={proposal.seller_work_conditions_text || ""} onChange={(e) => setProposalField("seller_work_conditions_text", e.target.value)} />
+                        </Field>
+                        <div className="agreement-preview">
+                          <strong>Voorsteltekst</strong>
+                          <p>Verkoper zal vóór de juridische levering de in dit voorstel omschreven herstelwerkzaamheden uitvoeren. Wanneer deze werkzaamheden volledig en deugdelijk zijn uitgevoerd en door koper zijn goedgekeurd, wordt de basiskoopprijs verhoogd met {formatMoney(parseMoney(proposal.seller_work_amount_text)) || "het ingevulde bedrag"}. De totale koopprijs bedraagt in dat geval {sellerWorkTotal || "het berekende totaalbedrag"} kosten koper.</p>
+                          <small>Let op: dit wordt als mogelijke verhoging van de koopsom bij notariële levering weergegeven, niet als losse betaling vóór levering.</small>
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
+
+                  <div className="agreement-block">
+                    <label className="checkbox-label wide-check"><input type="checkbox" checked={Boolean(proposal.resale_payment_enabled)} onChange={(e) => setProposalField("resale_payment_enabled", e.target.checked)} /><span>Aanvullende betaling bij doorverkoop opnemen</span></label>
+                    {proposal.resale_payment_enabled ? (
+                      <>
+                        <div className="form-grid">
+                          <Field label="Drempelbedrag doorverkoop"><input inputMode="decimal" value={proposal.resale_threshold_text || ""} onChange={(e) => setProposalField("resale_threshold_text", e.target.value)} /></Field>
+                          <Field label="Percentage meeropbrengst"><input inputMode="decimal" min="0" max="100" value={proposal.resale_percentage_text || ""} onChange={(e) => setProposalField("resale_percentage_text", e.target.value)} /></Field>
+                          <Field label="Periode in maanden"><input inputMode="numeric" min="1" type="number" value={proposal.resale_period_months || ""} onChange={(e) => setProposalField("resale_period_months", e.target.value)} /></Field>
+                          <Field label="Maximumbedrag optioneel"><input inputMode="decimal" placeholder="Leeg laten als er geen maximum is" value={proposal.resale_cap_text || ""} onChange={(e) => setProposalField("resale_cap_text", e.target.value)} /></Field>
+                        </div>
+                        <div className="checkbox-grid single">
+                          <label className="checkbox-label"><input type="checkbox" checked={Boolean(proposal.resale_deduct_courtage)} onChange={(e) => setProposalField("resale_deduct_courtage", e.target.checked)} /><span>Makelaarscourtage van de latere doorverkoop aftrekken</span></label>
+                        </div>
+                        <Field label="Aanvullende toelichting">
+                          <textarea value={proposal.resale_explanation_text || ""} onChange={(e) => setProposalField("resale_explanation_text", e.target.value)} />
+                        </Field>
+                        <div className="agreement-preview">
+                          <strong>Rekenvoorbeeld admin</strong>
+                          <p>Doorverkoopprijs {formatMoney(resaleExample.salePrice)} · courtage {formatMoney(resaleExample.courtage) || "€ 0"} · netto doorverkoopprijs {formatMoney(resaleExample.netResale)} · meeropbrengst {formatMoney(resaleExample.surplus) || "€ 0"} · aanvullende betaling {formatMoney(resaleExample.payment) || "€ 0"}.</p>
+                          <small>Alleen de courtage van de latere doorverkoop wordt afgetrokken. De courtage van de huidige verkoopmakelaar van verkoper wordt niet afgetrokken.</small>
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+
                 <div className="form-section">
-                  <h3>6. Teksten en voorwaarden</h3>
+                  <h3>7. Teksten en voorwaarden</h3>
                   <Field label="Uitgangspunten van dit voorstel">
                     <textarea value={proposal.assumptions_text} onChange={(e) => setProposalField("assumptions_text", e.target.value)} />
                   </Field>
@@ -475,6 +639,9 @@ export default function LeadDetailPage({ params }) {
                   </Field>
                   <Field label="Voorwaarden">
                     <textarea value={proposal.conditions_text} onChange={(e) => setProposalField("conditions_text", e.target.value)} />
+                  </Field>
+                  <Field label="Voorbehoud en totstandkoming">
+                    <textarea value={proposal.nonbinding_text || ""} onChange={(e) => setProposalField("nonbinding_text", e.target.value)} />
                   </Field>
                   <Field label="Korte vergelijking / toelichting">
                     <textarea value={proposal.short_comparison_text} onChange={(e) => setProposalField("short_comparison_text", e.target.value)} />
@@ -492,7 +659,7 @@ export default function LeadDetailPage({ params }) {
 
                 <div className="proposal-actions">
                   <button disabled={saving || !proposal.amount_text} onClick={createProposal}>Voorstel maken en openen</button>
-                  <button type="button" className="ghost" onClick={() => setProposal(defaultProposalForLead(lead))}>Velden herstellen</button>
+                  <button type="button" className="ghost" onClick={() => setProposal(applyAdditionalAgreementDefaults(defaultProposalForLead(lead)))}>Velden herstellen</button>
                 </div>
               </div>
             ) : null}
@@ -500,7 +667,7 @@ export default function LeadDetailPage({ params }) {
 
           <section className="grid three">
             <article className="card"><h2>Taken</h2>{(data.tasks || []).map((item) => <div className="item" key={item.id}><strong>{item.title}</strong><span>{item.status} · {item.due_date || "geen datum"}</span><select value={item.status || "Open"} onChange={(e) => post({ action: "updateTask", id: item.id, status: e.target.value })}>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select></div>)}</article>
-            <article className="card"><h2>Voorstellen</h2>{(data.proposals || []).map((item) => <div className="item" key={item.id}><strong>{item.amount_text || "Voorstel"}</strong><span>{item.status} · {fmt(item.created_at)}</span><a href={`/admin/voorstellen/${item.id}/print`} target="_blank">Interne print/PDF</a>{item.public_token ? <a href={`/voorstel/${item.public_token}?admin_preview=1`} target="_blank">Klantversie bekijken</a> : null}<button className="small" onClick={() => sendProposal(item.id)}>Mail voorstel naar klant</button>{item.emailed_at ? <small>Laatst gemaild: {fmt(item.emailed_at)}</small> : null}{proposalViewedAfterEmail(item) ? <small>Bekeken door klant: {fmt(item.public_viewed_at)}</small> : null}</div>)}</article>
+            <article className="card"><h2>Voorstellen</h2>{(data.proposals || []).map((item) => <div className="item" key={item.id}><strong>{item.amount_text || "Voorstel"}</strong><span>{item.status} · {fmt(item.created_at)}</span><a href={`/admin/voorstellen/${item.id}/print`} target="_blank">Interne print/PDF</a>{item.public_token ? <a href={`/voorstel/${item.public_token}?admin_preview=1`} target="_blank">Klantversie bekijken</a> : null}<button className="small" onClick={() => sendProposal(item.id)}>Mail voorstel naar klant</button><button className="small secondary-small" onClick={() => useProposalAsBase(item)}>Gebruik als basis</button>{item.emailed_at ? <small>Laatst gemaild: {fmt(item.emailed_at)}</small> : null}{proposalViewedAfterEmail(item) ? <small>Bekeken door klant: {fmt(item.public_viewed_at)}</small> : null}</div>)}</article>
             <article className="card"><h2>Mailhistorie</h2>{(data.mailLogs || []).map((item) => <div className="item" key={item.id}><strong>{item.type}</strong><span>{item.status} · {item.recipient}</span><small>{fmt(item.created_at)}</small></div>)}</article>
           </section>
         </>
@@ -510,5 +677,5 @@ export default function LeadDetailPage({ params }) {
 }
 
 const styles = `
-:root{--navy:#071f3a;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#D96A1C;--green:#3E8F5E;--shadow:0 22px 70px rgba(7,31,58,.12)}body{margin:0;background:radial-gradient(circle at top right,#FFF1E6,transparent 34%),var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.detail-page{max-width:1280px;margin:0 auto;padding:28px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}header a{color:var(--navy);font-weight:900;text-decoration:none}header img{width:220px;background:#fff;border-radius:18px;padding:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero span,.section-head span{color:#B85216;background:#FFF1E6;border:1px solid #F2B885;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase}.hero h1{font-size:42px;letter-spacing:-.04em;margin:12px 0 6px}.hero p,.section-head p{color:var(--muted);font-size:18px}.actions,.proposal-actions{display:flex;gap:10px;flex-wrap:wrap}.actions a,.actions button,.card button,.item a,.secondary-link{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer;display:inline-block;margin-right:8px;margin-top:8px}.actions a:first-child{background:var(--navy)}.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:18px}.grid.three{grid-template-columns:repeat(3,1fr)}h2{margin:0 0 18px;font-size:24px;letter-spacing:-.03em}h3{margin:0 0 16px;font-size:20px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}.info{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.info span,.item span,.item small,label span{display:block;color:var(--muted);font-size:13px}.info strong{display:block;margin-top:6px;word-break:break-word}label{display:grid;gap:8px;font-weight:900;margin-top:12px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}.item{border-bottom:1px solid var(--line);padding:12px 0}.item:last-child{border-bottom:0}.item strong{display:block}.item a{margin-top:8px;background:var(--navy)}.item button.small{margin-top:8px;margin-left:8px;padding:9px 12px;font-size:13px}.error,.notice-top{border-radius:16px;padding:12px 14px;margin-bottom:16px}.error{background:#F8EEE9;color:#7C2D20;border:1px solid #E8C7BC}.notice-top{background:#f0fff6;color:#075c2a;border:1px solid #bff3d0}.proposal-card{margin:18px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.section-head h2{font-size:34px;margin:12px 0 8px}.secondary-link{background:var(--navy);white-space:nowrap}.proposal-form{display:grid;gap:20px}.form-section{border:1px solid var(--line);border-radius:24px;background:#fff;padding:20px}.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.form-section textarea{min-height:96px}.calc-help{margin:14px 0 0;color:var(--muted);font-weight:700}.checkbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.checkbox-label{display:flex;align-items:flex-start;gap:10px;margin:0;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:13px 14px;font-weight:900}.checkbox-label input{width:auto;margin-top:2px;accent-color:var(--orange)}.checkbox-label span{display:block;color:var(--navy);font-size:13px;line-height:1.35}.calc-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}.calc-summary div{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.calc-summary span{display:block;color:var(--muted);font-size:12px;font-weight:900}.calc-summary strong{display:block;margin-top:6px;font-size:18px}.calc-summary .positive{background:#f0fff6;border-color:#bff3d0}.calc-summary .negative{background:#fff5f1;border-color:#ffd5c4}.proposal-actions button{padding:14px 20px}.proposal-actions .ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}@media(max-width:1100px){.form-grid{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:1fr}.calc-summary{grid-template-columns:repeat(2,1fr)}.checkbox-grid{grid-template-columns:1fr}}@media(max-width:900px){.grid,.hero,.section-head{grid-template-columns:1fr;display:grid}.info-grid,.form-grid,.calc-summary{grid-template-columns:1fr}.detail-page{padding:18px}}
+:root{--navy:#071f3a;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#D96A1C;--green:#3E8F5E;--shadow:0 22px 70px rgba(7,31,58,.12)}body{margin:0;background:radial-gradient(circle at top right,#FFF1E6,transparent 34%),var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.detail-page{max-width:1280px;margin:0 auto;padding:28px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}header a{color:var(--navy);font-weight:900;text-decoration:none}header img{width:220px;background:#fff;border-radius:18px;padding:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero span,.section-head span{color:#B85216;background:#FFF1E6;border:1px solid #F2B885;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase}.hero h1{font-size:42px;letter-spacing:-.04em;margin:12px 0 6px}.hero p,.section-head p{color:var(--muted);font-size:18px}.actions,.proposal-actions{display:flex;gap:10px;flex-wrap:wrap}.actions a,.actions button,.card button,.item a,.secondary-link{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer;display:inline-block;margin-right:8px;margin-top:8px}.actions a:first-child{background:var(--navy)}.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:18px}.grid.three{grid-template-columns:repeat(3,1fr)}h2{margin:0 0 18px;font-size:24px;letter-spacing:-.03em}h3{margin:0 0 16px;font-size:20px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}.info{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.info span,.item span,.item small,label span{display:block;color:var(--muted);font-size:13px}.info strong{display:block;margin-top:6px;word-break:break-word}label{display:grid;gap:8px;font-weight:900;margin-top:12px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}.item{border-bottom:1px solid var(--line);padding:12px 0}.item:last-child{border-bottom:0}.item strong{display:block}.item a{margin-top:8px;background:var(--navy)}.item button.small{margin-top:8px;margin-left:8px;padding:9px 12px;font-size:13px}.error,.notice-top{border-radius:16px;padding:12px 14px;margin-bottom:16px}.error{background:#F8EEE9;color:#7C2D20;border:1px solid #E8C7BC}.notice-top{background:#f0fff6;color:#075c2a;border:1px solid #bff3d0}.proposal-card{margin:18px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.section-head h2{font-size:34px;margin:12px 0 8px}.secondary-link{background:var(--navy);white-space:nowrap}.proposal-form{display:grid;gap:20px}.form-section{border:1px solid var(--line);border-radius:24px;background:#fff;padding:20px}.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.form-section textarea{min-height:96px}.calc-help{margin:14px 0 0;color:var(--muted);font-weight:700}.checkbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.checkbox-label{display:flex;align-items:flex-start;gap:10px;margin:0;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:13px 14px;font-weight:900}.checkbox-label input{width:auto;margin-top:2px;accent-color:var(--orange)}.checkbox-label span{display:block;color:var(--navy);font-size:13px;line-height:1.35}.calc-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}.calc-summary div{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.calc-summary span{display:block;color:var(--muted);font-size:12px;font-weight:900}.calc-summary strong{display:block;margin-top:6px;font-size:18px}.calc-summary .positive{background:#f0fff6;border-color:#bff3d0}.calc-summary .negative{background:#fff5f1;border-color:#ffd5c4}.proposal-actions button{padding:14px 20px}.proposal-actions .ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}.agreement-block{border:1px solid var(--line);border-radius:22px;background:#fffdf9;padding:16px;margin-top:14px}.wide-check{margin:0 0 12px}.checkbox-grid.single{grid-template-columns:1fr}.agreement-preview{margin-top:14px;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.agreement-preview strong{display:block;margin-bottom:6px}.agreement-preview p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}.agreement-preview small{display:block;color:#7b8795;margin-top:8px;font-weight:700}.secondary-small{background:#fff!important;color:var(--navy)!important;border:1px solid var(--line)!important}@media(max-width:1100px){.form-grid{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:1fr}.calc-summary{grid-template-columns:repeat(2,1fr)}.checkbox-grid{grid-template-columns:1fr}}@media(max-width:900px){.grid,.hero,.section-head{grid-template-columns:1fr;display:grid}.info-grid,.form-grid,.calc-summary{grid-template-columns:1fr}.detail-page{padding:18px}}
 `;

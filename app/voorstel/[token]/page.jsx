@@ -5,6 +5,8 @@ import PrintButton from "./PrintButton";
 
 export const dynamic = "force-dynamic";
 
+const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid.";
+
 function formatDate(value) {
   if (!value) return "-";
   return new Intl.DateTimeFormat("nl-NL", {
@@ -69,6 +71,18 @@ function constructieChecks(proposal) {
   if (proposal.delivery_free_of_claims) checks.push("Levering vrij van huur, gebruik, beslagen en hypotheken");
   if (proposal.property_same_state) checks.push("Woning blijft tot levering in huidige staat");
   return checks;
+}
+
+function percent(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return "-";
+  return raw.includes("%") ? raw : `${raw}%`;
+}
+
+function months(value, fallback = "-") {
+  const raw = String(value || "").trim();
+  if (!raw) return fallback;
+  return `${raw} maanden`;
 }
 
 export default async function PublicProposalPage({ params, searchParams }) {
@@ -149,6 +163,9 @@ export default async function PublicProposalPage({ params, searchParams }) {
   );
   const showDeliveryConstructie = specialProposal || hasDeliveryData;
   const showBridge = proposalType === "Overbruggingsoplossing" || hasBridgeData;
+  const showSellerWork = Boolean(proposal.seller_work_enabled);
+  const showResalePayment = Boolean(proposal.resale_payment_enabled);
+  const nonbindingText = value(proposal.nonbinding_text, DEFAULT_NONBINDING_TEXT);
 
   return (
     <main className="proposal-page">
@@ -330,6 +347,54 @@ export default async function PublicProposalPage({ params, searchParams }) {
         </div>
       </section>
 
+      {showSellerWork ? (
+        <section className="card special-card agreement-card">
+          <span className="section-kicker">Werkzaamheden door verkoper</span>
+          <h2>Werkzaamheden en koopprijsverhoging</h2>
+          <div className="construct-grid">
+            <div><strong>Basiskoopprijs</strong><span>{amount(proposal.seller_work_base_price_text)}</span></div>
+            <div><strong>Bedrag werkzaamheden</strong><span>{amount(proposal.seller_work_amount_text)}</span></div>
+            <div><strong>Totale koopprijs na uitvoering</strong><span>{amount(proposal.seller_work_total_price_text)}</span></div>
+            <div><strong>Uiterste uitvoeringsdatum</strong><span>{formatDate(proposal.seller_work_deadline)}</span></div>
+          </div>
+          {proposal.seller_work_description ? <p className="bridge-copy"><strong>Omschrijving werkzaamheden:</strong><br />{proposal.seller_work_description}</p> : null}
+          <p className="bridge-copy">
+            Verkoper zal vóór de juridische levering de in dit voorstel omschreven herstelwerkzaamheden uitvoeren.
+            Wanneer deze werkzaamheden volledig en deugdelijk zijn uitgevoerd en door koper zijn goedgekeurd, wordt de basiskoopprijs verhoogd met {amount(proposal.seller_work_amount_text)}.
+            De totale koopprijs bedraagt in dat geval {amount(proposal.seller_work_total_price_text)} kosten koper.
+          </p>
+          <p className="bridge-copy">
+            Wanneer de werkzaamheden niet, niet volledig of niet deugdelijk zijn uitgevoerd, kan de aanvullende koopprijs worden verminderd met de redelijkerwijs benodigde kosten om de werkzaamheden alsnog te voltooien of te herstellen.
+            Het bedrag voor de werkzaamheden wordt niet als losse betaling vóór levering weergegeven, maar als mogelijke verhoging van de koopsom bij de notariële levering.
+          </p>
+          {proposal.seller_work_conditions_text ? <p className="bridge-copy">{proposal.seller_work_conditions_text}</p> : null}
+        </section>
+      ) : null}
+
+      {showResalePayment ? (
+        <section className="card special-card agreement-card">
+          <span className="section-kicker">Aanvullende betaling bij doorverkoop</span>
+          <h2>Regeling bij latere doorverkoop</h2>
+          <div className="construct-grid">
+            <div><strong>Drempelbedrag</strong><span>{amount(proposal.resale_threshold_text)}</span></div>
+            <div><strong>Percentage meeropbrengst</strong><span>{percent(proposal.resale_percentage_text)}</span></div>
+            <div><strong>Periode</strong><span>{months(proposal.resale_period_months)}</span></div>
+            <div><strong>Courtage aftrekken</strong><span>{proposal.resale_deduct_courtage ? "Ja, alleen latere doorverkoopcourtage" : "Nee"}</span></div>
+            {proposal.resale_cap_text ? <div><strong>Maximumbedrag</strong><span>{amount(proposal.resale_cap_text)}</span></div> : null}
+          </div>
+          <p className="bridge-copy">
+            Indien de woning binnen {months(proposal.resale_period_months, "de afgesproken periode")} wordt doorverkocht tegen een netto doorverkoopprijs van meer dan {amount(proposal.resale_threshold_text)}, ontvangt verkoper een aanvullende betaling ter grootte van {percent(proposal.resale_percentage_text)} van het gedeelte van de netto doorverkoopprijs boven {amount(proposal.resale_threshold_text)}.
+          </p>
+          <p className="bridge-copy">
+            Onder netto doorverkoopprijs wordt verstaan de overeengekomen verkoopprijs aan de opvolgende koper, verminderd met de door koper daadwerkelijk verschuldigde makelaarscourtage voor de doorverkoop, inclusief btw. Andere aankoop-, verbouwings-, financierings-, notaris- of verkoopkosten worden niet in mindering gebracht. De courtage van de huidige verkoopmakelaar van verkoper wordt niet afgetrokken.
+          </p>
+          <p className="bridge-copy">
+            Deze regeling geldt ook bij een ABC-transactie, AB-BC-transactie, levering aan een nader te noemen meester of rechtstreekse levering aan een eindkoper.
+          </p>
+          {proposal.resale_explanation_text ? <p className="bridge-copy">{proposal.resale_explanation_text}</p> : null}
+        </section>
+      ) : null}
+
       <section className="two-columns">
         <section className="card">
           <span className="section-kicker">Uitgangspunten</span>
@@ -400,8 +465,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
       </section>
 
       <section className="disclaimer">
-        <strong>Belangrijk:</strong> dit voorstel is vrijblijvend en onder voorbehoud van definitieve controle,
-        akkoord van betrokken partijen en notariële vastlegging. Aan dit document kunnen geen rechten worden ontleend.
+        <strong>Voorbehoud en totstandkoming:</strong> {nonbindingText}
       </section>
     </main>
   );
