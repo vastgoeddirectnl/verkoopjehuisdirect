@@ -168,6 +168,17 @@ export default function SeoLandingPage({ page }) {
   const processSteps = Array.isArray(page.processSteps) && page.processSteps.length
     ? page.processSteps
     : sections.find((section) => Array.isArray(section.steps) && section.steps.length)?.steps || [];
+  const formTrustItems = Array.isArray(page.formTrustItems) && page.formTrustItems.length
+    ? page.formTrustItems
+    : [
+        "Vrijblijvende aanvraag",
+        "Persoonlijk contact",
+        "Schriftelijke afspraken",
+        "Notariële overdracht",
+      ];
+  const afterRequestTitle = page.afterRequestTitle || "Wat gebeurt er na uw aanvraag?";
+  const afterRequestText = page.afterRequestText || "Wij beoordelen de woninggegevens en uw situatie. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Als er nog informatie nodig is, nemen wij kort contact met u op.";
+  const heroNote = page.heroNote || "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf.";
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -277,6 +288,13 @@ export default function SeoLandingPage({ page }) {
         .ad-mini-success{background:#f0fff5;border:1px solid #bfe7cc;border-radius:16px;padding:14px;color:#103b22;margin-top:14px}
         .ad-mini-success strong{display:block;margin-bottom:5px;color:#103b22}
         .ad-mini-success p{margin:0!important;color:#315b3f!important;font-size:14px!important;line-height:1.45!important}
+        .form-conversion-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(150px,.88fr);gap:14px;align-items:start;margin-top:2px}
+        .form-trust-box{background:#fffaf4;border:1px solid #ead7c2;border-radius:17px;padding:13px 14px;display:grid;gap:9px;box-shadow:0 10px 22px rgba(7,31,58,.045)}
+        .form-trust-box strong{display:block;color:#071f3a;font-size:14px;line-height:1.25}
+        .form-trust-box ul{display:grid;gap:7px;list-style:none;margin:0;padding:0}
+        .form-trust-box li{font-size:12.5px;line-height:1.32;color:#405167;font-weight:850}
+        .form-trust-box a{color:#071f3a;text-decoration:none;font-weight:900}
+        .form-trust-box a:hover{color:#D96A1C}
         .after-request{display:grid;gap:4px;margin-top:14px;background:#f8f5ef;border:1px solid #eee8df;border-radius:16px;padding:13px;color:#24364a;font-size:13px;line-height:1.42}
         .after-request strong{color:#071f3a;font-size:14px}
         .section{padding:58px 0}
@@ -322,6 +340,7 @@ export default function SeoLandingPage({ page }) {
         .steps{counter-reset:step;display:grid;gap:10px;margin:14px 0 0;padding:0;list-style:none}
         .steps li{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;background:#f8f5ef;border:1px solid #eee8df;border-radius:16px;padding:10px 12px;color:#24364a;font-size:15px;font-weight:850}
         .steps li:before{counter-increment:step;content:counter(step);width:38px;height:38px;border-radius:14px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900}
+        .steps li small{display:block;color:#647386;font-weight:750;font-size:13.5px;line-height:1.42;margin-top:3px}
         .comparison-wrap{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:32px;padding:32px;color:#fff;box-shadow:0 22px 66px rgba(7,31,58,.18)}
         .comparison-top{display:grid;grid-template-columns:.9fr 1.1fr;gap:26px;align-items:end;margin-bottom:22px}
         .comparison-top h2{color:#fff}
@@ -424,6 +443,8 @@ export default function SeoLandingPage({ page }) {
           .content-block p,.example-card p,.section-head p,.text{font-size:15px;line-height:1.58}
           .cta-logo{display:none}
           .cta-card h2{font-size:24px}
+          .form-conversion-grid{grid-template-columns:1fr;gap:12px}
+          .form-trust-box{order:2}
           .compare-row{grid-template-columns:1fr;gap:5px}
           .faq-item{display:block}
           .faq-item h3{margin-bottom:7px}
@@ -459,9 +480,9 @@ export default function SeoLandingPage({ page }) {
           </nav>
 
           <div className="header-actions">
-            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
-            <a href="tel:0612238051" className="btn btn-blue">Bel direct</a>
-            <a href="#aanvraag" className="btn btn-orange">Voorstel aanvragen</a>
+            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green" data-analytics-event="secondary_cta_click" data-analytics-component="header_whatsapp">WhatsApp</a>
+            <a href="tel:0612238051" className="btn btn-blue" data-analytics-event="secondary_cta_click" data-analytics-component="header_phone">Bel direct</a>
+            <a href="#aanvraag" className="btn btn-orange" data-analytics-event="primary_cta_click" data-analytics-component="header">Voorstel aanvragen</a>
           </div>
         </div>
       </header>
@@ -474,11 +495,11 @@ export default function SeoLandingPage({ page }) {
             <p className="lead">{page.lead}</p>
 
             <div className="hero-cta-row">
-              <a href="#aanvraag" className="btn btn-orange">{primaryCta}</a>
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">{secondaryCta}</a>
+              <a href="#aanvraag" className="btn btn-orange" data-analytics-event="primary_cta_click" data-analytics-component="hero">{primaryCta}</a>
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light" data-analytics-event="secondary_cta_click" data-analytics-component="hero_whatsapp">{secondaryCta}</a>
             </div>
 
-            <p className="micro-note">Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf.</p>
+            <p className="micro-note">{heroNote}</p>
             <p className="mobile-trust-line">Vrijblijvend · Schriftelijke afspraken · Notariële afwikkeling</p>
 
             {heroBenefits.length > 0 && (
@@ -494,14 +515,28 @@ export default function SeoLandingPage({ page }) {
             <p>
               Vul de belangrijkste gegevens in. Wij bekijken uw woning en situatie. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel.
             </p>
-            <AdsLeadMiniForm
-              pageTitle={page.breadcrumb}
-              pageSlug={page.slug}
-              defaultSituation={page.defaultSituation || page.breadcrumb}
-            />
-            <div className="after-request">
-              <strong>Wat gebeurt er na uw aanvraag?</strong>
-              <span>Wij beoordelen de woninggegevens en uw situatie. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Als er nog informatie nodig is, nemen wij kort contact met u op.</span>
+            <div className="form-conversion-grid">
+              <div>
+                <AdsLeadMiniForm
+                  pageTitle={page.breadcrumb}
+                  pageSlug={page.slug}
+                  defaultSituation={page.defaultSituation || page.breadcrumb}
+                  submitLabel={page.formSubmitLabel || primaryCta}
+                />
+                <div className="after-request">
+                  <strong>{afterRequestTitle}</strong>
+                  <span>{afterRequestText}</span>
+                </div>
+              </div>
+
+              <div className="form-trust-box" aria-label="Waarom aanvragen">
+                <strong>Rustig en zonder verplichting</strong>
+                <ul>
+                  {formTrustItems.map((item) => <li key={item}>✓ {item}</li>)}
+                  <li><a href="tel:0612238051" data-analytics-event="secondary_cta_click" data-analytics-component="form_trust_phone">Bel 06 12 23 80 51</a></li>
+                  <li><a href={whatsappLink} target="_blank" rel="noopener noreferrer" data-analytics-event="secondary_cta_click" data-analytics-component="form_trust_whatsapp">WhatsApp uw situatie</a></li>
+                </ul>
+              </div>
             </div>
           </aside>
         </div>
@@ -662,7 +697,14 @@ export default function SeoLandingPage({ page }) {
               <p>De aanvraag is bedoeld om eerst duidelijkheid te krijgen. Een koopovereenkomst ontstaat pas na uitwerking en ondertekening door beide partijen.</p>
             </div>
             <ol className="steps">
-              {processSteps.map((step) => <li key={step}>{step}</li>)}
+              {processSteps.map((step) => {
+                const key = typeof step === "string" ? step : `${step.title}-${step.text}`;
+                return (
+                  <li key={key}>
+                    {typeof step === "string" ? step : <span><strong>{step.title}</strong>{step.text ? <small>{step.text}</small> : null}</span>}
+                  </li>
+                );
+              })}
             </ol>
           </div>
         </section>
@@ -756,9 +798,9 @@ export default function SeoLandingPage({ page }) {
           <h2>{page.ctaTitle}</h2>
           <p>{page.ctaText}</p>
           <div className="cta-buttons">
-            <a href="#aanvraag" className="btn btn-orange">{primaryCta}</a>
-            <a href="tel:0612238051" className="btn btn-light">Bel direct</a>
-            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">Stuur uw situatie via WhatsApp</a>
+            <a href="#aanvraag" className="btn btn-orange" data-analytics-event="primary_cta_click" data-analytics-component="final_cta">{primaryCta}</a>
+            <a href="tel:0612238051" className="btn btn-light" data-analytics-event="secondary_cta_click" data-analytics-component="final_phone">Bel direct</a>
+            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green" data-analytics-event="secondary_cta_click" data-analytics-component="final_whatsapp">Stuur uw situatie via WhatsApp</a>
           </div>
         </div>
       </section>
@@ -775,7 +817,7 @@ export default function SeoLandingPage({ page }) {
             <h3>Contact</h3>
             <p>info@vastgoeddirectnederland.nl</p>
             <p>06 12 23 80 51</p>
-            <p><a href="tel:0612238051">Bel direct</a></p>
+            <p><a href="tel:0612238051" data-analytics-event="secondary_cta_click" data-analytics-component="footer_phone">Bel direct</a></p>
           </div>
 
           <div>
@@ -796,11 +838,11 @@ export default function SeoLandingPage({ page }) {
         </div>
       </footer>
 
-      <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
+      <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="whatsapp-float" data-analytics-event="secondary_cta_click" data-analytics-component="floating_whatsapp">WhatsApp</a>
 
       <div className="mobile-bottom-cta">
-        <a href="#aanvraag" className="btn btn-orange">Voorstel aanvragen</a>
-        <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+        <a href="#aanvraag" className="btn btn-orange" data-analytics-event="primary_cta_click" data-analytics-component="mobile_sticky">Voorstel aanvragen</a>
+        <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green" data-analytics-event="secondary_cta_click" data-analytics-component="mobile_sticky_whatsapp">WhatsApp</a>
       </div>
     </main>
   );

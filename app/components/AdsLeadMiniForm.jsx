@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { trackGoogleAdsConversion } from "../lib/googleAds";
+import { useRef, useState } from "react";
+import { trackAnalyticsEvent, trackGoogleAdsConversion } from "../lib/googleAds";
 
 const situaties = [
   "Snel duidelijkheid gewenst",
@@ -17,10 +17,16 @@ const situaties = [
   "Anders",
 ];
 
-export default function AdsLeadMiniForm({ pageTitle = "Advertentiepagina", pageSlug = "/", defaultSituation = "" }) {
+export default function AdsLeadMiniForm({
+  pageTitle = "Advertentiepagina",
+  pageSlug = "/",
+  defaultSituation = "",
+  submitLabel = "Ontvang een vrijblijvend verkoopvoorstel",
+}) {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const hasTrackedStart = useRef(false);
   const [form, setForm] = useState({
     naam: "",
     telefoon: "",
@@ -30,13 +36,24 @@ export default function AdsLeadMiniForm({ pageTitle = "Advertentiepagina", pageS
     situatie: defaultSituation || "",
   });
 
+  const trackFormStart = () => {
+    if (hasTrackedStart.current) return;
+    hasTrackedStart.current = true;
+    trackAnalyticsEvent("lead_form_start", {
+      form_name: "seo_ads_mini_form",
+      component: pageSlug,
+    });
+  };
+
   const updateForm = (event) => {
+    trackFormStart();
     const { name, value } = event.target;
     setForm((current) => ({ ...current, [name]: value }));
   };
 
   const submitLead = async (event) => {
     event.preventDefault();
+    trackFormStart();
     setError("");
 
     if (!form.naam || !form.telefoon || !form.postcode || !form.huisnummer) {
@@ -76,6 +93,11 @@ export default function AdsLeadMiniForm({ pageTitle = "Advertentiepagina", pageS
         throw new Error(result.error || "Aanvraag verzenden mislukt.");
       }
 
+      trackAnalyticsEvent("lead_form_submit", {
+        form_name: "seo_ads_mini_form",
+        component: pageSlug,
+      });
+
       trackGoogleAdsConversion("lead", {
         value: 1,
         currency: "EUR",
@@ -101,15 +123,15 @@ export default function AdsLeadMiniForm({ pageTitle = "Advertentiepagina", pageS
   }
 
   return (
-    <form className="ad-mini-form" onSubmit={submitLead}>
+    <form className="ad-mini-form" onSubmit={submitLead} onFocusCapture={trackFormStart}>
       <div className="ad-mini-form-row two">
         <label>
           <span>Postcode</span>
-          <input name="postcode" value={form.postcode} onChange={updateForm} placeholder="Bijv. 9501 AB" autoComplete="postal-code" required />
+          <input name="postcode" value={form.postcode} onChange={updateForm} placeholder="Bijv. 9501 AB" autoComplete="postal-code" inputMode="text" required />
         </label>
         <label>
           <span>Huisnr.</span>
-          <input name="huisnummer" value={form.huisnummer} onChange={updateForm} placeholder="12" autoComplete="address-line2" required />
+          <input name="huisnummer" value={form.huisnummer} onChange={updateForm} placeholder="12" autoComplete="address-line2" inputMode="numeric" required />
         </label>
       </div>
 
@@ -130,21 +152,21 @@ export default function AdsLeadMiniForm({ pageTitle = "Advertentiepagina", pageS
 
       <label>
         <span>Telefoonnummer</span>
-        <input name="telefoon" value={form.telefoon} onChange={updateForm} placeholder="06 ..." autoComplete="tel" required />
+        <input name="telefoon" type="tel" value={form.telefoon} onChange={updateForm} placeholder="06 ..." autoComplete="tel" inputMode="tel" required />
       </label>
 
       <label>
         <span>E-mail optioneel</span>
-        <input name="email" type="email" value={form.email} onChange={updateForm} placeholder="naam@email.nl" autoComplete="email" />
+        <input name="email" type="email" value={form.email} onChange={updateForm} placeholder="naam@email.nl" autoComplete="email" inputMode="email" />
       </label>
 
       {error && <p className="ad-mini-error">{error}</p>}
 
       <button type="submit" className="btn btn-orange ad-mini-submit" disabled={submitting}>
-        {submitting ? "Aanvraag verzenden..." : "Ontvang een vrijblijvend voorstel"}
+        {submitting ? "Aanvraag verzenden..." : submitLabel}
       </button>
 
-      <p className="ad-mini-note">Vrijblijvend. U zit nergens aan vast.</p>
+      <p className="ad-mini-note">Vrijblijvend. Uw gegevens worden niet zonder toestemming gedeeld.</p>
     </form>
   );
 }

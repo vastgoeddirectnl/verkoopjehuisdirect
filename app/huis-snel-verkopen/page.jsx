@@ -33,6 +33,19 @@ const page = {
   h1: "Huis snel verkopen zonder eerst een lang verkooptraject te starten",
   lead:
     "Wilt u snel weten waar u aan toe bent? Wij bekijken uw woning en situatie zoals die nu zijn. U hoeft niet eerst op te knappen, leeg te halen of een reeks bezichtigingen te organiseren om vrijblijvend duidelijkheid te krijgen.",
+  heroNote:
+    "Snel duidelijkheid krijgen betekent niet dat u overhaast hoeft te beslissen. U ontvangt eerst informatie en beoordeelt daarna rustig of het past.",
+  formSubmitLabel: "Ontvang een vrijblijvend verkoopvoorstel",
+  afterRequestTitle: "Hoe snel hoort u iets na uw aanvraag?",
+  afterRequestText:
+    "Na uw aanvraag nemen wij doorgaans binnen één werkdag persoonlijk contact met u op. Op basis van de woninggegevens bespreken wij welke verkooptermijn haalbaar is. Een voorstel of verkoop binnen een vaste termijn kunnen wij niet vooraf garanderen.",
+  formTrustItems: [
+    "Vrijblijvende aanvraag",
+    "Doorgaans binnen één werkdag reactie",
+    "Duidelijke schriftelijke afspraken",
+    "Notariële overdracht bij akkoord",
+    "Geen traditionele verkoopcampagne nodig",
+  ],
   shortAnswer:
     "Snel verkopen betekent niet dat u overhaast hoeft te beslissen. U kunt eerst vrijblijvend een verkoopvoorstel aanvragen met een duidelijke uitleg over prijs, planning, voorwaarden en notariële afwikkeling.",
   heroBenefits: [
@@ -109,16 +122,6 @@ const page = {
       ],
     },
     {
-      title: "Hoe komt een voorstel tot stand?",
-      steps: [
-        "U vult de belangrijkste woninggegevens en uw situatie in.",
-        "Wij bekijken de woning, locatie, staat en gewenste termijn.",
-        "Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel.",
-        "Als er meer informatie nodig is, nemen wij kort contact op of plannen we een beoordeling.",
-        "Bij akkoord worden afspraken schriftelijk uitgewerkt en verloopt overdracht via de notaris.",
-      ],
-    },
-    {
       title: "Wat wordt schriftelijk vastgelegd?",
       bullets: [
         "De koopprijs en eventuele voorwaarden.",
@@ -129,12 +132,24 @@ const page = {
       ],
     },
   ],
+  processTitle: "Vier stappen naar duidelijkheid over snel verkopen",
   processSteps: [
-    "Aanvraag met woninggegevens invullen.",
-    "Eerste beoordeling van woning en situatie.",
-    "Vrijblijvende inschatting of voorstel ontvangen.",
-    "Vragen bespreken en afspraken verduidelijken.",
-    "Bij akkoord vastleggen in koopovereenkomst en overdracht via de notaris.",
+    {
+      title: "Aanvraag indienen",
+      text: "U vult kort de woninggegevens, uw contactgegevens en uw situatie in.",
+    },
+    {
+      title: "Persoonlijk contact en beoordeling",
+      text: "Wij nemen doorgaans binnen één werkdag contact op en beoordelen wat op basis van de gegevens haalbaar is.",
+    },
+    {
+      title: "Vrijblijvend voorstel",
+      text: "Waar mogelijk ontvangt u een eerste inschatting of verkoopvoorstel met prijs, planning en voorwaarden.",
+    },
+    {
+      title: "Schriftelijke afspraken en notariële overdracht",
+      text: "Alleen bij akkoord worden afspraken uitgewerkt in een koopovereenkomst en loopt de overdracht via de notaris.",
+    },
   ],
   comparisonRows: [
     ["Verkoopklaar maken", "Vaak eerst opruimen, styling of herstel", "Niet nodig voor een eerste beoordeling"],
@@ -147,6 +162,11 @@ const page = {
     ["Afwikkeling", "Via koopovereenkomst en notaris", "Ook via koopovereenkomst en notaris"],
   ],
   faqs: [
+    {
+      question: "Hoe snel nemen jullie contact op na mijn aanvraag?",
+      answer:
+        "Doorgaans nemen wij binnen één werkdag contact op. De snelheid van een eerste beoordeling of voorstel hangt af van de woninggegevens en de informatie die beschikbaar is.",
+    },
     {
       question: "Kan ik mijn huis snel verkopen zonder open huis?",
       answer:

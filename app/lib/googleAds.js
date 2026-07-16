@@ -56,3 +56,20 @@ export function trackGoogleAdsConversion(type, options = {}) {
   window.gtag("event", "conversion", eventData);
   return true;
 }
+
+export function trackAnalyticsEvent(eventName, params = {}) {
+  if (typeof window === "undefined") return false;
+  if (!eventName || typeof window.gtag !== "function") return false;
+
+  const safeParams = {
+    event_category: params.event_category || "engagement",
+    page_path: window.location?.pathname || undefined,
+  };
+
+  if (params.link_type) safeParams.link_type = params.link_type;
+  if (params.component) safeParams.component = params.component;
+  if (params.form_name) safeParams.form_name = params.form_name;
+
+  window.gtag("event", eventName, safeParams);
+  return true;
+}
