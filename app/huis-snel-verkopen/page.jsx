@@ -1,171 +1,189 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Huis snel verkopen zonder gedoe",
-  "description": "Huis snel verkopen zonder open huis, verkoopdruk of eerst opknappen? Vraag vrijblijvend duidelijkheid aan.",
-  "alternates": {
-    "canonical": "https://www.vastgoeddirectnederland.nl/huis-snel-verkopen"
+  title: "Huis snel verkopen met duidelijke afspraken",
+  description:
+    "Wilt u snel duidelijkheid over verkoop van uw woning? Vraag vrijblijvend een verkoopvoorstel aan zonder open huis, verkoopdruk of eerst opknappen.",
+  alternates: {
+    canonical: "https://www.vastgoeddirectnederland.nl/huis-snel-verkopen",
   },
-  "openGraph": {
-    "title": "Huis snel verkopen zonder gedoe",
-    "description": "Huis snel verkopen zonder open huis, verkoopdruk of eerst opknappen? Vraag vrijblijvend duidelijkheid aan.",
-    "url": "https://www.vastgoeddirectnederland.nl/huis-snel-verkopen",
-    "siteName": "Vastgoed Direct Nederland",
-    "locale": "nl_NL",
-    "type": "website"
-  }
+  openGraph: {
+    title: "Huis snel verkopen met duidelijke afspraken",
+    description:
+      "Vraag vrijblijvend een verkoopvoorstel aan. Geen open huis nodig, geen verkoopdruk en heldere afspraken over prijs, planning en overdracht.",
+    url: "https://www.vastgoeddirectnederland.nl/huis-snel-verkopen",
+    siteName: "Vastgoed Direct Nederland",
+    locale: "nl_NL",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Huis snel verkopen met duidelijke afspraken",
+    description:
+      "Snel duidelijkheid over uw woningverkoop zonder eerst een regulier verkooptraject te starten.",
+  },
 };
 
 const page = {
-  "slug": "/huis-snel-verkopen",
-  "breadcrumb": "Huis snel verkopen",
-  "eyebrow": "Huis snel verkopen",
-  "h1": "Huis snel verkopen zonder gedoe",
-  "lead": "Wilt u snel weten wat er mogelijk is met uw woning? Vraag vrijblijvend een voorstel aan. Ook als de woning onderhoud nodig heeft, nog vol spullen staat of niet verkoopklaar is.",
-  "shortAnswer": "Ja, snel duidelijkheid krijgen kan zonder dat de woning eerst opgeknapt, leeggehaald of verkoopklaar gemaakt hoeft te worden. U vraagt vrijblijvend informatie aan en beslist daarna zelf of u verder wilt.",
-  "benefits": [
+  slug: "/huis-snel-verkopen",
+  breadcrumb: "Huis snel verkopen",
+  pageType: "high-intent",
+  eyebrow: "Snel duidelijkheid bij woningverkoop",
+  defaultSituation: "Snel duidelijkheid gewenst",
+  h1: "Huis snel verkopen zonder eerst een lang verkooptraject te starten",
+  lead:
+    "Wilt u snel weten waar u aan toe bent? Wij bekijken uw woning en situatie zoals die nu zijn. U hoeft niet eerst op te knappen, leeg te halen of een reeks bezichtigingen te organiseren om vrijblijvend duidelijkheid te krijgen.",
+  shortAnswer:
+    "Snel verkopen betekent niet dat u overhaast hoeft te beslissen. U kunt eerst vrijblijvend een verkoopvoorstel aanvragen met een duidelijke uitleg over prijs, planning, voorwaarden en notariële afwikkeling.",
+  heroBenefits: [
     "Snel duidelijkheid",
-    "Geen open huis",
-    "Niet eerst opknappen",
-    "Niet leeghalen",
-    "Geen verkoopdruk",
-    "Vrijblijvend voorstel"
+    "Geen open huis nodig",
+    "Niet eerst verkoopklaar maken",
+    "U beslist zelf",
   ],
-  "exampleSituation": {
-    "title": "Wanneer snelheid vooral rust moet geven",
-    "text": "Een veelvoorkomende situatie is dat een eigenaar dubbele lasten heeft of een woning leeg ziet staan. Dan gaat het niet alleen om snel handelen, maar vooral om weten waar u aan toe bent zonder meteen een open huis, herstelwerk of verkoopklaar maken te organiseren."
+  benefits: [
+    "Vrijblijvend verkoopvoorstel",
+    "Geen open huis nodig",
+    "Niet eerst opknappen of leeghalen",
+    "Duidelijke planning en voorwaarden",
+    "Geen makelaarskosten bij directe aankoop",
+    "Notariële afwikkeling",
+  ],
+  concernTitle: "Waarom willen eigenaren vaak snel duidelijkheid?",
+  concernCards: [
+    "Er lopen dubbele lasten of de woning staat al leeg.",
+    "Een regulier traject met bezichtigingen voelt te onzeker of te belastend.",
+    "De woning is nog niet verkoopklaar, maar u wilt wel weten wat mogelijk is.",
+    "Er moet een planning komen rond verhuizing, aankoop, erfenis of scheiding.",
+  ],
+  solutionTitle: "Wat kunt u concreet verwachten?",
+  solutionCards: [
+    "Een eerste beoordeling op basis van woninggegevens en uw situatie.",
+    "Waar mogelijk een eerste vrijblijvende inschatting of verkoopvoorstel.",
+    "Duidelijke uitleg over koopprijs, oplevering, voorwaarden en termijn.",
+    "Alleen vervolgstappen als het voorstel voor u interessant is.",
+  ],
+  valueTitle: "Snelheid is pas waardevol als de afspraken duidelijk zijn.",
+  valueText:
+    "Daarom sturen wij niet op druk of overhaaste beslissingen. U vraagt eerst informatie aan, ontvangt waar mogelijk een eerste inschatting en kunt daarna rustig beoordelen of directe verkoop bij uw situatie past.",
+  vdnTasks: [
+    "Meedenken over een realistische verkooproute zonder open huis.",
+    "Beoordelen of de woning in huidige staat kan worden meegenomen.",
+    "Afspraken over oplevering, spullen, planning en overdracht concreet maken.",
+    "Het vervolg bij akkoord via koopovereenkomst en notaris laten verlopen.",
+  ],
+  ownerTasks: [
+    "Bekende gebreken en bijzonderheden eerlijk melden.",
+    "Aangeven welke termijn of leverdatum voor u belangrijk is.",
+    "Eventuele mede-eigenaren of betrokkenen tijdig laten meekijken.",
+    "Het voorstel rustig beoordelen voordat u ergens mee instemt.",
+  ],
+  practiceExample: {
+    situation: "Eigenaar wil snel rust door leegstaande woning",
+    propertyType: "Eengezinswoning",
+    region: "Noord-Nederland",
+    mainProblem:
+      "De woning stond leeg en de eigenaar wilde geen maandenlange verkoopcampagne met onderhoud, foto's en bezichtigingen organiseren.",
+    solution:
+      "Eerst een vrijblijvende inschatting, daarna een voorstel met duidelijke planning en opleverafspraken.",
+    delivery:
+      "Woning kon in huidige staat worden beoordeeld; leeghalen werd apart besproken.",
+    transfer:
+      "Overdracht via de notaris na ondertekening van de koopovereenkomst.",
+    nextStep:
+      "Eigenaar kon het voorstel vergelijken met regulier verkopen en daarna pas beslissen.",
   },
-  "sections": [
+  sections: [
     {
-      "title": "Wanneer speelt dit?",
-      "paragraphs": [
-        "Snel verkopen speelt vaak bij dubbele lasten, leegstand, een verhuizing, scheiding, erfenis of wanneer u geen zin heeft in een lang verkooptraject.",
-        "Ook als de woning nog niet netjes of leeg is, kunt u eerst laten bekijken wat er mogelijk is."
-      ]
+      title: "Wanneer is snel verkopen vooral interessant?",
+      paragraphs: [
+        "Snel verkopen speelt vaak bij dubbele lasten, leegstand, verhuizing, scheiding, erfenis of wanneer u geen langdurige onzekerheid wilt over bezichtigingen, biedingen en financieringsvoorbehoud.",
+        "Het kan ook gaan om een woning die nog niet klaar is voor presentatie. In dat geval is eerst duidelijkheid krijgen vaak praktischer dan direct investeren in herstel, styling of opruimen.",
+      ],
     },
     {
-      "title": "Welke opties heeft u?",
-      "bullets": [
-        "Regulier verkopen via een makelaar",
-        "Eerst opknappen en verkoopklaar maken",
-        "Zelf verkopen zonder makelaar",
-        "Direct vrijblijvend een verkoopvoorstel aanvragen"
-      ]
+      title: "Wat is het verschil met regulier verkopen?",
+      paragraphs: [
+        "Bij reguliere verkoop wordt de woning vaak eerst gepresenteerd aan de markt. Dat kan een hogere opbrengst opleveren, maar vraagt ook tijd, voorbereiding en onzekerheid over koper, financiering en oplevering.",
+        "Bij directe verkoop ligt de nadruk op rust en duidelijkheid. U ontvangt eerst een voorstel en beoordeelt daarna of prijs, planning en voorwaarden voor u passend zijn.",
+      ],
     },
     {
-      "title": "Wanneer is directe verkoop logisch?",
-      "paragraphs": [
-        "Directe verkoop kan logisch zijn als snelheid, rust en duidelijkheid belangrijker zijn dan een lang traject met meerdere bezichtigingen.",
-        "U krijgt eerst een eerste vrijblijvend bod. Als dat passend lijkt, kan daarna een definitief voorstel volgen met planning en uitleg over het vervolg."
-      ]
+      title: "Hoe komt een voorstel tot stand?",
+      steps: [
+        "U vult de belangrijkste woninggegevens en uw situatie in.",
+        "Wij bekijken de woning, locatie, staat en gewenste termijn.",
+        "Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel.",
+        "Als er meer informatie nodig is, nemen wij kort contact op of plannen we een beoordeling.",
+        "Bij akkoord worden afspraken schriftelijk uitgewerkt en verloopt overdracht via de notaris.",
+      ],
     },
     {
-      "title": "Hoe werkt het proces?",
-      "steps": [
-        "U vult kort uw woning en situatie in.",
-        "Op basis van de eerste gegevens ontvangt u een eerste vrijblijvend bod.",
-        "We bespreken uw situatie en bekijken de woning eventueel in de huidige staat.",
-        "Na beoordeling ontvangt u een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.",
-        "Bij akkoord worden de afspraken vastgelegd in een koopovereenkomst en volgt de overdracht via de notaris."
-      ]
+      title: "Wat wordt schriftelijk vastgelegd?",
+      bullets: [
+        "De koopprijs en eventuele voorwaarden.",
+        "De gewenste leverdatum of passeertermijn.",
+        "Afspraken over oplevering, leegstand, spullen of onderhoud.",
+        "Eventuele voorbehouden of aanvullende afspraken.",
+        "De notariële afwikkeling van de eigendomsoverdracht.",
+      ],
     },
-    {
-      "title": "Waar moet u op letten?",
-      "paragraphs": [
-        "Vergelijk niet alleen het bedrag, maar ook de planning, opleverdatum, eventuele spullen in de woning, kosten en zekerheid van afwikkeling."
-      ]
-    }
   ],
-  "comparisonRows": [
-    [
-      "Opknappen",
-      "Vaak eerst nodig voor presentatie",
-      "Niet vooraf nodig voor een eerste voorstel"
-    ],
-    [
-      "Leeghalen",
-      "Vaak nodig voor foto's en bezichtigingen",
-      "Kan worden meegenomen in het voorstel"
-    ],
-    [
-      "Bezichtigingen",
-      "Vaak meerdere kijkers",
-      "Geen open huis nodig"
-    ],
-    [
-      "Kosten",
-      "Mogelijk courtage, styling of herstel",
-      "Geen makelaarskosten voor de aanvraag"
-    ],
-    [
-      "Planning",
-      "Afhankelijk van koper en markt",
-      "In overleg duidelijk af te spreken"
-    ],
-    [
-      "Beslissing",
-      "Vaak langer traject",
-      "U beslist zelf na het voorstel"
-    ]
+  processSteps: [
+    "Aanvraag met woninggegevens invullen.",
+    "Eerste beoordeling van woning en situatie.",
+    "Vrijblijvende inschatting of voorstel ontvangen.",
+    "Vragen bespreken en afspraken verduidelijken.",
+    "Bij akkoord vastleggen in koopovereenkomst en overdracht via de notaris.",
   ],
-  "faqs": [
-    {
-      "question": "Kan ik mijn huis snel verkopen zonder open huis?",
-      "answer": "Ja, dat kan. Bij een directe verkoop is een open huis meestal niet nodig. U kunt vrijblijvend laten bekijken wat er mogelijk is en daarna zelf beslissen of u verder wilt."
-    },
-    {
-      "question": "Moet mijn woning verkoopklaar zijn voor een snelle verkoop?",
-      "answer": "Nee, dat hoeft niet altijd. Ook als de woning onderhoud nodig heeft, nog vol spullen staat of niet verkoopklaar is, kunt u vrijblijvend een voorstel aanvragen."
-    },
-    {
-      "question": "Zit ik ergens aan vast na een aanvraag?",
-      "answer": "Nee. Een aanvraag is gratis en vrijblijvend. U ontvangt eerst duidelijkheid over de mogelijkheden en beslist daarna zelf of u verder wilt."
-    },
-    {
-      "question": "Wanneer is snel verkopen logisch?",
-      "answer": "Snel verkopen kan logisch zijn bij dubbele lasten, leegstand, verhuizing, scheiding, erfenis of wanneer u geen regulier verkooptraject wilt met bezichtigingen en onzekerheid."
-    },
-    {
-      "question": "Krijg ik alleen een bedrag of ook uitleg?",
-      "answer": "U ontvangt niet alleen een bedrag, maar ook uitleg over het bod, de planning, de koopovereenkomst en de notariële overdracht."
-    }
+  comparisonRows: [
+    ["Verkoopklaar maken", "Vaak eerst opruimen, styling of herstel", "Niet nodig voor een eerste beoordeling"],
+    ["Fotografie en presentatie", "Meestal onderdeel van verkoopcampagne", "Geen campagne nodig voor een voorstel"],
+    ["Bezichtigingen", "Vaak meerdere kijkers of open huis", "Meestal niet nodig"],
+    ["Onzekerheid koper", "Afhankelijk van biedingen en financiering", "Voorwaarden worden vooraf besproken"],
+    ["Verkooptermijn", "Kan weken of maanden duren", "Planning kan gericht worden afgesproken"],
+    ["Makelaarskosten", "Vaak courtage of vast tarief", "Geen makelaarskosten bij directe aankoop"],
+    ["Oplevering", "Onderhandeling met koper", "Afspraken vooraf duidelijk vastleggen"],
+    ["Afwikkeling", "Via koopovereenkomst en notaris", "Ook via koopovereenkomst en notaris"],
   ],
-  "relatedLinks": [
-    [
-      "/huis-verkopen-zonder-leeghalen",
-      "Huis verkopen zonder leeghalen"
-    ],
-    [
-      "/huis-verkopen-zonder-opknappen",
-      "Huis verkopen zonder opknappen"
-    ],
-    [
-      "/woning-verkopen-die-nog-vol-staat",
-      "Woning verkopen die nog vol staat"
-    ],
-    [
-      "/opknapwoning-verkopen-zonder-makelaar",
-      "Opknapwoning verkopen zonder makelaar"
-    ],
-    [
-      "/leegstaand-huis-verkopen-wat-zijn-de-opties",
-      "Leegstaand huis verkopen: wat zijn de opties?"
-    ],
-    [
-      "/huis-verkopen-bij-dubbele-lasten",
-      "Huis verkopen bij dubbele lasten"
-    ],
-    [
-      "/huis-verkopen-zonder-bezichtigingen-uitleg",
-      "Huis verkopen zonder bezichtigingen"
-    ],
-    [
-      "/geerfde-woning-verkopen-zonder-leeghalen",
-      "Geërfde woning verkopen zonder leeghalen"
-    ]
+  faqs: [
+    {
+      question: "Kan ik mijn huis snel verkopen zonder open huis?",
+      answer:
+        "Ja. Bij directe verkoop is een open huis meestal niet nodig. U vraagt eerst vrijblijvend een voorstel aan en beslist daarna zelf of u verder wilt.",
+    },
+    {
+      question: "Moet mijn woning eerst verkoopklaar zijn?",
+      answer:
+        "Nee, niet altijd. Ook als de woning onderhoud nodig heeft, nog vol spullen staat of niet verkoopklaar is, kunt u vrijblijvend laten beoordelen wat mogelijk is.",
+    },
+    {
+      question: "Krijg ik gegarandeerd direct een bod?",
+      answer:
+        "Nee, dat garanderen wij niet. Wij beoordelen eerst de woninggegevens en situatie. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of voorstel.",
+    },
+    {
+      question: "Zit ik ergens aan vast na de aanvraag?",
+      answer:
+        "Nee. De aanvraag is vrijblijvend. Een koopovereenkomst ontstaat pas nadat alle afspraken zijn uitgewerkt en door koper en verkoper zijn ondertekend.",
+    },
+    {
+      question: "Is snel verkopen altijd financieel het beste?",
+      answer:
+        "Niet altijd. Regulier verkopen kan soms een hogere opbrengst opleveren. Directe verkoop kan vooral aantrekkelijk zijn wanneer rust, snelheid, oplevering en zekerheid zwaar meewegen.",
+    },
   ],
-  "ctaTitle": "Wilt u snel duidelijkheid?",
-  "ctaText": "Vraag vrijblijvend een voorstel aan. Ook als de woning nog vol spullen staat, onderhoud nodig heeft of niet verkoopklaar is."
+  relatedLinks: [
+    ["/huis-direct-verkopen", "Huis direct verkopen", "Rechtstreeks duidelijkheid over de verkoopmogelijkheden."],
+    ["/huis-verkopen-aan-opkoper", "Huis verkopen aan opkoper", "Vergelijk rustig wat directe verkoop betekent."],
+    ["/huis-verkopen-bij-dubbele-lasten", "Huis verkopen bij dubbele lasten", "Wanneer planning en lasten snel duidelijk moeten worden."],
+    ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen", "Bij leegstand, zorgen of doorlopende kosten."],
+    ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen", "Zonder eerst te verbouwen of herstellen."],
+    ["/woning-verkopen-zonder-makelaar", "Woning verkopen zonder makelaar", "Geen traditioneel makelaarstraject nodig."],
+  ],
+  ctaTitle: "Wilt u snel duidelijkheid over uw woning?",
+  ctaText:
+    "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid over prijs, planning en voorwaarden. Daarna beslist u zelf.",
 };
 
 export default function HuisSnelVerkopenPage() {

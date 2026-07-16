@@ -141,7 +141,7 @@ export default function AdsLeadMiniForm({ pageTitle = "Advertentiepagina", pageS
       {error && <p className="ad-mini-error">{error}</p>}
 
       <button type="submit" className="btn btn-orange ad-mini-submit" disabled={submitting}>
-        {submitting ? "Aanvraag verzenden..." : "Vraag vrijblijvend voorstel aan"}
+        {submitting ? "Aanvraag verzenden..." : "Ontvang een vrijblijvend voorstel"}
       </button>
 
       <p className="ad-mini-note">Vrijblijvend. U zit nergens aan vast.</p>

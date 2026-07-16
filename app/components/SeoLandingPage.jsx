@@ -1,5 +1,8 @@
 import AdsLeadMiniForm from "./AdsLeadMiniForm";
+
 const whatsappBase = "https://wa.me/31612238051";
+const primaryCta = "Ontvang een vrijblijvend verkoopvoorstel";
+const secondaryCta = "Bespreek eerst mijn situatie";
 
 const internalLinks = [
   ["/huis-snel-verkopen", "Huis snel verkopen"],
@@ -82,7 +85,7 @@ const geoSlugs = new Set([
 ]);
 
 function isGeoPage(page) {
-  return geoSlugs.has(page.slug);
+  return geoSlugs.has(page.slug) || page.pageType === "region";
 }
 
 function relatedSectionCopy(page) {
@@ -111,15 +114,60 @@ function relatedCardsFor(page) {
   }));
 }
 
+function normaliseExample(page) {
+  if (page.practiceExample) return page.practiceExample;
+  if (!page.exampleSituation) return null;
+
+  return {
+    situation: page.exampleSituation.title,
+    mainProblem: page.exampleSituation.text,
+  };
+}
+
+function pageTypeCopy(page) {
+  if (page.pageType === "region") {
+    return {
+      eyebrow: "Regionale verkoopoplossing",
+      valueTitle: `Verkopen in ${page.regionName || page.breadcrumb} met duidelijke afspraken`,
+      valueText: "Ook regionaal draait het niet alleen om snelheid. We kijken naar de woning, de situatie en de gewenste planning, zodat u eerst rustig kunt beoordelen welke verkooproute past.",
+    };
+  }
+
+  if (page.pageType === "situation") {
+    return {
+      eyebrow: "Situatiegericht verkopen",
+      valueTitle: "Geen standaard verkooptraject wanneer uw situatie niet standaard is.",
+      valueText: "Bij erfenis, onderhoud, leegstand of een volle woning spelen andere vragen dan bij een reguliere verkoop. Daarom kijken we eerst naar de situatie en leggen we afspraken duidelijk vast.",
+    };
+  }
+
+  return {
+    eyebrow: "Hoge koopintentie",
+    valueTitle: "Snel duidelijkheid zonder direct een lang verkooptraject te starten.",
+    valueText: "U wilt vooral weten wat er concreet mogelijk is. Daarom houden we de aanvraag laagdrempelig en krijgt u waar mogelijk eerst een vrijblijvende inschatting of voorstel.",
+  };
+}
+
 export default function SeoLandingPage({ page }) {
   const faqs = Array.isArray(page.faqs) ? page.faqs : [];
   const sections = Array.isArray(page.sections) ? page.sections : [];
   const benefits = Array.isArray(page.benefits) ? page.benefits : [];
+  const heroBenefits = Array.isArray(page.heroBenefits) && page.heroBenefits.length
+    ? page.heroBenefits.slice(0, 4)
+    : benefits.slice(0, 4);
   const comparisonRows = Array.isArray(page.comparisonRows) ? page.comparisonRows : [];
   const relatedCards = relatedCardsFor(page);
   const relatedCopy = relatedSectionCopy(page);
-  const example = page.exampleSituation;
+  const example = normaliseExample(page);
+  const typeCopy = pageTypeCopy(page);
   const showFaqSchema = faqs.length > 0;
+  const concernCards = Array.isArray(page.concernCards) ? page.concernCards : [];
+  const solutionCards = Array.isArray(page.solutionCards) ? page.solutionCards : [];
+  const ownerTasks = Array.isArray(page.ownerTasks) ? page.ownerTasks : [];
+  const vdnTasks = Array.isArray(page.vdnTasks) ? page.vdnTasks : [];
+  const processSteps = Array.isArray(page.processSteps) && page.processSteps.length
+    ? page.processSteps
+    : sections.find((section) => Array.isArray(section.steps) && section.steps.length)?.steps || [];
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -154,7 +202,7 @@ export default function SeoLandingPage({ page }) {
   };
 
   const whatsappText = encodeURIComponent(
-    `Hallo, ik wil graag meer informatie over: ${page.breadcrumb}. Kunt u contact met mij opnemen?`
+    `Hallo, ik wil graag mijn situatie bespreken over: ${page.breadcrumb}. Kunt u met mij meekijken?`
   );
   const whatsappLink = `${whatsappBase}?text=${whatsappText}`;
 
@@ -218,9 +266,6 @@ export default function SeoLandingPage({ page }) {
         .cta-logo{width:205px;max-width:100%;display:block;margin:0 auto 16px;padding-bottom:15px;border-bottom:1px solid #eee9e2}
         .cta-card h2{font-size:28px;line-height:1.08;letter-spacing:-.9px;margin:0 0 10px;color:var(--navy)}
         .cta-card p{color:#617184;line-height:1.55;margin:0 0 14px}
-        .mini-checks{display:grid;gap:8px;margin:16px 0}
-        .mini-checks div{display:flex;gap:8px;background:#f8f5ef;border:1px solid #eee8df;border-radius:14px;padding:10px 12px;color:#24364a;font-size:13px;font-weight:850;line-height:1.35}
-        .mini-checks span{color:var(--orange);font-weight:900}
         .ad-mini-form{display:grid;gap:10px;margin-top:14px}
         .ad-mini-form label{display:grid;gap:5px;color:#24364a;font-size:12px;font-weight:900}
         .ad-mini-form input,.ad-mini-form select{width:100%;border:1px solid #ddd4c8;border-radius:13px;background:#fff;padding:11px 12px;color:#071f3a;font-size:14px;outline:none}
@@ -234,10 +279,6 @@ export default function SeoLandingPage({ page }) {
         .ad-mini-success p{margin:0!important;color:#315b3f!important;font-size:14px!important;line-height:1.45!important}
         .after-request{display:grid;gap:4px;margin-top:14px;background:#f8f5ef;border:1px solid #eee8df;border-radius:16px;padding:13px;color:#24364a;font-size:13px;line-height:1.42}
         .after-request strong{color:#071f3a;font-size:14px}
-        .review-mini{margin-top:14px;background:#071f3a;color:#fff;border-radius:20px;padding:16px}
-        .review-mini strong{display:block;font-size:17px;margin-bottom:4px}
-        .stars{color:#f5a400;letter-spacing:1.5px;font-weight:900}
-        .review-mini p{color:#d7e3ef;font-size:13px;line-height:1.45;margin:8px 0 0}
         .section{padding:58px 0}
         .section-white{background:#fff}
         .section-tight{padding:48px 0}
@@ -252,10 +293,18 @@ export default function SeoLandingPage({ page }) {
         .short-answer{display:grid;grid-template-columns:.76fr 1.24fr;gap:24px;align-items:center}
         .benefit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:22px}
         .benefit-item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px 15px;font-size:15px;font-weight:900;color:#24364a;box-shadow:0 12px 30px rgba(7,31,58,.055)}
+        .insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+        .insight-card{background:#fff;border:1px solid var(--line);border-radius:26px;padding:24px;box-shadow:0 16px 44px rgba(7,31,58,.07)}
+        .insight-card h2{font-size:clamp(24px,2.1vw,34px);line-height:1.14;letter-spacing:-.75px;margin-bottom:12px}
+        .insight-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+        .insight-list li{background:#f8f5ef;border:1px solid #eee8df;border-radius:15px;padding:11px 13px;color:#24364a;font-size:15px;font-weight:850;line-height:1.42}
         .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
         .why-card{background:#fff;border:1px solid var(--line);border-radius:26px;padding:24px;box-shadow:0 16px 44px rgba(7,31,58,.07)}
         .why-card strong{display:block;font-size:18px;line-height:1.2;color:var(--navy);margin-bottom:9px}
         .why-card p{margin:0;color:#647386;line-height:1.55;font-size:15px}
+        .two-column-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+        .task-card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 14px 38px rgba(7,31,58,.055)}
+        .task-card h3{font-size:21px;margin-bottom:12px}
         .content-grid{display:grid;gap:18px}
         .content-block{background:#fff;border:1px solid var(--line);border-radius:26px;padding:26px;box-shadow:0 14px 38px rgba(7,31,58,.055)}
         .content-block h2{font-size:clamp(24px,2vw,32px);line-height:1.14;letter-spacing:-.7px;margin:0 0 12px}
@@ -264,6 +313,10 @@ export default function SeoLandingPage({ page }) {
         .example-card{background:linear-gradient(135deg,#F7F2EC 0%,#ffffff 100%);border:1px solid #F2B885;border-radius:28px;padding:28px;box-shadow:0 16px 44px rgba(217,106,28,.08)}
         .example-card h2{font-size:clamp(24px,2.1vw,33px);line-height:1.12;letter-spacing:-.75px;margin-bottom:10px}
         .example-card p{color:#5f7083;font-size:16px;line-height:1.62;margin:0}
+        .example-details{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px}
+        .example-detail{background:#fff;border:1px solid #eadbca;border-radius:16px;padding:13px 14px}
+        .example-detail strong{display:block;color:#071f3a;font-size:13px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
+        .example-detail span{display:block;color:#526274;font-size:14px;line-height:1.45}
         .list{display:grid;gap:10px;margin:12px 0 0;padding:0;list-style:none}
         .list li{background:#f8f5ef;border:1px solid #eee8df;border-radius:15px;padding:10px 13px;color:#24364a;font-size:15px;font-weight:850;line-height:1.35}
         .steps{counter-reset:step;display:grid;gap:10px;margin:14px 0 0;padding:0;list-style:none}
@@ -289,11 +342,10 @@ export default function SeoLandingPage({ page }) {
         .related-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
         .related-card{background:linear-gradient(180deg,#fff 0%,#fffaf4 100%);border:1px solid #dfd2c4;border-left:4px solid #F2B885;border-radius:18px;padding:17px 18px;min-height:108px;display:grid;grid-template-columns:1fr;gap:0;align-items:start;color:#071f3a;text-decoration:none;box-shadow:0 10px 26px rgba(7,31,58,.055);transition:.18s ease}
         .related-card:hover{border-color:#D96A1C;border-left-color:#D96A1C;transform:translateY(-1px);box-shadow:0 14px 32px rgba(7,31,58,.10)}
-        .related-card-icon{display:none}
         .related-card-content{display:grid;gap:6px}
         .related-card strong{display:block;font-size:17px;line-height:1.2;color:#071f3a}
         .related-card p{margin:0;color:#526274;line-height:1.5;font-size:14px;font-weight:400}
-        .related-card span:not(.related-card-icon):not(.related-card-content){margin-top:2px;color:var(--orange);font-weight:900;font-size:14px}
+        .related-card span:not(.related-card-content){margin-top:2px;color:var(--orange);font-weight:900;font-size:14px}
         .final-cta{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:58px 0;text-align:center}
         .final-cta h2{color:#fff}
         .final-cta p{color:#d7e3ef;font-size:18px;line-height:1.6;max-width:730px;margin:16px auto 0}
@@ -337,9 +389,9 @@ export default function SeoLandingPage({ page }) {
           .header-inner{grid-template-columns:auto auto}
           .nav{grid-column:1/-1;justify-content:flex-start;overflow-x:auto;gap:18px;padding:0 0 12px;scrollbar-width:none}
           .nav::-webkit-scrollbar{display:none}
-          .hero-grid,.comparison-top,.short-answer{grid-template-columns:1fr}
+          .hero-grid,.comparison-top,.short-answer,.insight-grid{grid-template-columns:1fr}
           .trust-micro,.benefit-grid{grid-template-columns:repeat(2,1fr)}
-          .why-grid{grid-template-columns:1fr}
+          .why-grid,.two-column-cards{grid-template-columns:1fr}
           .cta-card{max-width:620px;margin:0 auto}
           .footer-grid{grid-template-columns:repeat(2,1fr)}
         }
@@ -363,16 +415,15 @@ export default function SeoLandingPage({ page }) {
           .micro-note{display:none}
           .mobile-trust-line{display:block;font-size:13px;color:#647386;font-weight:900;margin-top:12px;line-height:1.45}
           .trust-micro{display:none}
-          .benefit-grid,.compare-columns,.related-card-grid{grid-template-columns:1fr}
+          .benefit-grid,.compare-columns,.related-card-grid,.example-details{grid-template-columns:1fr}
           .section{padding:42px 0}.section-tight{padding:38px 0}
           .section-head{text-align:left;margin-bottom:20px}
-          .card,.content-block,.cta-card,.comparison-wrap,.why-card,.example-card{border-radius:22px;padding:20px}
+          .card,.content-block,.cta-card,.comparison-wrap,.why-card,.example-card,.insight-card,.task-card{border-radius:22px;padding:20px}
           .content-block h2,.example-card h2{font-size:24px;line-height:1.15;letter-spacing:-.5px}
           .section-head h2,.short-answer h2{font-size:28px;line-height:1.12;letter-spacing:-.65px}
           .content-block p,.example-card p,.section-head p,.text{font-size:15px;line-height:1.58}
           .cta-logo{display:none}
           .cta-card h2{font-size:24px}
-          .review-mini{display:none}
           .compare-row{grid-template-columns:1fr;gap:5px}
           .faq-item{display:block}
           .faq-item h3{margin-bottom:7px}
@@ -410,7 +461,7 @@ export default function SeoLandingPage({ page }) {
           <div className="header-actions">
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
             <a href="tel:0612238051" className="btn btn-blue">Bel direct</a>
-            <a href="#aanvraag" className="btn btn-orange">Vraag voorstel aan</a>
+            <a href="#aanvraag" className="btn btn-orange">Voorstel aanvragen</a>
           </div>
         </div>
       </header>
@@ -418,24 +469,23 @@ export default function SeoLandingPage({ page }) {
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <div className="badge">Ook als de woning niet verkoopklaar is</div>
+            <div className="badge">{page.eyebrow || typeCopy.eyebrow}</div>
             <h1>{page.h1}</h1>
             <p className="lead">{page.lead}</p>
 
             <div className="hero-cta-row">
-              <a href="#aanvraag" className="btn btn-orange">Vraag vrijblijvend voorstel aan</a>
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
+              <a href="#aanvraag" className="btn btn-orange">{primaryCta}</a>
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">{secondaryCta}</a>
             </div>
 
-            <p className="micro-note">De woning hoeft niet eerst opgeknapt of leeggehaald te worden. U zit nergens aan vast.</p>
-            <p className="mobile-trust-line">Niet opknappen · Niet leeghalen · Vrijblijvend</p>
+            <p className="micro-note">Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf.</p>
+            <p className="mobile-trust-line">Vrijblijvend · Schriftelijke afspraken · Notariële afwikkeling</p>
 
-            <div className="trust-micro" aria-label="Voordelen">
-              <div>✓ Niet eerst opknappen</div>
-              <div>✓ Niet leeghalen</div>
-              <div>✓ Geen open huis</div>
-              <div>✓ Vrijblijvend</div>
-            </div>
+            {heroBenefits.length > 0 && (
+              <div className="trust-micro" aria-label="Voordelen">
+                {heroBenefits.map((item) => <div key={item}>✓ {item}</div>)}
+              </div>
+            )}
           </div>
 
           <aside className="cta-card" id="aanvraag">
@@ -451,7 +501,7 @@ export default function SeoLandingPage({ page }) {
             />
             <div className="after-request">
               <strong>Wat gebeurt er na uw aanvraag?</strong>
-              <span>Na uw aanvraag bekijken wij de woninggegevens en uw situatie. Als er nog informatie nodig is om dit goed te beoordelen, nemen wij kort contact met u op. U zit nergens aan vast.</span>
+              <span>Wij beoordelen de woninggegevens en uw situatie. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Als er nog informatie nodig is, nemen wij kort contact met u op.</span>
             </div>
           </aside>
         </div>
@@ -477,40 +527,100 @@ export default function SeoLandingPage({ page }) {
         </div>
       </section>
 
+      {(concernCards.length > 0 || solutionCards.length > 0) && (
+        <section className="section-tight">
+          <div className="container insight-grid">
+            {concernCards.length > 0 && (
+              <div className="insight-card">
+                <p className="eyebrow">Herkenbaar</p>
+                <h2>{page.concernTitle || "Welke zorgen spelen vaak?"}</h2>
+                <ul className="insight-list">
+                  {concernCards.map((item) => <li key={item}>✓ {item}</li>)}
+                </ul>
+              </div>
+            )}
+            {solutionCards.length > 0 && (
+              <div className="insight-card">
+                <p className="eyebrow">Oplossing</p>
+                <h2>{page.solutionTitle || "Wat kan Vastgoed Direct Nederland vereenvoudigen?"}</h2>
+                <ul className="insight-list">
+                  {solutionCards.map((item) => <li key={item}>✓ {item}</li>)}
+                </ul>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       <section id="waarom-vdn" className="section-tight">
         <div className="container">
           <div className="section-head">
-            <p className="eyebrow">Waarom VDN</p>
-            <h2>Geen standaard verkooptraject. Eerst rustig duidelijkheid.</h2>
-            <p>
-              Veel verkopers willen vooral weten waar ze aan toe zijn. Daarom maken we het laagdrempelig: u hoeft de woning niet eerst op te knappen, leeg te halen of verkoopklaar te maken om een voorstel aan te vragen.
-            </p>
+            <p className="eyebrow">{typeCopy.eyebrow}</p>
+            <h2>{page.valueTitle || typeCopy.valueTitle}</h2>
+            <p>{page.valueText || typeCopy.valueText}</p>
           </div>
 
           <div className="why-grid">
             <div className="why-card">
-              <strong>Niet eerst opknappen of leeghalen</strong>
-              <p>Ook als de woning nog vol spullen staat, onderhoud nodig heeft of niet verkoopklaar is, kijken wij met u mee.</p>
+              <strong>Duidelijkheid vóór verplichtingen</strong>
+              <p>U vraagt eerst vrijblijvend een voorstel aan. Pas als het voorstel past, worden afspraken verder uitgewerkt.</p>
             </div>
             <div className="why-card">
-              <strong>Geen open huis of verkoopdruk</strong>
-              <p>U vraagt rustig informatie aan. Daarna beslist u zelf of het eerste bod en het vervolg bij uw situatie passen.</p>
+              <strong>Schriftelijke afspraken</strong>
+              <p>Prijs, planning, oplevering en bijzondere voorwaarden worden helder vastgelegd voordat er sprake is van verkoop.</p>
             </div>
             <div className="why-card">
-              <strong>Voorstel dat u kunt beoordelen</strong>
-              <p>U krijgt eerst een eerste vrijblijvend bod. Als beoordeling nodig is, volgt daarna een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.</p>
+              <strong>Correcte notariële afwikkeling</strong>
+              <p>Bij akkoord loopt de juridische levering via de notaris. Zo blijft duidelijk wie waarvoor verantwoordelijk is.</p>
             </div>
           </div>
         </div>
       </section>
 
+      {(ownerTasks.length > 0 || vdnTasks.length > 0) && (
+        <section className="section-tight section-white">
+          <div className="container">
+            <div className="section-head">
+              <p className="eyebrow">Rollen en verwachtingen</p>
+              <h2>Wat hoeft u niet zelf te doen en wat blijft belangrijk?</h2>
+            </div>
+            <div className="two-column-cards">
+              {vdnTasks.length > 0 && (
+                <div className="task-card">
+                  <h3>Wat wij kunnen vereenvoudigen</h3>
+                  <ul className="list">
+                    {vdnTasks.map((item) => <li key={item}>✓ {item}</li>)}
+                  </ul>
+                </div>
+              )}
+              {ownerTasks.length > 0 && (
+                <div className="task-card">
+                  <h3>Wat u zelf moet weten of regelen</h3>
+                  <ul className="list">
+                    {ownerTasks.map((item) => <li key={item}>✓ {item}</li>)}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
       {example && (
         <section className="section-tight section-white">
           <div className="container">
             <div className="example-card">
-              <p className="eyebrow">Voorbeeldsituatie</p>
-              <h2>{example.title}</h2>
-              <p>{example.text}</p>
+              <p className="eyebrow">Geanonimiseerde voorbeeldsituatie</p>
+              <h2>{example.situation || example.title || "Praktijkvoorbeeld"}</h2>
+              {example.mainProblem && <p>{example.mainProblem}</p>}
+              <div className="example-details">
+                {example.propertyType && <div className="example-detail"><strong>Type woning</strong><span>{example.propertyType}</span></div>}
+                {example.region && <div className="example-detail"><strong>Regio</strong><span>{example.region}</span></div>}
+                {example.solution && <div className="example-detail"><strong>Oplossing</strong><span>{example.solution}</span></div>}
+                {example.delivery && <div className="example-detail"><strong>Oplevering</strong><span>{example.delivery}</span></div>}
+                {example.transfer && <div className="example-detail"><strong>Overdracht</strong><span>{example.transfer}</span></div>}
+                {example.nextStep && <div className="example-detail"><strong>Vervolgstap</strong><span>{example.nextStep}</span></div>}
+              </div>
             </div>
           </div>
         </section>
@@ -543,23 +653,37 @@ export default function SeoLandingPage({ page }) {
         </div>
       </section>
 
+      {processSteps.length > 0 && (
+        <section className="section-tight">
+          <div className="container">
+            <div className="section-head">
+              <p className="eyebrow">Proces</p>
+              <h2>{page.processTitle || "Zo verloopt een vrijblijvende aanvraag"}</h2>
+              <p>De aanvraag is bedoeld om eerst duidelijkheid te krijgen. Een koopovereenkomst ontstaat pas na uitwerking en ondertekening door beide partijen.</p>
+            </div>
+            <ol className="steps">
+              {processSteps.map((step) => <li key={step}>{step}</li>)}
+            </ol>
+          </div>
+        </section>
+      )}
+
       {comparisonRows.length > 0 && (
         <section id="vergelijking" className="section-tight">
           <div className="container comparison-wrap">
             <div className="comparison-top">
               <div>
                 <p className="eyebrow">Vergelijking</p>
-                <h2>Niet alleen de prijs telt. Ook rust, tijd en duidelijkheid.</h2>
+                <h2>Reguliere verkoop of directe verkoop?</h2>
               </div>
               <p>
-                Bij verkoop gaat het niet alleen om het hoogste bod. Ook kosten, bezichtigingen,
-                oplevering, spullen in de woning, koopovereenkomst en overdrachtsdatum zijn belangrijk.
+                Een reguliere verkoop kan soms een hogere opbrengst opleveren. Directe verkoop kan juist aantrekkelijk zijn als rust, snelheid, minder voorbereiding en duidelijke afspraken zwaarder wegen.
               </p>
             </div>
 
             <div className="compare-columns">
               <div className="compare-box">
-                <div className="compare-title">Traditionele verkoop</div>
+                <div className="compare-title">Reguliere verkoop via een makelaar</div>
                 {comparisonRows.map((row) => (
                   <div className="compare-row" key={`normal-${row[0]}`}>
                     <strong>{row[0]}</strong>
@@ -569,7 +693,7 @@ export default function SeoLandingPage({ page }) {
               </div>
 
               <div className="compare-box">
-                <div className="compare-title orange">Vastgoed Direct Nederland</div>
+                <div className="compare-title orange">Directe verkoop aan VDN</div>
                 {comparisonRows.map((row) => (
                   <div className="compare-row" key={`direct-${row[0]}`}>
                     <strong>{row[0]}</strong>
@@ -632,9 +756,9 @@ export default function SeoLandingPage({ page }) {
           <h2>{page.ctaTitle}</h2>
           <p>{page.ctaText}</p>
           <div className="cta-buttons">
-            <a href="#aanvraag" className="btn btn-orange">Vraag vrijblijvend voorstel aan</a>
+            <a href="#aanvraag" className="btn btn-orange">{primaryCta}</a>
             <a href="tel:0612238051" className="btn btn-light">Bel direct</a>
-            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">Stuur uw situatie via WhatsApp</a>
           </div>
         </div>
       </section>
