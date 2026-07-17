@@ -1,6 +1,8 @@
 import AdsLeadMiniForm from "./AdsLeadMiniForm";
 
 const whatsappBase = "https://wa.me/31612238051";
+const googleReviewUrl =
+  "https://www.google.com/search?q=reviews+voor+Vastgoed+Direct+Nederland";
 const primaryCta = "Ontvang een vrijblijvend verkoopvoorstel";
 const secondaryCta = "Bespreek eerst mijn situatie";
 
@@ -264,7 +266,7 @@ export default function SeoLandingPage({ page }) {
         .btn-light{background:#fff;color:var(--navy);border:1px solid #e3ded6}
         .btn-green{background:#3E8F5E;color:#fff;box-shadow:0 12px 28px rgba(62,143,94,.18)}
         .hero{position:relative;overflow:hidden;background:radial-gradient(circle at 84% 6%,rgba(217,106,28,.13),transparent 30%),linear-gradient(180deg,#fffdf9 0%,#f6f2eb 100%)}
-        .hero-grid{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(350px,.74fr);gap:42px;align-items:center;padding:54px 0 56px}
+        .hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(420px,.82fr);gap:46px;align-items:center;padding:54px 0 56px}
         .badge{display:inline-flex;color:#B85216;background:var(--soft);border:1px solid #F2B885;border-radius:999px;padding:9px 14px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:17px}
         h1{font-size:clamp(40px,4.4vw,62px);line-height:.98;letter-spacing:-2.2px;margin:0;color:var(--navy);max-width:760px}
         .lead{font-size:19px;line-height:1.62;color:#526274;max-width:720px;margin:20px 0 0}
@@ -273,9 +275,9 @@ export default function SeoLandingPage({ page }) {
         .mobile-trust-line{display:none}
         .trust-micro{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:23px 0 0;max-width:760px}
         .trust-micro div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font-size:14px;font-weight:900;color:var(--navy);box-shadow:0 10px 22px rgba(7,31,58,.06)}
-        .cta-card{background:#fff;border:1px solid #e7ded2;border-radius:28px;padding:22px;box-shadow:0 18px 52px rgba(7,31,58,.10)}
-        .cta-logo{width:205px;max-width:100%;display:block;margin:0 auto 16px;padding-bottom:15px;border-bottom:1px solid #eee9e2}
-        .cta-card h2{font-size:28px;line-height:1.08;letter-spacing:-.9px;margin:0 0 10px;color:var(--navy)}
+        .cta-card{background:#fff;border:1px solid #e7ded2;border-radius:28px;padding:24px;box-shadow:0 18px 52px rgba(7,31,58,.10)}
+        .cta-logo{display:none}
+        .cta-card h2{font-size:29px;line-height:1.08;letter-spacing:-.9px;margin:0 0 10px;color:var(--navy)}
         .cta-card p{color:#617184;line-height:1.5;margin:0 0 12px;font-size:14.5px}
         .ad-mini-form{display:grid;gap:9px;margin-top:12px}
         .ad-mini-form label{display:grid;gap:4px;color:#24364a;font-size:12px;font-weight:900}
@@ -288,15 +290,24 @@ export default function SeoLandingPage({ page }) {
         .ad-mini-success{background:#f0fff5;border:1px solid #bfe7cc;border-radius:16px;padding:14px;color:#103b22;margin-top:14px}
         .ad-mini-success strong{display:block;margin-bottom:5px;color:#103b22}
         .ad-mini-success p{margin:0!important;color:#315b3f!important;font-size:14px!important;line-height:1.45!important}
-        .form-conversion-grid{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(145px,.82fr);gap:12px;align-items:start;margin-top:2px}
+        .form-conversion-grid{display:grid;grid-template-columns:1fr;gap:12px;align-items:start;margin-top:10px}
         .form-trust-box{background:#fffaf4;border:1px solid #ead7c2;border-radius:16px;padding:12px 13px;display:grid;gap:9px;box-shadow:none}
         .form-trust-box strong{display:block;color:#071f3a;font-size:13.5px;line-height:1.25}
-        .form-trust-box ul{display:grid;gap:7px;list-style:none;margin:0;padding:0}.form-trust-box .form-contact-list{border-top:1px solid #ead7c2;padding-top:8px;gap:6px}
-        .form-trust-box li{font-size:12.3px;line-height:1.32;color:#405167;font-weight:850}
+        .form-trust-box ul{display:grid;grid-template-columns:repeat(2,1fr);gap:7px 12px;list-style:none;margin:0;padding:0}.form-trust-box .form-contact-list{border-top:1px solid #ead7c2;padding-top:8px;gap:6px;grid-template-columns:repeat(2,1fr)}
+        .form-trust-box li{font-size:12.5px;line-height:1.32;color:#405167;font-weight:850}
         .form-trust-box a{color:#071f3a;text-decoration:none;font-weight:900}
         .form-trust-box a:hover{color:#D96A1C}
-        .after-request{display:grid;gap:4px;margin-top:11px;background:#fff;border:1px solid #eee8df;border-left:3px solid #D96A1C;border-radius:14px;padding:11px 12px;color:#24364a;font-size:12.8px;line-height:1.4}
+        .after-request{display:grid;gap:4px;margin-top:11px;background:#fffaf4;border:1px solid #ead7c2;border-left:3px solid #D96A1C;border-radius:14px;padding:11px 12px;color:#24364a;font-size:12.8px;line-height:1.4}
         .after-request strong{color:#071f3a;font-size:13.5px}
+        .seo-review-band{background:#fffdf9;border-top:1px solid #eadfd3;border-bottom:1px solid #eadfd3;padding:16px 0}
+        .seo-review-link{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;text-decoration:none;color:inherit}
+        .seo-review-score{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 10px 24px rgba(7,31,58,.045)}
+        .seo-review-score strong{font-size:31px;line-height:.95;letter-spacing:-1px;color:var(--navy)}
+        .seo-stars{color:#f5a400;letter-spacing:1.3px;font-size:15px;font-weight:900;line-height:1}
+        .seo-review-score span{display:block;color:#647386;font-size:12.5px;font-weight:850;margin-top:4px}
+        .seo-review-copy h2{font-size:24px;line-height:1.1;letter-spacing:-.5px;margin:0 0 5px;color:var(--navy)}
+        .seo-review-copy p{margin:0;color:#647386;font-size:14.5px;line-height:1.5}
+        .seo-review-cta{font-size:13px;font-weight:900;color:var(--orange);white-space:nowrap}
         .section{padding:58px 0}
         .section-white{background:#fff}
         .section-tight{padding:48px 0}
@@ -444,7 +455,13 @@ export default function SeoLandingPage({ page }) {
           .cta-logo{display:none}
           .cta-card h2{font-size:24px}
           .form-conversion-grid{grid-template-columns:1fr;gap:12px}
-          .form-trust-box{order:2}.ad-mini-section{padding:9px}.ad-mini-form input,.ad-mini-form select{min-height:44px}
+          .form-trust-box{order:2}
+          .form-trust-box ul,.form-trust-box .form-contact-list{grid-template-columns:1fr}
+          .ad-mini-section{padding:9px}.ad-mini-form input,.ad-mini-form select{min-height:44px}
+          .seo-review-link{grid-template-columns:1fr;gap:10px}
+          .seo-review-score{width:100%;justify-content:flex-start}
+          .seo-review-copy h2{font-size:22px}
+          .seo-review-cta{display:none}
           .compare-row{grid-template-columns:1fr;gap:5px}
           .faq-item{display:block}
           .faq-item h3{margin-bottom:7px}
@@ -510,7 +527,6 @@ export default function SeoLandingPage({ page }) {
           </div>
 
           <aside className="cta-card" id="aanvraag">
-            <img src="/logo.png" alt="Vastgoed Direct Nederland" className="cta-logo" />
             <h2>Vraag vrijblijvend een voorstel aan</h2>
             <p>
               Vul kort de woning en uw contactgegevens in. Wij bekijken uw aanvraag en geven waar mogelijk een eerste inschatting of verkoopvoorstel.
@@ -544,6 +560,30 @@ export default function SeoLandingPage({ page }) {
             </div>
           </aside>
         </div>
+      </section>
+
+      <section className="seo-review-band" aria-label="Google-beoordelingen">
+        <a
+          href={googleReviewUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="container seo-review-link"
+          data-analytics-event="secondary_cta_click"
+          data-analytics-component="seo_google_review"
+        >
+          <div className="seo-review-score">
+            <strong>5,0</strong>
+            <div>
+              <div className="seo-stars">★★★★★</div>
+              <span>Google · 2 reviews</span>
+            </div>
+          </div>
+          <div className="seo-review-copy">
+            <h2>Rustig en duidelijk geholpen</h2>
+            <p>Bekijk de actuele Google-beoordelingen. We gebruiken alleen controleerbare review-informatie en voegen geen verzonnen klantverhalen toe.</p>
+          </div>
+          <span className="seo-review-cta">Bekijk op Google →</span>
+        </a>
       </section>
 
       <section className="section section-white">
