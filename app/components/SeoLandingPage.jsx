@@ -273,30 +273,30 @@ export default function SeoLandingPage({ page }) {
         .mobile-trust-line{display:none}
         .trust-micro{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:23px 0 0;max-width:760px}
         .trust-micro div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font-size:14px;font-weight:900;color:var(--navy);box-shadow:0 10px 22px rgba(7,31,58,.06)}
-        .cta-card{background:#fff;border:1px solid var(--line);border-radius:30px;padding:24px;box-shadow:0 24px 72px rgba(7,31,58,.14)}
+        .cta-card{background:#fff;border:1px solid #e7ded2;border-radius:28px;padding:22px;box-shadow:0 18px 52px rgba(7,31,58,.10)}
         .cta-logo{width:205px;max-width:100%;display:block;margin:0 auto 16px;padding-bottom:15px;border-bottom:1px solid #eee9e2}
         .cta-card h2{font-size:28px;line-height:1.08;letter-spacing:-.9px;margin:0 0 10px;color:var(--navy)}
-        .cta-card p{color:#617184;line-height:1.55;margin:0 0 14px}
-        .ad-mini-form{display:grid;gap:10px;margin-top:14px}
-        .ad-mini-form label{display:grid;gap:5px;color:#24364a;font-size:12px;font-weight:900}
-        .ad-mini-form input,.ad-mini-form select{width:100%;border:1px solid #ddd4c8;border-radius:13px;background:#fff;padding:11px 12px;color:#071f3a;font-size:14px;outline:none}
+        .cta-card p{color:#617184;line-height:1.5;margin:0 0 12px;font-size:14.5px}
+        .ad-mini-form{display:grid;gap:9px;margin-top:12px}
+        .ad-mini-form label{display:grid;gap:4px;color:#24364a;font-size:12px;font-weight:900}
+        .ad-mini-form input,.ad-mini-form select{width:100%;border:1px solid #ded6cb;border-radius:12px;background:#fff;padding:10px 11px;color:#071f3a;font-size:14px;outline:none;min-height:42px}
         .ad-mini-form input:focus,.ad-mini-form select:focus{border-color:#D96A1C;box-shadow:0 0 0 3px rgba(217,106,28,.12)}
-        .ad-mini-form-row.two{display:grid;grid-template-columns:1fr .65fr;gap:9px}
-        .ad-mini-submit{width:100%;margin-top:2px}
-        .ad-mini-note{font-size:12px!important;line-height:1.35!important;margin:0!important;color:#647386!important;text-align:center}
+        .ad-mini-form-row.two{display:grid;grid-template-columns:1fr .56fr;gap:8px}
+        .ad-mini-section{display:grid;gap:8px;background:#fbfaf7;border:1px solid #eee8df;border-radius:16px;padding:10px}.ad-mini-section-title{font-size:12px;font-weight:900;color:#071f3a;letter-spacing:.02em}.ad-mini-submit{width:100%;margin-top:1px;min-height:46px}
+        .ad-mini-note{font-size:11.5px!important;line-height:1.35!important;margin:0!important;color:#647386!important;text-align:center}
         .ad-mini-error{background:#fff1f1;border:1px solid #f2b4b4;color:#8b1c1c!important;border-radius:12px;padding:9px 11px;font-size:13px!important;margin:0!important;line-height:1.35!important;font-weight:850}
         .ad-mini-success{background:#f0fff5;border:1px solid #bfe7cc;border-radius:16px;padding:14px;color:#103b22;margin-top:14px}
         .ad-mini-success strong{display:block;margin-bottom:5px;color:#103b22}
         .ad-mini-success p{margin:0!important;color:#315b3f!important;font-size:14px!important;line-height:1.45!important}
-        .form-conversion-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(150px,.88fr);gap:14px;align-items:start;margin-top:2px}
-        .form-trust-box{background:#fffaf4;border:1px solid #ead7c2;border-radius:17px;padding:13px 14px;display:grid;gap:9px;box-shadow:0 10px 22px rgba(7,31,58,.045)}
-        .form-trust-box strong{display:block;color:#071f3a;font-size:14px;line-height:1.25}
-        .form-trust-box ul{display:grid;gap:7px;list-style:none;margin:0;padding:0}
-        .form-trust-box li{font-size:12.5px;line-height:1.32;color:#405167;font-weight:850}
+        .form-conversion-grid{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(145px,.82fr);gap:12px;align-items:start;margin-top:2px}
+        .form-trust-box{background:#fffaf4;border:1px solid #ead7c2;border-radius:16px;padding:12px 13px;display:grid;gap:9px;box-shadow:none}
+        .form-trust-box strong{display:block;color:#071f3a;font-size:13.5px;line-height:1.25}
+        .form-trust-box ul{display:grid;gap:7px;list-style:none;margin:0;padding:0}.form-trust-box .form-contact-list{border-top:1px solid #ead7c2;padding-top:8px;gap:6px}
+        .form-trust-box li{font-size:12.3px;line-height:1.32;color:#405167;font-weight:850}
         .form-trust-box a{color:#071f3a;text-decoration:none;font-weight:900}
         .form-trust-box a:hover{color:#D96A1C}
-        .after-request{display:grid;gap:4px;margin-top:14px;background:#f8f5ef;border:1px solid #eee8df;border-radius:16px;padding:13px;color:#24364a;font-size:13px;line-height:1.42}
-        .after-request strong{color:#071f3a;font-size:14px}
+        .after-request{display:grid;gap:4px;margin-top:11px;background:#fff;border:1px solid #eee8df;border-left:3px solid #D96A1C;border-radius:14px;padding:11px 12px;color:#24364a;font-size:12.8px;line-height:1.4}
+        .after-request strong{color:#071f3a;font-size:13.5px}
         .section{padding:58px 0}
         .section-white{background:#fff}
         .section-tight{padding:48px 0}
@@ -444,7 +444,7 @@ export default function SeoLandingPage({ page }) {
           .cta-logo{display:none}
           .cta-card h2{font-size:24px}
           .form-conversion-grid{grid-template-columns:1fr;gap:12px}
-          .form-trust-box{order:2}
+          .form-trust-box{order:2}.ad-mini-section{padding:9px}.ad-mini-form input,.ad-mini-form select{min-height:44px}
           .compare-row{grid-template-columns:1fr;gap:5px}
           .faq-item{display:block}
           .faq-item h3{margin-bottom:7px}
@@ -513,7 +513,7 @@ export default function SeoLandingPage({ page }) {
             <img src="/logo.png" alt="Vastgoed Direct Nederland" className="cta-logo" />
             <h2>Vraag vrijblijvend een voorstel aan</h2>
             <p>
-              Vul de belangrijkste gegevens in. Wij bekijken uw woning en situatie. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel.
+              Vul kort de woning en uw contactgegevens in. Wij bekijken uw aanvraag en geven waar mogelijk een eerste inschatting of verkoopvoorstel.
             </p>
             <div className="form-conversion-grid">
               <div>
@@ -522,6 +522,8 @@ export default function SeoLandingPage({ page }) {
                   pageSlug={page.slug}
                   defaultSituation={page.defaultSituation || page.breadcrumb}
                   submitLabel={page.formSubmitLabel || primaryCta}
+                  successText={page.formSuccessText}
+                  privacyNote={page.formPrivacyNote}
                 />
                 <div className="after-request">
                   <strong>{afterRequestTitle}</strong>
@@ -530,9 +532,11 @@ export default function SeoLandingPage({ page }) {
               </div>
 
               <div className="form-trust-box" aria-label="Waarom aanvragen">
-                <strong>Rustig en zonder verplichting</strong>
+                <strong>Bij uw aanvraag</strong>
                 <ul>
-                  {formTrustItems.map((item) => <li key={item}>✓ {item}</li>)}
+                  {formTrustItems.slice(0, 4).map((item) => <li key={item}>✓ {item}</li>)}
+                </ul>
+                <ul className="form-contact-list">
                   <li><a href="tel:0612238051" data-analytics-event="secondary_cta_click" data-analytics-component="form_trust_phone">Bel 06 12 23 80 51</a></li>
                   <li><a href={whatsappLink} target="_blank" rel="noopener noreferrer" data-analytics-event="secondary_cta_click" data-analytics-component="form_trust_whatsapp">WhatsApp uw situatie</a></li>
                 </ul>

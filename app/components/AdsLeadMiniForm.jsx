@@ -17,11 +17,71 @@ const situaties = [
   "Anders",
 ];
 
+
+const TRACKING_PARAMS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+  "gclid",
+  "gbraid",
+  "wbraid",
+];
+
+function compactParts(parts, maxLength = 300) {
+  const result = [];
+  let length = 0;
+
+  for (const part of parts.filter(Boolean)) {
+    const nextLength = length + (result.length ? 3 : 0) + part.length;
+    if (nextLength > maxLength) break;
+    result.push(part);
+    length = nextLength;
+  }
+
+  return result.join(" | ");
+}
+
+function getAttributionFromUrl(pageTitle, fallbackSlug) {
+  if (typeof window === "undefined") {
+    return {
+      pagePath: fallbackSlug || "/",
+      pageLabel: `${fallbackSlug || "/"} · ${pageTitle}`.slice(0, 260),
+      sourceLabel: "direct",
+    };
+  }
+
+  const params = new URLSearchParams(window.location.search || "");
+  const pagePath = `${window.location.pathname || fallbackSlug || "/"}${window.location.search || ""}`;
+  const trackingParts = TRACKING_PARAMS
+    .map((key) => {
+      const value = params.get(key);
+      return value ? `${key}=${value}` : "";
+    })
+    .filter(Boolean);
+
+  const referrer = document.referrer ? `referrer=${document.referrer}` : "";
+  const sourceLabel = compactParts(
+    trackingParts.length ? trackingParts : [params.get("source") ? `source=${params.get("source")}` : "", referrer, "direct"],
+    300
+  );
+
+  return {
+    pagePath,
+    pageLabel: compactParts([pagePath, pageTitle], 260),
+    sourceLabel,
+  };
+}
+
 export default function AdsLeadMiniForm({
   pageTitle = "Advertentiepagina",
   pageSlug = "/",
   defaultSituation = "",
   submitLabel = "Ontvang een vrijblijvend verkoopvoorstel",
+  successTitle = "Bedankt, uw aanvraag is ontvangen.",
+  successText = "Wij bekijken de woninggegevens en nemen doorgaans binnen één werkdag contact met u op. Waar mogelijk ontvangt u daarna een eerste vrijblijvende inschatting of verkoopvoorstel.",
+  privacyNote = "Vrijblijvend. Uw gegevens worden alleen gebruikt om uw aanvraag te beoordelen en contact met u op te nemen.",
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -57,14 +117,14 @@ export default function AdsLeadMiniForm({
     setError("");
 
     if (!form.naam || !form.telefoon || !form.postcode || !form.huisnummer) {
-      setError("Vul naam, telefoonnummer, postcode en huisnummer in.");
+      setError("Vul de verplichte velden in: naam, telefoonnummer, postcode en huisnummer.");
       return;
     }
 
     setSubmitting(true);
 
     try {
-      const params = new URLSearchParams(window.location.search);
+      const attribution = getAttributionFromUrl(pageTitle, pageSlug);
       const lead = {
         naam: form.naam,
         email: form.email,
@@ -77,8 +137,8 @@ export default function AdsLeadMiniForm({
           `Campagne landingspagina: ${pageTitle}`,
           form.situatie ? `Situatie: ${form.situatie}` : "",
         ].filter(Boolean).join(" | "),
-        pagina: window.location.pathname || pageSlug,
-        bron: params.get("utm_source") || params.get("source") || document.referrer || "direct",
+        pagina: attribution.pageLabel,
+        bron: attribution.sourceLabel,
       };
 
       const response = await fetch("/api/leads", {
@@ -116,49 +176,55 @@ export default function AdsLeadMiniForm({
   if (submitted) {
     return (
       <div className="ad-mini-success" role="status">
-        <strong>Bedankt, uw aanvraag is ontvangen.</strong>
-        <p>Wij bekijken uw gegevens en sturen waar mogelijk een eerste vrijblijvende inschatting of voorstel. Als er nog iets nodig is, nemen wij kort contact op.</p>
+        <strong>{successTitle}</strong>
+        <p>{successText}</p>
       </div>
     );
   }
 
   return (
     <form className="ad-mini-form" onSubmit={submitLead} onFocusCapture={trackFormStart}>
-      <div className="ad-mini-form-row two">
+      <div className="ad-mini-section">
+        <div className="ad-mini-section-title">Woning</div>
+        <div className="ad-mini-form-row two">
+          <label>
+            <span>Postcode</span>
+            <input name="postcode" value={form.postcode} onChange={updateForm} placeholder="Bijv. 9501 AB" autoComplete="postal-code" inputMode="text" required />
+          </label>
+          <label>
+            <span>Nr.</span>
+            <input name="huisnummer" value={form.huisnummer} onChange={updateForm} placeholder="12" autoComplete="address-line2" inputMode="numeric" required />
+          </label>
+        </div>
+
         <label>
-          <span>Postcode</span>
-          <input name="postcode" value={form.postcode} onChange={updateForm} placeholder="Bijv. 9501 AB" autoComplete="postal-code" inputMode="text" required />
-        </label>
-        <label>
-          <span>Huisnr.</span>
-          <input name="huisnummer" value={form.huisnummer} onChange={updateForm} placeholder="12" autoComplete="address-line2" inputMode="numeric" required />
+          <span>Situatie</span>
+          <select name="situatie" value={form.situatie} onChange={updateForm}>
+            <option value="">Kies wat het beste past</option>
+            {situaties.map((situatie) => (
+              <option value={situatie} key={situatie}>{situatie}</option>
+            ))}
+          </select>
         </label>
       </div>
 
-      <label>
-        <span>Wat speelt er?</span>
-        <select name="situatie" value={form.situatie} onChange={updateForm}>
-          <option value="">Kies wat het beste past</option>
-          {situaties.map((situatie) => (
-            <option value={situatie} key={situatie}>{situatie}</option>
-          ))}
-        </select>
-      </label>
+      <div className="ad-mini-section">
+        <div className="ad-mini-section-title">Contact</div>
+        <label>
+          <span>Naam</span>
+          <input name="naam" value={form.naam} onChange={updateForm} placeholder="Uw naam" autoComplete="name" required />
+        </label>
 
-      <label>
-        <span>Naam</span>
-        <input name="naam" value={form.naam} onChange={updateForm} placeholder="Uw naam" autoComplete="name" required />
-      </label>
+        <label>
+          <span>Telefoonnummer</span>
+          <input name="telefoon" type="tel" value={form.telefoon} onChange={updateForm} placeholder="06 ..." autoComplete="tel" inputMode="tel" required />
+        </label>
 
-      <label>
-        <span>Telefoonnummer</span>
-        <input name="telefoon" type="tel" value={form.telefoon} onChange={updateForm} placeholder="06 ..." autoComplete="tel" inputMode="tel" required />
-      </label>
-
-      <label>
-        <span>E-mail optioneel</span>
-        <input name="email" type="email" value={form.email} onChange={updateForm} placeholder="naam@email.nl" autoComplete="email" inputMode="email" />
-      </label>
+        <label>
+          <span>E-mail (optioneel)</span>
+          <input name="email" type="email" value={form.email} onChange={updateForm} placeholder="naam@email.nl" autoComplete="email" inputMode="email" />
+        </label>
+      </div>
 
       {error && <p className="ad-mini-error">{error}</p>}
 
@@ -166,7 +232,7 @@ export default function AdsLeadMiniForm({
         {submitting ? "Aanvraag verzenden..." : submitLabel}
       </button>
 
-      <p className="ad-mini-note">Vrijblijvend. Uw gegevens worden niet zonder toestemming gedeeld.</p>
+      <p className="ad-mini-note">{privacyNote}</p>
     </form>
   );
 }

@@ -36,6 +36,10 @@ const page = {
   heroNote:
     "Snel duidelijkheid krijgen betekent niet dat u overhaast hoeft te beslissen. U ontvangt eerst informatie en beoordeelt daarna rustig of het past.",
   formSubmitLabel: "Ontvang een vrijblijvend verkoopvoorstel",
+  formSuccessText:
+    "Wij bekijken de woninggegevens en nemen doorgaans binnen één werkdag contact met u op. Waar mogelijk ontvangt u daarna een eerste vrijblijvende inschatting of verkoopvoorstel.",
+  formPrivacyNote:
+    "Vrijblijvend. Uw gegevens worden alleen gebruikt om uw aanvraag te beoordelen en contact met u op te nemen.",
   afterRequestTitle: "Hoe snel hoort u iets na uw aanvraag?",
   afterRequestText:
     "Na uw aanvraag nemen wij doorgaans binnen één werkdag persoonlijk contact met u op. Op basis van de woninggegevens bespreken wij welke verkooptermijn haalbaar is. Een voorstel of verkoop binnen een vaste termijn kunnen wij niet vooraf garanderen.",
