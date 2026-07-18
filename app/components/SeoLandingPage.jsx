@@ -247,6 +247,7 @@ export default function SeoLandingPage({ page }) {
           font-family:Arial,Helvetica,sans-serif;
           color:var(--navy);
           background:linear-gradient(180deg,#fffdf9 0%,#f5f2ec 100%);
+          overflow-x:hidden;
         }
         .container{width:min(1120px,calc(100% - 44px));margin:0 auto}
         .top-strip{background:var(--navy);color:#fff;font-size:13px;font-weight:900}
@@ -426,21 +427,21 @@ export default function SeoLandingPage({ page }) {
           .footer-grid{grid-template-columns:repeat(2,1fr)}
         }
         @media(max-width:760px){
-          .container{width:min(100% - 28px,1120px)}
+          .container{width:min(100% - 32px,1120px);max-width:100%;overflow:visible}
           .top-strip{display:none}
           .header{position:relative}
-          .header-inner{display:flex;align-items:center;min-height:auto;padding:12px 0;gap:10px}
-          .logo{width:178px}
+          .header-inner{display:flex;align-items:center;min-height:auto;padding:11px 0;gap:10px;max-width:100%}
+          .logo{width:min(176px,47vw)}
           .nav{display:none}
           .header-actions{margin-left:auto}
           .header-actions .btn-green,.header-actions .btn-blue{display:none}
-          .header-actions .btn-orange{padding:11px 13px;font-size:13px}
-          .hero-grid{padding:30px 0 30px;gap:22px}
+          .header-actions .btn-orange{padding:10px 13px;font-size:13px;max-width:43vw;white-space:normal;text-align:center;line-height:1.1}
+          .hero-grid{padding:26px 0 26px;gap:18px;max-width:100%;overflow:hidden}
           .badge{display:none}
-          h1{font-size:clamp(35px,10vw,45px);line-height:1.04;letter-spacing:-1.1px}
-          .lead{font-size:17px;line-height:1.52;margin-top:15px}
+          h1{font-size:clamp(31px,8.2vw,38px);line-height:1.08;letter-spacing:-.7px;max-width:100%;overflow-wrap:break-word;hyphens:auto}
+          .lead{font-size:16px;line-height:1.5;margin-top:13px;max-width:100%}
           .hero-cta-row{margin-top:20px}
-          .hero-cta-row .btn,.cta-buttons .btn{width:100%}
+          .hero-cta-row .btn,.cta-buttons .btn{width:100%;max-width:100%;white-space:normal;text-align:center;line-height:1.15;min-height:46px}
           .hero-cta-row .btn-light{display:none}
           .micro-note{display:none}
           .mobile-trust-line{display:block;font-size:13px;color:#647386;font-weight:900;margin-top:12px;line-height:1.45}
@@ -457,7 +458,7 @@ export default function SeoLandingPage({ page }) {
           .form-conversion-grid{grid-template-columns:1fr;gap:12px}
           .form-trust-box{order:2}
           .form-trust-box ul,.form-trust-box .form-contact-list{grid-template-columns:1fr}
-          .ad-mini-section{padding:9px}.ad-mini-form input,.ad-mini-form select{min-height:44px}
+          .ad-mini-section{padding:9px;border-radius:14px}.ad-mini-form{gap:8px}.ad-mini-form label{font-size:12px}.ad-mini-form input,.ad-mini-form select{min-height:42px;font-size:16px;padding:9px 10px;border-radius:12px}.ad-mini-form-row.two{gap:7px}.ad-mini-submit{min-height:48px;white-space:normal;line-height:1.15;padding:12px 14px}.ad-mini-note{font-size:11.5px!important;line-height:1.35!important;padding:0 8px}.after-request{font-size:12.5px;line-height:1.42;padding:10px 11px;margin-top:10px}.after-request strong{font-size:13.2px}.form-trust-box{padding:10px 11px;border-radius:14px}.form-trust-box li{font-size:12px}
           .seo-review-link{grid-template-columns:1fr;gap:10px}
           .seo-review-score{width:100%;justify-content:flex-start}
           .seo-review-copy h2{font-size:22px}
@@ -467,11 +468,21 @@ export default function SeoLandingPage({ page }) {
           .faq-item h3{margin-bottom:7px}
           .footer-grid{grid-template-columns:1fr}
           .whatsapp-float{display:none}
-          .mobile-bottom-cta{position:fixed;left:10px;right:10px;bottom:10px;z-index:90;display:grid;grid-template-columns:1fr .72fr;gap:7px;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:22px;padding:8px;box-shadow:0 18px 50px rgba(7,31,58,.18);backdrop-filter:blur(14px)}
-          .mobile-bottom-cta a{width:100%;min-height:48px;padding:12px 10px;font-size:14px}
+          .mobile-bottom-cta{position:fixed;left:10px;right:10px;bottom:10px;z-index:90;display:grid;grid-template-columns:1fr .72fr;gap:7px;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:22px;padding:7px;box-shadow:0 18px 50px rgba(7,31,58,.18);backdrop-filter:blur(14px);max-width:calc(100vw - 20px)}
+          .mobile-bottom-cta a{width:100%;min-width:0;min-height:46px;padding:11px 8px;font-size:13.5px;white-space:normal;text-align:center;line-height:1.1}
           .final-cta{padding-bottom:100px}
           .footer{padding-bottom:102px}
         }
+        @media(max-width:380px){
+          .container{width:min(100% - 24px,1120px)}
+          .logo{width:min(160px,45vw)}
+          .header-actions .btn-orange{font-size:12px;padding:9px 11px}
+          h1{font-size:30px;line-height:1.1}
+          .lead{font-size:15.5px}
+          .mobile-bottom-cta{grid-template-columns:1fr .64fr}
+          .mobile-bottom-cta a{font-size:12.5px}
+        }
+
       `}</style>
 
       <div className="top-strip">
