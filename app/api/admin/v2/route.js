@@ -510,8 +510,8 @@ export async function POST(request) {
         : "Uw verkoopvoorstel staat klaar";
 
       const previewText = address && address !== "-"
-        ? `Wij hebben uw vrijblijvende verkoopvoorstel voor ${address} klaargezet. U kunt het rustig bekijken via uw persoonlijke klantlink.`
-        : "Wij hebben uw vrijblijvende verkoopvoorstel klaargezet. U kunt het rustig bekijken via uw persoonlijke klantlink.";
+        ? `Wij hebben uw vrijblijvende verkoopvoorstel voor ${address} klaargezet. U kunt het rustig bekijken via uw persoonlijke voorstelpagina.`
+        : "Wij hebben uw vrijblijvende verkoopvoorstel klaargezet. U kunt het rustig bekijken via uw persoonlijke voorstelpagina.";
 
       const html = `
         <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${previewText}</div>
@@ -526,7 +526,7 @@ export async function POST(request) {
                 Uw verkoopvoorstel staat klaar
               </h1>
               <p style="margin:14px 0 0;font-size:16px;line-height:1.65;color:#d9e6f5;">
-                Wij hebben uw vrijblijvende verkoopvoorstel overzichtelijk klaargezet. U bekijkt het voorstel via uw persoonlijke klantlink. Het bekijken van het voorstel betekent niet dat u ergens aan vastzit.
+                Wij hebben uw vrijblijvende verkoopvoorstel overzichtelijk klaargezet. U bekijkt het voorstel via uw persoonlijke voorstelpagina. Het bekijken van het voorstel betekent niet dat u ergens aan vastzit.
               </p>
             </div>
 
@@ -541,7 +541,7 @@ export async function POST(request) {
               <div style="background:#F7F2EC;border:1px solid #F2B885;border-radius:22px;padding:22px;margin:22px 0;">
                 <div style="font-size:12px;color:#B85216;text-transform:uppercase;font-weight:bold;letter-spacing:.07em;">Woning</div>
                 <div style="font-size:20px;font-weight:bold;margin-top:6px;color:#071f3a;line-height:1.3;">${address || "-"}</div>
-                <div style="font-size:15px;line-height:1.6;margin-top:12px;color:#48586b;">U bekijkt het voorstel via uw persoonlijke klantlink. Zo blijft de inhoud overzichtelijk bij elkaar.</div>
+                <div style="font-size:15px;line-height:1.6;margin-top:12px;color:#48586b;">U bekijkt het voorstel via uw persoonlijke voorstelpagina. Zo blijft de inhoud overzichtelijk bij elkaar.</div>
                 ${validity ? `<div style="font-size:14px;color:#48586b;margin-top:10px;">Geldig tot: ${validity}</div>` : ""}
               </div>
 
