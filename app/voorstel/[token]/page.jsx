@@ -312,7 +312,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
           Bij een woningverkoop gaat het niet alleen om de verkoopprijs, maar ook om kosten, voorbereiding,
           doorlooptijd en zekerheid. Onderstaand overzicht helpt om het voorstel naast een regulier traject te leggen.
         </p>
-        <div className="comparison">
+        <div className="comparison comparison-desktop" aria-label="Vergelijking netto-opbrengst">
           <div className="head">Onderdeel</div>
           <div className="head">Traditionele verkoop</div>
           <div className="head orange">Vastgoed Direct Nederland</div>
@@ -336,6 +336,30 @@ export default async function PublicProposalPage({ params, searchParams }) {
           <div className="total">Verwachte netto-opbrengst</div>
           <div className="total">{amount(proposal.traditional_net_text, "Nog te bepalen")}</div>
           <div className="total accent">{amount(proposal.direct_net_text || proposal.amount_text)}</div>
+        </div>
+
+        <div className="comparison-mobile" aria-label="Vergelijking netto-opbrengst mobiel">
+          {[
+            ["Bod / verkoopprijs", amount(proposal.traditional_price_text, "Nog onbekend"), offerAmount],
+            ["Makelaarskosten", value(proposal.agent_costs_text, "Gebruikelijk van toepassing"), "€ 0"],
+            ["Herstel-/renovatiekosten vooraf", value(proposal.renovation_costs_text, "Afhankelijk van verkoopstrategie"), "Niet noodzakelijk vooraf"],
+            ["Overige verkoopkosten", value(proposal.other_costs_text, "Afhankelijk van situatie"), "In overleg en vooraf helder"],
+            ["Verwachte netto-opbrengst", amount(proposal.traditional_net_text, "Nog te bepalen"), amount(proposal.direct_net_text || proposal.amount_text), true],
+          ].map(([label, traditional, direct, isTotal]) => (
+            <article className={isTotal ? "mobile-compare-card total" : "mobile-compare-card"} key={label}>
+              <h3>{label}</h3>
+              <div className="mobile-compare-values">
+                <div>
+                  <span>Traditionele verkoop</span>
+                  <strong>{traditional}</strong>
+                </div>
+                <div className="direct">
+                  <span>Vastgoed Direct Nederland</span>
+                  <strong>{direct}</strong>
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -539,6 +563,7 @@ p,.intro,li{font-size:16.5px;line-height:1.68;color:var(--muted)}
 .comparison .orange{background:var(--orange)}
 .comparison .total{background:#F7F2EC;font-weight:900;color:var(--navy)}
 .comparison .accent{color:var(--orange);font-size:18px}
+.comparison-mobile{display:none}
 .checks{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
 .checks div,.reservations div{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px;font-weight:800;line-height:1.4}
 .checks span{color:var(--orange);font-weight:900}
@@ -557,7 +582,8 @@ p,.intro,li{font-size:16.5px;line-height:1.68;color:var(--muted)}
 .contact-block strong{font-size:20px;margin-bottom:10px}
 .contact-block span{color:#d9e6f5;margin-top:6px}
 .disclaimer{background:#F7F2EC;color:#415168;line-height:1.65;font-size:14px;box-shadow:none}
-@media(max-width:900px){.cover,.executive-summary,.two-columns,.signature,.proposal-assurance{grid-template-columns:1fr}.benefits{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3n){border-right:1px solid var(--line)}.facts div:nth-child(2n){border-right:0}.comparison{grid-template-columns:1fr}.comparison .head{text-align:left}.comparison>div{border-right:0}.checks,.reservations,.construct-grid,.mini-checks{grid-template-columns:1fr}}
-@media(max-width:640px){.proposal-page{padding:12px}.topbar{display:grid}.top-actions{justify-content:stretch}.top-actions span{display:none}.topbar img{width:215px}.topbar button{width:100%}.cover,.executive-summary,.card,.signature,.disclaimer{border-radius:24px;padding:20px}.cover h1{font-size:39px}.cover p{font-size:16px}.offer-panel strong{font-size:36px}.benefits,.facts{grid-template-columns:1fr}.facts div{border-right:0!important}.timeline-step{grid-template-columns:54px 1fr}.section-kicker{font-size:11px}h2{font-size:28px}}
+@media(max-width:900px){.cover,.executive-summary,.two-columns,.signature,.proposal-assurance{grid-template-columns:1fr}.benefits{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3n){border-right:1px solid var(--line)}.facts div:nth-child(2n){border-right:0}.comparison-desktop{display:none}.comparison-mobile{display:grid;gap:12px;margin-top:18px}.mobile-compare-card{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 10px 28px rgba(7,31,58,.045)}.mobile-compare-card h3{margin:0;padding:14px 16px;background:#F7F2EC;border-bottom:1px solid var(--line);font-size:18px;line-height:1.2;letter-spacing:-.02em;color:var(--navy)}.mobile-compare-values{display:grid;grid-template-columns:1fr 1fr}.mobile-compare-values div{padding:14px 16px;min-width:0}.mobile-compare-values div:first-child{border-right:1px solid var(--line)}.mobile-compare-values span{display:block;font-size:11px;line-height:1.25;text-transform:uppercase;letter-spacing:.055em;color:var(--muted);font-weight:900;margin-bottom:7px}.mobile-compare-values strong{display:block;font-size:18px;line-height:1.28;color:var(--navy);overflow-wrap:anywhere}.mobile-compare-values .direct strong{color:var(--orange)}.mobile-compare-card.total{border-color:#ead4c0;background:#fffaf4}.mobile-compare-card.total h3{background:#fff1e6}.mobile-compare-card.total strong{font-size:20px}.checks,.reservations,.construct-grid,.mini-checks{grid-template-columns:1fr}}
+@media(max-width:640px){.proposal-page{padding:12px}.topbar{display:grid}.top-actions{justify-content:stretch}.top-actions span{display:none}.topbar img{width:215px}.topbar button{width:100%}.cover,.executive-summary,.card,.signature,.disclaimer{border-radius:24px;padding:20px}.cover h1{font-size:39px}.cover p{font-size:16px}.offer-panel strong{font-size:36px}.benefits,.facts{grid-template-columns:1fr}.facts div{border-right:0!important}.timeline-step{grid-template-columns:54px 1fr}.section-kicker{font-size:11px}h2{font-size:28px}.mobile-compare-card h3{font-size:17px;padding:13px 14px}.mobile-compare-values div{padding:12px 13px}.mobile-compare-values strong{font-size:16px}.mobile-compare-card.total strong{font-size:18px}}
+@media(max-width:420px){.mobile-compare-values{grid-template-columns:1fr}.mobile-compare-values div:first-child{border-right:0;border-bottom:1px solid var(--line)}.mobile-compare-values div{padding:12px 14px}.mobile-compare-values span{font-size:10.5px}.mobile-compare-values strong{font-size:17px}.mobile-compare-card.total strong{font-size:19px}}
 @media print{body{background:#fff}.proposal-page{max-width:none;padding:0}.topbar button,.top-actions span{display:none}.topbar img{box-shadow:none}.cover,.executive-summary,.card,.signature,.disclaimer{box-shadow:none;page-break-inside:avoid;border-radius:18px}.cover{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.offer-panel{box-shadow:none}.comparison .head,.timeline-step strong,.contact-block{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.comparison .orange{background:#D96A1C!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 `;

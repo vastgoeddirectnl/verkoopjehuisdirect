@@ -504,14 +504,15 @@ export async function POST(request) {
 
       const publicUrl = `${siteUrl()}/voorstel/${token}`;
       const address = formatAddress(proposal);
+      const offerAmount = formatMoney(proposal.amount_text);
       const validity = formatDateShort(proposal.validity_date);
       const subject = address && address !== "-"
-        ? `Uw verkoopvoorstel voor ${address} staat klaar`
-        : "Uw verkoopvoorstel staat klaar";
+        ? `Uw persoonlijke verkoopvoorstel staat klaar`
+        : "Uw persoonlijke verkoopvoorstel staat klaar";
 
       const previewText = address && address !== "-"
-        ? `Wij hebben uw vrijblijvende verkoopvoorstel voor ${address} klaargezet. U kunt het rustig bekijken via uw persoonlijke voorstelpagina.`
-        : "Wij hebben uw vrijblijvende verkoopvoorstel klaargezet. U kunt het rustig bekijken via uw persoonlijke voorstelpagina.";
+        ? `Wij hebben een vrijblijvend verkoopvoorstel klaargezet voor ${address}.`
+        : "Wij hebben uw vrijblijvende verkoopvoorstel klaargezet.";
 
       const html = `
         <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${previewText}</div>
@@ -523,10 +524,11 @@ export async function POST(request) {
                 Vrijblijvend verkoopvoorstel
               </div>
               <h1 style="margin:16px 0 0;font-size:34px;line-height:1.08;color:#fff;letter-spacing:-.03em;">
-                Uw verkoopvoorstel staat klaar
+                Uw persoonlijke voorstel staat klaar
               </h1>
               <p style="margin:14px 0 0;font-size:16px;line-height:1.65;color:#d9e6f5;">
-                Wij hebben uw vrijblijvende verkoopvoorstel overzichtelijk klaargezet. U bekijkt het voorstel via uw persoonlijke voorstelpagina. Het bekijken van het voorstel betekent niet dat u ergens aan vastzit.
+                Wij hebben het voorstel overzichtelijk voor u klaargezet. In de klantversie vindt u de uitgangspunten,
+                voorwaarden, planning en vervolgstappen. Het bedrag staat bewust alleen in de beveiligde klantversie.
               </p>
             </div>
 
@@ -534,14 +536,15 @@ export async function POST(request) {
               <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#48586b;">Beste ${proposal.lead_naam || "heer/mevrouw"},</p>
 
               <p style="margin:0 0 20px;font-size:16px;line-height:1.7;color:#48586b;">
-                Naar aanleiding van uw aanvraag hebben wij een vrijblijvend verkoopvoorstel voor uw woning klaargezet.
-                In het voorstel leest u onder andere het voorgestelde bedrag, de uitgangspunten, de mogelijke planning, de voorwaarden en de vervolgstappen.
+                Naar aanleiding van uw aanvraag hebben wij een vrijblijvend verkoopvoorstel voor u klaargezet.
+                Het voorstel is bedoeld om u snel en helder inzicht te geven in een mogelijke verkooproute via
+                Vastgoed Direct Nederland.
               </p>
 
               <div style="background:#F7F2EC;border:1px solid #F2B885;border-radius:22px;padding:22px;margin:22px 0;">
                 <div style="font-size:12px;color:#B85216;text-transform:uppercase;font-weight:bold;letter-spacing:.07em;">Woning</div>
                 <div style="font-size:20px;font-weight:bold;margin-top:6px;color:#071f3a;line-height:1.3;">${address || "-"}</div>
-                <div style="font-size:15px;line-height:1.6;margin-top:12px;color:#48586b;">U bekijkt het voorstel via uw persoonlijke voorstelpagina. Zo blijft de inhoud overzichtelijk bij elkaar.</div>
+                <div style="font-size:15px;line-height:1.6;margin-top:12px;color:#48586b;">Het voorstel staat klaar in een aparte klantversie. U kunt het rustig bekijken via de knop hieronder.</div>
                 ${validity ? `<div style="font-size:14px;color:#48586b;margin-top:10px;">Geldig tot: ${validity}</div>` : ""}
               </div>
 
@@ -560,8 +563,8 @@ export async function POST(request) {
                 </tr>
                 <tr>
                   <td style="background:#ffffff;border:1px solid #e8e3db;border-radius:16px;padding:15px;">
-                    <strong style="display:block;color:#071f3a;font-size:15px;">Vrijblijvend bekijken</strong>
-                    <span style="display:block;color:#5f7083;font-size:14px;line-height:1.5;margin-top:4px;">Het bekijken van het voorstel betekent niet dat u ergens aan vastzit.</span>
+                    <strong style="display:block;color:#071f3a;font-size:15px;">Geen verplichting</strong>
+                    <span style="display:block;color:#5f7083;font-size:14px;line-height:1.5;margin-top:4px;">Het voorstel is vrijblijvend en onder voorbehoud van definitieve controle.</span>
                   </td>
                 </tr>
               </table>
@@ -572,12 +575,9 @@ export async function POST(request) {
                 </a>
               </p>
 
-              <p style="margin:0 0 14px;font-size:15px;line-height:1.65;color:#48586b;">
-                Heeft u vragen of wilt u het voorstel bespreken? Reageer gerust op deze e-mail of neem contact met ons op via telefoon of WhatsApp: <strong>06 12 23 80 51</strong>.
-              </p>
-
               <p style="margin:0;font-size:15px;line-height:1.65;color:#48586b;">
-                Als het voorstel voor u interessant is, bespreken we samen eventuele vragen en vervolgstappen. Definitieve afspraken worden pas vastgelegd nadat alle voorwaarden zijn uitgewerkt en een koopovereenkomst door koper en verkoper is ondertekend.
+                Heeft u vragen of wilt u het voorstel bespreken? Reageer gerust op deze e-mail of bel/WhatsApp via
+                <strong>06 12 23 80 51</strong>.
               </p>
             </div>
 
@@ -588,7 +588,7 @@ export async function POST(request) {
           </div>
 
           <p style="max-width:720px;margin:14px auto 0;font-size:12px;line-height:1.5;color:#7a8797;text-align:center;">
-            ${proposal.nonbinding_text || "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid."}
+            ${proposal.nonbinding_text || "Dit voorstel is vrijblijvend en onder voorbehoud van definitieve controle, akkoord van betrokken partijen en notariële vastlegging."}
           </p>
         </div>
       `;
