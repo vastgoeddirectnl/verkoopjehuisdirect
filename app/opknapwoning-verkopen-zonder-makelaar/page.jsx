@@ -138,7 +138,7 @@ const page = {
       "Woning verkopen zonder makelaar"
     ],
     [
-      "/huis-verkopen-zonder-bezichtigingen-uitleg",
+      "/huis-verkopen-zonder-bezichtigingen",
       "Huis verkopen zonder bezichtigingen"
     ],
     [

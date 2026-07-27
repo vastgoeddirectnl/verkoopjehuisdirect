@@ -138,7 +138,7 @@ const page = {
       "Geërfde woning verkopen zonder leeghalen"
     ],
     [
-      "/huis-verkopen-zonder-bezichtigingen-uitleg",
+      "/huis-verkopen-zonder-bezichtigingen",
       "Huis verkopen zonder bezichtigingen"
     ],
     [

@@ -1,16 +1,14 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen in Winschoten",
-  description:
-    "Huis verkopen in Winschoten zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
+  title: 'Huis verkopen in Winschoten | zonder verkoopstress',
+  description: 'Huis verkopen in Winschoten of Oldambt? Vraag vrijblijvend een voorstel aan, ook bij onderhoud, leegstand of erfenis.',
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-winschoten",
   },
   openGraph: {
-    title: "Huis verkopen in Winschoten",
-    description:
-      "Huis verkopen in Winschoten zonder makelaar of open huis? Vraag vrijblijvend een persoonlijk verkoopvoorstel aan via Vastgoed Direct Nederland.",
+    title: 'Huis verkopen in Winschoten | zonder verkoopstress',
+    description: 'Huis verkopen in Winschoten of Oldambt? Vraag vrijblijvend een voorstel aan, ook bij onderhoud, leegstand of erfenis.',
     url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-winschoten",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
@@ -19,106 +17,143 @@ export const metadata = {
 };
 
 const page = {
-  "slug": "/huis-verkopen-winschoten",
-  "breadcrumb": "Huis verkopen in Winschoten",
-  "eyebrow": "Huis verkopen in Winschoten",
-  "h1": "Huis verkopen in Winschoten zonder makelaar of verkoopstress",
-  "lead": "Wilt u uw huis in Winschoten verkopen en snel duidelijkheid krijgen zonder open huis, makelaarskosten of lange verkoopperiode? Vastgoed Direct Nederland helpt woningeigenaren in Winschoten en omgeving met een rustige en duidelijke verkoopoplossing.",
-  "shortAnswer": "U kunt vrijblijvend een verkoopvoorstel aanvragen voor uw woning in Winschoten. Wij kijken naar uw situatie, de woning, de gewenste planning en de mogelijkheden voor een directe verkooproute.",
-  "benefits": [
-    "Huis verkopen in Winschoten",
-    "Geen makelaarskosten",
+  slug: "/huis-verkopen-winschoten",
+  pageType: "region",
+  regionName: "Winschoten",
+  breadcrumb: "Huis verkopen in Winschoten",
+  eyebrow: "Regio Winschoten",
+  h1: "Uw huis verkopen in Winschoten zonder verkoopstress",
+  lead: "Wilt u een woning in Winschoten of de omgeving van Oldambt verkopen? Wij kijken rustig naar de woning, de staat en de gewenste overdracht.",
+  heroNote: "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf.",
+  defaultSituation: "Huis verkopen in Winschoten",
+  afterRequestText: "Wij bekijken uw woninggegevens, locatie en gewenste planning. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Een verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd.",
+  shortAnswer: "Vraag vrijblijvend een verkoopvoorstel aan voor uw woning in Winschoten. Ook bij leegstand, onderhoud, erfenis, verhuur, dubbele lasten of een woning die nog vol staat kunt u rustig bespreken welke verkooproute past.",
+  benefits: [
+    "Actief in Winschoten",
+    "Ook bij onderhoud of leegstand",
     "Geen open huis nodig",
-    "Vrijblijvend verkoopvoorstel",
-    "Duidelijke voorwaarden",
-    "Notariële afwikkeling"
+    "Vrijblijvend voorstel",
+    "Duidelijke opleverafspraken",
+    "Notariële overdracht",
   ],
-  "sections": [
-    {
-      "title": "Huis verkopen in Winschoten: wanneer is dit interessant?",
-      "paragraphs": [
-        "Een directe verkoopoplossing kan interessant zijn als u in Winschoten snel duidelijkheid wilt en liever geen traditioneel verkooptraject met meerdere bezichtigingen wilt.",
-        "In Winschoten en omgeving kan een woningverkoop soms vragen om snelheid, rust of maatwerk. Een vrijblijvend voorstel geeft eerst duidelijkheid zonder direct traditioneel verkooptraject."
-      ]
-    },
-    {
-      "title": "Zonder verkoopstress of open huis",
-      "paragraphs": [
-        "Niet iedere verkoper zit te wachten op verkoopklaar maken, fotograferen, bezichtigingen en onzekerheid over biedingen.",
-        "Bij Vastgoed Direct Nederland vraagt u eerst vrijblijvend een voorstel aan. Daarna beslist u rustig of de verkooproute bij u past."
-      ]
-    },
-    {
-      "title": "Voor welke woningen?",
-      "bullets": [
-        "Woningen met onderhoud of renovatiebehoefte",
-        "Leegstaande woningen",
-        "Erfeniswoningen",
-        "Verhuurde woningen",
-        "Woningen waarbij privacy belangrijk is",
-        "Woningen waarbij snelle duidelijkheid gewenst is"
-      ]
-    },
-    {
-      "title": "Hoe werkt het?",
-      "steps": [
-        "U vult de woninggegevens in.",
-        "Wij nemen persoonlijk contact met u op.",
-        "U ontvangt een vrijblijvend verkoopvoorstel.",
-        "Bij akkoord wordt de overdracht via de notaris geregeld."
-      ]
-    }
+  heroBenefits: [
+    "Regionale beoordeling",
+    "Vrijblijvend voorstel",
+    "Geen verkoopdruk",
+    "Duidelijke afspraken",
   ],
-  "comparisonRows": [
-    [
-      "Makelaarskosten",
-      "Vaak courtage of vast tarief",
-      "Geen makelaarskosten"
-    ],
-    [
-      "Bezichtigingen",
-      "Vaak meerdere kijkers of open huis",
-      "Geen open huis nodig"
-    ],
-    [
-      "Verkoopklaar maken",
-      "Vaak gewenst voor presentatie",
-      "Niet altijd nodig"
-    ],
-    [
-      "Snelheid",
-      "Afhankelijk van markt en kopers",
-      "Snel duidelijkheid mogelijk"
-    ],
-    [
-      "Afwikkeling",
-      "Afhankelijk van koper en voorwaarden",
-      "Bij akkoord via de notaris"
-    ]
+  concernTitle: "Veelvoorkomende verkoopvragen in Winschoten",
+  concernCards: [
+    "De woning is niet verkoopklaar of vraagt onderhoud.",
+    "Er is behoefte aan duidelijkheid over planning, oplevering en voorwaarden.",
+    "De eigenaar wil liever geen open huis of reeks bezichtigingen.",
+    "Er speelt een bijzondere situatie zoals erfenis, leegstand, verhuur of dubbele lasten.",
   ],
-  "faqs": [
-    {
-      "question": "Kan ik mijn huis in Winschoten verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
-    },
-    {
-      "question": "Is de aanvraag vrijblijvend?",
-      "answer": "Ja, de aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
-    },
-    {
-      "question": "Moet de woning verkoopklaar zijn?",
-      "answer": "Nee, niet altijd. Ook woningen met onderhoud, leegstand of renovatiebehoefte kunnen worden aangemeld."
-    },
-    {
-      "question": "Betaal ik makelaarskosten?",
-      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
-    }
+  solutionTitle: "Wat beoordelen wij in deze regio?",
+  solutionCards: [
+    "De woning en staat zoals deze nu is.",
+    "De locatie, het type woning en de praktische verkoopmogelijkheden.",
+    "De gewenste termijn en mogelijke opleverafspraken.",
+    "Of directe verkoop of een andere route passend kan zijn.",
   ],
-  "ctaTitle": "Wilt u uw huis in Winschoten verkopen?",
-  "ctaText": "Vraag gratis en vrijblijvend een persoonlijk verkoopvoorstel aan en ontdek wat er mogelijk is voor uw woning.",
-  "keywords": "huis verkopen winschoten, woning verkopen winschoten, huis snel verkopen winschoten, groningen"
+  vdnTasks: [
+    "Woninggegevens en regionale situatie beoordelen.",
+    "Meedenken over oplevering, planning en eventuele bijzonderheden.",
+    "Waar mogelijk een eerste inschatting of voorstel uitwerken.",
+    "Bij akkoord zorgen dat afspraken schriftelijk en notarieel worden vastgelegd.",
+  ],
+  ownerTasks: [
+    "De ligging, staat en bekende bijzonderheden van de woning delen.",
+    "Aangeven welke termijn of overdracht gewenst is.",
+    "Controleren of alle eigenaren of betrokkenen kunnen meewerken.",
+    "Het voorstel rustig beoordelen voordat er verdere afspraken worden gemaakt.",
+  ],
+  practiceExample: {
+    situation: "Regionale woning waarbij eerst duidelijkheid nodig was",
+    propertyType: "Dorpswoning / bestaande bouw",
+    region: "Winschoten en Oldambt",
+    mainProblem: "De eigenaar wilde weten of directe verkoop passend kon zijn, zonder eerst kosten te maken voor herstel, presentatie en bezichtigingen.",
+    solution: "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
+    delivery: "Oplevering in huidige staat kon worden besproken.",
+    transfer: "Bij akkoord zouden afspraken via koopovereenkomst en notaris worden vastgelegd.",
+    nextStep: "De eigenaar kon het voorstel vergelijken met een regulier verkooptraject.",
+  },
+  sections: [
+    {
+      title: "Werkgebied in en rond Winschoten",
+      paragraphs: [
+        "Wij beoordelen woningen in Winschoten, Oldambt, Scheemda, Beerta en omliggende dorpen.",
+        "Het gaat niet alleen om de plaatsnaam. De staat van de woning, de gewenste termijn, eventuele bewoning en de oplevering bepalen samen welke verkooproute logisch is.",
+      ],
+    },
+    {
+      title: "Regionale bijzonderheden",
+      paragraphs: [
+        "In Oldambt spelen vaak situaties zoals oudere woningen, leegstand, onderhoud of verkoop vanuit een nalatenschap. Opleverafspraken kunnen daarom belangrijk zijn.",
+        "Daarom krijgt u geen standaardantwoord, maar eerst een beoordeling van uw woninggegevens en situatie.",
+      ],
+    },
+    {
+      title: "Welke woningen kunnen worden aangemeld?",
+      paragraphs: [
+        "U kunt ook een aanvraag doen wanneer de woning nog niet verkoopklaar is of wanneer er iets speelt waardoor een regulier verkooptraject minder prettig voelt.",
+      ],
+      bullets: [
+        "Leegstaande woning",
+        "Opknapwoning of woning met achterstallig onderhoud",
+        "Erfeniswoning of woning die nog vol staat",
+        "Verhuurde woning of woning met gebruiksafspraken",
+        "Woning waarbij snel duidelijkheid gewenst is",
+      ],
+    },
+  ],
+  processTitle: "Hoe verloopt een regionale aanvraag?",
+  processSteps: [
+    { title: "Aanvraag indienen", text: "U deelt de woninggegevens, locatie en de reden van verkoop." },
+    { title: "Beoordeling van woning en regio", text: "We kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden." },
+    { title: "Vrijblijvende inschatting of voorstel", text: "Waar mogelijk ontvangt u duidelijkheid over verkoopmogelijkheden en voorwaarden." },
+    { title: "Afspraken en overdracht", text: "Alleen bij akkoord worden afspraken schriftelijk uitgewerkt en loopt de overdracht via de notaris." },
+  ],
+  comparisonRows: [
+    ["Voorbereiding", "Vaak verkoopklaar maken voor presentatie", "Huidige staat kan worden beoordeeld"],
+    ["Bezichtigingen", "Vaak meerdere kijkers", "Geen open huis nodig"],
+    ["Kosten", "Mogelijk courtage, styling of herstel", "Geen makelaarskosten voor de aanvraag"],
+    ["Planning", "Afhankelijk van markt en koper", "In overleg duidelijk af te spreken"],
+    ["Oplevering", "Regulier per koper af te stemmen", "Bijzonderheden vooraf bespreken"],
+    ["Afwikkeling", "Via koopovereenkomst en notaris", "Bij akkoord ook via notaris"],
+  ],
+  faqs: [
+    {
+      question: "Kan ik mijn woning in Winschoten verkopen zonder makelaar?",
+      answer: "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bekijken wij of een directe verkooproute of een andere oplossing passend kan zijn.",
+    },
+    {
+      question: "Moet mijn woning in Winschoten verkoopklaar zijn?",
+      answer: "Niet altijd. Ook bij onderhoud, leegstand, spullen in de woning of andere bijzonderheden kunt u eerst vrijblijvend duidelijkheid aanvragen.",
+    },
+    {
+      question: "Krijg ik gegarandeerd snel een bod?",
+      answer: "Nee, een bod of verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden.",
+    },
+    {
+      question: "Hoe worden afspraken vastgelegd?",
+      answer: "Pas bij akkoord worden afspraken over prijs, planning, oplevering en voorwaarden uitgewerkt in een koopovereenkomst. De juridische overdracht verloopt via de notaris.",
+    },
+  ],
+  relatedLinks: [
+    ["/opknapwoning-verkopen", "Opknapwoning verkopen"],
+    ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen"],
+    ["/huis-verkopen-bij-erfenis", "Huis verkopen bij erfenis"],
+    ["/woning-verkopen-zonder-makelaar", "Woning verkopen zonder makelaar"],
+    ["/huis-direct-verkopen", "Huis direct verkopen"],
+    ["/huis-snel-verkopen", "Huis snel verkopen"],
+    ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen"],
+    ["/huis-verkopen-in-huidige-staat", "Huis verkopen in huidige staat"],
+  ],
+  ctaTitle: "Wilt u uw huis in Winschoten verkopen?",
+  ctaText: "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
 };
 
-export default function Page() {
+export default function HuisVerkopenWinschotenPage() {
   return <SeoLandingPage page={page} />;
 }

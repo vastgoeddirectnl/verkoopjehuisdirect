@@ -151,7 +151,7 @@ const page = {
       "Huis verkopen bij dubbele lasten"
     ],
     [
-      "/huis-verkopen-zonder-bezichtigingen-uitleg",
+      "/huis-verkopen-zonder-bezichtigingen",
       "Huis verkopen zonder bezichtigingen"
     ],
     [

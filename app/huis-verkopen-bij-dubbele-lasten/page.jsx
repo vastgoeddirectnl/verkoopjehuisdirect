@@ -147,7 +147,7 @@ const page = {
       "Huis direct verkopen"
     ],
     [
-      "/huis-verkopen-zonder-bezichtigingen-uitleg",
+      "/huis-verkopen-zonder-bezichtigingen",
       "Huis verkopen zonder bezichtigingen"
     ]
   ],

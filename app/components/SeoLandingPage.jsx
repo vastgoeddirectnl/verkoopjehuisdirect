@@ -53,7 +53,6 @@ const linkDescriptions = {
   "/opknapwoning-verkopen-zonder-makelaar": "Opknapwoning verkopen zonder regulier verkooptraject.",
   "/leegstaand-huis-verkopen-wat-zijn-de-opties": "Bekijk welke routes passen bij leegstand.",
   "/huis-verkopen-bij-dubbele-lasten": "Wanneer planning, zekerheid en lasten meespelen.",
-  "/huis-verkopen-zonder-bezichtigingen-uitleg": "Meer rust en privacy tijdens het verkoopproces.",
   "/huis-verkopen-bij-erfenis": "Praktische oplossing bij een erfenis of nalatenschap.",
   "/verhuurde-woning-verkopen": "Ook mogelijk wanneer huur of gebruik een rol speelt.",
   "/huis-verkopen-met-achterstallig-onderhoud": "Als onderhoud of herstel niet wenselijk is voor verkoop.",
@@ -167,9 +166,17 @@ export default function SeoLandingPage({ page }) {
   const solutionCards = Array.isArray(page.solutionCards) ? page.solutionCards : [];
   const ownerTasks = Array.isArray(page.ownerTasks) ? page.ownerTasks : [];
   const vdnTasks = Array.isArray(page.vdnTasks) ? page.vdnTasks : [];
-  const processSteps = Array.isArray(page.processSteps) && page.processSteps.length
+  const hasExplicitProcessSteps = Array.isArray(page.processSteps) && page.processSteps.length > 0;
+  const fallbackProcessSection = sections.find((section) => Array.isArray(section.steps) && section.steps.length);
+  const processSteps = hasExplicitProcessSteps
     ? page.processSteps
-    : sections.find((section) => Array.isArray(section.steps) && section.steps.length)?.steps || [];
+    : fallbackProcessSection?.steps || [];
+  const processTitle = page.processTitle || fallbackProcessSection?.title || "Zo verloopt een vrijblijvende aanvraag";
+  const processIntro = page.processIntro || "De aanvraag is bedoeld om eerst duidelijkheid te krijgen. Een koopovereenkomst ontstaat pas na uitwerking en ondertekening door beide partijen.";
+  const contentSections = sections.filter((section) => {
+    if (section !== fallbackProcessSection) return true;
+    return Boolean(section.paragraphs?.length || section.bullets?.length);
+  });
   const formTrustItems = Array.isArray(page.formTrustItems) && page.formTrustItems.length
     ? page.formTrustItems
     : [
@@ -716,40 +723,42 @@ export default function SeoLandingPage({ page }) {
         </section>
       )}
 
-      <section className="section-tight section-white">
-        <div className="container content-grid">
-          {sections.map((section) => (
-            <section className="content-block" key={section.title}>
-              <h2>{section.title}</h2>
-              {section.paragraphs?.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-              {section.bullets?.length > 0 && (
-                <ul className="list">
-                  {section.bullets.map((bullet) => (
-                    <li key={bullet}>✓ {bullet}</li>
-                  ))}
-                </ul>
-              )}
-              {section.steps?.length > 0 && (
-                <ol className="steps">
-                  {section.steps.map((step) => (
-                    <li key={step}>{step}</li>
-                  ))}
-                </ol>
-              )}
-            </section>
-          ))}
-        </div>
-      </section>
+      {contentSections.length > 0 && (
+        <section className="section-tight section-white">
+          <div className="container content-grid">
+            {contentSections.map((section) => (
+              <section className="content-block" key={section.title}>
+                <h2>{section.title}</h2>
+                {section.paragraphs?.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+                {section.bullets?.length > 0 && (
+                  <ul className="list">
+                    {section.bullets.map((bullet) => (
+                      <li key={bullet}>✓ {bullet}</li>
+                    ))}
+                  </ul>
+                )}
+                {!processSteps.length && section.steps?.length > 0 && (
+                  <ol className="steps">
+                    {section.steps.map((step) => (
+                      <li key={step}>{step}</li>
+                    ))}
+                  </ol>
+                )}
+              </section>
+            ))}
+          </div>
+        </section>
+      )}
 
       {processSteps.length > 0 && (
         <section className="section-tight">
           <div className="container">
             <div className="section-head">
               <p className="eyebrow">Proces</p>
-              <h2>{page.processTitle || "Zo verloopt een vrijblijvende aanvraag"}</h2>
-              <p>De aanvraag is bedoeld om eerst duidelijkheid te krijgen. Een koopovereenkomst ontstaat pas na uitwerking en ondertekening door beide partijen.</p>
+              <h2>{processTitle}</h2>
+              <p>{processIntro}</p>
             </div>
             <ol className="steps">
               {processSteps.map((step) => {

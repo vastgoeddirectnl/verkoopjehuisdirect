@@ -142,7 +142,7 @@ const page = {
       "Huis verkopen bij erfenis"
     ],
     [
-      "/huis-verkopen-zonder-bezichtigingen-uitleg",
+      "/huis-verkopen-zonder-bezichtigingen",
       "Huis verkopen zonder bezichtigingen"
     ],
     [

@@ -149,7 +149,7 @@ const page = {
       "Huis verkopen zonder opknappen"
     ],
     [
-      "/huis-verkopen-zonder-bezichtigingen-uitleg",
+      "/huis-verkopen-zonder-bezichtigingen",
       "Huis verkopen zonder bezichtigingen"
     ],
     [
