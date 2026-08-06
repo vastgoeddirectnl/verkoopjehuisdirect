@@ -1,14 +1,14 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen binnen 24 uur",
-  description: "Huis verkopen binnen 24 uur of snel duidelijkheid over uw mogelijkheden? Vraag vrijblijvend een helder verkoopvoorstel aan.",
+  title: "Huis verkopen binnen 24 uur? Vraag eerst snel duidelijkheid aan",
+  description: "Binnen 24 uur verkopen kan niet vooraf worden gegarandeerd. Wel kunt u snel een vrijblijvende beoordeling aanvragen en bespreken we welke termijn haalbaar ",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-binnen-24-uur",
   },
   openGraph: {
-    title: "Huis verkopen binnen 24 uur",
-    description: "Huis verkopen binnen 24 uur of snel duidelijkheid over uw mogelijkheden? Vraag vrijblijvend een helder verkoopvoorstel aan.",
+    title: "Huis verkopen binnen 24 uur? Vraag eerst snel duidelijkheid aan",
+    description: "Binnen 24 uur verkopen kan niet vooraf worden gegarandeerd. Wel kunt u snel een vrijblijvende beoordeling aanvragen en bespreken we welke termijn haalbaar ",
     url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-binnen-24-uur",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
@@ -19,116 +19,124 @@ export const metadata = {
 const page = {
   "slug": "/huis-verkopen-binnen-24-uur",
   "breadcrumb": "Huis verkopen binnen 24 uur",
-  "eyebrow": "Huis verkopen binnen 24 uur",
-  "h1": "Huis verkopen binnen 24 uur: snel duidelijkheid",
-  "lead": "Wilt u snel weten wat er mogelijk is met uw woning? Wij bekijken uw aanvraag zorgvuldig en geven zo snel mogelijk duidelijkheid.",
-  "shortAnswer": "Huis verkopen binnen 24 uur of snel duidelijkheid over uw mogelijkheden? U kunt vrijblijvend een helder verkoopvoorstel aan.",
-  "benefits": [
-    "Huis verkopen binnen 24 uur",
-    "Geen makelaarskosten",
+  "eyebrow": "Snel duidelijkheid",
+  "h1": "Huis verkopen binnen 24 uur? Vraag eerst snel duidelijkheid aan",
+  "lead": "Wilt u heel snel weten wat er mogelijk is met uw woning? Wij beoordelen uw aanvraag zorgvuldig en bespreken welke verkooptermijn realistisch is. Een verkoop of bod binnen een vaste termijn wordt niet vooraf gegarandeerd.",
+  "heroNote": "Snel duidelijkheid krijgen betekent niet dat u overhaast hoeft te beslissen. U ontvangt eerst een vrijblijvende beoordeling.",
+  "heroBenefits": [
+    "Doorgaans snel persoonlijk contact",
     "Geen open huis nodig",
-    "Vrijblijvend verkoopvoorstel",
-    "Duidelijke voorwaarden",
-    "Notariële afwikkeling"
+    "Niet eerst verkoopklaar maken",
+    "Vrijblijvend voorstel"
+  ],
+  "benefits": [
+    "Snel duidelijkheid over mogelijkheden",
+    "Geen traditionele verkoopcampagne nodig",
+    "Ook bij onderhoud of leegstand",
+    "Schriftelijke afspraken bij akkoord"
+  ],
+  "shortAnswer": "Binnen 24 uur verkopen kan niet vooraf worden gegarandeerd. Wel kunt u snel een vrijblijvende beoordeling aanvragen en bespreken we welke termijn haalbaar is.",
+  "pageType": "high-intent",
+  "concernCards": [
+    "Ik wil snel weten waar ik aan toe ben",
+    "Ik wil geen wekenlange bezichtigingsperiode",
+    "Ik wil niet eerst verbouwen of leeghalen",
+    "Ik wil duidelijke voorwaarden voordat ik beslis"
+  ],
+  "solutionCards": [
+    "Vrijblijvende beoordeling van uw woninggegevens",
+    "Bespreking van haalbare termijn en voorwaarden",
+    "Mogelijkheid tot directe verkoop zonder regulier traject",
+    "Notariële afwikkeling bij definitieve afspraken"
+  ],
+  "vdnTasks": [
+    "Woninggegevens beoordelen",
+    "Verkoopmogelijkheden en planning bespreken",
+    "Voorstel schriftelijk uitwerken wanneer passend",
+    "Overdracht met notaris voorbereiden bij akkoord"
+  ],
+  "ownerTasks": [
+    "Basisgegevens aanleveren",
+    "Bijzonderheden over woning en eigendom melden",
+    "Voorstel rustig beoordelen",
+    "Pas tekenen na definitieve koopovereenkomst"
   ],
   "sections": [
     {
-      "title": "Huis verkopen binnen 24 uur: wanneer is dit interessant?",
+      "title": "Wat betekent verkopen binnen 24 uur realistisch?",
       "paragraphs": [
-        "Wilt u snel weten wat er mogelijk is met uw woning? Wij bekijken uw aanvraag zorgvuldig en geven zo snel mogelijk duidelijkheid.",
-        "Een directe verkoopoplossing kan passend zijn wanneer u snel duidelijkheid wilt, geen lang verkooptraject wilt of de woning niet eerst verkoopklaar wilt maken."
+        "Veel zoekers bedoelen met binnen 24 uur vooral: snel duidelijkheid. Daarom maken wij onderscheid tussen snelle beoordeling en definitieve verkoop.",
+        "Een definitieve verkoop vraagt altijd om goede afspraken, controle van gegevens en notariële uitvoerbaarheid."
       ]
     },
     {
-      "title": "Zonder traditioneel verkooptraject",
-      "paragraphs": [
-        "U hoeft niet altijd te kiezen voor een verkooptraject met meerdere bezichtigingen, open huis of lange onderhandelingen.",
-        "Bij Vastgoed Direct Nederland vraagt u vrijblijvend een helder verkoopvoorstel aan. Daarna beslist u rustig of het voorstel bij uw situatie past."
-      ]
-    },
-    {
-      "title": "Voor welke situaties?",
+      "title": "Wanneer kan een snelle route passend zijn?",
       "bullets": [
-        "Huis verkopen binnen 24 uur",
-        "Leegstand",
-        "Achterstallig onderhoud",
-        "Opknapwoning",
-        "Erfenis",
-        "Scheiding",
-        "Verhuur",
-        "Snel duidelijkheid gewenst"
-      ]
-    },
-    {
-      "title": "Hoe werkt het?",
-      "steps": [
-        "U vult uw woninggegevens in.",
-        "Wij bespreken uw situatie en gewenste snelheid.",
-        "U ontvangt een vrijblijvend verkoopvoorstel.",
-        "Bij akkoord wordt de overdracht via de notaris geregeld."
-      ]
-    },
-    {
-      "title": "Kosten en afwikkeling",
-      "paragraphs": [
-        "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
-        "Een aanbetaling of voorschot kan in sommige situaties bespreekbaar zijn, mits dit juridisch en notarieel goed wordt vastgelegd."
+        "bij dubbele lasten of leegstand",
+        "bij een woning die niet verkoopklaar is",
+        "bij een erfenis of scheiding",
+        "bij behoefte aan privacy en beperkte bezichtigingen"
       ]
     }
   ],
+  "processTitle": "Van snelle aanvraag naar duidelijke afspraak",
+  "processSteps": [
+    "U dient de aanvraag in met de belangrijkste woninggegevens.",
+    "Wij nemen de situatie door en beoordelen wat haalbaar is.",
+    "U ontvangt waar mogelijk een vrijblijvende inschatting of voorstel.",
+    "Bij akkoord worden afspraken schriftelijk en notarieel vastgelegd."
+  ],
+  "practiceExample": {
+    "situation": "Snel duidelijkheid nodig",
+    "propertyType": "Eengezinswoning",
+    "region": "Noord-Nederland",
+    "mainProblem": "De eigenaar wilde snel weten of verkoop zonder regulier traject mogelijk was vanwege dubbele lasten.",
+    "solution": "Na beoordeling van de woninggegevens is eerst een vrijblijvende inschatting besproken.",
+    "delivery": "Overdracht en planning zijn pas later definitief gemaakt.",
+    "result": "De eigenaar kon rustig vergelijken zonder direct vast te zitten."
+  },
   "comparisonRows": [
     [
-      "Makelaarskosten",
-      "Vaak courtage of vast tarief",
-      "Geen makelaarskosten"
-    ],
-    [
-      "Bezichtigingen",
-      "Vaak meerdere kijkers",
-      "Niet standaard nodig"
-    ],
-    [
       "Snelheid",
-      "Kan weken of maanden duren",
-      "Snelle duidelijkheid mogelijk"
+      "Afhankelijk van bezichtigingen, biedingen en financiering",
+      "Snel duidelijkheid mogelijk, zonder termijn-garantie"
     ],
     [
-      "Onderhoud",
-      "Kan verkoop lastiger maken",
-      "Ook deze woningen kunnen worden aangemeld"
+      "Beslissen",
+      "Vaak meerdere stappen met kijkers en onderhandelingen",
+      "U beoordeelt eerst rustig het voorstel"
     ],
     [
-      "Opleverdatum",
-      "Afhankelijk van koper",
-      "In overleg bespreekbaar"
+      "Verkoopklaar maken",
+      "Vaak wenselijk voor presentatie",
+      "Meestal niet nodig voor eerste beoordeling"
     ],
     [
       "Afwikkeling",
-      "Afhankelijk van afspraken",
-      "Bij akkoord via de notaris"
+      "Via koopovereenkomst en notaris",
+      "Ook hier pas definitief na schriftelijke afspraken en notaris"
     ]
   ],
   "faqs": [
     {
-      "question": "Kan ik mijn huis verkopen binnen 24 uur zonder makelaar regelen?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
+      "question": "Kan mijn huis echt binnen 24 uur verkocht zijn?",
+      "answer": "Een verkoop binnen 24 uur wordt niet gegarandeerd. Wel kunt u snel duidelijkheid aanvragen over de mogelijkheden en haalbare verkooptermijn."
     },
     {
-      "question": "Is de aanvraag vrijblijvend?",
-      "answer": "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
+      "question": "Krijg ik altijd een bod?",
+      "answer": "Nee. Een voorstel hangt af van woninggegevens, staat, juridische situatie en uitvoerbaarheid."
     },
     {
-      "question": "Moet de woning verkoopklaar zijn?",
-      "answer": "Niet altijd. Ook woningen met onderhoud, leegstand of renovatiebehoefte kunnen worden aangemeld."
+      "question": "Moet ik meteen beslissen?",
+      "answer": "Nee. De aanvraag is vrijblijvend en u beslist pas na beoordeling van het voorstel."
     },
     {
-      "question": "Betaal ik makelaarskosten?",
-      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
+      "question": "Is een notaris nog nodig?",
+      "answer": "Ja. Definitieve overdracht van een woning verloopt via de notaris."
     }
   ],
-  "ctaTitle": "Wilt u huis verkopen binnen 24 uur?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden.",
-  "keywords": "huis verkopen binnen 24 uur, snel bod woning, snel duidelijkheid"
+  "ctaTitle": "Wilt u snel weten wat er mogelijk is?",
+  "ctaText": "Vraag vrijblijvend een beoordeling aan. U zit nergens aan vast."
 };
 
 export default function HuisVerkopenBinnen24UurPage() {

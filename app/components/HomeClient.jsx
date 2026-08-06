@@ -2,12 +2,11 @@
 
 import React, { useState } from "react";
 import { trackGoogleAdsConversion } from "../lib/googleAds";
+import { reviewData, reviewDisplayText } from "../lib/reviewData";
 
 const whatsappLink =
   "https://wa.me/31612238051?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F";
 
-const googleReviewUrl =
-  "https://www.google.com/search?q=reviews+voor+Vastgoed+Direct+Nederland";
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
@@ -2417,17 +2416,17 @@ export default function HomeClient() {
 
       <section className="review-band">
         <a
-          href={googleReviewUrl}
+          href={reviewData.url}
           target="_blank"
           rel="noopener noreferrer"
           className="container review-compact review-link"
           aria-label="Bekijk de Google-reviews van Vastgoed Direct Nederland"
         >
           <div className="review-score">
-            <strong>5,0</strong>
+            <strong>{reviewData.rating}</strong>
             <div>
               <div className="stars">★★★★★</div>
-              <span>Google · 2 reviews</span>
+              <span>{reviewDisplayText(reviewData)}</span>
             </div>
           </div>
 

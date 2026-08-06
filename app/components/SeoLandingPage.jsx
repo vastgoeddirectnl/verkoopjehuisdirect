@@ -1,8 +1,7 @@
 import AdsLeadMiniForm from "./AdsLeadMiniForm";
+import SeoReviewBand from "./seo/SeoReviewBand";
 
 const whatsappBase = "https://wa.me/31612238051";
-const googleReviewUrl =
-  "https://www.google.com/search?q=reviews+voor+Vastgoed+Direct+Nederland";
 const primaryCta = "Ontvang een vrijblijvend verkoopvoorstel";
 const secondaryCta = "Bespreek eerst mijn situatie";
 
@@ -580,29 +579,8 @@ export default function SeoLandingPage({ page }) {
         </div>
       </section>
 
-      <section className="seo-review-band" aria-label="Google-beoordelingen">
-        <a
-          href={googleReviewUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="container seo-review-link"
-          data-analytics-event="secondary_cta_click"
-          data-analytics-component="seo_google_review"
-        >
-          <div className="seo-review-score">
-            <strong>5,0</strong>
-            <div>
-              <div className="seo-stars">★★★★★</div>
-              <span>Google · 2 reviews</span>
-            </div>
-          </div>
-          <div className="seo-review-copy">
-            <h2>Rustig en duidelijk geholpen</h2>
-            <p>Bekijk de actuele Google-beoordelingen. We gebruiken alleen controleerbare review-informatie en voegen geen verzonnen klantverhalen toe.</p>
-          </div>
-          <span className="seo-review-cta">Bekijk op Google →</span>
-        </a>
-      </section>
+      <SeoReviewBand />
+
 
       <section className="section section-white">
         <div className="container">

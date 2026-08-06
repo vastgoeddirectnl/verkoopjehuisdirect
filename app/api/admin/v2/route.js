@@ -5,6 +5,7 @@ import { listLeads } from "../../../lib/leads";
 import { sendResendMail } from "../../../lib/mail";
 import { logMailEventSafe } from "../../../lib/mailLog";
 import { markProposalSentAutomation, refreshLeadAutomation, refreshAllLeadAutomation } from "../../../lib/automation";
+import { isValidEmail } from "../../../lib/admin/validators";
 
 export const runtime = "nodejs";
 
@@ -96,6 +97,7 @@ const PROPOSAL_FIELDS = [
 function clean(value, max = 1500) {
   return String(value || "").trim().slice(0, max);
 }
+
 
 function parseNonNegativeNumber(value) {
   const raw = String(value || "").trim();
@@ -375,6 +377,9 @@ export async function POST(request) {
     const action = body.action;
 
     if (action === "updateLead") {
+      if (body.email && !isValidEmail(body.email)) {
+        return NextResponse.json({ error: "Ongeldig e-mailadres." }, { status: 400 });
+      }
       const allowed = ["status", "notitie", "last_contact_at", "naam", "email", "telefoon", "postcode", "huisnummer", "woningtype", "staat", "reden", "next_follow_up_at"];
       const updates = [];
       const params = [];
@@ -497,7 +502,12 @@ export async function POST(request) {
     if (action === "sendProposalEmail") {
       let proposal = await queryOne("select * from proposals where id = $1", [body.id]);
       if (!proposal) return NextResponse.json({ error: "Voorstel niet gevonden." }, { status: 404 });
-      if (!proposal.lead_email) return NextResponse.json({ error: "Geen e-mailadres bekend." }, { status: 400 });
+      const recipientOverride = clean(body.lead_email || "", 300);
+      if (recipientOverride) {
+        if (!isValidEmail(recipientOverride)) return NextResponse.json({ error: "Ongeldig e-mailadres voor verzending." }, { status: 400 });
+        proposal = await queryOne("update proposals set lead_email = $1, updated_at = now() where id = $2 returning *", [recipientOverride, proposal.id]);
+      }
+      if (!proposal.lead_email || !isValidEmail(proposal.lead_email)) return NextResponse.json({ error: "Geen geldig e-mailadres bekend." }, { status: 400 });
 
       const token = await ensurePublicToken(proposal);
       proposal = { ...proposal, public_token: token };

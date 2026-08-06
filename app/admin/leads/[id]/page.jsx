@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { parseLeadSourceDetails, sourceChannelLabel } from "../../../lib/sourceParser";
 
 const STATUSES = ["Nieuwe aanvraag", "In behandeling", "Eerste bod gedaan", "Beoordeling gepland", "Voorstel opgesteld", "Voorstel verzonden", "Voorstel bekeken", "In onderhandeling", "Akkoord", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
 const LEGACY_STATUS_LABELS = { "Nieuw": "Nieuwe aanvraag", "Contact opgenomen": "In behandeling", "In beoordeling": "Beoordeling gepland", "Afgewezen": "Afgewezen / vervallen" };
@@ -50,43 +51,35 @@ function cleanPhone(value) {
   return String(value || "").replace(/[^\d+]/g, "");
 }
 
-function parseLeadSourceDetails(lead) {
-  const bron = String(lead?.bron || "");
-  const pagina = String(lead?.pagina || "");
-  const params = {};
+function isValidEmail(value) {
+  const email = String(value || "").trim();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
-  bron.split("|").map((part) => part.trim()).forEach((part) => {
-    const index = part.indexOf("=");
-    if (index > 0) {
-      params[part.slice(0, index).trim()] = part.slice(index + 1).trim();
-    }
-  });
-
-  const pageParts = pagina.split(" · ");
-  const pagePath = pageParts[0] || pagina;
-  const pageTitle = pageParts.slice(1).join(" · ");
-
-  return {
-    pagePath,
-    pageTitle,
-    source: params.utm_source || params.source || (bron === "direct" ? "direct" : ""),
-    medium: params.utm_medium || "",
-    campaign: params.utm_campaign || "",
-    term: params.utm_term || "",
-    content: params.utm_content || "",
-    clickId: params.gclid || params.gbraid || params.wbraid || "",
-    referrer: params.referrer || "",
-  };
+function sameEmail(a, b) {
+  return String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
 }
 
 function SourceDetails({ lead }) {
   const details = parseLeadSourceDetails(lead);
   const hasDetails = [details.pagePath, details.pageTitle, details.source, details.medium, details.campaign, details.term, details.content, details.clickId, details.referrer].some(Boolean);
   if (!hasDetails) return null;
+  const channel = sourceChannelLabel(details);
 
   return (
     <div className="source-detail-box">
-      <h3>Meetgegevens</h3>
+      <div className="source-head">
+        <div>
+          <h3>Bron en campagne</h3>
+          <p>Leesbare samenvatting van de herkomst van deze aanvraag.</p>
+        </div>
+        <span className="source-pill">{channel}</span>
+      </div>
+      <div className="source-summary-row">
+        <span>Campagne: {details.campaign || "niet meegegeven"}</span>
+        <span>Zoekterm: {details.term || "niet meegegeven"}</span>
+        <span>Click ID: {details.clickId ? "aanwezig" : "niet meegegeven"}</span>
+      </div>
       <div className="info-grid">
         <Info label="Landingspagina" value={details.pagePath} />
         <Info label="Paginatitel" value={details.pageTitle} />
@@ -256,6 +249,60 @@ function Field({ label, children }) {
   return <label><span>{label}</span>{children}</label>;
 }
 
+function ProposalListItem({ item, lead, saving, sendProposal, useProposalAsBase, updateProposalEmail }) {
+  const [email, setEmail] = useState(item.lead_email || lead?.email || "");
+  const proposalEmail = String(item.lead_email || "").trim();
+  const leadEmail = String(lead?.email || "").trim();
+  const differs = proposalEmail && leadEmail && !sameEmail(proposalEmail, leadEmail);
+  const emailChanged = !sameEmail(email, proposalEmail);
+  const valid = isValidEmail(email);
+
+  async function saveEmail() {
+    await updateProposalEmail(item.id, email);
+  }
+
+  return (
+    <div className="item proposal-item">
+      <div className="proposal-item-head">
+        <div>
+          <strong>{item.amount_text || "Voorstel"}</strong>
+          <span>{item.status} · {fmt(item.created_at)}</span>
+        </div>
+        {proposalViewedAfterEmail(item) ? <span className="status-pill green">Bekeken</span> : item.emailed_at ? <span className="status-pill">Verzonden</span> : <span className="status-pill muted">Concept</span>}
+      </div>
+
+      <div className="proposal-recipient-box">
+        <strong>Verzenden naar klant</strong>
+        <small>Controleer het e-mailadres voordat u het voorstel verstuurt.</small>
+        <Field label="E-mailadres ontvanger">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="klant@example.nl"
+          />
+        </Field>
+        <div className="recipient-meta">
+          <span>Voorstel: {proposalEmail || "geen e-mailadres"}</span>
+          <span>Lead: {leadEmail || "geen e-mailadres"}</span>
+        </div>
+        {differs ? <div className="warning-line">Let op: het e-mailadres op dit voorstel wijkt af van het e-mailadres op de lead.</div> : null}
+        {email && !valid ? <div className="warning-line">Voer een geldig e-mailadres in voordat u verzendt.</div> : null}
+        <div className="proposal-mail-actions">
+          <button className="small secondary-small" disabled={saving || !emailChanged || !valid} onClick={saveEmail}>E-mailadres bijwerken</button>
+          <button className="small" disabled={saving || !valid} onClick={() => sendProposal(item.id, email)}>Voorstel verzenden</button>
+        </div>
+      </div>
+
+      <a href={`/admin/voorstellen/${item.id}/print`} target="_blank">Interne print/PDF</a>
+      {item.public_token ? <a href={`/voorstel/${item.public_token}?admin_preview=1`} target="_blank">Klantversie bekijken</a> : null}
+      <button className="small secondary-small" onClick={() => useProposalAsBase(item)}>Gebruik als basis</button>
+      {item.emailed_at ? <small>Laatst gemaild: {fmt(item.emailed_at)}{item.sent_to_email ? ` · naar ${item.sent_to_email}` : ""}</small> : null}
+      {proposalViewedAfterEmail(item) ? <small>Bekeken door klant: {fmt(item.public_viewed_at)}</small> : null}
+    </div>
+  );
+}
+
 function defaultProposalForLead(lead) {
   const propertyAddress = [lead?.postcode, lead?.huisnummer].filter(Boolean).join(" ").toUpperCase();
   return {
@@ -330,6 +377,7 @@ export default function LeadDetailPage({ params }) {
   const [notice, setNotice] = useState("");
   const [task, setTask] = useState({ title: "", due_date: todayPlus(1), note: "" });
   const [proposal, setProposal] = useState(null);
+  const [contactForm, setContactForm] = useState({ naam: "", email: "", telefoon: "" });
 
   useEffect(() => {
     Promise.resolve(params).then((resolved) => setLeadId(resolved.id));
@@ -372,6 +420,15 @@ export default function LeadDetailPage({ params }) {
   useEffect(() => { if (leadId) load(leadId); }, [leadId]);
 
   const lead = data?.lead;
+
+  useEffect(() => {
+    if (!lead) return;
+    setContactForm({
+      naam: lead.naam || "",
+      email: lead.email || "",
+      telefoon: lead.telefoon || "",
+    });
+  }, [lead?.id, lead?.naam, lead?.email, lead?.telefoon]);
 
   const latestProposal = useMemo(() => {
     return (data?.proposals || [])[0] || null;
@@ -448,14 +505,43 @@ export default function LeadDetailPage({ params }) {
     }
   }
 
-  async function sendProposal(id) {
-    const confirmed = window.confirm("Wilt u dit voorstel nu naar de klant mailen?");
+  async function saveContactDetails() {
+    if (contactForm.email && !isValidEmail(contactForm.email)) {
+      setError("Voer een geldig e-mailadres in voordat u de contactgegevens opslaat.");
+      return;
+    }
+    const result = await post({
+      action: "updateLead",
+      id: lead.id,
+      naam: contactForm.naam,
+      email: contactForm.email,
+      telefoon: contactForm.telefoon,
+    });
+    if (result?.lead) setNotice("Contactgegevens zijn bijgewerkt.");
+  }
+
+  async function updateProposalEmail(id, email) {
+    if (!isValidEmail(email)) {
+      setError("Voer een geldig e-mailadres in voordat u het voorstel bijwerkt.");
+      return;
+    }
+    const result = await post({ action: "updateProposal", id, lead_email: email });
+    if (result?.proposal) setNotice("E-mailadres van het voorstel is bijgewerkt.");
+  }
+
+  async function sendProposal(id, recipientEmail) {
+    const targetEmail = String(recipientEmail || "").trim();
+    if (!isValidEmail(targetEmail)) {
+      setError("Voorstel kan niet worden verzonden: e-mailadres ontbreekt of is ongeldig.");
+      return;
+    }
+    const confirmed = window.confirm(`Dit voorstel wordt verzonden naar ${targetEmail}. Klopt dit e-mailadres?`);
     if (!confirmed) return;
-    const result = await post({ action: "sendProposalEmail", id });
+    const result = await post({ action: "sendProposalEmail", id, lead_email: targetEmail });
     if (result?.ok) {
       setNotice(result.skipped
-        ? "Mail is overgeslagen omdat Resend niet actief is ingesteld. De klantlink is wel beschikbaar."
-        : "Voorstel is naar de klant gemaild en vastgelegd in de mailhistorie.");
+        ? "Mail is overgeslagen omdat Resend niet actief is ingesteld. De persoonlijke voorstelpagina is wel beschikbaar."
+        : `Voorstel is naar ${targetEmail} gemaild en vastgelegd in de mailhistorie.`);
     }
   }
 
@@ -490,12 +576,36 @@ export default function LeadDetailPage({ params }) {
             </div>
           </section>
 
+          <nav className="admin-quick-nav" aria-label="Admin snelnavigatie">
+            <a href="#contact">Contact</a>
+            <a href="#woning">Woning en aanvraag</a>
+            <a href="#bron">Bron</a>
+            <a href="#voorstel-maken">Voorstel maken</a>
+            <a href="#taken">Taken</a>
+            <a href="#voorstellen">Voorstellen</a>
+          </nav>
+
           <section className="grid">
-            <article className="card">
-              <h2>Contact & aanvraag</h2>
+            <article className="card" id="contact">
+              <h2>Contactgegevens</h2>
+              <div className="form-grid compact-two">
+                <Field label="Naam">
+                  <input value={contactForm.naam} onChange={(e) => setContactForm({ ...contactForm, naam: e.target.value })} />
+                </Field>
+                <Field label="E-mail">
+                  <input type="email" value={contactForm.email} onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })} />
+                </Field>
+                <Field label="Telefoon">
+                  <input type="tel" value={contactForm.telefoon} onChange={(e) => setContactForm({ ...contactForm, telefoon: e.target.value })} />
+                </Field>
+                <div className="contact-save-box">
+                  <button disabled={saving || (contactForm.email && !isValidEmail(contactForm.email))} onClick={saveContactDetails}>Contactgegevens opslaan</button>
+                  {contactForm.email && !isValidEmail(contactForm.email) ? <small>Ongeldig e-mailadres.</small> : <small>Deze gegevens worden gebruikt bij opvolging en nieuwe voorstellen.</small>}
+                </div>
+              </div>
+
+              <h2 className="subheading" id="woning">Aanvraag</h2>
               <div className="info-grid">
-                <Info label="Telefoon" value={lead.telefoon} />
-                <Info label="E-mail" value={lead.email} />
                 <Info label="Woningtype" value={lead.woningtype} />
                 <Info label="Staat" value={lead.staat} />
                 <Info label="Reden" value={lead.reden} />
@@ -503,7 +613,7 @@ export default function LeadDetailPage({ params }) {
                 <Info label="Bron" value={lead.bron} />
                 <Info label="Aangemaakt" value={fmt(lead.created_at)} />
               </div>
-              <SourceDetails lead={lead} />
+              <div id="bron"><SourceDetails lead={lead} /></div>
               <Field label="Status">
                 <select value={selectStatusValue(lead.status)} onChange={(e) => post({ action: "updateLead", id: lead.id, status: e.target.value })}>
                   {STATUSES.map((status) => <option key={status}>{status}</option>)}
@@ -523,7 +633,17 @@ export default function LeadDetailPage({ params }) {
             </article>
           </section>
 
-          <section className="card proposal-card">
+          <section className="admin-checklist card">
+            <h2>Snelle controle</h2>
+            <div className="checklist-grid">
+              <span className={lead.email ? "ok" : "warn"}>{lead.email ? "E-mailadres aanwezig" : "E-mailadres ontbreekt"}</span>
+              <span className={lead.telefoon ? "ok" : "warn"}>{lead.telefoon ? "Telefoonnummer aanwezig" : "Telefoonnummer ontbreekt"}</span>
+              <span className={latestProposal ? "ok" : "muted"}>{latestProposal ? "Voorstel aanwezig" : "Nog geen voorstel"}</span>
+              <span className={latestProposal?.emailed_at ? "ok" : "muted"}>{latestProposal?.emailed_at ? "Voorstel gemaild" : "Nog niet gemaild"}</span>
+            </div>
+          </section>
+
+          <section className="card proposal-card" id="voorstel-maken">
             <div className="section-head">
               <div>
                 <span>Premium voorstel</span>
@@ -719,8 +839,8 @@ export default function LeadDetailPage({ params }) {
           </section>
 
           <section className="grid three">
-            <article className="card"><h2>Taken</h2>{(data.tasks || []).map((item) => <div className="item" key={item.id}><strong>{item.title}</strong><span>{item.status} · {item.due_date || "geen datum"}</span><select value={item.status || "Open"} onChange={(e) => post({ action: "updateTask", id: item.id, status: e.target.value })}>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select></div>)}</article>
-            <article className="card"><h2>Voorstellen</h2>{(data.proposals || []).map((item) => <div className="item" key={item.id}><strong>{item.amount_text || "Voorstel"}</strong><span>{item.status} · {fmt(item.created_at)}</span><a href={`/admin/voorstellen/${item.id}/print`} target="_blank">Interne print/PDF</a>{item.public_token ? <a href={`/voorstel/${item.public_token}?admin_preview=1`} target="_blank">Klantversie bekijken</a> : null}<button className="small" onClick={() => sendProposal(item.id)}>Mail voorstel naar klant</button><button className="small secondary-small" onClick={() => useProposalAsBase(item)}>Gebruik als basis</button>{item.emailed_at ? <small>Laatst gemaild: {fmt(item.emailed_at)}</small> : null}{proposalViewedAfterEmail(item) ? <small>Bekeken door klant: {fmt(item.public_viewed_at)}</small> : null}</div>)}</article>
+            <article className="card" id="taken"><h2>Taken</h2>{(data.tasks || []).map((item) => <div className="item" key={item.id}><strong>{item.title}</strong><span>{item.status} · {item.due_date || "geen datum"}</span><select value={item.status || "Open"} onChange={(e) => post({ action: "updateTask", id: item.id, status: e.target.value })}>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select></div>)}</article>
+            <article className="card" id="voorstellen"><h2>Voorstellen</h2>{(data.proposals || []).map((item) => <ProposalListItem key={item.id} item={item} lead={lead} saving={saving} sendProposal={sendProposal} useProposalAsBase={useProposalAsBase} updateProposalEmail={updateProposalEmail} />)}</article>
             <article className="card"><h2>Mailhistorie</h2>{(data.mailLogs || []).map((item) => <div className="item" key={item.id}><strong>{item.type}</strong><span>{item.status} · {item.recipient}</span><small>{fmt(item.created_at)}</small></div>)}</article>
           </section>
         </>
@@ -730,5 +850,5 @@ export default function LeadDetailPage({ params }) {
 }
 
 const styles = `
-:root{--navy:#071f3a;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#D96A1C;--green:#3E8F5E;--shadow:0 22px 70px rgba(7,31,58,.12)}body{margin:0;background:radial-gradient(circle at top right,#FFF1E6,transparent 34%),var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.detail-page{max-width:1280px;margin:0 auto;padding:28px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}header a{color:var(--navy);font-weight:900;text-decoration:none}header img{width:220px;background:#fff;border-radius:18px;padding:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero span,.section-head span{color:#B85216;background:#FFF1E6;border:1px solid #F2B885;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase}.hero h1{font-size:42px;letter-spacing:-.04em;margin:12px 0 6px}.hero p,.section-head p{color:var(--muted);font-size:18px}.actions,.proposal-actions{display:flex;gap:10px;flex-wrap:wrap}.actions a,.actions button,.card button,.item a,.secondary-link{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer;display:inline-block;margin-right:8px;margin-top:8px}.actions a:first-child{background:var(--navy)}.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:18px}.grid.three{grid-template-columns:repeat(3,1fr)}h2{margin:0 0 18px;font-size:24px;letter-spacing:-.03em}h3{margin:0 0 16px;font-size:20px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}.info{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.source-detail-box{margin:18px 0;background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px}.source-detail-box h3{margin:0 0 12px;font-size:18px}.info span,.item span,.item small,label span{display:block;color:var(--muted);font-size:13px}.info strong{display:block;margin-top:6px;word-break:break-word}label{display:grid;gap:8px;font-weight:900;margin-top:12px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}.item{border-bottom:1px solid var(--line);padding:12px 0}.item:last-child{border-bottom:0}.item strong{display:block}.item a{margin-top:8px;background:var(--navy)}.item button.small{margin-top:8px;margin-left:8px;padding:9px 12px;font-size:13px}.error,.notice-top{border-radius:16px;padding:12px 14px;margin-bottom:16px}.error{background:#F8EEE9;color:#7C2D20;border:1px solid #E8C7BC}.notice-top{background:#f0fff6;color:#075c2a;border:1px solid #bff3d0}.proposal-card{margin:18px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.section-head h2{font-size:34px;margin:12px 0 8px}.secondary-link{background:var(--navy);white-space:nowrap}.proposal-form{display:grid;gap:20px}.form-section{border:1px solid var(--line);border-radius:24px;background:#fff;padding:20px}.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.form-section textarea{min-height:96px}.calc-help{margin:14px 0 0;color:var(--muted);font-weight:700}.checkbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.checkbox-label{display:flex;align-items:flex-start;gap:10px;margin:0;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:13px 14px;font-weight:900}.checkbox-label input{width:auto;margin-top:2px;accent-color:var(--orange)}.checkbox-label span{display:block;color:var(--navy);font-size:13px;line-height:1.35}.calc-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}.calc-summary div{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.calc-summary span{display:block;color:var(--muted);font-size:12px;font-weight:900}.calc-summary strong{display:block;margin-top:6px;font-size:18px}.calc-summary .positive{background:#f0fff6;border-color:#bff3d0}.calc-summary .negative{background:#fff5f1;border-color:#ffd5c4}.proposal-actions button{padding:14px 20px}.proposal-actions .ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}.agreement-block{border:1px solid var(--line);border-radius:22px;background:#fffdf9;padding:16px;margin-top:14px}.wide-check{margin:0 0 12px}.checkbox-grid.single{grid-template-columns:1fr}.agreement-preview{margin-top:14px;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.agreement-preview strong{display:block;margin-bottom:6px}.agreement-preview p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}.agreement-preview small{display:block;color:#7b8795;margin-top:8px;font-weight:700}.secondary-small{background:#fff!important;color:var(--navy)!important;border:1px solid var(--line)!important}@media(max-width:1100px){.form-grid{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:1fr}.calc-summary{grid-template-columns:repeat(2,1fr)}.checkbox-grid{grid-template-columns:1fr}}@media(max-width:900px){.grid,.hero,.section-head{grid-template-columns:1fr;display:grid}.info-grid,.form-grid,.calc-summary{grid-template-columns:1fr}.detail-page{padding:18px}}
+:root{--navy:#071f3a;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#D96A1C;--green:#3E8F5E;--shadow:0 22px 70px rgba(7,31,58,.12)}body{margin:0;background:radial-gradient(circle at top right,#FFF1E6,transparent 34%),var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.detail-page{max-width:1280px;margin:0 auto;padding:28px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}header a{color:var(--navy);font-weight:900;text-decoration:none}header img{width:220px;background:#fff;border-radius:18px;padding:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero span,.section-head span{color:#B85216;background:#FFF1E6;border:1px solid #F2B885;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase}.hero h1{font-size:42px;letter-spacing:-.04em;margin:12px 0 6px}.hero p,.section-head p{color:var(--muted);font-size:18px}.actions,.proposal-actions{display:flex;gap:10px;flex-wrap:wrap}.actions a,.actions button,.card button,.item a,.secondary-link{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer;display:inline-block;margin-right:8px;margin-top:8px}.actions a:first-child{background:var(--navy)}.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:18px}.grid.three{grid-template-columns:repeat(3,1fr)}h2{margin:0 0 18px;font-size:24px;letter-spacing:-.03em}h3{margin:0 0 16px;font-size:20px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}.info{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.source-detail-box{margin:18px 0;background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px}.source-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:12px}.source-head h3{margin:0 0 4px}.source-head p{margin:0;color:var(--muted);font-size:13px}.source-pill{background:#071f3a;color:#fff;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:900;white-space:nowrap}.source-summary-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}.source-summary-row span{background:#f8f5ef;border:1px solid var(--line);border-radius:999px;padding:6px 9px;color:var(--muted);font-size:12px;font-weight:800}.admin-quick-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}.admin-quick-nav a{background:#fffdf9;border:1px solid var(--line);color:var(--navy);border-radius:999px;padding:10px 13px;text-decoration:none;font-weight:900;box-shadow:0 8px 24px rgba(7,31,58,.05)}.admin-checklist{margin-bottom:18px}.checklist-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.checklist-grid span{border-radius:16px;border:1px solid var(--line);background:#f8f5ef;padding:12px;font-weight:900;font-size:13px}.checklist-grid .ok{background:#f0fff6;border-color:#bff3d0;color:#075c2a}.checklist-grid .warn{background:#fff5f1;border-color:#ffd5c4;color:#7c2d20}.checklist-grid .muted{color:var(--muted)}.source-detail-box h3{margin:0 0 12px;font-size:18px}.info span,.item span,.item small,label span{display:block;color:var(--muted);font-size:13px}.info strong{display:block;margin-top:6px;word-break:break-word}label{display:grid;gap:8px;font-weight:900;margin-top:12px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}.item{border-bottom:1px solid var(--line);padding:12px 0}.item:last-child{border-bottom:0}.item strong{display:block}.item a{margin-top:8px;background:var(--navy)}.item button.small{margin-top:8px;margin-left:8px;padding:9px 12px;font-size:13px}.error,.notice-top{border-radius:16px;padding:12px 14px;margin-bottom:16px}.error{background:#F8EEE9;color:#7C2D20;border:1px solid #E8C7BC}.notice-top{background:#f0fff6;color:#075c2a;border:1px solid #bff3d0}.proposal-card{margin:18px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.section-head h2{font-size:34px;margin:12px 0 8px}.secondary-link{background:var(--navy);white-space:nowrap}.proposal-form{display:grid;gap:20px}.form-section{border:1px solid var(--line);border-radius:24px;background:#fff;padding:20px}.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.form-section textarea{min-height:96px}.calc-help{margin:14px 0 0;color:var(--muted);font-weight:700}.checkbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.checkbox-label{display:flex;align-items:flex-start;gap:10px;margin:0;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:13px 14px;font-weight:900}.checkbox-label input{width:auto;margin-top:2px;accent-color:var(--orange)}.checkbox-label span{display:block;color:var(--navy);font-size:13px;line-height:1.35}.calc-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}.calc-summary div{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.calc-summary span{display:block;color:var(--muted);font-size:12px;font-weight:900}.calc-summary strong{display:block;margin-top:6px;font-size:18px}.calc-summary .positive{background:#f0fff6;border-color:#bff3d0}.calc-summary .negative{background:#fff5f1;border-color:#ffd5c4}.proposal-actions button{padding:14px 20px}.proposal-actions .ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}.agreement-block{border:1px solid var(--line);border-radius:22px;background:#fffdf9;padding:16px;margin-top:14px}.wide-check{margin:0 0 12px}.checkbox-grid.single{grid-template-columns:1fr}.agreement-preview{margin-top:14px;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.agreement-preview strong{display:block;margin-bottom:6px}.agreement-preview p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}.agreement-preview small{display:block;color:#7b8795;margin-top:8px;font-weight:700}.secondary-small{background:#fff!important;color:var(--navy)!important;border:1px solid var(--line)!important}.subheading{margin-top:24px}.compact-two{grid-template-columns:repeat(2,1fr)}.contact-save-box{align-self:end}.contact-save-box small{display:block;margin-top:8px;color:var(--muted);font-size:12px;font-weight:700}.proposal-item-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.status-pill{border-radius:999px;background:#fff1e6;color:#9a4314;border:1px solid #f2b885;padding:5px 9px;font-size:12px;font-weight:900}.status-pill.green{background:#f0fff6;color:#075c2a;border-color:#bff3d0}.status-pill.muted{background:#f8f5ef;color:var(--muted);border-color:var(--line)}.proposal-recipient-box{margin:12px 0;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.recipient-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.recipient-meta span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 8px;font-size:12px;color:var(--muted);font-weight:800}.warning-line{margin-top:8px;border-radius:12px;background:#fff5f1;border:1px solid #ffd5c4;color:#7c2d20;padding:8px 10px;font-size:12px;font-weight:800}.proposal-mail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}@media(max-width:1100px){.form-grid{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:1fr}.calc-summary{grid-template-columns:repeat(2,1fr)}.checkbox-grid{grid-template-columns:1fr}.checklist-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:900px){.grid,.hero,.section-head{grid-template-columns:1fr;display:grid}.info-grid,.form-grid,.calc-summary,.checklist-grid{grid-template-columns:1fr}.detail-page{padding:18px}.admin-quick-nav{position:static}.source-head{display:grid}.source-pill{justify-self:start}}
 `;
