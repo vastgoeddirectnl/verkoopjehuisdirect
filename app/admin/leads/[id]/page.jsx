@@ -18,6 +18,12 @@ const PROPOSAL_TYPES = [
 const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid.";
 
 const SPECIAL_PROPOSAL_TYPES = ["Uitgestelde levering", "Overbruggingsoplossing", "ABC-doorverkoop mogelijk"];
+const OBJECT_USAGE_TYPES = ["Woning", "Winkelruimte", "Bedrijfsruimte", "Woon-winkelpand", "Gemengd object", "Anders"];
+const OCCUPANCY_STATUSES = ["Eigen gebruik", "Verhuurd", "Deels verhuurd", "Leegstaand", "Onbekend"];
+const DELIVERY_OCCUPANCY_STATUSES = ["Vrij van huur en gebruik", "Met huurder", "Deels vrij / deels verhuurd", "Nader te bepalen"];
+const YES_NO_UNKNOWN = ["Ja", "Nee", "Onbekend"];
+const TENANT_COOPERATION_STATUSES = ["Ja", "Nee", "In overleg", "Onbekend"];
+
 
 function isSpecialProposalType(type) {
   return SPECIAL_PROPOSAL_TYPES.includes(type);
@@ -166,6 +172,25 @@ function applyAdditionalAgreementDefaults(current = {}) {
     resale_period_months: current.resale_period_months || 12,
     resale_cap_text: current.resale_cap_text || "",
     resale_explanation_text: current.resale_explanation_text || "",
+    use_rental_enabled: Boolean(current.use_rental_enabled),
+    object_usage_type: current.object_usage_type || "Woon-winkelpand",
+    current_occupancy_status: current.current_occupancy_status || "Verhuurd",
+    delivery_occupancy_status: current.delivery_occupancy_status || "Vrij van huur en gebruik",
+    lease_agreement_available: current.lease_agreement_available || "Onbekend",
+    lease_end_date: current.lease_end_date || "",
+    tenant_vacate_deadline: current.tenant_vacate_deadline || "",
+    tenant_cooperation_status: current.tenant_cooperation_status || "Onbekend",
+    current_rent_text: current.current_rent_text || "",
+    deposit_present: current.deposit_present || "Onbekend",
+    rent_arrears_or_dispute: current.rent_arrears_or_dispute || "Onbekend",
+    commercial_area_text: current.commercial_area_text || "",
+    residential_area_text: current.residential_area_text || "",
+    separate_entrance_status: current.separate_entrance_status || "Onbekend",
+    independent_residence_status: current.independent_residence_status || "Onbekend",
+    zoning_permits_checked: current.zoning_permits_checked || "Onbekend",
+    split_potential_status: current.split_potential_status || "Onbekend",
+    fire_safety_check_status: current.fire_safety_check_status || "Onbekend",
+    use_rental_notes_text: current.use_rental_notes_text || "",
     nonbinding_text: current.nonbinding_text || DEFAULT_NONBINDING_TEXT,
   };
 }
@@ -195,6 +220,8 @@ function normalizeProposalForForm(item, lead) {
     validity_date: base.validity_date ? String(base.validity_date).slice(0, 10) : todayPlus(14),
     desired_transfer_date: base.desired_transfer_date ? String(base.desired_transfer_date).slice(0, 10) : "",
     seller_work_deadline: base.seller_work_deadline ? String(base.seller_work_deadline).slice(0, 10) : "",
+    lease_end_date: base.lease_end_date ? String(base.lease_end_date).slice(0, 10) : "",
+    tenant_vacate_deadline: base.tenant_vacate_deadline ? String(base.tenant_vacate_deadline).slice(0, 10) : "",
   });
 }
 
@@ -247,6 +274,16 @@ function Info({ label, value }) {
 
 function Field({ label, children }) {
   return <label><span>{label}</span>{children}</label>;
+}
+
+function SelectField({ label, value, onChange, options }) {
+  return (
+    <Field label={label}>
+      <select value={value || ""} onChange={(event) => onChange(event.target.value)}>
+        {options.map((option) => <option key={option} value={option}>{option}</option>)}
+      </select>
+    </Field>
+  );
 }
 
 function ProposalListItem({ item, lead, saving, sendProposal, useProposalAsBase, updateProposalEmail }) {
@@ -364,6 +401,25 @@ function defaultProposalForLead(lead) {
     resale_period_months: 12,
     resale_cap_text: "",
     resale_explanation_text: "",
+    use_rental_enabled: false,
+    object_usage_type: "Woon-winkelpand",
+    current_occupancy_status: "Verhuurd",
+    delivery_occupancy_status: "Vrij van huur en gebruik",
+    lease_agreement_available: "Onbekend",
+    lease_end_date: "",
+    tenant_vacate_deadline: "",
+    tenant_cooperation_status: "Onbekend",
+    current_rent_text: "",
+    deposit_present: "Onbekend",
+    rent_arrears_or_dispute: "Onbekend",
+    commercial_area_text: "",
+    residential_area_text: "",
+    separate_entrance_status: "Onbekend",
+    independent_residence_status: "Onbekend",
+    zoning_permits_checked: "Onbekend",
+    split_potential_status: "Onbekend",
+    fire_safety_check_status: "Onbekend",
+    use_rental_notes_text: "",
     nonbinding_text: DEFAULT_NONBINDING_TEXT,
     notes: "",
   };
@@ -802,8 +858,45 @@ export default function LeadDetailPage({ params }) {
                   </div>
                 </div>
 
+                <div className="form-section use-rental-section">
+                  <h3>7. Gebruik, verhuur en oplevering</h3>
+                  <p className="calc-help">Gebruik deze optionele sectie bij verhuurde woningen, bedrijfsruimtes, woon-winkelpanden en gemengde objecten. Alleen zichtbaar in voorstel/PDF wanneer ingeschakeld.</p>
+                  <label className="checkbox-label wide-check"><input type="checkbox" checked={Boolean(proposal.use_rental_enabled)} onChange={(e) => setProposalField("use_rental_enabled", e.target.checked)} /><span>Gebruik, verhuur en oplevering opnemen</span></label>
+                  {proposal.use_rental_enabled ? (
+                    <>
+                      <div className="form-grid">
+                        <SelectField label="Objecttype" value={proposal.object_usage_type} onChange={(value) => setProposalField("object_usage_type", value)} options={OBJECT_USAGE_TYPES} />
+                        <SelectField label="Huidig gebruik" value={proposal.current_occupancy_status} onChange={(value) => setProposalField("current_occupancy_status", value)} options={OCCUPANCY_STATUSES} />
+                        <SelectField label="Wordt geleverd" value={proposal.delivery_occupancy_status} onChange={(value) => setProposalField("delivery_occupancy_status", value)} options={DELIVERY_OCCUPANCY_STATUSES} />
+                        <SelectField label="Huurovereenkomst aanwezig" value={proposal.lease_agreement_available} onChange={(value) => setProposalField("lease_agreement_available", value)} options={YES_NO_UNKNOWN} />
+                        <Field label="Einddatum huur"><input type="date" value={proposal.lease_end_date || ""} onChange={(e) => setProposalField("lease_end_date", e.target.value)} /></Field>
+                        <Field label="Uiterste ontruiming"><input type="date" value={proposal.tenant_vacate_deadline || ""} onChange={(e) => setProposalField("tenant_vacate_deadline", e.target.value)} /></Field>
+                        <SelectField label="Huurder werkt mee" value={proposal.tenant_cooperation_status} onChange={(value) => setProposalField("tenant_cooperation_status", value)} options={TENANT_COOPERATION_STATUSES} />
+                        <Field label="Actuele huur"><input inputMode="decimal" placeholder="Bijv. € 1.500 p.m." value={proposal.current_rent_text || ""} onChange={(e) => setProposalField("current_rent_text", e.target.value)} /></Field>
+                        <SelectField label="Waarborgsom aanwezig" value={proposal.deposit_present} onChange={(value) => setProposalField("deposit_present", value)} options={YES_NO_UNKNOWN} />
+                        <SelectField label="Huurachterstand/geschil" value={proposal.rent_arrears_or_dispute} onChange={(value) => setProposalField("rent_arrears_or_dispute", value)} options={YES_NO_UNKNOWN} />
+                        <Field label="Winkel-/bedrijfsruimte"><input placeholder="Bijv. 165 m²" value={proposal.commercial_area_text || ""} onChange={(e) => setProposalField("commercial_area_text", e.target.value)} /></Field>
+                        <Field label="Woonruimte"><input placeholder="Bijv. 60-65 m²" value={proposal.residential_area_text || ""} onChange={(e) => setProposalField("residential_area_text", e.target.value)} /></Field>
+                        <SelectField label="Aparte entree bovenwoning" value={proposal.separate_entrance_status} onChange={(value) => setProposalField("separate_entrance_status", value)} options={YES_NO_UNKNOWN} />
+                        <SelectField label="Zelfstandige woonruimte" value={proposal.independent_residence_status} onChange={(value) => setProposalField("independent_residence_status", value)} options={YES_NO_UNKNOWN} />
+                        <SelectField label="Bestemming/vergunningen gecontroleerd" value={proposal.zoning_permits_checked} onChange={(value) => setProposalField("zoning_permits_checked", value)} options={YES_NO_UNKNOWN} />
+                        <SelectField label="Splitsingsmogelijkheid relevant" value={proposal.split_potential_status} onChange={(value) => setProposalField("split_potential_status", value)} options={YES_NO_UNKNOWN} />
+                        <SelectField label="Brandveiligheid/gebruiksvereisten" value={proposal.fire_safety_check_status} onChange={(value) => setProposalField("fire_safety_check_status", value)} options={YES_NO_UNKNOWN} />
+                      </div>
+                      <Field label="Aanvullende toelichting gebruik/verhuur">
+                        <textarea placeholder="Bijv. winkelruimte is nu verhuurd, maar uitgangspunt is levering vrij van huur en gebruik." value={proposal.use_rental_notes_text || ""} onChange={(e) => setProposalField("use_rental_notes_text", e.target.value)} />
+                      </Field>
+                      <div className="agreement-preview">
+                        <strong>Voorsteltekst</strong>
+                        <p>Uitgangspunt van dit voorstel is dat het object bij juridische levering {String(proposal.delivery_occupancy_status || "vrij van huur en gebruik").toLowerCase()} wordt geleverd, tenzij schriftelijk anders overeengekomen. Bij verhuur of gemengd gebruik worden huur, gebruik, ontruiming, bestemming en eventuele vergunningen vóór definitieve vastlegging gecontroleerd.</p>
+                        <small>Deze sectie is bedoeld voor verhuurde woningen, bedrijfsruimtes, woon-winkelpanden en gemengde objecten.</small>
+                      </div>
+                    </>
+                  ) : null}
+                </div>
+
                 <div className="form-section">
-                  <h3>7. Teksten en voorwaarden</h3>
+                  <h3>8. Teksten en voorwaarden</h3>
                   <Field label="Uitgangspunten van dit voorstel">
                     <textarea value={proposal.assumptions_text} onChange={(e) => setProposalField("assumptions_text", e.target.value)} />
                   </Field>

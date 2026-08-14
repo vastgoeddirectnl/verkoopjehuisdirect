@@ -90,6 +90,25 @@ const PROPOSAL_FIELDS = [
   "resale_period_months",
   "resale_cap_text",
   "resale_explanation_text",
+  "use_rental_enabled",
+  "object_usage_type",
+  "current_occupancy_status",
+  "delivery_occupancy_status",
+  "lease_agreement_available",
+  "lease_end_date",
+  "tenant_vacate_deadline",
+  "tenant_cooperation_status",
+  "current_rent_text",
+  "deposit_present",
+  "rent_arrears_or_dispute",
+  "commercial_area_text",
+  "residential_area_text",
+  "separate_entrance_status",
+  "independent_residence_status",
+  "zoning_permits_checked",
+  "split_potential_status",
+  "fire_safety_check_status",
+  "use_rental_notes_text",
   "nonbinding_text",
   "notes",
 ];
@@ -140,7 +159,7 @@ function percentText(value) {
 
 function cleanForField(field, value) {
   if (field === "lead_id") return value || null;
-  if (["validity_date", "desired_transfer_date", "seller_work_deadline"].includes(field)) return value || null;
+  if (["validity_date", "desired_transfer_date", "seller_work_deadline", "lease_end_date", "tenant_vacate_deadline"].includes(field)) return value || null;
   if (field === "proposal_variant") return clean(value, 40) || "Uitgebreid";
   if (field === "proposal_type") return clean(value, 80) || "Standaard aankoop";
   if ([
@@ -152,6 +171,7 @@ function cleanForField(field, value) {
     "seller_work_enabled",
     "resale_payment_enabled",
     "resale_deduct_courtage",
+    "use_rental_enabled",
   ].includes(field)) {
     return Boolean(value);
   }
@@ -166,6 +186,7 @@ function cleanForField(field, value) {
     "seller_work_description",
     "seller_work_conditions_text",
     "resale_explanation_text",
+    "use_rental_notes_text",
     "nonbinding_text",
     "notes",
   ].includes(field)) {

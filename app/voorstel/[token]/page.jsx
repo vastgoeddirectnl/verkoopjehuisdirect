@@ -165,6 +165,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
   const showBridge = proposalType === "Overbruggingsoplossing" || hasBridgeData;
   const showSellerWork = Boolean(proposal.seller_work_enabled);
   const showResalePayment = Boolean(proposal.resale_payment_enabled);
+  const showUseRental = Boolean(proposal.use_rental_enabled);
   const nonbindingText = value(proposal.nonbinding_text, DEFAULT_NONBINDING_TEXT);
 
   return (
@@ -251,6 +252,34 @@ export default async function PublicProposalPage({ params, searchParams }) {
             <div><strong>Doel constructie</strong><span>{value(proposal.bridge_goal_text, "Duidelijkheid over verkoop, planning en aflossing van de overbruggingssituatie.")}</span></div>
           </div>
           {proposal.bridge_explanation_text ? <p className="bridge-copy">{proposal.bridge_explanation_text}</p> : null}
+        </section>
+      ) : null}
+
+      {showUseRental ? (
+        <section className="card special-card">
+          <span className="section-kicker">Gebruik, verhuur en oplevering</span>
+          <h2>Uitgangspunt gebruikssituatie</h2>
+          <div className="construct-grid">
+            <div><strong>Objecttype</strong><span>{value(proposal.object_usage_type, "Nog te controleren")}</span></div>
+            <div><strong>Huidig gebruik</strong><span>{value(proposal.current_occupancy_status, "Nog te controleren")}</span></div>
+            <div><strong>Wordt geleverd</strong><span>{value(proposal.delivery_occupancy_status, "Vrij van huur en gebruik")}</span></div>
+            <div><strong>Huurovereenkomst aanwezig</strong><span>{value(proposal.lease_agreement_available, "Onbekend")}</span></div>
+            <div><strong>Einddatum huur</strong><span>{formatDate(proposal.lease_end_date)}</span></div>
+            <div><strong>Uiterste ontruiming</strong><span>{formatDate(proposal.tenant_vacate_deadline)}</span></div>
+            <div><strong>Actuele huur</strong><span>{value(proposal.current_rent_text, "Niet ingevuld")}</span></div>
+            <div><strong>Huurachterstand/geschil</strong><span>{value(proposal.rent_arrears_or_dispute, "Onbekend")}</span></div>
+          </div>
+          <p className="bridge-copy">Uitgangspunt van dit voorstel is dat het object bij juridische levering {String(value(proposal.delivery_occupancy_status, "vrij van huur en gebruik")).toLowerCase()} wordt geleverd, tenzij schriftelijk anders overeengekomen.</p>
+          {(proposal.commercial_area_text || proposal.residential_area_text || proposal.separate_entrance_status || proposal.independent_residence_status) ? (
+            <div className="construct-grid compact-grid">
+              <div><strong>Winkel-/bedrijfsruimte</strong><span>{areaValue(proposal.commercial_area_text, "Nog te controleren")}</span></div>
+              <div><strong>Woonruimte</strong><span>{areaValue(proposal.residential_area_text, "Nog te controleren")}</span></div>
+              <div><strong>Aparte entree</strong><span>{value(proposal.separate_entrance_status, "Onbekend")}</span></div>
+              <div><strong>Zelfstandige woonruimte</strong><span>{value(proposal.independent_residence_status, "Onbekend")}</span></div>
+            </div>
+          ) : null}
+          <p className="bridge-copy">Bij verhuur of gemengd gebruik worden huur, gebruik, ontruiming, bestemming, vergunningen, brandveiligheid en eventuele splitsingsmogelijkheden vóór definitieve vastlegging gecontroleerd.</p>
+          {proposal.use_rental_notes_text ? <p className="bridge-copy">{proposal.use_rental_notes_text}</p> : null}
         </section>
       ) : null}
 

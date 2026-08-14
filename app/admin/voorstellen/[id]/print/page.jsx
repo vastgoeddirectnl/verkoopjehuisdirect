@@ -157,11 +157,13 @@ export default async function ProposalPrintPage({ params }) {
   const showBridge = proposalType === "Overbruggingsoplossing" || hasBridgeData;
   const showSellerWork = Boolean(proposal.seller_work_enabled);
   const showResalePayment = Boolean(proposal.resale_payment_enabled);
+  const showUseRental = Boolean(proposal.use_rental_enabled);
   const showAdditionalAgreements = showSellerWork || showResalePayment;
   const deliverySectionNumber = showDeliveryConstructie ? 4 : null;
-  const bridgeSectionNumber = showBridge ? (showDeliveryConstructie ? 5 : 4) : null;
-  const additionalAgreementsSectionNumber = showAdditionalAgreements ? 4 + (showDeliveryConstructie ? 1 : 0) + (showBridge ? 1 : 0) : null;
-  const offset = (showDeliveryConstructie ? 1 : 0) + (showBridge ? 1 : 0) + (showAdditionalAgreements ? 1 : 0);
+  const bridgeSectionNumber = showBridge ? 4 + (showDeliveryConstructie ? 1 : 0) : null;
+  const useRentalSectionNumber = showUseRental ? 4 + (showDeliveryConstructie ? 1 : 0) + (showBridge ? 1 : 0) : null;
+  const additionalAgreementsSectionNumber = showAdditionalAgreements ? 4 + (showDeliveryConstructie ? 1 : 0) + (showBridge ? 1 : 0) + (showUseRental ? 1 : 0) : null;
+  const offset = (showDeliveryConstructie ? 1 : 0) + (showBridge ? 1 : 0) + (showUseRental ? 1 : 0) + (showAdditionalAgreements ? 1 : 0);
   const netSectionNumber = String(4 + offset);
   const comparisonSectionNumber = String(5 + offset);
   const reservationsSectionNumber = String(6 + offset);
@@ -280,6 +282,33 @@ export default async function ProposalPrintPage({ params }) {
               <div className="wide"><strong>Doel van de constructie</strong><span>{value(proposal.bridge_goal_text, "Duidelijkheid over verkoop, planning en aflossing van de overbruggingssituatie.")}</span></div>
             </div>
             {proposal.bridge_explanation_text ? <p className="notice"><strong>Toelichting:</strong> {proposal.bridge_explanation_text}</p> : null}
+          </section>
+        ) : null}
+
+        {showUseRental ? (
+          <section className="section">
+            <div className="section-title navy"><span>{useRentalSectionNumber}</span><strong>Gebruik, verhuur en oplevering</strong></div>
+            <div className="table two">
+              <div><strong>Objecttype</strong><span>{value(proposal.object_usage_type, "Nog te controleren")}</span></div>
+              <div><strong>Huidig gebruik</strong><span>{value(proposal.current_occupancy_status, "Nog te controleren")}</span></div>
+              <div><strong>Wordt geleverd</strong><span>{value(proposal.delivery_occupancy_status, "Vrij van huur en gebruik")}</span></div>
+              <div><strong>Huurovereenkomst aanwezig</strong><span>{value(proposal.lease_agreement_available, "Onbekend")}</span></div>
+              <div><strong>Einddatum huur</strong><span>{formatDate(proposal.lease_end_date)}</span></div>
+              <div><strong>Uiterste ontruiming</strong><span>{formatDate(proposal.tenant_vacate_deadline)}</span></div>
+              <div><strong>Huurder werkt mee</strong><span>{value(proposal.tenant_cooperation_status, "Onbekend")}</span></div>
+              <div><strong>Actuele huur</strong><span>{value(proposal.current_rent_text, "Niet ingevuld")}</span></div>
+              <div><strong>Waarborgsom</strong><span>{value(proposal.deposit_present, "Onbekend")}</span></div>
+              <div><strong>Huurachterstand/geschil</strong><span>{value(proposal.rent_arrears_or_dispute, "Onbekend")}</span></div>
+              <div><strong>Winkel-/bedrijfsruimte</strong><span>{areaValue(proposal.commercial_area_text)}</span></div>
+              <div><strong>Woonruimte</strong><span>{areaValue(proposal.residential_area_text)}</span></div>
+              <div><strong>Aparte entree bovenwoning</strong><span>{value(proposal.separate_entrance_status, "Onbekend")}</span></div>
+              <div><strong>Zelfstandige woonruimte</strong><span>{value(proposal.independent_residence_status, "Onbekend")}</span></div>
+              <div><strong>Bestemming/vergunningen</strong><span>{value(proposal.zoning_permits_checked, "Onbekend")}</span></div>
+              <div><strong>Splitsingsmogelijkheid</strong><span>{value(proposal.split_potential_status, "Onbekend")}</span></div>
+              <div><strong>Brandveiligheid/gebruiksvereisten</strong><span>{value(proposal.fire_safety_check_status, "Onbekend")}</span></div>
+            </div>
+            <p className="notice">Uitgangspunt van dit voorstel is dat het object bij juridische levering {String(value(proposal.delivery_occupancy_status, "vrij van huur en gebruik")).toLowerCase()} wordt geleverd, tenzij schriftelijk anders overeengekomen. Bij verhuur of gemengd gebruik worden huur, gebruik, ontruiming, bestemming, vergunningen, brandveiligheid en eventuele splitsingsmogelijkheden vóór definitieve vastlegging gecontroleerd.</p>
+            {proposal.use_rental_notes_text ? <p className="notice">{proposal.use_rental_notes_text}</p> : null}
           </section>
         ) : null}
 
