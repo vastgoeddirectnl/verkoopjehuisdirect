@@ -308,6 +308,7 @@ export default async function ProposalPrintPage({ params }) {
               <div><strong>Brandveiligheid/gebruiksvereisten</strong><span>{value(proposal.fire_safety_check_status, "Onbekend")}</span></div>
             </div>
             <p className="notice">Uitgangspunt van dit voorstel is dat het object bij juridische levering {String(value(proposal.delivery_occupancy_status, "vrij van huur en gebruik")).toLowerCase()} wordt geleverd, tenzij schriftelijk anders overeengekomen. Bij verhuur of gemengd gebruik worden huur, gebruik, ontruiming, bestemming, vergunningen, brandveiligheid en eventuele splitsingsmogelijkheden vóór definitieve vastlegging gecontroleerd.</p>
+            <p className="notice"><strong>Gevolg voor het voorstel:</strong> Dit voorstel is gebaseerd op de hierboven genoemde wijze van levering. Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen.</p>
             {proposal.use_rental_notes_text ? <p className="notice">{proposal.use_rental_notes_text}</p> : null}
           </section>
         ) : null}
@@ -369,6 +370,9 @@ export default async function ProposalPrintPage({ params }) {
         <p className="subtle">
           Gebruik dit overzicht om niet alleen het bod, maar vooral de netto-opbrengst en voorwaarden te vergelijken.
         </p>
+        {showUseRental ? (
+          <p className="notice"><strong>Uitgangspunt vergelijking:</strong> Deze financiële vergelijking is gebaseerd op de hierboven genoemde wijze van levering. Wanneer uitgangspunt is dat het object vrij van huur en gebruik wordt geleverd, is de vergelijking daarop gebaseerd. Als het object toch geheel of gedeeltelijk verhuurd of in gebruik geleverd wordt, kan dit invloed hebben op waarde, voorwaarden en haalbaarheid van het voorstel.</p>
+        ) : null}
 
         <section className="section">
           <div className="section-title orange"><span>{netSectionNumber}</span><strong>Netto-opbrengst vergelijken</strong></div>

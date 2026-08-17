@@ -51,10 +51,9 @@ function formatAddress(proposal) {
   return [proposal.property_postcode, proposal.property_house_number].filter(Boolean).join(" ").toUpperCase() || "-";
 }
 
-function firstName(name) {
-  const raw = String(name || "").trim();
-  if (!raw) return "heer/mevrouw";
-  return raw.split(" ")[0];
+function salutationName(name) {
+  const raw = String(name || "").replace(/\s+/g, " ").trim();
+  return raw || "heer/mevrouw";
 }
 
 const SPECIAL_PROPOSAL_TYPES = ["Uitgestelde levering", "Overbruggingsoplossing", "ABC-doorverkoop mogelijk"];
@@ -185,7 +184,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
           <span className="label">Vrijblijvend & persoonlijk</span>
           <h1>Verkoopvoorstel voor uw woning</h1>
           <p>
-            Beste {firstName(proposal.lead_naam)}, op basis van de beschikbare informatie hebben wij
+            Beste {salutationName(proposal.lead_naam)}, op basis van de beschikbare informatie hebben wij
             een concreet en overzichtelijk voorstel uitgewerkt. Het doel: duidelijkheid over bedrag,
             voorwaarden en vervolgstappen zonder onnodige verkoopdruk.
           </p>
@@ -270,6 +269,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
             <div><strong>Huurachterstand/geschil</strong><span>{value(proposal.rent_arrears_or_dispute, "Onbekend")}</span></div>
           </div>
           <p className="bridge-copy">Uitgangspunt van dit voorstel is dat het object bij juridische levering {String(value(proposal.delivery_occupancy_status, "vrij van huur en gebruik")).toLowerCase()} wordt geleverd, tenzij schriftelijk anders overeengekomen.</p>
+          <p className="bridge-copy"><strong>Gevolg voor het voorstel:</strong> Dit voorstel is gebaseerd op de hierboven genoemde wijze van levering. Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen.</p>
           {(proposal.commercial_area_text || proposal.residential_area_text || proposal.separate_entrance_status || proposal.independent_residence_status) ? (
             <div className="construct-grid compact-grid">
               <div><strong>Winkel-/bedrijfsruimte</strong><span>{areaValue(proposal.commercial_area_text, "Nog te controleren")}</span></div>
@@ -341,6 +341,9 @@ export default async function PublicProposalPage({ params, searchParams }) {
           Bij een woningverkoop gaat het niet alleen om de verkoopprijs, maar ook om kosten, voorbereiding,
           doorlooptijd en zekerheid. Onderstaand overzicht helpt om het voorstel naast een regulier traject te leggen.
         </p>
+        {showUseRental ? (
+          <p className="bridge-copy"><strong>Uitgangspunt vergelijking:</strong> Deze financiële vergelijking is gebaseerd op de hierboven genoemde wijze van levering. Wanneer uitgangspunt is dat het object vrij van huur en gebruik wordt geleverd, is de vergelijking daarop gebaseerd. Als het object toch geheel of gedeeltelijk verhuurd of in gebruik geleverd wordt, kan dit invloed hebben op waarde, voorwaarden en haalbaarheid van het voorstel.</p>
+        ) : null}
         <div className="comparison comparison-desktop" aria-label="Vergelijking netto-opbrengst">
           <div className="head">Onderdeel</div>
           <div className="head">Traditionele verkoop</div>

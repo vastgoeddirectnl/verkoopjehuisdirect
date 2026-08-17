@@ -889,7 +889,8 @@ export default function LeadDetailPage({ params }) {
                       <div className="agreement-preview">
                         <strong>Voorsteltekst</strong>
                         <p>Uitgangspunt van dit voorstel is dat het object bij juridische levering {String(proposal.delivery_occupancy_status || "vrij van huur en gebruik").toLowerCase()} wordt geleverd, tenzij schriftelijk anders overeengekomen. Bij verhuur of gemengd gebruik worden huur, gebruik, ontruiming, bestemming en eventuele vergunningen vóór definitieve vastlegging gecontroleerd.</p>
-                        <small>Deze sectie is bedoeld voor verhuurde woningen, bedrijfsruimtes, woon-winkelpanden en gemengde objecten.</small>
+                        <p><strong>Gevolg voor het voorstel:</strong> als het object niet volgens deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan het voorstel worden herbeoordeeld, aangepast of ingetrokken.</p>
+                        <small>Deze sectie is bedoeld voor verhuurde woningen, bedrijfsruimtes, woon-winkelpanden en gemengde objecten. De financiële vergelijking blijft apart staan, maar wordt gelezen vanuit dit leveringsuitgangspunt.</small>
                       </div>
                     </>
                   ) : null}
