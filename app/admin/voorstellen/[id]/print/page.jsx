@@ -4,7 +4,7 @@ import PrintButton from "./PrintButton";
 
 export const dynamic = "force-dynamic";
 
-const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid.";
+const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid. Als partijen na akkoord op dit voorstel een koopovereenkomst willen uitwerken, geldt als uitgangspunt dat koper koopt zonder financieringsvoorbehoud, bouwkundig voorbehoud, verkoopvoorbehoud of andere ontbindende voorbehouden, tenzij koper en verkoper schriftelijk anders overeenkomen.";
 
 function formatDate(value) {
   if (!value) return "-";
@@ -370,6 +370,7 @@ export default async function ProposalPrintPage({ params }) {
         <p className="subtle">
           Gebruik dit overzicht om niet alleen het bod, maar vooral de netto-opbrengst en voorwaarden te vergelijken.
         </p>
+        <p className="notice"><strong>Let op:</strong> de traditionele verkoopprijs is een indicatieve vergelijkingswaarde. Bij verhuurde, leeg te leveren of gemengde objecten kan deze waarde mede zijn gebaseerd op huurwaarde, leegstand, verhuurrisico, verkoopbaarheid en kosten.</p>
         {showUseRental ? (
           <p className="notice"><strong>Uitgangspunt vergelijking:</strong> Deze financiële vergelijking is gebaseerd op de hierboven genoemde wijze van levering. Wanneer uitgangspunt is dat het object vrij van huur en gebruik wordt geleverd, is de vergelijking daarop gebaseerd. Als het object toch geheel of gedeeltelijk verhuurd of in gebruik geleverd wordt, kan dit invloed hebben op waarde, voorwaarden en haalbaarheid van het voorstel.</p>
         ) : null}
@@ -389,9 +390,9 @@ export default async function ProposalPrintPage({ params }) {
             <div>{value(proposal.agent_costs_text, "-")}</div>
             <div>€ 0</div>
 
-            <div><strong>Notariskosten levering</strong></div>
+            <div><strong>Door VDN overgenomen afwikkelingskosten verkoper</strong></div>
             <div>{value(proposal.notary_costs_text, "-")}</div>
-            <div>Standaard voor onze rekening*</div>
+            <div>Overgenomen indien afgesproken</div>
 
             <div><strong>Herstel- of renovatiekosten</strong></div>
             <div>{value(proposal.renovation_costs_text, "-")}</div>
@@ -405,7 +406,7 @@ export default async function ProposalPrintPage({ params }) {
             <div className="total">{amount(proposal.traditional_net_text, "-")}</div>
             <div className="total accent">{amount(proposal.direct_net_text || proposal.amount_text)}</div>
           </div>
-          <p className="footnote">* Eventuele afwijkende kosten of bijzondere afspraken worden vooraf besproken.</p>
+          <p className="footnote">Onder door VDN overgenomen afwikkelingskosten verkoper vallen alleen vooraf afgesproken kosten aan verkoperszijde, zoals volmachtskosten, royement/doorhaling van hypotheekinschrijvingen of bijzondere afwikkelingskosten. Kosten die normaal voor koper zijn bij kosten koper worden niet als verkoperskosten meegenomen. Deze post wordt alleen gebruikt als VDN deze kosten in het voorstel of de koopovereenkomst voor haar rekening neemt.</p>
         </section>
 
         <section className="section">
