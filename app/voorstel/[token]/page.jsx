@@ -5,7 +5,7 @@ import PrintButton from "./PrintButton";
 
 export const dynamic = "force-dynamic";
 
-const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid. Als partijen na akkoord op dit voorstel een koopovereenkomst willen uitwerken, geldt als uitgangspunt dat koper koopt zonder financieringsvoorbehoud, bouwkundig voorbehoud, verkoopvoorbehoud of andere ontbindende voorbehouden, tenzij koper en verkoper schriftelijk anders overeenkomen.";
+const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid. Indien partijen overeenstemming bereiken, wordt de koopovereenkomst opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen.";
 
 function formatDate(value) {
   if (!value) return "-";
@@ -35,6 +35,43 @@ function areaValue(value, fallback = "Nog te controleren") {
   if (/m²|m2|㎡/i.test(raw)) return raw.replace(/m2/i, "m²");
   if (/^\d+(?:[,.]\d+)?$/.test(raw)) return `${raw} m²`;
   return raw;
+}
+
+function monthlyRentValue(value, fallback = "Niet ingevuld") {
+  const raw = String(value || "").replace(/\s+/g, " ").trim();
+  if (!raw) return fallback;
+
+  const periodPattern = /per\s*maand|p\.?\s*\/?\s*m\.?|maandelijks/i;
+  const amountPart = raw.replace(periodPattern, "").trim();
+  const hasOnlyAmountAndPeriod = /^[€\s\d.,-]+$/.test(amountPart);
+
+  if (hasOnlyAmountAndPeriod) {
+    const formatted = amount(amountPart, "");
+    if (formatted) return `${formatted} per maand`;
+  }
+
+  return raw;
+}
+
+function cleanUseRentalNotes(value) {
+  let text = String(value || "").replace(/\s+/g, " ").trim();
+  if (!text) return "";
+
+  text = text
+    .replace(/Uitgangspunt van dit voorstel is dat het object bij juridische levering[^.]*wordt geleverd, tenzij schriftelijk anders overeengekomen\.\s*/gi, "")
+    .replace(/Gevolg voor het voorstel:\s*Dit voorstel is gebaseerd op de hierboven genoemde wijze van levering\.\s*Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen\.\s*/gi, "")
+    .replace(/Bij verhuur of gemengd gebruik worden huur, gebruik, ontruiming, bestemming(?:, vergunningen, brandveiligheid en eventuele splitsingsmogelijkheden| en eventuele vergunningen)? vóór definitieve vastlegging gecontroleerd\.\s*/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return text;
+}
+
+function withNoBuyerConditionsText(value) {
+  const raw = String(value || DEFAULT_NONBINDING_TEXT).replace(/\s+/g, " ").trim();
+  const required = "Indien partijen overeenstemming bereiken, wordt de koopovereenkomst opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen.";
+  if (/zonder\s+ontbindende\s+voorbehouden\s+aan\s+koperszijde/i.test(raw)) return raw;
+  return `${raw} ${required}`.trim();
 }
 
 function lines(value, fallback = []) {
@@ -165,7 +202,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
   const showSellerWork = Boolean(proposal.seller_work_enabled);
   const showResalePayment = Boolean(proposal.resale_payment_enabled);
   const showUseRental = Boolean(proposal.use_rental_enabled);
-  const nonbindingText = value(proposal.nonbinding_text, DEFAULT_NONBINDING_TEXT);
+  const nonbindingText = withNoBuyerConditionsText(proposal.nonbinding_text);
 
   return (
     <main className="proposal-page">
@@ -265,7 +302,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
             <div><strong>Huurovereenkomst aanwezig</strong><span>{value(proposal.lease_agreement_available, "Onbekend")}</span></div>
             <div><strong>Einddatum huur</strong><span>{formatDate(proposal.lease_end_date)}</span></div>
             <div><strong>Uiterste ontruiming</strong><span>{formatDate(proposal.tenant_vacate_deadline)}</span></div>
-            <div><strong>Actuele huur</strong><span>{value(proposal.current_rent_text, "Niet ingevuld")}</span></div>
+            <div><strong>Actuele huur</strong><span>{monthlyRentValue(proposal.current_rent_text)}</span></div>
             <div><strong>Huurachterstand/geschil</strong><span>{value(proposal.rent_arrears_or_dispute, "Onbekend")}</span></div>
           </div>
           <p className="bridge-copy">Uitgangspunt van dit voorstel is dat het object bij juridische levering {String(value(proposal.delivery_occupancy_status, "vrij van huur en gebruik")).toLowerCase()} wordt geleverd, tenzij schriftelijk anders overeengekomen.</p>
@@ -279,7 +316,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
             </div>
           ) : null}
           <p className="bridge-copy">Bij verhuur of gemengd gebruik worden huur, gebruik, ontruiming, bestemming, vergunningen, brandveiligheid en eventuele splitsingsmogelijkheden vóór definitieve vastlegging gecontroleerd.</p>
-          {proposal.use_rental_notes_text ? <p className="bridge-copy">{proposal.use_rental_notes_text}</p> : null}
+          {cleanUseRentalNotes(proposal.use_rental_notes_text) ? <p className="bridge-copy">{cleanUseRentalNotes(proposal.use_rental_notes_text)}</p> : null}
         </section>
       ) : null}
 
@@ -358,9 +395,9 @@ export default async function PublicProposalPage({ params, searchParams }) {
           <div>{value(proposal.agent_costs_text, "Gebruikelijk van toepassing")}</div>
           <div>€ 0</div>
 
-          <div>Door VDN overgenomen afwikkelingskosten verkoper</div>
+          <div>Afwikkelingskosten verkoper</div>
           <div>{value(proposal.notary_costs_text, "Afhankelijk van situatie")}</div>
-          <div>Overgenomen indien afgesproken</div>
+          <div>Door VDN overgenomen indien afgesproken</div>
 
           <div>Herstel-/renovatiekosten vooraf</div>
           <div>{value(proposal.renovation_costs_text, "Afhankelijk van verkoopstrategie")}</div>
@@ -379,7 +416,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
           {[
             ["Bod / verkoopprijs", amount(proposal.traditional_price_text, "Nog onbekend"), offerAmount],
             ["Makelaarskosten", value(proposal.agent_costs_text, "Gebruikelijk van toepassing"), "€ 0"],
-            ["Door VDN overgenomen afwikkelingskosten verkoper", value(proposal.notary_costs_text, "Afhankelijk van situatie"), "Overgenomen indien afgesproken"],
+            ["Afwikkelingskosten verkoper", value(proposal.notary_costs_text, "Afhankelijk van situatie"), "Door VDN overgenomen indien afgesproken"],
             ["Herstel-/renovatiekosten vooraf", value(proposal.renovation_costs_text, "Afhankelijk van verkoopstrategie"), "Niet noodzakelijk vooraf"],
             ["Overige verkoopkosten", value(proposal.other_costs_text, "Afhankelijk van situatie"), "In overleg en vooraf helder"],
             ["Verwachte netto-opbrengst", amount(proposal.traditional_net_text, "Nog te bepalen"), amount(proposal.direct_net_text || proposal.amount_text), true],
@@ -400,7 +437,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
           ))}
         </div>
         <p className="bridge-copy">
-          Onder door VDN overgenomen afwikkelingskosten verkoper vallen alleen vooraf afgesproken kosten aan verkoperszijde, zoals volmachtskosten, royement/doorhaling van hypotheekinschrijvingen of bijzondere afwikkelingskosten. Kosten die normaal voor koper zijn bij kosten koper worden niet als verkoperskosten meegenomen.
+          Onder afwikkelingskosten verkoper vallen alleen vooraf afgesproken kosten aan verkoperszijde, zoals volmachtskosten, royement/doorhaling van hypotheekinschrijvingen of bijzondere afwikkelingskosten. Kosten die normaal voor koper zijn bij kosten koper worden niet als verkoperskosten meegenomen.
         </p>
       </section>
 
@@ -486,8 +523,8 @@ export default async function PublicProposalPage({ params, searchParams }) {
       ) : null}
 
       <section className="card">
-        <span className="section-kicker">Voorbehouden</span>
-        <h2>Nog te controleren vóór definitieve vastlegging</h2>
+        <span className="section-kicker">Controlepunten</span>
+        <h2>Controlepunten vóór definitieve vastlegging</h2>
         <div className="reservations">
           {reservations.map((item) => <div key={item}><span>□</span>{item}</div>)}
         </div>

@@ -15,7 +15,7 @@ const PROPOSAL_TYPES = [
   "ABC-doorverkoop mogelijk",
 ];
 
-const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid. Als partijen na akkoord op dit voorstel een koopovereenkomst willen uitwerken, geldt als uitgangspunt dat koper koopt zonder financieringsvoorbehoud, bouwkundig voorbehoud, verkoopvoorbehoud of andere ontbindende voorbehouden, tenzij koper en verkoper schriftelijk anders overeenkomen.";
+const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid. Indien partijen overeenstemming bereiken, wordt de koopovereenkomst opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen.";
 
 const SPECIAL_PROPOSAL_TYPES = ["Uitgestelde levering", "Overbruggingsoplossing", "ABC-doorverkoop mogelijk"];
 const OBJECT_USAGE_TYPES = ["Woning", "Winkelruimte", "Bedrijfsruimte", "Woon-winkelpand", "Gemengd object", "Anders"];
@@ -741,18 +741,18 @@ export default function LeadDetailPage({ params }) {
 
                 <div className="form-section">
                   <h3>3. Netto-opbrengstvergelijking</h3>
-                  <p className="calc-help">Vul de traditionele verkoopprijs als indicatieve vergelijkingswaarde in. Bij verhuurde, leeg te leveren of gemengde objecten mag deze waarde ook rendementsmatig worden benaderd op basis van huurwaarde, leegstand, verhuurrisico en kosten. Vul makelaarskosten en overige verkoopkosten exclusief btw in; het adminportaal rekent automatisch 21% btw door. Vul afwikkelingskosten alleen in als deze normaal voor verkoper komen en VDN ze in dit voorstel overneemt.</p>
+                  <p className="calc-help">Vul de traditionele verkoopprijs als indicatieve vergelijkingswaarde in. Bij verhuurde, leeg te leveren of gemengde objecten mag deze waarde ook rendementsmatig worden benaderd op basis van huurwaarde, leegstand, verhuurrisico en kosten. Vul makelaarskosten en overige verkoopkosten exclusief btw in; het adminportaal rekent automatisch 21% btw door. Vul afwikkelingskosten alleen in als deze normaal voor verkoper komen en VDN ze in dit voorstel eventueel overneemt.</p>
                   <div className="form-grid">
                     <Field label="Traditionele verkoopprijs"><input inputMode="decimal" placeholder="Bijv. € 240.000" value={proposal.traditional_price_text} onChange={(e) => setProposalField("traditional_price_text", e.target.value)} /></Field>
                     <Field label="Makelaarskosten excl. btw"><input inputMode="decimal" placeholder="Bijv. € 3.600" value={proposal.agent_costs_text} onChange={(e) => setProposalField("agent_costs_text", e.target.value)} /></Field>
-                    <Field label="Door VDN overgenomen afwikkelingskosten verkoper"><input inputMode="decimal" placeholder="Bijv. € 750" value={proposal.notary_costs_text} onChange={(e) => setProposalField("notary_costs_text", e.target.value)} /></Field>
+                    <Field label="Afwikkelingskosten verkoper"><input inputMode="decimal" placeholder="Bijv. € 750" value={proposal.notary_costs_text} onChange={(e) => setProposalField("notary_costs_text", e.target.value)} /></Field>
                     <Field label="Herstel-/renovatiekosten"><input inputMode="decimal" placeholder="Bijv. € 45.000" value={proposal.renovation_costs_text} onChange={(e) => setProposalField("renovation_costs_text", e.target.value)} /></Field>
                     <Field label="Overige verkoopkosten excl. btw"><input inputMode="decimal" placeholder="Bijv. € 950" value={proposal.other_costs_text} onChange={(e) => setProposalField("other_costs_text", e.target.value)} /></Field>
                     <Field label="Netto Vastgoed Direct"><input inputMode="decimal" placeholder="Automatisch uit voorgesteld bedrag" value={proposal.direct_net_text} onChange={(e) => setProposalField("direct_net_text", e.target.value)} /></Field>
                   </div>
 
 
-                  <p className="calc-help small">Onder door VDN overgenomen afwikkelingskosten verkoper vallen alleen vooraf afgesproken kosten aan verkoperszijde, zoals volmachtskosten, royement/doorhaling van hypotheekinschrijvingen of bijzondere afwikkelingskosten. Kosten die normaal voor koper zijn bij kosten koper worden hier niet als verkoperskosten meegenomen. Neem deze post alleen op als VDN deze kosten in het voorstel of de koopovereenkomst voor haar rekening neemt.</p>
+                  <p className="calc-help small">Onder afwikkelingskosten verkoper vallen alleen vooraf afgesproken kosten aan verkoperszijde, zoals volmachtskosten, royement/doorhaling van hypotheekinschrijvingen of bijzondere afwikkelingskosten. Kosten die normaal voor koper zijn bij kosten koper worden hier niet als verkoperskosten meegenomen. In de klantversie wordt vermeld dat VDN deze kosten overneemt indien dit is afgesproken.</p>
 
                   <div className="calc-summary">
                     <div><span>Makelaarskosten incl. 21% btw</span><strong>{formatMoney(netComparison.agentInclVat, true) || "-"}</strong></div>
@@ -891,8 +891,9 @@ export default function LeadDetailPage({ params }) {
                       </Field>
                       <div className="agreement-preview">
                         <strong>Voorsteltekst</strong>
-                        <p>Uitgangspunt van dit voorstel is dat het object bij juridische levering {String(proposal.delivery_occupancy_status || "vrij van huur en gebruik").toLowerCase()} wordt geleverd, tenzij schriftelijk anders overeengekomen. Bij verhuur of gemengd gebruik worden huur, gebruik, ontruiming, bestemming en eventuele vergunningen vóór definitieve vastlegging gecontroleerd.</p>
-                        <p><strong>Gevolg voor het voorstel:</strong> als het object niet volgens deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan het voorstel worden herbeoordeeld, aangepast of ingetrokken.</p>
+                        <p>Uitgangspunt van dit voorstel is dat het object bij juridische levering {String(proposal.delivery_occupancy_status || "vrij van huur en gebruik").toLowerCase()} wordt geleverd, tenzij schriftelijk anders overeengekomen.</p>
+                        <p><strong>Gevolg voor het voorstel:</strong> Dit voorstel is gebaseerd op de hierboven genoemde wijze van levering. Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen.</p>
+                        <p>Bij verhuur of gemengd gebruik worden huur, gebruik, ontruiming, bestemming, vergunningen, brandveiligheid en eventuele splitsingsmogelijkheden vóór definitieve vastlegging gecontroleerd.</p>
                         <small>Deze sectie is bedoeld voor verhuurde woningen, bedrijfsruimtes, woon-winkelpanden en gemengde objecten. De financiële vergelijking blijft apart staan, maar wordt gelezen vanuit dit leveringsuitgangspunt.</small>
                       </div>
                     </>
@@ -916,7 +917,7 @@ export default function LeadDetailPage({ params }) {
                   <Field label="Korte vergelijking / toelichting">
                     <textarea value={proposal.short_comparison_text} onChange={(e) => setProposalField("short_comparison_text", e.target.value)} />
                   </Field>
-                  <Field label="Voorbehouden — één regel per punt">
+                  <Field label="Controlepunten — één regel per punt">
                     <textarea value={proposal.reservations_text} onChange={(e) => setProposalField("reservations_text", e.target.value)} />
                   </Field>
                   <Field label="Vervolgstappen — één regel per stap">
