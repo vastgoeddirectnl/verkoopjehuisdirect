@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { queryOne, query } from "../../../../lib/neonDb";
-import { isUuid } from "../../../../lib/requestSecurity";
+import { isUuid, enforceRateLimit } from "../../../../lib/requestSecurity";
+import { isExpiredAmsterdam } from "../../../../lib/date";
 
 export const runtime = "nodejs";
 
@@ -8,44 +9,16 @@ function clean(value, max = 800) {
   return String(value || "").trim().slice(0, max);
 }
 
-function parseProposalDate(value) {
-  if (!value) return null;
-  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
-
-  const raw = String(value).trim();
-  if (!raw) return null;
-
-  const isoMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (isoMatch) {
-    const [, year, month, day] = isoMatch;
-    const date = new Date(Number(year), Number(month) - 1, Number(day), 23, 59, 59);
-    return Number.isNaN(date.getTime()) ? null : date;
-  }
-
-  const nlMatch = raw.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
-  if (nlMatch) {
-    const [, day, month, year] = nlMatch;
-    const date = new Date(Number(year), Number(month) - 1, Number(day), 23, 59, 59);
-    return Number.isNaN(date.getTime()) ? null : date;
-  }
-
-  const fallback = new Date(raw);
-  return Number.isNaN(fallback.getTime()) ? null : fallback;
-}
-
-function isExpiredDate(value) {
-  const expiry = parseProposalDate(value);
-  if (!expiry) return false;
-  return expiry.getTime() < Date.now();
-}
-
 function canRecordProposalAction(proposal) {
   const status = String(proposal?.status || "").trim().toLowerCase();
-  return ["verzonden", "bekeken"].includes(status) && !isExpiredDate(proposal?.validity_date);
+  return ["verzonden", "bekeken"].includes(status) && !isExpiredAmsterdam(proposal?.validity_date);
 }
 
 export async function POST(request, { params }) {
   try {
+    const limited = await enforceRateLimit(request, { scope: "proposal-action", limit: 20, windowSeconds: 600 });
+    if (!limited.allowed) return NextResponse.json({ error: "Te veel verzoeken. Probeer het later opnieuw." }, { status: 429 });
+
     const { token } = await params;
     if (!isUuid(token)) return NextResponse.json({ error: "Ongeldig voorstel." }, { status: 400 });
 
@@ -71,6 +44,12 @@ export async function POST(request, { params }) {
     const message = clean(body.message, 800);
 
     await query(
+      `insert into proposal_events (proposal_id, lead_id, event_type, message, metadata)
+       values ($1,$2,$3,$4,'{}'::jsonb)`,
+      [proposal.id, proposal.lead_id || null, action, message || null]
+    );
+
+    await query(
       `update proposals
        set interest_status = $2,
            interest_at = now(),
@@ -84,7 +63,8 @@ export async function POST(request, { params }) {
       await query(
         `update leads
          set status = case when $2 = 'Positief' and status not in ('Akkoord','Afgewezen','Afgewezen / vervallen','Afgerond','Gearchiveerd') then 'In onderhandeling' else status end,
-             next_follow_up_at = current_date,
+             automation_follow_up_at = current_date,
+             next_follow_up_at = coalesce(manual_follow_up_at, current_date),
              updated_at = now()
          where id = $1`,
         [proposal.lead_id, label]

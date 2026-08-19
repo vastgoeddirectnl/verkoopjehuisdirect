@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { trackAnalyticsEvent, trackGoogleAdsConversion } from "../lib/googleAds";
+import { getLeadAttribution } from "../lib/attribution";
 
 const situaties = [
   "Snel duidelijkheid gewenst",
@@ -17,62 +18,6 @@ const situaties = [
   "Anders",
 ];
 
-
-const TRACKING_PARAMS = [
-  "utm_source",
-  "utm_medium",
-  "utm_campaign",
-  "utm_term",
-  "utm_content",
-  "gclid",
-  "gbraid",
-  "wbraid",
-];
-
-function compactParts(parts, maxLength = 300) {
-  const result = [];
-  let length = 0;
-
-  for (const part of parts.filter(Boolean)) {
-    const nextLength = length + (result.length ? 3 : 0) + part.length;
-    if (nextLength > maxLength) break;
-    result.push(part);
-    length = nextLength;
-  }
-
-  return result.join(" | ");
-}
-
-function getAttributionFromUrl(pageTitle, fallbackSlug) {
-  if (typeof window === "undefined") {
-    return {
-      pagePath: fallbackSlug || "/",
-      pageLabel: `${fallbackSlug || "/"} · ${pageTitle}`.slice(0, 260),
-      sourceLabel: "direct",
-    };
-  }
-
-  const params = new URLSearchParams(window.location.search || "");
-  const pagePath = `${window.location.pathname || fallbackSlug || "/"}${window.location.search || ""}`;
-  const trackingParts = TRACKING_PARAMS
-    .map((key) => {
-      const value = params.get(key);
-      return value ? `${key}=${value}` : "";
-    })
-    .filter(Boolean);
-
-  const referrer = document.referrer ? `referrer=${document.referrer}` : "";
-  const sourceLabel = compactParts(
-    trackingParts.length ? trackingParts : [params.get("source") ? `source=${params.get("source")}` : "", referrer, "direct"],
-    300
-  );
-
-  return {
-    pagePath,
-    pageLabel: compactParts([pagePath, pageTitle], 260),
-    sourceLabel,
-  };
-}
 
 export default function AdsLeadMiniForm({
   pageTitle = "Advertentiepagina",
@@ -125,7 +70,7 @@ export default function AdsLeadMiniForm({
     setSubmitting(true);
 
     try {
-      const attribution = getAttributionFromUrl(pageTitle, pageSlug);
+      const attribution = getLeadAttribution({ pageTitle, fallbackPath: pageSlug });
       const lead = {
         naam: form.naam,
         email: form.email,

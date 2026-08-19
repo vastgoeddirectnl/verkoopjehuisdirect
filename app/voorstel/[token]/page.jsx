@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
 import { queryOne } from "../../lib/neonDb";
-import { markProposalViewed } from "../../lib/automation";
 import { isUuid } from "../../lib/requestSecurity";
+import { daysUntilAmsterdam, formatDateNL, validityStatus } from "../../lib/date";
 import PrintButton from "./PrintButton";
 import ProposalActions from "./ProposalActions";
+import ProposalViewTracker from "./ProposalViewTracker";
 
 export const dynamic = "force-dynamic";
 
@@ -20,55 +21,18 @@ function ensureIncludedAssurance(items) {
   return alreadyIncluded ? list : [...list, INCLUDED_ASSURANCE_ITEM];
 }
 
-function parseProposalDate(value) {
-  if (!value) return null;
-  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
-
-  const raw = String(value).trim();
-  if (!raw) return null;
-
-  const isoMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (isoMatch) {
-    const [, year, month, day] = isoMatch;
-    const date = new Date(Number(year), Number(month) - 1, Number(day), 12, 0, 0);
-    return Number.isNaN(date.getTime()) ? null : date;
-  }
-
-  const nlMatch = raw.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
-  if (nlMatch) {
-    const [, day, month, year] = nlMatch;
-    const date = new Date(Number(year), Number(month) - 1, Number(day), 12, 0, 0);
-    return Number.isNaN(date.getTime()) ? null : date;
-  }
-
-  const fallback = new Date(raw);
-  return Number.isNaN(fallback.getTime()) ? null : fallback;
-}
-
 function formatDate(value) {
-  const date = parseProposalDate(value);
-  if (!date) return "-";
-  return new Intl.DateTimeFormat("nl-NL", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  }).format(date);
-}
-
-function todayAtNoon() {
-  const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0);
+  return formatDateNL(value, { fallback: "-" });
 }
 
 function daysUntil(value) {
-  const date = parseProposalDate(value);
-  if (!date) return null;
-  const end = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
-  const today = todayAtNoon();
-  return Math.ceil((end.getTime() - today.getTime()) / 86400000);
+  return daysUntilAmsterdam(value);
 }
 
-function validityStatusText(days) {
+function validityStatusText(daysOrValue) {
+  const days = typeof daysOrValue === "number" || daysOrValue === null
+    ? daysOrValue
+    : daysUntil(daysOrValue);
   if (days === null) return null;
   if (days < 0) return "Dit voorstel is verlopen";
   if (days === 0) return "Loopt vandaag af";
@@ -324,19 +288,16 @@ export default async function PublicProposalPage({ params, searchParams }) {
   const nonbindingText = withNoBuyerConditionsText(proposal.nonbinding_text);
   const actionActive = canRespondToProposal(proposal);
 
-  if (!isAdminPreview && actionActive) {
-    await markProposalViewed(proposal);
-  }
-
   return (
     <main className="proposal-page">
       <style>{styles}</style>
+      <ProposalViewTracker token={token} enabled={!isAdminPreview && actionActive} />
 
       <header className="topbar">
         <img src="/logo.png" alt="Vastgoed Direct Nederland" />
         <div className="top-actions">
           <span>Persoonlijk verkoopvoorstel</span>
-          <PrintButton />
+          <PrintButton token={token} />
         </div>
       </header>
 
@@ -386,7 +347,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
         </div>
       </section>
 
-      <ProposalActions token={token} isActive={actionActive} previewMode={isAdminPreview} validityText={validityStatusText(validityDays)} />
+      <ProposalActions token={token} amountText={offerAmount} isActive={actionActive} previewMode={isAdminPreview} validityText={validityStatusText(validityDays)} />
 
       {showDeliveryConstructie ? (
         <section className="card special-card">

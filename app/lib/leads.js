@@ -223,7 +223,7 @@ export async function listLeads({ status, search, limit = 300, archive = "active
       select
         lead_id,
         max(created_at) as last_proposal_at,
-        max(public_viewed_at) as last_proposal_viewed_at,
+        max(coalesce(public_last_viewed_at, public_viewed_at)) as last_proposal_viewed_at,
         sum(coalesce(public_view_count, 0)) as proposal_view_count,
         max(interest_at) as last_interest_at,
         (array_agg(interest_status order by interest_at desc nulls last) filter (where interest_status is not null))[1] as interest_status

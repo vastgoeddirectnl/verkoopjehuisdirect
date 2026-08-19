@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { parseLeadSourceDetails, sourceChannelLabel } from "../../../lib/sourceParser";
+import { addDaysAmsterdam, formatDateTimeNL } from "../../../lib/date";
+import LeadTimeline from "../../../components/admin/LeadTimeline";
 
 const STATUSES = ["Nieuwe aanvraag", "In behandeling", "Eerste bod gedaan", "Beoordeling gepland", "Voorstel opgesteld", "Voorstel verzonden", "Voorstel bekeken", "In onderhandeling", "Akkoord", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
 const LEGACY_STATUS_LABELS = { "Nieuw": "Nieuwe aanvraag", "Contact opgenomen": "In behandeling", "In beoordeling": "Beoordeling gepland", "Afgewezen": "Afgewezen / vervallen" };
@@ -29,22 +31,9 @@ function isSpecialProposalType(type) {
   return SPECIAL_PROPOSAL_TYPES.includes(type);
 }
 
-function todayPlus(days) {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return date.toISOString().slice(0, 10);
-}
+function todayPlus(days) { return addDaysAmsterdam(days); }
 
-function fmt(value) {
-  if (!value) return "-";
-  return new Intl.DateTimeFormat("nl-NL", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(value));
-}
+function fmt(value) { return formatDateTimeNL(value); }
 
 function proposalViewedAfterEmail(item) {
   if (!item?.emailed_at || !item?.public_viewed_at) return false;
@@ -627,6 +616,7 @@ export default function LeadDetailPage({ params }) {
             </div>
             <div className="actions">
               {lead.telefoon ? <a href={`tel:${cleanPhone(lead.telefoon)}`}>Bellen</a> : null}
+              {lead.telefoon ? <a href={`https://wa.me/${cleanPhone(lead.telefoon).replace(/^0/, "31")}`} target="_blank" rel="noopener noreferrer">WhatsApp</a> : null}
               {lead.email ? <a href={`mailto:${lead.email}`}>Mailen</a> : null}
               <button disabled={saving} onClick={() => post({ action: "updateLead", id: lead.id, last_contact_at: new Date().toISOString(), status: ["Nieuw", "Nieuwe aanvraag"].includes(lead.status) ? "In behandeling" : lead.status })}>Contact gehad</button>
             </div>
@@ -636,6 +626,7 @@ export default function LeadDetailPage({ params }) {
             <a href="#contact">Contact</a>
             <a href="#woning">Woning en aanvraag</a>
             <a href="#bron">Bron</a>
+            <a href="#tijdlijn">Tijdlijn</a>
             <a href="#voorstel-maken">Voorstel maken</a>
             <a href="#taken">Taken</a>
             <a href="#voorstellen">Voorstellen</a>
@@ -675,6 +666,14 @@ export default function LeadDetailPage({ params }) {
                   {STATUSES.map((status) => <option key={status}>{status}</option>)}
                 </select>
               </Field>
+              <Field label="Volgende opvolging">
+                <input
+                  type="date"
+                  value={lead.manual_follow_up_at || ""}
+                  onChange={(e) => post({ action: "updateLead", id: lead.id, next_follow_up_at: e.target.value })}
+                />
+                <small>{lead.manual_follow_up_at ? "Handmatig ingesteld — deze datum krijgt voorrang op automatisering." : `Automatisch voorstel: ${lead.automation_follow_up_at || lead.next_follow_up_at || "geen"}`}</small>
+              </Field>
               <Field label="Notitie">
                 <textarea defaultValue={lead.notitie || ""} onBlur={(e) => post({ action: "updateLead", id: lead.id, notitie: e.target.value })} />
               </Field>
@@ -698,6 +697,15 @@ export default function LeadDetailPage({ params }) {
               <span className={latestProposal?.emailed_at ? "ok" : "muted"}>{latestProposal?.emailed_at ? "Voorstel gemaild" : "Nog niet gemaild"}</span>
             </div>
           </section>
+          <div id="tijdlijn">
+            <LeadTimeline
+              lead={lead}
+              tasks={data?.tasks || []}
+              proposals={data?.proposals || []}
+              mailLogs={data?.mailLogs || []}
+              proposalEvents={data?.proposalEvents || []}
+            />
+          </div>
 
           <section className="card proposal-card" id="voorstel-maken">
             <div className="section-head">
@@ -706,7 +714,7 @@ export default function LeadDetailPage({ params }) {
                 <h2>Uitgebreid verkoopvoorstel maken</h2>
                 <p>Maak een voorstel met voorblad, woning-/objectgegevens, uitgangspunten, netto-opbrengstvergelijking, voorwaarden en vervolgstappen.</p>
               </div>
-              {latestProposal ? <a className="secondary-link" href={`/admin/voorstellen/${latestProposal.id}/print`} target="_blank">Laatste voorstel openen</a> : null}
+              {latestProposal ? <a className="secondary-link" href={`/admin/voorstellen/${latestProposal.id}`}>Laatste voorstel beheren</a> : null}
             </div>
 
             {proposal ? (

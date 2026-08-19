@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { queryOne } from "./neonDb";
+import { query, queryOne } from "./neonDb";
 
 const fallbackBuckets = new Map();
 
@@ -54,6 +54,14 @@ export async function enforceRateLimit(request, {
     );
 
     const count = Number(row?.request_count || 0);
+
+    // Ruim verlopen buckets probabilistisch op zodat de tabel klein blijft
+    // zonder een aparte cron-job verplicht te maken.
+    if (Math.random() < 0.02) {
+      await query("delete from request_rate_limits where expires_at < now() - interval '1 day'")
+        .catch(() => {});
+    }
+
     return { allowed: count <= limit, remaining: Math.max(0, limit - count) };
   } catch (error) {
     console.warn("Database rate limiting niet beschikbaar; tijdelijke fallback actief:", error.message);

@@ -2,10 +2,11 @@ import { NextResponse } from "next/server";
 import { isAdminAuthenticated } from "../../../lib/adminAuth";
 import { query, queryOne } from "../../../lib/neonDb";
 import { listLeads } from "../../../lib/leads";
-import { sendResendMail } from "../../../lib/mail";
+import { escapeHtml, sendResendMail } from "../../../lib/mail";
 import { logMailEventSafe } from "../../../lib/mailLog";
 import { markProposalSentAutomation, refreshLeadAutomation, refreshAllLeadAutomation } from "../../../lib/automation";
 import { isValidEmail } from "../../../lib/admin/validators";
+import { formatDateNL } from "../../../lib/date";
 
 export const runtime = "nodejs";
 
@@ -224,12 +225,7 @@ function formatAddress(proposal) {
 }
 
 function formatDateShort(value) {
-  if (!value) return "";
-  return new Intl.DateTimeFormat("nl-NL", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(value));
+  return value ? formatDateNL(value, { fallback: "" }) : "";
 }
 
 async function ensurePublicToken(proposal) {
@@ -272,13 +268,19 @@ export async function GET(request) {
       const lead = await queryOne("select * from leads where id = $1", [id]);
       if (!lead) return NextResponse.json({ error: "Lead niet gevonden." }, { status: 404 });
 
-      const [{ rows: tasks }, { rows: proposals }, { rows: mailLogs }] = await Promise.all([
+      const [{ rows: tasks }, { rows: proposals }, { rows: mailLogs }, { rows: proposalEvents }] = await Promise.all([
         query("select * from tasks where lead_id = $1 order by due_date asc nulls last, created_at desc", [id]),
         query("select * from proposals where lead_id = $1 order by created_at desc", [id]),
         query("select * from mail_logs where lead_id = $1 order by created_at desc limit 100", [id]),
+        query(`select e.*, p.amount_text, p.property_address, p.version_number
+               from proposal_events e
+               left join proposals p on p.id = e.proposal_id
+               where e.lead_id = $1
+               order by e.created_at desc
+               limit 200`, [id]),
       ]);
 
-      return NextResponse.json({ lead, tasks, proposals, mailLogs });
+      return NextResponse.json({ lead, tasks, proposals, mailLogs, proposalEvents });
     }
 
     if (action === "tasks") {
@@ -317,7 +319,15 @@ export async function GET(request) {
       const id = searchParams.get("id");
       const proposal = await queryOne("select * from proposals where id = $1", [id]);
       if (!proposal) return NextResponse.json({ error: "Voorstel niet gevonden." }, { status: 404 });
-      return NextResponse.json({ proposal });
+      const [{ rows: proposalEvents }, { rows: versions }] = await Promise.all([
+        query("select * from proposal_events where proposal_id = $1 order by created_at desc limit 200", [id]),
+        query(`select id, status, version_number, created_at, updated_at, amount_text, public_token
+               from proposals
+               where id = $1 or parent_proposal_id = $1 or id = (select parent_proposal_id from proposals where id = $1)
+                  or parent_proposal_id = (select parent_proposal_id from proposals where id = $1)
+               order by version_number asc, created_at asc`, [id]),
+      ]);
+      return NextResponse.json({ proposal, proposalEvents, versions });
     }
 
     if (action === "mailLogs") {
@@ -410,7 +420,12 @@ export async function POST(request) {
           let value = body[field];
           if (field === "status" && value && !STATUSES.includes(value)) value = "Nieuwe aanvraag";
           params.push(value || null);
-          updates.push(`${field} = $${params.length}`);
+          if (field === "next_follow_up_at") {
+            updates.push(`manual_follow_up_at = $${params.length}`);
+            updates.push(`next_follow_up_at = $${params.length}`);
+          } else {
+            updates.push(`${field} = $${params.length}`);
+          }
         }
       }
 
@@ -520,6 +535,33 @@ export async function POST(request) {
       return NextResponse.json({ proposal });
     }
 
+    if (action === "cloneProposalVersion") {
+      const source = await queryOne("select * from proposals where id = $1", [body.id]);
+      if (!source) return NextResponse.json({ error: "Voorstel niet gevonden." }, { status: 404 });
+
+      const rootId = source.parent_proposal_id || source.id;
+      const versionRow = await queryOne(
+        `select coalesce(max(version_number), 1)::int + 1 as next_version
+         from proposals
+         where id = $1 or parent_proposal_id = $1`,
+        [rootId]
+      );
+      const nextVersion = Number(versionRow?.next_version || 2);
+
+      const columns = PROPOSAL_FIELDS;
+      const values = columns.map((field) => cleanForField(field, source[field]));
+      const placeholders = values.map((_, index) => `$${index + 1}`).join(",");
+      values.push(rootId, nextVersion);
+      const proposal = await queryOne(
+        `insert into proposals (${columns.join(",")}, status, parent_proposal_id, version_number)
+         values (${placeholders}, 'Concept', $${values.length - 1}, $${values.length})
+         returning *`,
+        values
+      );
+
+      return NextResponse.json({ proposal });
+    }
+
     if (action === "sendProposalEmail") {
       let proposal = await queryOne("select * from proposals where id = $1", [body.id]);
       if (!proposal) return NextResponse.json({ error: "Voorstel niet gevonden." }, { status: 404 });
@@ -543,9 +585,15 @@ export async function POST(request) {
       const previewText = address && address !== "-"
         ? `Wij hebben uw vrijblijvende verkoopvoorstel voor ${address} klaargezet. U kunt het rustig bekijken via uw persoonlijke voorstelpagina.`
         : "Wij hebben uw vrijblijvende verkoopvoorstel klaargezet. U kunt het rustig bekijken via uw persoonlijke voorstelpagina.";
+      const safePreviewText = escapeHtml(previewText);
+      const safeLeadName = escapeHtml(proposal.lead_naam || "heer/mevrouw");
+      const safeAddress = escapeHtml(address || "-");
+      const safeValidity = escapeHtml(validity || "");
+      const safePublicUrl = escapeHtml(publicUrl);
+      const safeNonbinding = escapeHtml(proposal.nonbinding_text || "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid. Indien partijen overeenstemming bereiken, wordt de koopovereenkomst opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen.");
 
       const html = `
-        <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${previewText}</div>
+        <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${safePreviewText}</div>
         <div style="font-family:Arial,Helvetica,sans-serif;background:#f5f2ec;padding:28px;color:#071f3a;">
           <div style="max-width:720px;margin:0 auto;background:#fffdf9;border:1px solid #e8e3db;border-radius:28px;overflow:hidden;box-shadow:0 22px 70px rgba(7,31,58,.12);">
             <div style="background:#071f3a;padding:30px 32px;color:#fff;position:relative;">
@@ -562,7 +610,7 @@ export async function POST(request) {
             </div>
 
             <div style="padding:30px 32px;">
-              <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#48586b;">Beste ${proposal.lead_naam || "heer/mevrouw"},</p>
+              <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#48586b;">Beste ${safeLeadName},</p>
 
               <p style="margin:0 0 20px;font-size:16px;line-height:1.7;color:#48586b;">
                 Naar aanleiding van uw aanvraag hebben wij een vrijblijvend verkoopvoorstel voor uw woning klaargezet.
@@ -571,9 +619,9 @@ export async function POST(request) {
 
               <div style="background:#F7F2EC;border:1px solid #F2B885;border-radius:22px;padding:22px;margin:22px 0;">
                 <div style="font-size:12px;color:#B85216;text-transform:uppercase;font-weight:bold;letter-spacing:.07em;">Woning</div>
-                <div style="font-size:20px;font-weight:bold;margin-top:6px;color:#071f3a;line-height:1.3;">${address || "-"}</div>
+                <div style="font-size:20px;font-weight:bold;margin-top:6px;color:#071f3a;line-height:1.3;">${safeAddress}</div>
                 <div style="font-size:15px;line-height:1.6;margin-top:12px;color:#48586b;">U bekijkt het voorstel via uw persoonlijke voorstelpagina. Zo blijft de inhoud overzichtelijk bij elkaar.</div>
-                ${validity ? `<div style="font-size:14px;color:#48586b;margin-top:10px;">Geldig tot: ${validity}</div>` : ""}
+                ${validity ? `<div style="font-size:14px;color:#48586b;margin-top:10px;">Geldig tot: ${safeValidity}</div>` : ""}
               </div>
 
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:separate;border-spacing:0 10px;margin:18px 0 24px;">
@@ -598,7 +646,7 @@ export async function POST(request) {
               </table>
 
               <p style="margin:0 0 26px;">
-                <a href="${publicUrl}" style="display:block;width:100%;max-width:320px;box-sizing:border-box;background:#D96A1C;color:#fff;text-decoration:none;border-radius:999px;padding:15px 24px;font-weight:bold;text-align:center;box-shadow:0 12px 26px rgba(217,106,28,.18);">
+                <a href="${safePublicUrl}" style="display:block;width:100%;max-width:320px;box-sizing:border-box;background:#D96A1C;color:#fff;text-decoration:none;border-radius:999px;padding:15px 24px;font-weight:bold;text-align:center;box-shadow:0 12px 26px rgba(217,106,28,.18);">
                   Verkoopvoorstel inzien
                 </a>
               </p>
@@ -619,7 +667,7 @@ export async function POST(request) {
           </div>
 
           <p style="max-width:720px;margin:14px auto 0;font-size:12px;line-height:1.5;color:#7a8797;text-align:center;">
-            ${proposal.nonbinding_text || "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid. Indien partijen overeenstemming bereiken, wordt de koopovereenkomst opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen."}
+            ${safeNonbinding}
           </p>
         </div>
       `;
@@ -657,7 +705,7 @@ export async function POST(request) {
 
         if (proposal.lead_id) {
           await query(
-            "update leads set status = 'Voorstel verzonden', next_follow_up_at = current_date + interval '2 days', updated_at = now() where id = $1 and status not in ('Akkoord','Afgewezen','Afgewezen / vervallen','Afgerond','Gearchiveerd')",
+            "update leads set status = 'Voorstel verzonden', automation_follow_up_at = current_date + 2, next_follow_up_at = coalesce(manual_follow_up_at, current_date + 2), updated_at = now() where id = $1 and status not in ('Akkoord','Afgewezen','Afgewezen / vervallen','Afgerond','Gearchiveerd')",
             [proposal.lead_id]
           );
           await markProposalSentAutomation(proposal);

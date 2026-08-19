@@ -1,4 +1,5 @@
 import { query, queryOne } from "./neonDb";
+import { addDaysAmsterdam } from "./date";
 
 const HIGH_VALUE_REGIONS = ["groningen", "drenthe", "friesland", "overijssel", "borger", "stadskanaal", "assen", "emmen", "veendam", "winschoten", "musselkanaal"];
 const INACTIVE_LEAD_STATUSES = ["Akkoord", "Afgewezen", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
@@ -8,21 +9,7 @@ function clean(value) {
 }
 
 function todayPlus(days = 0) {
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Europe/Amsterdam",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).formatToParts(new Date());
-
-  const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
-  const date = new Date(Date.UTC(
-    Number(values.year),
-    Number(values.month) - 1,
-    Number(values.day) + Number(days || 0)
-  ));
-
-  return date.toISOString().slice(0, 10);
+  return addDaysAmsterdam(days);
 }
 
 function containsAny(text, words) {
@@ -180,7 +167,8 @@ export async function refreshLeadAutomation(inputLead) {
        set lead_score = $2,
            lead_priority = $3,
            automation_note = $4,
-           next_follow_up_at = $5,
+           automation_follow_up_at = $5,
+           next_follow_up_at = coalesce(manual_follow_up_at, $5::date),
            last_automation_at = now(),
            updated_at = now()
        where id = $1
@@ -252,7 +240,9 @@ export async function markProposalViewed(proposal) {
     await query(
       `update proposals
        set public_viewed_at = coalesce(public_viewed_at, now()),
+           public_last_viewed_at = now(),
            public_view_count = coalesce(public_view_count, 0) + 1,
+           status = case when status = 'Verzonden' then 'Bekeken' else status end,
            updated_at = now()
        where id = $1`,
       [proposal.id]
@@ -268,7 +258,8 @@ export async function markProposalViewed(proposal) {
         `update leads
          set status = case when status in ('Voorstel verzonden','Voorstel opgesteld') then 'Voorstel bekeken' else status end,
              proposal_viewed_at = coalesce(proposal_viewed_at, now()),
-             next_follow_up_at = current_date,
+             automation_follow_up_at = current_date,
+             next_follow_up_at = coalesce(manual_follow_up_at, current_date),
              updated_at = now()
          where id = $1`,
         [lead.id]

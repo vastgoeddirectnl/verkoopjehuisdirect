@@ -12,6 +12,24 @@
   --color-text: #0a2540;
   --color-muted: #647386;
   --color-border: #e6e2db;
+
+  /* V3.2 design tokens: gedeeld door website, admin en voorstelomgeving. */
+  --brand-primary: #071f3a;
+  --brand-primary-soft: #0d3159;
+  --brand-accent: #D96A1C;
+  --surface: #fffdf9;
+  --surface-muted: #f7f4ee;
+  --text-primary: #071f3a;
+  --text-secondary: #617184;
+  --border: #e8e3db;
+  --success: #3E8F5E;
+  --warning: #B85216;
+  --danger: #9A352B;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --shadow-card: 0 12px 42px rgba(7,31,58,.08);
+  --shadow-modal: 0 28px 90px rgba(7,31,58,.24);
 }
 
 * {

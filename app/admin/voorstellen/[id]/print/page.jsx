@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { queryOne } from "../../../../lib/neonDb";
 import PrintButton from "./PrintButton";
+import { daysUntilAmsterdam, formatDateNL } from "../../../../lib/date";
 
 export const dynamic = "force-dynamic";
 
@@ -17,48 +18,12 @@ function ensureIncludedAssurance(items) {
   return alreadyIncluded ? list : [...list, INCLUDED_ASSURANCE_ITEM];
 }
 
-function parseProposalDate(value) {
-  if (!value) return null;
-  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
-
-  const raw = String(value).trim();
-  if (!raw) return null;
-
-  const isoMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (isoMatch) {
-    const [, year, month, day] = isoMatch;
-    const date = new Date(Number(year), Number(month) - 1, Number(day), 12, 0, 0);
-    return Number.isNaN(date.getTime()) ? null : date;
-  }
-
-  const nlMatch = raw.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
-  if (nlMatch) {
-    const [, day, month, year] = nlMatch;
-    const date = new Date(Number(year), Number(month) - 1, Number(day), 12, 0, 0);
-    return Number.isNaN(date.getTime()) ? null : date;
-  }
-
-  const fallback = new Date(raw);
-  return Number.isNaN(fallback.getTime()) ? null : fallback;
-}
-
 function formatDate(value) {
-  const date = parseProposalDate(value);
-  if (!date) return "-";
-  return new Intl.DateTimeFormat("nl-NL", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  }).format(date);
+  return formatDateNL(value, { fallback: "-" });
 }
 
 function daysUntil(value) {
-  const date = parseProposalDate(value);
-  if (!date) return null;
-  const end = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0);
-  return Math.ceil((end.getTime() - today.getTime()) / 86400000);
+  return daysUntilAmsterdam(value);
 }
 
 function validityStatusText(days) {

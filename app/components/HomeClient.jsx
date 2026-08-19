@@ -1,8 +1,6 @@
-"use client";
-
-import React, { useState } from "react";
-import { trackGoogleAdsConversion } from "../lib/googleAds";
 import { reviewData, reviewDisplayText } from "../lib/reviewData";
+import HomeLeadForm from "./HomeLeadForm";
+import ConversionLink from "./ConversionLink";
 
 const whatsappLink =
   "https://wa.me/31612238051?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F";
@@ -249,100 +247,6 @@ const regionOverviewCards = [
 ];
 
 export default function HomeClient() {
-  const [step, setStep] = useState(1);
-  const [submitted, setSubmitted] = useState(false);
-  const [formError, setFormError] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState({
-    postcode: "",
-    huisnummer: "",
-    woningtype: "",
-    situatie: "",
-    termijn: "",
-    toelichting: "",
-    naam: "",
-    email: "",
-    telefoon: "",
-    _website: "",
-  });
-
-  const updateForm = (event) => {
-    const { name, value } = event.target;
-    const normalized = name === "postcode" ? value.toUpperCase().replace(/\s+/g, "").slice(0, 6) : value;
-    setForm((current) => ({ ...current, [name]: normalized }));
-    setFormError("");
-  };
-  const nextStep = () => {
-    setFormError("");
-    if (step === 1) {
-      if (!/^\d{4}[A-Z]{2}$/.test(form.postcode)) return setFormError("Vul een geldige postcode in, bijvoorbeeld 9723AB.");
-      if (!form.huisnummer.trim()) return setFormError("Vul het huisnummer in.");
-      if (!form.woningtype) return setFormError("Kies het type woning.");
-    }
-    if (step === 2 && !form.situatie) {
-      return setFormError("Kies kort welke situatie het beste past.");
-    }
-    setStep((current) => Math.min(current + 1, 3));
-  };
-  const previousStep = () => setStep((current) => Math.max(current - 1, 1));
-
-  const submitLead = async (event) => {
-    event.preventDefault();
-    setFormError("");
-    if (!form.naam.trim()) return setFormError("Vul uw naam in.");
-    if (form.telefoon.replace(/\D/g, "").length < 8) return setFormError("Controleer het telefoonnummer.");
-    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) return setFormError("Controleer het e-mailadres.");
-    setSubmitting(true);
-
-    const params = new URLSearchParams(window.location.search);
-
-    const lead = {
-      naam: form.naam,
-      email: form.email,
-      telefoon: form.telefoon,
-      postcode: form.postcode,
-      huisnummer: form.huisnummer,
-      woningtype: form.woningtype,
-      staat: form.situatie,
-      reden: [
-        form.termijn ? `Termijn: ${form.termijn}` : "",
-        form.toelichting ? `Toelichting: ${form.toelichting}` : "",
-      ].filter(Boolean).join(" | "),
-      situatie: form.situatie,
-      termijn: form.termijn,
-      toelichting: form.toelichting,
-      pagina: window.location.pathname,
-      bron: params.get("utm_source") || params.get("source") || document.referrer || "direct",
-      _website: form._website,
-    };
-
-    try {
-      const response = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(lead),
-      });
-
-      const result = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(result.error || "Aanvraag verzenden mislukt.");
-      }
-
-      trackGoogleAdsConversion("lead", {
-        value: 1,
-        currency: "EUR",
-        transactionId: result?.reference ? `lead-${result.reference}` : undefined,
-      });
-      setSubmitted(true);
-    } catch (error) {
-      setFormError("Er ging iets mis. Probeer opnieuw of neem contact op via WhatsApp.");
-      console.error(error);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   return (
     <main>
       <script
@@ -354,7 +258,7 @@ export default function HomeClient() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <style jsx global>{`
+      <style>{`
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
@@ -731,7 +635,7 @@ export default function HomeClient() {
         .field:focus { border-color: #071f3a; background: #fff; }
         .form-progress{height:6px;background:#e9e4db;border-radius:999px;overflow:hidden;margin:-2px 0 14px}.form-progress span{display:block;height:100%;background:#D96A1C;border-radius:inherit;transition:width .25s ease}.form-inline-error{background:#fff1ed;border:1px solid #f0b6a5;color:#8d321b;border-radius:14px;padding:11px 13px;margin:10px 0 12px;font-weight:700;font-size:14px}.btn:disabled{opacity:.65;cursor:not-allowed}
 
-        .form-stack { display: grid; gap: 12px; }
+        .input-group{display:grid;gap:7px}.input-group>span{font-size:13px;font-weight:900;color:#24364a}.field.has-error{border-color:#b94b3d!important}.field-error{color:#9a352b;font-size:12px;font-weight:800}.address-feedback{display:grid;gap:3px;background:#edf7f1;border:1px solid #c8e7d4;border-radius:14px;padding:11px 13px;color:#23643f;font-size:13px}.address-feedback span{color:#3f5d4b}.address-feedback.loading{background:#f7f4ee;border-color:#e8e3db;color:#617184}.form-stack { display: grid; gap: 12px; }
         .form-actions { display: grid; grid-template-columns: .8fr 1.6fr; gap: 9px; }
         .small-note {
           font-size: 12px;
@@ -2309,8 +2213,8 @@ export default function HomeClient() {
           </nav>
 
           <div className="header-actions">
-            <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
-            <a href="tel:0612238051" onClick={() => trackGoogleAdsConversion("call")} className="btn btn-blue">Bel direct</a>
+            <ConversionLink href={whatsappLink} eventName="whatsapp" target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</ConversionLink>
+            <ConversionLink href="tel:0612238051" eventName="call" className="btn btn-blue">Bel direct</ConversionLink>
             <a href="#aanvraag" className="btn btn-orange">Voorstel aanvragen</a>
           </div>
         </div>
@@ -2331,7 +2235,7 @@ export default function HomeClient() {
 
             <div className="hero-cta-row">
               <a href="#aanvraag" className="btn btn-orange">Vraag vrijblijvend voorstel aan</a>
-              <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
+              <ConversionLink href={whatsappLink} eventName="whatsapp" target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</ConversionLink>
             </div>
 
             <p className="micro-note">Niet eerst opknappen. Niet eerst leeghalen. Vrijblijvend voorstel.</p>
@@ -2345,97 +2249,7 @@ export default function HomeClient() {
             </div>
           </div>
 
-          <section id="aanvraag" className="form-card">
-            <div className="form-logo-wrap">
-              <img src="/logo.png" alt="Vastgoed Direct Nederland" className="form-logo" />
-            </div>
-
-            {!submitted ? (
-              <form onSubmit={submitLead}>
-                <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}>
-                  <label>
-                    Website
-                    <input name="_website" value={form._website} onChange={updateForm} tabIndex={-1} autoComplete="off" />
-                  </label>
-                </div>
-                <p className="step-label">Stap {step} van 3</p><div className="form-progress" aria-hidden="true"><span style={{ width: `${(step / 3) * 100}%` }} /></div>{formError ? <div className="form-inline-error" role="alert">{formError}</div> : null}
-                <h2 className="form-title">Vertel kort om welke woning het gaat</h2>
-                <p className="form-sub form-sub-desktop">
-                  Vul uw adres en situatie in. Wij bekijken wat er mogelijk is en sturen waar mogelijk een eerste voorstel.
-                </p>
-                <p className="form-sub form-sub-mobile">
-                  Adres en situatie zijn genoeg voor een eerste beoordeling.
-                </p>
-
-                {step === 1 && (
-                  <div className="form-stack">
-                    <div className="form-part"><span>1</span> Uw woning</div>
-                    <input name="postcode" value={form.postcode} onChange={updateForm} placeholder="Postcode" className="field" required />
-                    <input name="huisnummer" value={form.huisnummer} onChange={updateForm} placeholder="Huisnummer" className="field" required />
-                    <select name="woningtype" value={form.woningtype} onChange={updateForm} className="field" required>
-                      <option value="">Type woning</option>
-                      {woningTypes.map((type) => (
-                        <option key={type}>{type}</option>
-                      ))}
-                    </select>
-                    <button type="button" onClick={nextStep} className="btn btn-blue">Volgende stap</button>
-                  </div>
-                )}
-
-                {step === 2 && (
-                  <div className="form-stack">
-                    <div className="form-part"><span>2</span> Uw situatie</div>
-                    <select name="situatie" value={form.situatie} onChange={updateForm} className="field" required>
-                      <option value="">Situatie</option>
-                      {verkoopSituaties.map((situatie) => (
-                        <option key={situatie}>{situatie}</option>
-                      ))}
-                    </select>
-                    <select name="termijn" value={form.termijn} onChange={updateForm} className="field">
-                      <option value="">Gewenste termijn (optioneel)</option>
-                      {termijnen.map((termijn) => (
-                        <option key={termijn}>{termijn}</option>
-                      ))}
-                    </select>
-                    <textarea
-                      name="toelichting"
-                      value={form.toelichting}
-                      onChange={updateForm}
-                      placeholder="Korte toelichting (optioneel)"
-                      className="field"
-                    />
-                    <div className="form-actions">
-                      <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
-                      <button type="button" onClick={nextStep} className="btn btn-blue">Naar laatste stap</button>
-                    </div>
-                  </div>
-                )}
-
-                {step === 3 && (
-                  <div className="form-stack">
-                    <div className="form-part"><span>3</span> Contactgegevens</div>
-                    <input name="naam" value={form.naam} onChange={updateForm} placeholder="Naam" className="field" required />
-                    <input name="telefoon" value={form.telefoon} onChange={updateForm} placeholder="Telefoonnummer" className="field" required />
-                    <input name="email" value={form.email} onChange={updateForm} placeholder="E-mailadres" type="email" className="field" required />
-                    <div className="form-actions">
-                      <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
-                      <button type="submit" className="btn btn-orange" disabled={submitting}>{submitting ? "Aanvraag verzenden…" : "Vraag vrijblijvend voorstel aan"}</button>
-                    </div>
-                    <p className="small-note">Wij gebruiken uw gegevens alleen om uw aanvraag te beoordelen en hierover contact op te nemen.</p>
-
-                  </div>
-                )}
-              </form>
-            ) : (
-              <div className="success">
-                <div className="success-icon">✓</div>
-                <h2 className="form-title">Aanvraag ontvangen</h2>
-                <p className="form-sub">Wij bekijken uw aanvraag en sturen waar mogelijk een eerste vrijblijvende inschatting of voorstel.</p>
-                <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">Aanvullen via WhatsApp</a>
-              </div>
-            )}
-
-          </section>
+          <HomeLeadForm />
         </div>
       </section>
 
@@ -2679,7 +2493,7 @@ export default function HomeClient() {
           </p>
           <div className="cta-buttons">
             <a href="#aanvraag" className="btn btn-orange">Vraag vrijblijvend voorstel aan</a>
-            <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst overleggen</a>
+            <ConversionLink href={whatsappLink} eventName="whatsapp" target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst overleggen</ConversionLink>
           </div>
         </div>
       </section>
@@ -2696,7 +2510,7 @@ export default function HomeClient() {
             <h3>Contact</h3>
             <p>info@vastgoeddirectnederland.nl</p>
             <p>06 12 23 80 51</p>
-            <p><a href="tel:0612238051" onClick={() => trackGoogleAdsConversion("call")}>Bel direct</a></p>
+            <p><ConversionLink href="tel:0612238051" eventName="call">Bel direct</ConversionLink></p>
           </div>
 
           <div>
@@ -2733,11 +2547,11 @@ export default function HomeClient() {
         </div>
       </footer>
 
-      <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</a>
+      <ConversionLink href={whatsappLink} eventName="whatsapp" target="_blank" rel="noopener noreferrer" className="whatsapp-float">WhatsApp</ConversionLink>
 
       <div className="mobile-bottom-cta">
         <a href="#aanvraag" className="btn btn-orange">Voorstel aanvragen</a>
-        <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+        <ConversionLink href={whatsappLink} eventName="whatsapp" target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</ConversionLink>
       </div>
 
     </main>
