@@ -8,8 +8,20 @@ function clean(value) {
 }
 
 function todayPlus(days = 0) {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Amsterdam",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+
+  const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+  const date = new Date(Date.UTC(
+    Number(values.year),
+    Number(values.month) - 1,
+    Number(values.day) + Number(days || 0)
+  ));
+
   return date.toISOString().slice(0, 10);
 }
 
@@ -98,8 +110,8 @@ export function calculateLeadAutomation(lead = {}) {
 
   if (status === "Nieuw" || status === "Nieuwe aanvraag") nextFollowUpAt = todayPlus(0);
   else if (["Contact opgenomen", "In behandeling", "In beoordeling", "Eerste bod gedaan", "Beoordeling gepland", "Voorstel opgesteld"].includes(status)) nextFollowUpAt = todayPlus(1);
-  else if (status === "Voorstel verzonden" || status === "Voorstel bekeken" || status === "In onderhandeling") nextFollowUpAt = todayPlus(2);
   else if (status === "Voorstel bekeken") nextFollowUpAt = todayPlus(0);
+  else if (status === "Voorstel verzonden" || status === "In onderhandeling") nextFollowUpAt = todayPlus(2);
   else if (priority === "Hoog" && !INACTIVE_LEAD_STATUSES.includes(status)) nextFollowUpAt = todayPlus(0);
 
   return {

@@ -6,6 +6,17 @@ export const dynamic = "force-dynamic";
 
 const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid. Indien partijen overeenstemming bereiken, wordt de koopovereenkomst opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen.";
 
+
+const NO_BUYER_CONDITIONS_NOTICE_TITLE = "Meer zekerheid bij akkoord";
+const NO_BUYER_CONDITIONS_NOTICE_TEXT = "Bij overeenstemming wordt de koopovereenkomst in beginsel opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen. Daarmee is het traject minder afhankelijk van financiering, keuringen of verkoop van een andere woning.";
+const INCLUDED_ASSURANCE_ITEM = "Meer zekerheid na akkoord";
+
+function ensureIncludedAssurance(items) {
+  const list = Array.isArray(items) ? items : [];
+  const alreadyIncluded = list.some((item) => /meer\s+zekerheid\s+na\s+akkoord|zonder\s+ontbindende\s+voorbehouden/i.test(String(item || "")));
+  return alreadyIncluded ? list : [...list, INCLUDED_ASSURANCE_ITEM];
+}
+
 function formatDate(value) {
   if (!value) return "-";
   return new Intl.DateTimeFormat("nl-NL", {
@@ -138,25 +149,71 @@ function months(value, fallback = "-") {
   return `${raw} maanden`;
 }
 
+function isObjectProposal(proposal) {
+  const text = [
+    proposal?.object_usage_type,
+    proposal?.property_type,
+    proposal?.current_situation,
+  ].filter(Boolean).join(" ").toLowerCase();
+
+  return /(woon\s*-?\s*winkelpand|gemengd|bedrijfspand|bedrijfsruimte|winkelruimte|winkelpand|kantoor|horeca|beleggingspand|object)/i.test(text);
+}
+
+function objectTerms(proposal) {
+  const objectProposal = isObjectProposal(proposal);
+  return {
+    lower: objectProposal ? "object" : "woning",
+    lowerArticle: objectProposal ? "het object" : "de woning",
+    possessive: objectProposal ? "uw object" : "uw woning",
+    gegevens: objectProposal ? "Gegevens object" : "Gegevens woning",
+    typeLabel: objectProposal ? "Type object" : "Type woning",
+    addressLabel: objectProposal ? "Adres / object" : "Adres / woning",
+    areaLabel: objectProposal ? "Gebruiks-/woonoppervlakte" : "Woonoppervlakte",
+    intro: objectProposal ? "Professioneel en vrijblijvend voorstel voor verkoop van uw object." : "Professioneel en vrijblijvend voorstel voor uw woningverkoop.",
+  };
+}
+
+function objectAwareText(text, proposal) {
+  const raw = String(text || "");
+  if (!isObjectProposal(proposal)) return raw;
+  return raw
+    .replace(/openbare woninginformatie/gi, "openbare objectinformatie")
+    .replace(/huidige bekende staat van de woning of het object/gi, "huidige bekende staat van het object")
+    .replace(/huidige bekende staat van de woning/gi, "huidige bekende staat van het object")
+    .replace(/woning-\/objectinformatie/gi, "objectinformatie")
+    .replace(/woning of het object/gi, "object")
+    .replace(/verkoopklaar maken van de woning/gi, "verkoopklaar maken van het object")
+    .replace(/woningverkoop/gi, "objectverkoop")
+    .replace(/Woning blijft/gi, "Object blijft")
+    .replace(/woninggegevens/gi, "objectgegevens")
+    .replace(/Controle woninggegevens/gi, "Controle objectgegevens")
+    .replace(/over de woning/gi, "over het object")
+    .replace(/van de woning/gi, "van het object")
+    .replace(/de woning binnen/gi, "het object binnen")
+    .replace(/uw woning/gi, "uw object");
+}
+
 export default async function ProposalPrintPage({ params }) {
   const { id } = await params;
   const proposal = await queryOne("select * from proposals where id = $1", [id]);
 
   if (!proposal) notFound();
 
-  const included = lines(proposal.included_items, [
+  const terms = objectTerms(proposal);
+
+  const included = ensureIncludedAssurance(lines(proposal.included_items, [
     "Heldere communicatie",
     "Geen makelaarskosten",
     "Geen openbare bezichtigingen nodig",
     "Notariële afwikkeling",
     "Verkoopoplossing op maat",
     "Vrijblijvend voorstel",
-  ]);
+  ]));
 
-  const assumptions = value(
+  const assumptions = objectAwareText(value(
     proposal.assumptions_text,
     "Dit voorstel is gebaseerd op de door u verstrekte gegevens, openbare woninginformatie en de huidige bekende staat van de woning. Eventuele afwijkingen, bijzondere juridische situaties, verborgen gebreken of aanvullende kosten kunnen invloed hebben op de definitieve afspraken."
-  );
+  ), proposal);
 
   const reservations = lines(proposal.reservations_text, [
     "Controle woninggegevens",
@@ -165,7 +222,7 @@ export default async function ProposalPrintPage({ params }) {
     "Notariële toetsing",
     "Akkoord op voorwaarden",
     "Geen bijzondere belemmeringen",
-  ]);
+  ]).map((item) => objectAwareText(item, proposal));
 
   const nextSteps = lines(proposal.next_steps_text, [
     "U beoordeelt het voorstel rustig.",
@@ -173,11 +230,11 @@ export default async function ProposalPrintPage({ params }) {
     "Bij akkoord worden afspraken juridisch en notarieel vastgelegd.",
     "De overdracht vindt plaats via de notaris.",
     "Bij akkoord werken wij de afspraken uit in een koopovereenkomst; de definitieve overdracht en betaling verlopen via de notaris.",
-  ]);
+  ]).map((item) => objectAwareText(item, proposal));
 
   const proposalType = value(proposal.proposal_type, proposal.proposal_variant || "Standaard aankoop");
   const specialProposal = isSpecialProposalType(proposalType);
-  const checks = constructieChecks(proposal);
+  const checks = constructieChecks(proposal).map((item) => objectAwareText(item, proposal));
   const hasDeliveryData = Boolean(
     proposal.delivery_term_text ||
     proposal.desired_transfer_date ||
@@ -225,7 +282,7 @@ export default async function ProposalPrintPage({ params }) {
         <div className="cover-content">
           <span className="eyebrow">Vrijblijvend voorstel</span>
           <h1>Vrijblijvend verkoopvoorstel</h1>
-          <p>Professioneel en vrijblijvend voorstel voor uw woningverkoop.</p>
+          <p>{terms.intro}</p>
           <div className="cover-card">
             <strong>{formatAddress(proposal)}</strong>
             <span>{amount(proposal.amount_text)}</span>
@@ -274,12 +331,12 @@ export default async function ProposalPrintPage({ params }) {
         </section>
 
         <section className="section">
-          <div className="section-title navy"><span>2</span><strong>Gegevens woning</strong></div>
+          <div className="section-title navy"><span>2</span><strong>{terms.gegevens}</strong></div>
           <div className="table two">
-            <div><strong>Adres / woning</strong><span>{formatAddress(proposal)}</span></div>
+            <div><strong>{terms.addressLabel}</strong><span>{formatAddress(proposal)}</span></div>
             <div><strong>Postcode / huisnummer</strong><span>{value([formatPostal(proposal.property_postcode), proposal.property_house_number].filter(Boolean).join(" "))}</span></div>
-            <div><strong>Type woning</strong><span>{value(proposal.property_type)}</span></div>
-            <div><strong>Woonoppervlakte</strong><span>{areaValue(proposal.living_area_text)}</span></div>
+            <div><strong>{terms.typeLabel}</strong><span>{value(proposal.property_type)}</span></div>
+            <div><strong>{terms.areaLabel}</strong><span>{areaValue(proposal.living_area_text)}</span></div>
             <div><strong>Perceeloppervlakte</strong><span>{areaValue(proposal.plot_area_text)}</span></div>
             <div><strong>Bouwjaar</strong><span>{value(proposal.build_year_text)}</span></div>
             <div className="wide"><strong>Huidige situatie</strong><span>{value(proposal.current_situation)}</span></div>
@@ -381,7 +438,7 @@ export default async function ProposalPrintPage({ params }) {
                   <div><strong>Courtage aftrekken</strong><span>{proposal.resale_deduct_courtage ? "Ja, alleen latere doorverkoopcourtage" : "Nee"}</span></div>
                   {proposal.resale_cap_text ? <div><strong>Maximumbedrag</strong><span>{amount(proposal.resale_cap_text)}</span></div> : null}
                 </div>
-                <p className="notice">Indien de woning binnen {months(proposal.resale_period_months, "de afgesproken periode")} wordt doorverkocht tegen een netto doorverkoopprijs van meer dan {amount(proposal.resale_threshold_text)}, ontvangt verkoper een aanvullende betaling ter grootte van {percent(proposal.resale_percentage_text)} van het gedeelte van de netto doorverkoopprijs boven {amount(proposal.resale_threshold_text)}.</p>
+                <p className="notice">Indien {terms.lowerArticle} binnen {months(proposal.resale_period_months, "de afgesproken periode")} wordt doorverkocht tegen een netto doorverkoopprijs van meer dan {amount(proposal.resale_threshold_text)}, ontvangt verkoper een aanvullende betaling ter grootte van {percent(proposal.resale_percentage_text)} van het gedeelte van de netto doorverkoopprijs boven {amount(proposal.resale_threshold_text)}.</p>
                 <p className="notice">Onder netto doorverkoopprijs wordt verstaan de overeengekomen verkoopprijs aan de opvolgende koper, verminderd met de door koper daadwerkelijk verschuldigde makelaarscourtage voor de doorverkoop, inclusief btw. Andere aankoop-, verbouwings-, financierings-, notaris- of verkoopkosten worden niet in mindering gebracht. De courtage van de huidige verkoopmakelaar van verkoper wordt niet afgetrokken.</p>
                 <p className="notice">Deze regeling geldt ook bij een ABC-transactie, AB-BC-transactie, levering aan een nader te noemen meester of rechtstreekse levering aan een eindkoper.</p>
                 {proposal.resale_explanation_text ? <p className="notice">{proposal.resale_explanation_text}</p> : null}
@@ -412,6 +469,9 @@ export default async function ProposalPrintPage({ params }) {
         {showUseRental ? (
           <p className="notice"><strong>Uitgangspunt vergelijking:</strong> Deze financiële vergelijking is gebaseerd op de hierboven genoemde wijze van levering. Wanneer uitgangspunt is dat het object vrij van huur en gebruik wordt geleverd, is de vergelijking daarop gebaseerd. Als het object toch geheel of gedeeltelijk verhuurd of in gebruik geleverd wordt, kan dit invloed hebben op waarde, voorwaarden en haalbaarheid van het voorstel.</p>
         ) : null}
+        <section className="notice assurance-print">
+          <strong>{NO_BUYER_CONDITIONS_NOTICE_TITLE}:</strong> {NO_BUYER_CONDITIONS_NOTICE_TEXT}
+        </section>
 
         <section className="section">
           <div className="section-title orange"><span>{netSectionNumber}</span><strong>Netto-opbrengst vergelijken</strong></div>
@@ -518,5 +578,5 @@ export default async function ProposalPrintPage({ params }) {
 }
 
 const styles = `
-*{box-sizing:border-box}body{margin:0;background:#f5f2ec;color:#071f3a;font-family:Arial,Helvetica,sans-serif}.print-root{padding:24px}.print-actions{width:min(980px,100%);margin:0 auto 18px;text-align:right}.print-actions button{border:0;background:#D96A1C;color:#fff;border-radius:999px;padding:14px 22px;font-weight:900;cursor:pointer;box-shadow:0 12px 28px rgba(217,106,28,.20)}.page{width:min(980px,100%);min-height:1320px;margin:0 auto 24px;background:#fffdf9;border:1px solid #e8e3db;padding:44px;box-shadow:0 22px 70px rgba(7,31,58,.12);position:relative;overflow:hidden}.cover{display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(circle at 78% 62%,rgba(217,106,28,.14),transparent 28%),linear-gradient(135deg,#fffdf9 0%,#fff 54%,#f5f9ff 100%)}.cover:after{content:"";position:absolute;right:-260px;bottom:-260px;width:700px;height:700px;border-radius:50%;background:#071f3a;box-shadow:-26px -26px 0 #D96A1C;z-index:0}.mobile-curve{display:none}.cover-logo,.cover-content,.cover-footer{position:relative;z-index:1}.cover-logo{text-align:center}.cover-logo img{width:260px;height:auto}.eyebrow{display:inline-block;margin-top:80px;background:#FFF1E6;border:1px solid #F2B885;color:#B85216;border-radius:999px;padding:8px 12px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.cover h1{font-size:76px;line-height:.95;margin:22px 0;letter-spacing:-.06em;max-width:720px}.cover p{font-size:24px;line-height:1.35;color:#415168;max-width:520px}.cover-card{margin-top:36px;background:#fff;border:1px solid #e8e3db;border-radius:28px;padding:22px;width:min(520px,100%);box-shadow:0 18px 50px rgba(7,31,58,.12)}.cover-card strong,.cover-card span{display:block}.cover-card strong{font-size:21px;text-transform:uppercase}.cover-card span{margin-top:6px;font-size:32px;color:#D96A1C;font-weight:900}.cover-footer{display:flex;gap:26px;font-weight:900}.doc-header{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid #e8e3db;padding-bottom:22px;margin-bottom:32px}.doc-header img{width:210px;background:#fff;border-radius:16px;padding:8px}.doc-header div{text-align:right}.doc-header strong{display:block;color:#D96A1C;font-size:19px}.doc-header span{display:block;color:#536273;margin-top:4px}.doc-header.small{padding-bottom:14px;margin-bottom:28px}.doc-header.small img{width:170px}h1{font-size:44px;line-height:1.06;letter-spacing:-.04em;margin:0 0 12px}.lead,.subtle,p,li{font-size:17px;line-height:1.55;color:#536273}.subtle{margin-top:0}.section{margin-top:28px}.section-title{display:grid;grid-template-columns:80px 1fr;align-items:center;color:#fff;text-transform:uppercase;font-weight:900;letter-spacing:.02em}.section-title span{text-align:center;padding:12px}.section-title strong{padding:12px;text-align:center}.section-title.orange{background:#D96A1C}.section-title.navy{background:#071f3a}.offer-grid{display:grid;grid-template-columns:.9fr 1.4fr;border:1px solid #e8e3db;border-top:0}.offer-amount{background:#FFF1E6;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center}.offer-amount span{font-weight:900}.offer-amount strong{font-size:44px;color:#D96A1C;margin-top:10px}.facts div,.table div{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e8e3db}.facts div:last-child{border-bottom:0}.facts span,.facts strong,.table strong,.table span{padding:14px}.facts span,.table strong{font-weight:900}.facts strong,.table span{color:#536273}.table{border:1px solid #e8e3db;border-top:0}.table .wide{grid-column:1/-1}.checks{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #e8e3db;border-top:0}.checks.compact-checks{grid-template-columns:repeat(2,1fr);margin-top:0}.checks div{padding:14px;border-right:1px solid #e8e3db;border-bottom:1px solid #e8e3db;font-weight:900}.checks div:nth-child(3n){border-right:0}.notice{background:#F7F2EC;border:1px solid #F2B885;border-radius:0;padding:14px 16px;color:#415168;line-height:1.55}.comparison{display:grid;grid-template-columns:1.15fr 1fr 1.15fr;border:1px solid #e8e3db;border-top:0}.comparison>div{padding:14px;border-right:1px solid #e8e3db;border-bottom:1px solid #e8e3db;color:#536273}.comparison .head{background:#071f3a;color:#fff;text-align:center;font-weight:900}.comparison .orange-head{background:#D96A1C}.comparison .total{background:#F7F2EC;font-weight:900;color:#071f3a}.comparison .accent{color:#D96A1C;font-size:20px}.footnote{font-size:13px;margin:8px 0 0}.mini-table{border:1px solid #e8e3db;border-top:0}.mini-table div{display:grid;grid-template-columns:1fr 1fr 1.2fr;border-bottom:1px solid #e8e3db}.mini-table div:last-child{border-bottom:0}.mini-table strong,.mini-table span,.mini-table em{padding:14px;font-style:normal}.mini-table strong{font-weight:900}.mini-table span{color:#536273}.mini-table em{color:#071f3a;font-weight:900}.reservations{display:grid;grid-template-columns:1fr 1fr;border:1px solid #e8e3db;border-top:0}.reservations div{padding:16px;border-right:1px solid #e8e3db;border-bottom:1px solid #e8e3db}.reservations div:nth-child(2n){border-right:0}.steps{counter-reset:step;list-style:none;margin:0;border:1px solid #e8e3db;border-top:0;padding:0}.steps li{position:relative;color:#071f3a;font-weight:900;padding:18px 18px 18px 74px;border-bottom:1px solid #e8e3db}.steps li:last-child{border-bottom:0}.steps li:before{counter-increment:step;content:counter(step);position:absolute;left:24px;color:#D96A1C;font-size:22px}.contact-grid{display:grid;grid-template-columns:1fr 1.55fr;border:1px solid #e8e3db;border-top:0}.contact-grid>div{padding:18px;border-right:1px solid #e8e3db}.contact-grid>div:last-child{border-right:0}.contact-grid span{display:block;color:#536273;margin-top:6px}.agreement-print-block{border:1px solid #e8e3db;border-top:0;padding:18px}.agreement-print-block h2{font-size:25px;margin:0 0 12px}.agreement-print-block+.agreement-print-block{border-top:1px solid #e8e3db;margin-top:18px}.disclaimer{margin-top:28px;background:#F7F2EC;border:1px solid #F2B885;padding:16px;color:#415168;line-height:1.55}@media print{body{background:#fff}.print-root{padding:0}.print-actions{display:none}.page{width:100%;min-height:0;height:auto;margin:0;box-shadow:none;border:0;page-break-after:always;padding:28px}.page:last-child{page-break-after:auto}.cover{min-height:100vh}.cover h1{font-size:64px}.cover:after{display:block;opacity:.96}}@media(max-width:760px){body{background:#f5f2ec}.print-root{padding:10px}.print-actions{text-align:center;margin-bottom:10px}.print-actions button{width:100%;padding:12px 15px}.page{width:100%;min-height:auto;margin:0 auto 14px;padding:20px;border-radius:20px;box-shadow:0 12px 38px rgba(7,31,58,.10);overflow:hidden}.cover{min-height:auto;display:block;background:#fffdf9;padding:0}.cover:after{display:none}.mobile-curve{display:block;height:82px;margin:14px -20px 0;background:linear-gradient(135deg,#D96A1C 0 40%,#071f3a 41% 100%);border-radius:0 0 24px 24px}.cover-logo{padding:20px 16px 4px}.cover-logo img{width:min(250px,72vw)}.cover-content{padding:20px}.eyebrow{margin-top:0;font-size:10px;padding:7px 10px;letter-spacing:.07em}.cover h1{font-size:36px;line-height:1.01;letter-spacing:-.055em;margin:14px 0 10px;color:#071f3a;max-width:100%}.cover p{font-size:16px;line-height:1.4;color:#536273;max-width:100%;margin:0}.cover-card{margin-top:18px;border-radius:20px;padding:16px;width:100%;box-shadow:0 10px 28px rgba(7,31,58,.11)}.cover-card strong{font-size:17px}.cover-card span{font-size:32px}.cover-footer{padding:0 20px 22px;display:grid;gap:3px;font-size:13px}.doc-header{display:grid;gap:12px}.doc-header img{width:180px}.doc-header div{text-align:left}h1{font-size:34px}.offer-grid,.checks,.comparison,.mini-table div,.reservations,.contact-grid{grid-template-columns:1fr}.section-title{grid-template-columns:54px 1fr}.comparison .head{text-align:left}.comparison>div{border-right:0}.facts div,.table div{grid-template-columns:1fr}.offer-amount strong{font-size:36px}.checks div,.reservations div{border-right:0}.mini-table strong,.mini-table span,.mini-table em{padding:10px 12px}.steps li{padding-left:56px}.lead,.subtle,p,li{font-size:16px}}
+*{box-sizing:border-box}body{margin:0;background:#f5f2ec;color:#071f3a;font-family:Arial,Helvetica,sans-serif}.print-root{padding:24px}.print-actions{width:min(980px,100%);margin:0 auto 18px;text-align:right}.print-actions button{border:0;background:#D96A1C;color:#fff;border-radius:999px;padding:14px 22px;font-weight:900;cursor:pointer;box-shadow:0 12px 28px rgba(217,106,28,.20)}.page{width:min(980px,100%);min-height:1320px;margin:0 auto 24px;background:#fffdf9;border:1px solid #e8e3db;padding:44px;box-shadow:0 22px 70px rgba(7,31,58,.12);position:relative;overflow:hidden}.cover{display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(circle at 78% 62%,rgba(217,106,28,.14),transparent 28%),linear-gradient(135deg,#fffdf9 0%,#fff 54%,#f5f9ff 100%)}.cover:after{content:"";position:absolute;right:-260px;bottom:-260px;width:700px;height:700px;border-radius:50%;background:#071f3a;box-shadow:-26px -26px 0 #D96A1C;z-index:0}.mobile-curve{display:none}.cover-logo,.cover-content,.cover-footer{position:relative;z-index:1}.cover-logo{text-align:center}.cover-logo img{width:260px;height:auto}.eyebrow{display:inline-block;margin-top:80px;background:#FFF1E6;border:1px solid #F2B885;color:#B85216;border-radius:999px;padding:8px 12px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.cover h1{font-size:76px;line-height:.95;margin:22px 0;letter-spacing:-.06em;max-width:720px}.cover p{font-size:24px;line-height:1.35;color:#415168;max-width:520px}.cover-card{margin-top:36px;background:#fff;border:1px solid #e8e3db;border-radius:28px;padding:22px;width:min(520px,100%);box-shadow:0 18px 50px rgba(7,31,58,.12)}.cover-card strong,.cover-card span{display:block}.cover-card strong{font-size:21px;text-transform:uppercase}.cover-card span{margin-top:6px;font-size:32px;color:#D96A1C;font-weight:900}.cover-footer{display:flex;gap:26px;font-weight:900}.doc-header{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid #e8e3db;padding-bottom:22px;margin-bottom:32px}.doc-header img{width:210px;background:#fff;border-radius:16px;padding:8px}.doc-header div{text-align:right}.doc-header strong{display:block;color:#D96A1C;font-size:19px}.doc-header span{display:block;color:#536273;margin-top:4px}.doc-header.small{padding-bottom:14px;margin-bottom:28px}.doc-header.small img{width:170px}h1{font-size:44px;line-height:1.06;letter-spacing:-.04em;margin:0 0 12px}.lead,.subtle,p,li{font-size:17px;line-height:1.55;color:#536273}.subtle{margin-top:0}.section{margin-top:28px}.section-title{display:grid;grid-template-columns:80px 1fr;align-items:center;color:#fff;text-transform:uppercase;font-weight:900;letter-spacing:.02em}.section-title span{text-align:center;padding:12px}.section-title strong{padding:12px;text-align:center}.section-title.orange{background:#D96A1C}.section-title.navy{background:#071f3a}.offer-grid{display:grid;grid-template-columns:.9fr 1.4fr;border:1px solid #e8e3db;border-top:0}.offer-amount{background:#FFF1E6;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center}.offer-amount span{font-weight:900}.offer-amount strong{font-size:44px;color:#D96A1C;margin-top:10px}.facts div,.table div{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e8e3db}.facts div:last-child{border-bottom:0}.facts span,.facts strong,.table strong,.table span{padding:14px}.facts span,.table strong{font-weight:900}.facts strong,.table span{color:#536273}.table{border:1px solid #e8e3db;border-top:0}.table .wide{grid-column:1/-1}.checks{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #e8e3db;border-top:0}.checks.compact-checks{grid-template-columns:repeat(2,1fr);margin-top:0}.checks div{padding:14px;border-right:1px solid #e8e3db;border-bottom:1px solid #e8e3db;font-weight:900}.checks div:nth-child(3n){border-right:0}.notice{background:#F7F2EC;border:1px solid #F2B885;border-radius:0;padding:14px 16px;color:#415168;line-height:1.55}.assurance-print{background:#071f3a;color:#fff;border-color:#071f3a}.assurance-print strong{color:#fff}.assurance-print{line-height:1.55}.comparison{display:grid;grid-template-columns:1.15fr 1fr 1.15fr;border:1px solid #e8e3db;border-top:0}.comparison>div{padding:14px;border-right:1px solid #e8e3db;border-bottom:1px solid #e8e3db;color:#536273}.comparison .head{background:#071f3a;color:#fff;text-align:center;font-weight:900}.comparison .orange-head{background:#D96A1C}.comparison .total{background:#F7F2EC;font-weight:900;color:#071f3a}.comparison .accent{color:#D96A1C;font-size:20px}.footnote{font-size:13px;margin:8px 0 0}.mini-table{border:1px solid #e8e3db;border-top:0}.mini-table div{display:grid;grid-template-columns:1fr 1fr 1.2fr;border-bottom:1px solid #e8e3db}.mini-table div:last-child{border-bottom:0}.mini-table strong,.mini-table span,.mini-table em{padding:14px;font-style:normal}.mini-table strong{font-weight:900}.mini-table span{color:#536273}.mini-table em{color:#071f3a;font-weight:900}.reservations{display:grid;grid-template-columns:1fr 1fr;border:1px solid #e8e3db;border-top:0}.reservations div{padding:16px;border-right:1px solid #e8e3db;border-bottom:1px solid #e8e3db}.reservations div:nth-child(2n){border-right:0}.steps{counter-reset:step;list-style:none;margin:0;border:1px solid #e8e3db;border-top:0;padding:0}.steps li{position:relative;color:#071f3a;font-weight:900;padding:18px 18px 18px 74px;border-bottom:1px solid #e8e3db}.steps li:last-child{border-bottom:0}.steps li:before{counter-increment:step;content:counter(step);position:absolute;left:24px;color:#D96A1C;font-size:22px}.contact-grid{display:grid;grid-template-columns:1fr 1.55fr;border:1px solid #e8e3db;border-top:0}.contact-grid>div{padding:18px;border-right:1px solid #e8e3db}.contact-grid>div:last-child{border-right:0}.contact-grid span{display:block;color:#536273;margin-top:6px}.agreement-print-block{border:1px solid #e8e3db;border-top:0;padding:18px}.agreement-print-block h2{font-size:25px;margin:0 0 12px}.agreement-print-block+.agreement-print-block{border-top:1px solid #e8e3db;margin-top:18px}.disclaimer{margin-top:28px;background:#F7F2EC;border:1px solid #F2B885;padding:16px;color:#415168;line-height:1.55}@media print{body{background:#fff}.print-root{padding:0}.print-actions{display:none}.page{width:100%;min-height:0;height:auto;margin:0;box-shadow:none;border:0;page-break-after:always;padding:28px}.page:last-child{page-break-after:auto}.cover{min-height:100vh}.cover h1{font-size:64px}.cover:after{display:block;opacity:.96}}@media(max-width:760px){body{background:#f5f2ec}.print-root{padding:10px}.print-actions{text-align:center;margin-bottom:10px}.print-actions button{width:100%;padding:12px 15px}.page{width:100%;min-height:auto;margin:0 auto 14px;padding:20px;border-radius:20px;box-shadow:0 12px 38px rgba(7,31,58,.10);overflow:hidden}.cover{min-height:auto;display:block;background:#fffdf9;padding:0}.cover:after{display:none}.mobile-curve{display:block;height:82px;margin:14px -20px 0;background:linear-gradient(135deg,#D96A1C 0 40%,#071f3a 41% 100%);border-radius:0 0 24px 24px}.cover-logo{padding:20px 16px 4px}.cover-logo img{width:min(250px,72vw)}.cover-content{padding:20px}.eyebrow{margin-top:0;font-size:10px;padding:7px 10px;letter-spacing:.07em}.cover h1{font-size:36px;line-height:1.01;letter-spacing:-.055em;margin:14px 0 10px;color:#071f3a;max-width:100%}.cover p{font-size:16px;line-height:1.4;color:#536273;max-width:100%;margin:0}.cover-card{margin-top:18px;border-radius:20px;padding:16px;width:100%;box-shadow:0 10px 28px rgba(7,31,58,.11)}.cover-card strong{font-size:17px}.cover-card span{font-size:32px}.cover-footer{padding:0 20px 22px;display:grid;gap:3px;font-size:13px}.doc-header{display:grid;gap:12px}.doc-header img{width:180px}.doc-header div{text-align:left}h1{font-size:34px}.offer-grid,.checks,.comparison,.mini-table div,.reservations,.contact-grid{grid-template-columns:1fr}.section-title{grid-template-columns:54px 1fr}.comparison .head{text-align:left}.comparison>div{border-right:0}.facts div,.table div{grid-template-columns:1fr}.offer-amount strong{font-size:36px}.checks div,.reservations div{border-right:0}.mini-table strong,.mini-table span,.mini-table em{padding:10px 12px}.steps li{padding-left:56px}.lead,.subtle,p,li{font-size:16px}}
 `;

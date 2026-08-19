@@ -26,6 +26,9 @@ export function normalizeLead(input = {}) {
     lead[key] = cleanText(input[key], max);
   }
 
+  lead.email = lead.email.toLowerCase();
+  lead.postcode = lead.postcode.replace(/\s+/g, "").toUpperCase();
+
   if (!lead.pagina) lead.pagina = "/";
   if (!lead.bron) lead.bron = "direct";
   return lead;
@@ -37,12 +40,29 @@ export function validateLead(lead) {
     if (!lead[field]) missing.push(field);
   }
 
-  if (lead.email && !/^\S+@\S+\.\S+$/.test(lead.email)) {
+  if (missing.length) {
+    return { ok: false, error: `Verplichte velden ontbreken: ${missing.join(", ")}.` };
+  }
+
+  if (lead.naam.length < 2) {
+    return { ok: false, error: "Controleer de naam." };
+  }
+
+  if (lead.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email)) {
     return { ok: false, error: "Controleer het e-mailadres." };
   }
 
-  if (missing.length) {
-    return { ok: false, error: `Verplichte velden ontbreken: ${missing.join(", ")}.` };
+  if (!/^\d{4}[A-Z]{2}$/.test(lead.postcode)) {
+    return { ok: false, error: "Controleer de postcode (bijvoorbeeld 9501AB)." };
+  }
+
+  const phoneDigits = lead.telefoon.replace(/\D/g, "");
+  if (phoneDigits.length < 8 || phoneDigits.length > 15) {
+    return { ok: false, error: "Controleer het telefoonnummer." };
+  }
+
+  if (!/^\d{1,6}[A-Za-z0-9\-\/ ]{0,12}$/.test(lead.huisnummer)) {
+    return { ok: false, error: "Controleer het huisnummer." };
   }
 
   return { ok: true };
@@ -56,6 +76,27 @@ export async function createLead(input = {}) {
     const error = new Error(validation.error);
     error.status = 400;
     throw error;
+  }
+
+  // Voorkom dubbele records door dubbelklikken/netwerk-retries binnen enkele minuten.
+  const duplicate = await queryOne(
+    `select *
+     from leads
+     where regexp_replace(coalesce(telefoon, ''), '\\D', '', 'g') = $1
+       and upper(replace(coalesce(postcode, ''), ' ', '')) = $2
+       and lower(trim(coalesce(huisnummer, ''))) = lower($3)
+       and created_at >= now() - interval '3 minutes'
+     order by created_at desc
+     limit 1`,
+    [
+      lead.telefoon.replace(/\D/g, ""),
+      lead.postcode,
+      lead.huisnummer,
+    ]
+  );
+
+  if (duplicate) {
+    return { lead: duplicate, mail: { duplicate: true } };
   }
 
   const saved = await queryOne(
@@ -167,6 +208,10 @@ export async function listLeads({ status, search, limit = 300, archive = "active
       l.*,
       coalesce(t.open_tasks, 0)::int as open_tasks,
       p.last_proposal_at,
+      p.last_proposal_viewed_at,
+      coalesce(p.proposal_view_count, 0)::int as proposal_view_count,
+      p.last_interest_at,
+      p.interest_status,
       m.last_mail_at
     from leads l
     left join (
@@ -175,7 +220,13 @@ export async function listLeads({ status, search, limit = 300, archive = "active
       group by lead_id
     ) t on t.lead_id = l.id
     left join (
-      select lead_id, max(created_at) as last_proposal_at
+      select
+        lead_id,
+        max(created_at) as last_proposal_at,
+        max(public_viewed_at) as last_proposal_viewed_at,
+        sum(coalesce(public_view_count, 0)) as proposal_view_count,
+        max(interest_at) as last_interest_at,
+        (array_agg(interest_status order by interest_at desc nulls last) filter (where interest_status is not null))[1] as interest_status
       from proposals
       group by lead_id
     ) p on p.lead_id = l.id

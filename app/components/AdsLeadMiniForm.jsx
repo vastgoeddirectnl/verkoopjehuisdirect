@@ -94,6 +94,7 @@ export default function AdsLeadMiniForm({
     postcode: "",
     huisnummer: "",
     situatie: defaultSituation || "",
+    _website: "",
   });
 
   const trackFormStart = () => {
@@ -139,6 +140,7 @@ export default function AdsLeadMiniForm({
         ].filter(Boolean).join(" | "),
         pagina: attribution.pageLabel,
         bron: attribution.sourceLabel,
+        _website: form._website,
       };
 
       const response = await fetch("/api/leads", {
@@ -161,7 +163,7 @@ export default function AdsLeadMiniForm({
       trackGoogleAdsConversion("lead", {
         value: 1,
         currency: "EUR",
-        transactionId: result?.lead?.id ? `lead-${result.lead.id}` : undefined,
+        transactionId: result?.reference ? `lead-${result.reference}` : undefined,
       });
 
       setSubmitted(true);
@@ -184,6 +186,12 @@ export default function AdsLeadMiniForm({
 
   return (
     <form className="ad-mini-form" onSubmit={submitLead} onFocusCapture={trackFormStart}>
+      <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}>
+        <label>
+          Website
+          <input name="_website" value={form._website} onChange={updateForm} tabIndex={-1} autoComplete="off" />
+        </label>
+      </div>
       <div className="ad-mini-section">
         <div className="ad-mini-section-title">Woning</div>
         <div className="ad-mini-form-row two">

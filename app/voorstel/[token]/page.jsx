@@ -1,11 +1,24 @@
 import { notFound } from "next/navigation";
 import { queryOne } from "../../lib/neonDb";
 import { markProposalViewed } from "../../lib/automation";
+import { isUuid } from "../../lib/requestSecurity";
 import PrintButton from "./PrintButton";
+import ProposalActions from "./ProposalActions";
 
 export const dynamic = "force-dynamic";
 
 const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid. Indien partijen overeenstemming bereiken, wordt de koopovereenkomst opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen.";
+
+
+const NO_BUYER_CONDITIONS_NOTICE_TITLE = "Meer zekerheid bij akkoord";
+const NO_BUYER_CONDITIONS_NOTICE_TEXT = "Bij overeenstemming wordt de koopovereenkomst in beginsel opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen. Daarmee is het traject minder afhankelijk van financiering, keuringen of verkoop van een andere woning.";
+const INCLUDED_ASSURANCE_ITEM = "Meer zekerheid na akkoord";
+
+function ensureIncludedAssurance(items) {
+  const list = Array.isArray(items) ? items : [];
+  const alreadyIncluded = list.some((item) => /meer\s+zekerheid\s+na\s+akkoord|zonder\s+ontbindende\s+voorbehouden/i.test(String(item || "")));
+  return alreadyIncluded ? list : [...list, INCLUDED_ASSURANCE_ITEM];
+}
 
 function formatDate(value) {
   if (!value) return "-";
@@ -121,42 +134,102 @@ function months(value, fallback = "-") {
   return `${raw} maanden`;
 }
 
+function isObjectProposal(proposal) {
+  const text = [
+    proposal?.object_usage_type,
+    proposal?.property_type,
+    proposal?.current_situation,
+  ].filter(Boolean).join(" ").toLowerCase();
+
+  return /(woon\s*-?\s*winkelpand|gemengd|bedrijfspand|bedrijfsruimte|winkelruimte|winkelpand|kantoor|horeca|beleggingspand|object)/i.test(text);
+}
+
+function objectTerms(proposal) {
+  const objectProposal = isObjectProposal(proposal);
+  return {
+    lower: objectProposal ? "object" : "woning",
+    lowerArticle: objectProposal ? "het object" : "de woning",
+    possessive: objectProposal ? "uw object" : "uw woning",
+    cap: objectProposal ? "Object" : "Woning",
+    gegevens: objectProposal ? "Objectgegevens" : "Woninggegevens",
+    uitgangspunt: objectProposal ? "Uitgangspunt object" : "Uitgangspunt woning",
+    addressLabel: objectProposal ? "Adres / object" : "Adres / woning",
+    typeLabel: objectProposal ? "Type object" : "Type woning",
+    areaLabel: objectProposal ? "Gebruiks-/woonoppervlakte" : "Woonoppervlakte",
+    verkoopText: objectProposal ? "Bij verkoop van een object" : "Bij een woningverkoop",
+  };
+}
+
+function objectAwareText(text, proposal) {
+  const raw = String(text || "");
+  if (!isObjectProposal(proposal)) return raw;
+  return raw
+    .replace(/openbare woninginformatie/gi, "openbare objectinformatie")
+    .replace(/huidige bekende staat van de woning of het object/gi, "huidige bekende staat van het object")
+    .replace(/huidige bekende staat van de woning/gi, "huidige bekende staat van het object")
+    .replace(/woning-\/objectinformatie/gi, "objectinformatie")
+    .replace(/woning of het object/gi, "object")
+    .replace(/verkoopklaar maken van de woning/gi, "verkoopklaar maken van het object")
+    .replace(/woningverkoop/gi, "objectverkoop")
+    .replace(/Woning blijft/gi, "Object blijft")
+    .replace(/woninggegevens/gi, "objectgegevens")
+    .replace(/Controle woninggegevens/gi, "Controle objectgegevens")
+    .replace(/over de woning/gi, "over het object")
+    .replace(/van de woning/gi, "van het object")
+    .replace(/de woning binnen/gi, "het object binnen")
+    .replace(/uw woning/gi, "uw object");
+}
+
+function canRespondToProposal(proposal) {
+  const status = String(proposal?.status || "").trim().toLowerCase();
+  const activeStatus = ["verzonden", "bekeken"].includes(status);
+  const expired = daysUntil(proposal?.validity_date) !== null && daysUntil(proposal?.validity_date) < 0;
+  return activeStatus && !expired;
+}
+
+function daysUntil(value) {
+  if (!value) return null;
+  const end = new Date(`${String(value).slice(0, 10)}T23:59:59`);
+  const now = new Date();
+  return Math.ceil((end.getTime() - now.getTime()) / 86400000);
+}
+
 export default async function PublicProposalPage({ params, searchParams }) {
   const { token } = await params;
+  if (!isUuid(token)) notFound();
+
   const query = searchParams ? await searchParams : {};
   const isAdminPreview = query?.admin_preview === "1" || query?.preview === "admin";
   const proposal = await queryOne("select * from proposals where public_token = $1::uuid", [token]);
 
   if (!proposal) notFound();
 
-  if (!isAdminPreview) {
-    await markProposalViewed(proposal);
-  }
-
   const address = formatAddress(proposal);
   const offerAmount = amount(proposal.amount_text);
   const validity = formatDate(proposal.validity_date);
+  const validityDays = daysUntil(proposal.validity_date);
   const transfer = value(proposal.transfer_date_text, "In overleg");
   const deposit = amount(proposal.deposit_text, "In overleg bespreekbaar");
+  const terms = objectTerms(proposal);
 
-  const assumptions = value(
+  const assumptions = objectAwareText(value(
     proposal.assumptions_text,
     "Dit voorstel is gebaseerd op de door u verstrekte gegevens, openbare woninginformatie en de huidige bekende staat van de woning. Voor definitieve vastlegging controleren wij de juridische, bouwkundige en notariële uitgangspunten."
-  );
+  ), proposal);
 
-  const conditions = value(
+  const conditions = objectAwareText(value(
     proposal.conditions_text,
     "Het voorstel is vrijblijvend en onder voorbehoud van definitieve controle, akkoord van betrokken partijen en notariële vastlegging."
-  );
+  ), proposal);
 
-  const included = lines(proposal.included_items, [
+  const included = ensureIncludedAssurance(lines(proposal.included_items, [
     "Een helder en concreet verkoopvoorstel",
     "Geen makelaarskosten voor een traditioneel verkooptraject",
     "Geen openbare bezichtigingsrondes nodig",
     "Afstemming over een passende overdrachtsdatum",
     "Notariële afwikkeling van de verkoop",
     "Eén vast aanspreekpunt tijdens het proces",
-  ]);
+  ]));
 
   const reservations = lines(proposal.reservations_text, [
     "Controle van eigendomssituatie en kadastrale gegevens",
@@ -164,7 +237,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
     "Controle van eventuele huur-, gebruiks- of beslag-/beperkingssituaties",
     "Akkoord over oplevering, roerende zaken en overdrachtsdatum",
     "Definitieve vastlegging via de notaris",
-  ]);
+  ]).map((item) => objectAwareText(item, proposal));
 
   const nextSteps = lines(proposal.next_steps_text, [
     "U bekijkt het voorstel rustig en noteert eventuele vragen.",
@@ -173,18 +246,18 @@ export default async function PublicProposalPage({ params, searchParams }) {
     "De juridische en notariële afwikkeling wordt opgestart.",
     "De overdracht vindt plaats op de afgesproken datum via de notaris.",
     "Bij akkoord werken wij de afspraken uit in een koopovereenkomst. De definitieve overdracht en betaling verlopen via de notaris.",
-  ]);
+  ]).map((item) => objectAwareText(item, proposal));
 
   const shortComparison = lines(proposal.short_comparison_text, [
     "Geen verkoopklaar maken van de woning noodzakelijk voordat wij kunnen meedenken.",
     "Geen open huis of meerdere bezichtigingsmomenten nodig.",
     "Meer duidelijkheid over voorwaarden, planning en afwikkeling.",
     "Een verkooproute die vooral gericht is op rust, snelheid en overzicht.",
-  ]);
+  ]).map((item) => objectAwareText(item, proposal));
 
   const proposalType = value(proposal.proposal_type, proposal.proposal_variant || "Standaard aankoop");
   const specialProposal = isSpecialProposalType(proposalType);
-  const checks = constructieChecks(proposal);
+  const checks = constructieChecks(proposal).map((item) => objectAwareText(item, proposal));
   const hasDeliveryData = Boolean(
     proposal.delivery_term_text ||
     proposal.desired_transfer_date ||
@@ -203,6 +276,11 @@ export default async function PublicProposalPage({ params, searchParams }) {
   const showResalePayment = Boolean(proposal.resale_payment_enabled);
   const showUseRental = Boolean(proposal.use_rental_enabled);
   const nonbindingText = withNoBuyerConditionsText(proposal.nonbinding_text);
+  const actionActive = canRespondToProposal(proposal);
+
+  if (!isAdminPreview && actionActive) {
+    await markProposalViewed(proposal);
+  }
 
   return (
     <main className="proposal-page">
@@ -219,7 +297,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
       <section className="cover">
         <div className="cover-copy">
           <span className="label">Vrijblijvend & persoonlijk</span>
-          <h1>Verkoopvoorstel voor uw woning</h1>
+          <h1>Verkoopvoorstel voor {terms.possessive}</h1>
           <p>
             Beste {salutationName(proposal.lead_naam)}, op basis van de beschikbare informatie hebben wij
             een concreet en overzichtelijk voorstel uitgewerkt. Het doel: duidelijkheid over bedrag,
@@ -235,6 +313,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
             <div>
               <em>Geldig tot</em>
               <b>{validity}</b>
+              {validityDays !== null ? <i>{validityDays < 0 ? "Dit voorstel is verlopen" : validityDays === 0 ? "Loopt vandaag af" : `Nog ${validityDays} dag${validityDays === 1 ? "" : "en"} geldig`}</i> : null}
             </div>
             <div>
               <em>Oplevering</em>
@@ -243,6 +322,8 @@ export default async function PublicProposalPage({ params, searchParams }) {
           </div>
         </aside>
       </section>
+
+      {!isAdminPreview ? <ProposalActions token={token} isActive={actionActive} /> : null}
 
       <section className="executive-summary">
         <div>
@@ -336,12 +417,12 @@ export default async function PublicProposalPage({ params, searchParams }) {
       </section>
 
       <section className="card">
-        <span className="section-kicker">Woninggegevens</span>
-        <h2>Uitgangspunt woning</h2>
+        <span className="section-kicker">{terms.gegevens}</span>
+        <h2>{terms.uitgangspunt}</h2>
         <div className="facts">
-          <div><strong>Adres / object</strong><span>{address}</span></div>
-          <div><strong>Type woning</strong><span>{value(proposal.property_type, "Nog te controleren")}</span></div>
-          <div><strong>Woonoppervlakte</strong><span>{areaValue(proposal.living_area_text)}</span></div>
+          <div><strong>{terms.addressLabel}</strong><span>{address}</span></div>
+          <div><strong>{terms.typeLabel}</strong><span>{value(proposal.property_type, "Nog te controleren")}</span></div>
+          <div><strong>{terms.areaLabel}</strong><span>{areaValue(proposal.living_area_text)}</span></div>
           <div><strong>Perceel</strong><span>{areaValue(proposal.plot_area_text)}</span></div>
           <div><strong>Bouwjaar</strong><span>{value(proposal.build_year_text, "Nog te controleren")}</span></div>
           <div><strong>Huidige situatie</strong><span>{value(proposal.current_situation, "Op basis van uw aanvraag te beoordelen")}</span></div>
@@ -375,13 +456,17 @@ export default async function PublicProposalPage({ params, searchParams }) {
         <span className="section-kicker">Financieel overzicht</span>
         <h2>Netto-opbrengst in perspectief</h2>
         <p className="intro">
-          Bij een woningverkoop gaat het niet alleen om de verkoopprijs, maar ook om kosten, voorbereiding,
+          {terms.verkoopText} gaat het niet alleen om de verkoopprijs, maar ook om kosten, voorbereiding,
           doorlooptijd en zekerheid. Onderstaand overzicht helpt om het voorstel naast een regulier traject te leggen.
         </p>
         <p className="bridge-copy"><strong>Let op:</strong> de traditionele verkoopprijs is een indicatieve vergelijkingswaarde. Bij verhuurde, leeg te leveren of gemengde objecten kan deze waarde mede zijn gebaseerd op huurwaarde, leegstand, verhuurrisico, verkoopbaarheid en kosten.</p>
         {showUseRental ? (
           <p className="bridge-copy"><strong>Uitgangspunt vergelijking:</strong> Deze financiële vergelijking is gebaseerd op de hierboven genoemde wijze van levering. Wanneer uitgangspunt is dat het object vrij van huur en gebruik wordt geleverd, is de vergelijking daarop gebaseerd. Als het object toch geheel of gedeeltelijk verhuurd of in gebruik geleverd wordt, kan dit invloed hebben op waarde, voorwaarden en haalbaarheid van het voorstel.</p>
         ) : null}
+        <div className="assurance-notice">
+          <strong>{NO_BUYER_CONDITIONS_NOTICE_TITLE}</strong>
+          <p>{NO_BUYER_CONDITIONS_NOTICE_TEXT}</p>
+        </div>
         <div className="comparison comparison-desktop" aria-label="Vergelijking netto-opbrengst">
           <div className="head">Onderdeel</div>
           <div className="head">Traditionele verkoop</div>
@@ -485,7 +570,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
             {proposal.resale_cap_text ? <div><strong>Maximumbedrag</strong><span>{amount(proposal.resale_cap_text)}</span></div> : null}
           </div>
           <p className="bridge-copy">
-            Indien de woning binnen {months(proposal.resale_period_months, "de afgesproken periode")} wordt doorverkocht tegen een netto doorverkoopprijs van meer dan {amount(proposal.resale_threshold_text)}, ontvangt verkoper een aanvullende betaling ter grootte van {percent(proposal.resale_percentage_text)} van het gedeelte van de netto doorverkoopprijs boven {amount(proposal.resale_threshold_text)}.
+            Indien {terms.lowerArticle} binnen {months(proposal.resale_period_months, "de afgesproken periode")} wordt doorverkocht tegen een netto doorverkoopprijs van meer dan {amount(proposal.resale_threshold_text)}, ontvangt verkoper een aanvullende betaling ter grootte van {percent(proposal.resale_percentage_text)} van het gedeelte van de netto doorverkoopprijs boven {amount(proposal.resale_threshold_text)}.
           </p>
           <p className="bridge-copy">
             Onder netto doorverkoopprijs wordt verstaan de overeengekomen verkoopprijs aan de opvolgende koper, verminderd met de door koper daadwerkelijk verschuldigde makelaarscourtage voor de doorverkoop, inclusief btw. Andere aankoop-, verbouwings-, financierings-, notaris- of verkoopkosten worden niet in mindering gebracht. De courtage van de huidige verkoopmakelaar van verkoper wordt niet afgetrokken.
@@ -573,7 +658,8 @@ export default async function PublicProposalPage({ params, searchParams }) {
   );
 }
 
-const styles = `
+const styles = `.proposal-actions{width:min(1180px,calc(100% - 40px));margin:-24px auto 34px;background:#fff;border:1px solid #e6dfd5;border-radius:24px;padding:24px;display:grid;grid-template-columns:1fr 1.2fr;gap:24px;align-items:center;box-shadow:0 18px 50px rgba(7,31,58,.09)}.proposal-actions h2{margin:5px 0 8px}.proposal-actions p{margin:0;color:#617184;line-height:1.55}.proposal-actions-kicker{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#b85216}.proposal-action-buttons{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.proposal-action-buttons button,.proposal-action-buttons a{border:0;border-radius:999px;padding:13px 17px;font:inherit;font-weight:900;cursor:pointer;text-decoration:none}.proposal-primary{background:#d96a1c;color:#fff}.proposal-secondary,.proposal-action-buttons a{background:#f4f1eb;color:#071f3a}.proposal-action-success{width:min(1180px,calc(100% - 40px));margin:-24px auto 34px;background:#eff8f2;border:1px solid #b9dec5;border-radius:22px;padding:18px 22px;display:grid;gap:4px}.proposal-action-success span{color:#446553}.proposal-action-inactive{background:#fff5f1;border-color:#ffd5c4}.proposal-action-inactive span{color:#7c2d20}.proposal-action-error{color:#9a3412!important;width:100%;text-align:right}.offer-panel i{display:block;font-style:normal;font-size:11px;margin-top:4px;color:#b85216}@media(max-width:760px){.proposal-actions{grid-template-columns:1fr;margin-top:-10px}.proposal-action-buttons{justify-content:stretch}.proposal-action-buttons>*{width:100%;text-align:center}}
+
 *{box-sizing:border-box}
 :root{--navy:#071f3a;--navy2:#0d2d52;--orange:#D96A1C;--cream:#f5f2ec;--card:#fffdf9;--line:#e8e3db;--muted:#5f7083;--soft:#FFF1E6;--shadow:0 22px 70px rgba(7,31,58,.12)}
 body{margin:0;background:radial-gradient(circle at 82% 0,#FFF1E6 0,transparent 34%),linear-gradient(180deg,#f7f3ec 0,#f1ede6 100%);color:var(--navy);font-family:Arial,Helvetica,sans-serif}
@@ -621,7 +707,7 @@ p,.intro,li{font-size:16.5px;line-height:1.68;color:var(--muted)}
 .summary-list strong,.summary-list span{display:block}
 .summary-list strong{font-size:24px;color:var(--navy)}
 .summary-list span{color:var(--muted);margin-top:5px}
-.special-card{background:linear-gradient(135deg,#fffdf9 0,#F7F2EC 100%)}.construct-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}.construct-grid div{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px}.construct-grid strong,.construct-grid span{display:block}.construct-grid strong{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}.construct-grid span{margin-top:6px;color:var(--navy);font-weight:800;line-height:1.35}.mini-checks{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}.mini-checks div{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;font-weight:800;line-height:1.4}.mini-checks span{color:var(--orange);font-weight:900}.bridge-copy{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0 0}
+.special-card{background:linear-gradient(135deg,#fffdf9 0,#F7F2EC 100%)}.construct-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}.construct-grid div{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px}.construct-grid strong,.construct-grid span{display:block}.construct-grid strong{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}.construct-grid span{margin-top:6px;color:var(--navy);font-weight:800;line-height:1.35}.mini-checks{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}.mini-checks div{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;font-weight:800;line-height:1.4}.mini-checks span{color:var(--orange);font-weight:900}.bridge-copy{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0 0}.assurance-notice{background:linear-gradient(135deg,#071f3a 0,#0b2f56 100%);color:#fff;border-radius:20px;padding:18px 20px;margin:14px 0 0;box-shadow:0 16px 34px rgba(7,31,58,.16)}.assurance-notice strong{display:block;font-size:20px;letter-spacing:-.02em}.assurance-notice p{margin:8px 0 0;color:#d9e6f5;font-size:15.5px;line-height:1.55}
 .notes-card{background:linear-gradient(135deg,#fffdf9 0,#F7F2EC 100%)}.notes-copy{white-space:pre-line;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0 0;color:var(--navy);font-weight:700}
 .facts{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff}
 .facts div{padding:17px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:92px}

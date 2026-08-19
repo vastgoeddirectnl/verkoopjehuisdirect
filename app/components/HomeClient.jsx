@@ -251,6 +251,8 @@ const regionOverviewCards = [
 export default function HomeClient() {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     postcode: "",
     huisnummer: "",
@@ -261,17 +263,24 @@ export default function HomeClient() {
     naam: "",
     email: "",
     telefoon: "",
+    _website: "",
   });
 
-  const updateForm = (event) => setForm({ ...form, [event.target.name]: event.target.value });
+  const updateForm = (event) => {
+    const { name, value } = event.target;
+    const normalized = name === "postcode" ? value.toUpperCase().replace(/\s+/g, "").slice(0, 6) : value;
+    setForm((current) => ({ ...current, [name]: normalized }));
+    setFormError("");
+  };
   const nextStep = () => {
-    if (step === 1 && (!form.postcode || !form.huisnummer || !form.woningtype)) {
-      alert("Vul postcode, huisnummer en type woning in om door te gaan.");
-      return;
+    setFormError("");
+    if (step === 1) {
+      if (!/^\d{4}[A-Z]{2}$/.test(form.postcode)) return setFormError("Vul een geldige postcode in, bijvoorbeeld 9723AB.");
+      if (!form.huisnummer.trim()) return setFormError("Vul het huisnummer in.");
+      if (!form.woningtype) return setFormError("Kies het type woning.");
     }
     if (step === 2 && !form.situatie) {
-      alert("Kies kort welke situatie het beste past. De gewenste termijn en toelichting zijn optioneel.");
-      return;
+      return setFormError("Kies kort welke situatie het beste past.");
     }
     setStep((current) => Math.min(current + 1, 3));
   };
@@ -279,6 +288,11 @@ export default function HomeClient() {
 
   const submitLead = async (event) => {
     event.preventDefault();
+    setFormError("");
+    if (!form.naam.trim()) return setFormError("Vul uw naam in.");
+    if (form.telefoon.replace(/\D/g, "").length < 8) return setFormError("Controleer het telefoonnummer.");
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) return setFormError("Controleer het e-mailadres.");
+    setSubmitting(true);
 
     const params = new URLSearchParams(window.location.search);
 
@@ -299,6 +313,7 @@ export default function HomeClient() {
       toelichting: form.toelichting,
       pagina: window.location.pathname,
       bron: params.get("utm_source") || params.get("source") || document.referrer || "direct",
+      _website: form._website,
     };
 
     try {
@@ -317,12 +332,14 @@ export default function HomeClient() {
       trackGoogleAdsConversion("lead", {
         value: 1,
         currency: "EUR",
-        transactionId: result?.lead?.id ? `lead-${result.lead.id}` : undefined,
+        transactionId: result?.reference ? `lead-${result.reference}` : undefined,
       });
       setSubmitted(true);
     } catch (error) {
-      alert("Er ging iets mis. Probeer opnieuw of neem contact op via WhatsApp.");
+      setFormError("Er ging iets mis. Probeer opnieuw of neem contact op via WhatsApp.");
       console.error(error);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -712,6 +729,8 @@ export default function HomeClient() {
           min-height: 55px;
         }
         .field:focus { border-color: #071f3a; background: #fff; }
+        .form-progress{height:6px;background:#e9e4db;border-radius:999px;overflow:hidden;margin:-2px 0 14px}.form-progress span{display:block;height:100%;background:#D96A1C;border-radius:inherit;transition:width .25s ease}.form-inline-error{background:#fff1ed;border:1px solid #f0b6a5;color:#8d321b;border-radius:14px;padding:11px 13px;margin:10px 0 12px;font-weight:700;font-size:14px}.btn:disabled{opacity:.65;cursor:not-allowed}
+
         .form-stack { display: grid; gap: 12px; }
         .form-actions { display: grid; grid-template-columns: .8fr 1.6fr; gap: 9px; }
         .small-note {
@@ -2333,7 +2352,13 @@ export default function HomeClient() {
 
             {!submitted ? (
               <form onSubmit={submitLead}>
-                <p className="step-label">Stap {step} van 3</p>
+                <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}>
+                  <label>
+                    Website
+                    <input name="_website" value={form._website} onChange={updateForm} tabIndex={-1} autoComplete="off" />
+                  </label>
+                </div>
+                <p className="step-label">Stap {step} van 3</p><div className="form-progress" aria-hidden="true"><span style={{ width: `${(step / 3) * 100}%` }} /></div>{formError ? <div className="form-inline-error" role="alert">{formError}</div> : null}
                 <h2 className="form-title">Vertel kort om welke woning het gaat</h2>
                 <p className="form-sub form-sub-desktop">
                   Vul uw adres en situatie in. Wij bekijken wat er mogelijk is en sturen waar mogelijk een eerste voorstel.
@@ -2394,7 +2419,7 @@ export default function HomeClient() {
                     <input name="email" value={form.email} onChange={updateForm} placeholder="E-mailadres" type="email" className="field" required />
                     <div className="form-actions">
                       <button type="button" onClick={previousStep} className="btn btn-light">Terug</button>
-                      <button type="submit" className="btn btn-orange">Vraag vrijblijvend voorstel aan</button>
+                      <button type="submit" className="btn btn-orange" disabled={submitting}>{submitting ? "Aanvraag verzenden…" : "Vraag vrijblijvend voorstel aan"}</button>
                     </div>
                     <p className="small-note">Wij gebruiken uw gegevens alleen om uw aanvraag te beoordelen en hierover contact op te nemen.</p>
 

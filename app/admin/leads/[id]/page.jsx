@@ -361,8 +361,8 @@ function defaultProposalForLead(lead) {
     transfer_date_text: "In overleg",
     deposit_text: "In overleg bespreekbaar",
     conditions_text: "Dit voorstel is vrijblijvend en bedoeld om duidelijkheid te geven over een mogelijke verkoop. Definitieve afspraken worden pas schriftelijk en notarieel vastgelegd. Als een koopovereenkomst wordt uitgewerkt, geldt als uitgangspunt dat koper koopt zonder financieringsvoorbehoud, bouwkundig voorbehoud, verkoopvoorbehoud of andere ontbindende voorbehouden, tenzij schriftelijk anders overeengekomen.",
-    assumptions_text: "Dit voorstel is gebaseerd op de door u verstrekte gegevens, openbare woninginformatie en de huidige bekende staat van de woning. Eventuele afwijkingen, bijzondere juridische situaties, verborgen gebreken, beperkte toegang tot documenten of aanvullende kosten kunnen invloed hebben op de definitieve afspraken.",
-    included_items: "Heldere communicatie\nGeen makelaarskosten\nGeen openbare bezichtigingen nodig\nVerkoop in huidige staat bespreekbaar\nFlexibele overdrachtsdatum\nNotariële afwikkeling\nVerkoopoplossing op maat\nVrijblijvend voorstel",
+    assumptions_text: "Dit voorstel is gebaseerd op de door u verstrekte gegevens, openbare woning-/objectinformatie en de huidige bekende staat van de woning of het object. Eventuele afwijkingen, bijzondere juridische situaties, verborgen gebreken, beperkte toegang tot documenten of aanvullende kosten kunnen invloed hebben op de definitieve afspraken.",
+    included_items: "Heldere communicatie\nGeen makelaarskosten\nGeen openbare bezichtigingen nodig\nVerkoop in huidige staat bespreekbaar\nFlexibele overdrachtsdatum\nNotariële afwikkeling\nMeer zekerheid na akkoord\nVerkoopoplossing op maat\nVrijblijvend voorstel",
     traditional_price_text: "",
     agent_costs_text: "",
     notary_costs_text: "",
@@ -370,9 +370,9 @@ function defaultProposalForLead(lead) {
     other_costs_text: "",
     traditional_net_text: "",
     direct_net_text: "",
-    short_comparison_text: "De netto-opbrengstvergelijking is indicatief. Bij verhuurde, leeg te leveren of gemengde objecten kan de traditionele vergelijkingswaarde mede worden benaderd vanuit huurwaarde, leegstand, verhuurrisico, verkoopbaarheid en kosten. Een direct voorstel kan lager zijn dan een optimistische marktwaarde, maar geeft meer duidelijkheid over voorwaarden, planning en afwikkeling.",
+    short_comparison_text: "De netto-opbrengstvergelijking is indicatief. Bij verhuurde, leeg te leveren of gemengde objecten kan de traditionele vergelijkingswaarde mede worden benaderd vanuit huurwaarde, leegstand, verhuurrisico, verkoopbaarheid en kosten. Een direct voorstel kan lager zijn dan een optimistische marktwaarde, maar geeft meer duidelijkheid over voorwaarden, planning, afwikkeling en zekerheid na akkoord.",
     reservations_text: "Controle woninggegevens\nControle eigendomssituatie\nControle beschikbare documenten\nControle eventuele huur-, gebruiks- of beslaggegevens\nNotariële toetsing\nAkkoord op voorwaarden\nGeen bijzondere belemmeringen\nDefinitieve schriftelijke vastlegging",
-    next_steps_text: "U beoordeelt het voorstel rustig.\nWij bespreken eventuele vragen, bijzonderheden en voorwaarden.\nIndien gewenst verzamelen wij aanvullende gegevens over de woning.\nBij akkoord worden de afspraken schriftelijk bevestigd.\nDe overdracht en betaling verlopen via de notaris.",
+    next_steps_text: "U beoordeelt het voorstel rustig.\nWij bespreken eventuele vragen, bijzonderheden en voorwaarden.\nIndien gewenst verzamelen wij aanvullende gegevens over de woning of het object.\nBij akkoord worden de afspraken schriftelijk bevestigd.\nDe overdracht en betaling verlopen via de notaris.",
     contact_person: "Rob Schiphuis",
     proposal_type: "Standaard aankoop",
     delivery_term_text: "Uiterlijk binnen 6 maanden",
@@ -704,7 +704,7 @@ export default function LeadDetailPage({ params }) {
               <div>
                 <span>Premium voorstel</span>
                 <h2>Uitgebreid verkoopvoorstel maken</h2>
-                <p>Maak een voorstel met voorblad, woninggegevens, uitgangspunten, netto-opbrengstvergelijking, voorwaarden en vervolgstappen.</p>
+                <p>Maak een voorstel met voorblad, woning-/objectgegevens, uitgangspunten, netto-opbrengstvergelijking, voorwaarden en vervolgstappen.</p>
               </div>
               {latestProposal ? <a className="secondary-link" href={`/admin/voorstellen/${latestProposal.id}/print`} target="_blank">Laatste voorstel openen</a> : null}
             </div>
@@ -726,12 +726,12 @@ export default function LeadDetailPage({ params }) {
                 </div>
 
                 <div className="form-section">
-                  <h3>2. Woninggegevens</h3>
+                  <h3>2. Woning-/objectgegevens</h3>
                   <div className="form-grid">
-                    <Field label="Adres / woning"><input value={proposal.property_address} onChange={(e) => setProposalField("property_address", e.target.value)} /></Field>
+                    <Field label="Adres / woning of object"><input value={proposal.property_address} onChange={(e) => setProposalField("property_address", e.target.value)} /></Field>
                     <Field label="Postcode"><input value={proposal.property_postcode} onChange={(e) => setProposalField("property_postcode", e.target.value.toUpperCase())} /></Field>
                     <Field label="Huisnummer"><input value={proposal.property_house_number} onChange={(e) => setProposalField("property_house_number", e.target.value)} /></Field>
-                    <Field label="Type woning"><input value={proposal.property_type} onChange={(e) => setProposalField("property_type", e.target.value)} /></Field>
+                    <Field label="Type woning/object"><input value={proposal.property_type} onChange={(e) => setProposalField("property_type", e.target.value)} /></Field>
                     <Field label="Woonoppervlakte"><input placeholder="Bijv. 178 m²" value={proposal.living_area_text} onChange={(e) => setProposalField("living_area_text", e.target.value)} /></Field>
                     <Field label="Perceeloppervlakte"><input placeholder="Bijv. 970 m²" value={proposal.plot_area_text} onChange={(e) => setProposalField("plot_area_text", e.target.value)} /></Field>
                     <Field label="Bouwjaar"><input value={proposal.build_year_text} onChange={(e) => setProposalField("build_year_text", e.target.value)} /></Field>
