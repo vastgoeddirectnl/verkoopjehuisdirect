@@ -8,10 +8,34 @@ function clean(value, max = 800) {
   return String(value || "").trim().slice(0, max);
 }
 
+function parseProposalDate(value) {
+  if (!value) return null;
+  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
+
+  const raw = String(value).trim();
+  if (!raw) return null;
+
+  const isoMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (isoMatch) {
+    const [, year, month, day] = isoMatch;
+    const date = new Date(Number(year), Number(month) - 1, Number(day), 23, 59, 59);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  const nlMatch = raw.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+  if (nlMatch) {
+    const [, day, month, year] = nlMatch;
+    const date = new Date(Number(year), Number(month) - 1, Number(day), 23, 59, 59);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  const fallback = new Date(raw);
+  return Number.isNaN(fallback.getTime()) ? null : fallback;
+}
+
 function isExpiredDate(value) {
-  if (!value) return false;
-  const expiry = new Date(`${String(value).slice(0, 10)}T23:59:59`);
-  if (Number.isNaN(expiry.getTime())) return false;
+  const expiry = parseProposalDate(value);
+  if (!expiry) return false;
   return expiry.getTime() < Date.now();
 }
 
@@ -67,8 +91,8 @@ export async function POST(request, { params }) {
       );
 
       const automationKey = `proposal-interest-${proposal.id}`;
-      const taskTitle = label === "Positief" ? "Klant is positief over voorstel - direct opvolgen" : "Klant wil voorstel bespreken";
-      const taskNote = message || `Actie vanaf openbare voorstelpagina: ${label}.`;
+      const taskTitle = label === "Positief" ? "Klant geeft akkoord op voorstel - direct opvolgen" : "Klant wil voorstel bespreken";
+      const taskNote = message || (label === "Positief" ? "Klant heeft via de voorstelpagina aangegeven akkoord te zijn met het voorstel. Dit is nog geen getekende koopovereenkomst." : `Actie vanaf openbare voorstelpagina: ${label}.`);
       const existingTask = await queryOne(
         "select id from tasks where lead_id = $1 and automation_key = $2 limit 1",
         [proposal.lead_id, automationKey]

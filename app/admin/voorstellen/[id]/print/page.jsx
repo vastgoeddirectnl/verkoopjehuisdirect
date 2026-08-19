@@ -17,13 +17,55 @@ function ensureIncludedAssurance(items) {
   return alreadyIncluded ? list : [...list, INCLUDED_ASSURANCE_ITEM];
 }
 
+function parseProposalDate(value) {
+  if (!value) return null;
+  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
+
+  const raw = String(value).trim();
+  if (!raw) return null;
+
+  const isoMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (isoMatch) {
+    const [, year, month, day] = isoMatch;
+    const date = new Date(Number(year), Number(month) - 1, Number(day), 12, 0, 0);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  const nlMatch = raw.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+  if (nlMatch) {
+    const [, day, month, year] = nlMatch;
+    const date = new Date(Number(year), Number(month) - 1, Number(day), 12, 0, 0);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  const fallback = new Date(raw);
+  return Number.isNaN(fallback.getTime()) ? null : fallback;
+}
+
 function formatDate(value) {
-  if (!value) return "-";
+  const date = parseProposalDate(value);
+  if (!date) return "-";
   return new Intl.DateTimeFormat("nl-NL", {
     day: "2-digit",
     month: "long",
     year: "numeric",
-  }).format(new Date(value));
+  }).format(date);
+}
+
+function daysUntil(value) {
+  const date = parseProposalDate(value);
+  if (!date) return null;
+  const end = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0);
+  return Math.ceil((end.getTime() - today.getTime()) / 86400000);
+}
+
+function validityStatusText(days) {
+  if (days === null) return null;
+  if (days < 0) return "Dit voorstel is verlopen";
+  if (days === 0) return "Loopt vandaag af";
+  return `Nog ${days} dag${days === 1 ? "" : "en"} geldig`;
 }
 
 function formatPostal(value) {
@@ -264,6 +306,8 @@ export default async function ProposalPrintPage({ params }) {
   const nextStepsSectionNumber = String(7 + offset);
   const contactSectionNumber = String(8 + offset);
   const nonbindingText = withNoBuyerConditionsText(proposal.nonbinding_text);
+  const validityDays = daysUntil(proposal.validity_date);
+  const validityText = validityStatusText(validityDays);
 
   return (
     <main className="print-root">
@@ -302,7 +346,7 @@ export default async function ProposalPrintPage({ params }) {
             <strong>{value(proposal.status, "Concept")} voorstel</strong>
             <span>Voorstelnummer: {proposalNumber(proposal)}</span>
             <span>Datum: {formatDate(proposal.created_at)}</span>
-            <span>Geldig tot: {formatDate(proposal.validity_date)}</span>
+            <span>Geldig tot: {formatDate(proposal.validity_date)}{validityText ? ` · ${validityText}` : ""}</span>
           </div>
         </header>
 
@@ -457,7 +501,7 @@ export default async function ProposalPrintPage({ params }) {
           <img src="/logo.png" alt="Vastgoed Direct Nederland" />
           <div>
             <strong>Vrijblijvend voorstel</strong>
-            <span>Geldig tot: {formatDate(proposal.validity_date)}</span>
+            <span>Geldig tot: {formatDate(proposal.validity_date)}{validityText ? ` · ${validityText}` : ""}</span>
           </div>
         </header>
 
@@ -471,6 +515,9 @@ export default async function ProposalPrintPage({ params }) {
         ) : null}
         <section className="notice assurance-print">
           <strong>{NO_BUYER_CONDITIONS_NOTICE_TITLE}:</strong> {NO_BUYER_CONDITIONS_NOTICE_TEXT}
+        </section>
+        <section className="notice action-print">
+          <strong>Akkoord geven of bespreken:</strong> Via de persoonlijke voorstelpagina kan verkoper aangeven akkoord te zijn met dit voorstel of het voorstel eerst te willen bespreken. Een online reactie is nog geen getekende koopovereenkomst; de definitieve afspraken worden daarna schriftelijk uitgewerkt.
         </section>
 
         <section className="section">
@@ -525,7 +572,7 @@ export default async function ProposalPrintPage({ params }) {
           <img src="/logo.png" alt="Vastgoed Direct Nederland" />
           <div>
             <strong>Vrijblijvend voorstel</strong>
-            <span>Geldig tot: {formatDate(proposal.validity_date)}</span>
+            <span>Geldig tot: {formatDate(proposal.validity_date)}{validityText ? ` · ${validityText}` : ""}</span>
           </div>
         </header>
 

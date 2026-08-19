@@ -20,13 +20,66 @@ function ensureIncludedAssurance(items) {
   return alreadyIncluded ? list : [...list, INCLUDED_ASSURANCE_ITEM];
 }
 
+function parseProposalDate(value) {
+  if (!value) return null;
+  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
+
+  const raw = String(value).trim();
+  if (!raw) return null;
+
+  const isoMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (isoMatch) {
+    const [, year, month, day] = isoMatch;
+    const date = new Date(Number(year), Number(month) - 1, Number(day), 12, 0, 0);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  const nlMatch = raw.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+  if (nlMatch) {
+    const [, day, month, year] = nlMatch;
+    const date = new Date(Number(year), Number(month) - 1, Number(day), 12, 0, 0);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  const fallback = new Date(raw);
+  return Number.isNaN(fallback.getTime()) ? null : fallback;
+}
+
 function formatDate(value) {
-  if (!value) return "-";
+  const date = parseProposalDate(value);
+  if (!date) return "-";
   return new Intl.DateTimeFormat("nl-NL", {
     day: "2-digit",
     month: "long",
     year: "numeric",
-  }).format(new Date(value));
+  }).format(date);
+}
+
+function todayAtNoon() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0);
+}
+
+function daysUntil(value) {
+  const date = parseProposalDate(value);
+  if (!date) return null;
+  const end = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
+  const today = todayAtNoon();
+  return Math.ceil((end.getTime() - today.getTime()) / 86400000);
+}
+
+function validityStatusText(days) {
+  if (days === null) return null;
+  if (days < 0) return "Dit voorstel is verlopen";
+  if (days === 0) return "Loopt vandaag af";
+  return `Nog ${days} dag${days === 1 ? "" : "en"} geldig`;
+}
+
+function validityStatusClass(days) {
+  if (days === null) return "";
+  if (days < 0) return " is-expired";
+  if (days <= 3) return " is-urgent";
+  return "";
 }
 
 function amount(value, fallback = "In overleg") {
@@ -187,13 +240,6 @@ function canRespondToProposal(proposal) {
   return activeStatus && !expired;
 }
 
-function daysUntil(value) {
-  if (!value) return null;
-  const end = new Date(`${String(value).slice(0, 10)}T23:59:59`);
-  const now = new Date();
-  return Math.ceil((end.getTime() - now.getTime()) / 86400000);
-}
-
 export default async function PublicProposalPage({ params, searchParams }) {
   const { token } = await params;
   if (!isUuid(token)) notFound();
@@ -313,7 +359,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
             <div>
               <em>Geldig tot</em>
               <b>{validity}</b>
-              {validityDays !== null ? <i>{validityDays < 0 ? "Dit voorstel is verlopen" : validityDays === 0 ? "Loopt vandaag af" : `Nog ${validityDays} dag${validityDays === 1 ? "" : "en"} geldig`}</i> : null}
+              {validityDays !== null ? <i className={`validity-pill${validityStatusClass(validityDays)}`}>{validityStatusText(validityDays)}</i> : null}
             </div>
             <div>
               <em>Oplevering</em>
@@ -322,8 +368,6 @@ export default async function PublicProposalPage({ params, searchParams }) {
           </div>
         </aside>
       </section>
-
-      {!isAdminPreview ? <ProposalActions token={token} isActive={actionActive} /> : null}
 
       <section className="executive-summary">
         <div>
@@ -341,6 +385,8 @@ export default async function PublicProposalPage({ params, searchParams }) {
           <div><strong>{deposit}</strong><span>aanbetaling / voorschot</span></div>
         </div>
       </section>
+
+      <ProposalActions token={token} isActive={actionActive} previewMode={isAdminPreview} validityText={validityStatusText(validityDays)} />
 
       {showDeliveryConstructie ? (
         <section className="card special-card">
@@ -466,6 +512,11 @@ export default async function PublicProposalPage({ params, searchParams }) {
         <div className="assurance-notice">
           <strong>{NO_BUYER_CONDITIONS_NOTICE_TITLE}</strong>
           <p>{NO_BUYER_CONDITIONS_NOTICE_TEXT}</p>
+        </div>
+        <div className="decision-inline">
+          <strong>Wilt u verder met dit voorstel?</strong>
+          <span>Geef eenvoudig aan dat u akkoord bent met het voorstel of dat u het eerst wilt bespreken. Een klik is nog geen getekende koopovereenkomst.</span>
+          <a href="#voorstel-actie">Akkoord geven of bespreken</a>
         </div>
         <div className="comparison comparison-desktop" aria-label="Vergelijking netto-opbrengst">
           <div className="head">Onderdeel</div>
@@ -644,6 +695,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
           <span>vastgoeddirectnederland.nl</span>
 
           <div className="contact-actions">
+            <a href="#voorstel-actie">Akkoord geven</a>
             <a href="tel:0612238051">Bel direct</a>
             <a href="mailto:info@vastgoeddirectnederland.nl">Stel een vraag</a>
             <a href="https://wa.me/31612238051" target="_blank" rel="noopener noreferrer">WhatsApp</a>
@@ -658,7 +710,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
   );
 }
 
-const styles = `.proposal-actions{width:min(1180px,calc(100% - 40px));margin:-24px auto 34px;background:#fff;border:1px solid #e6dfd5;border-radius:24px;padding:24px;display:grid;grid-template-columns:1fr 1.2fr;gap:24px;align-items:center;box-shadow:0 18px 50px rgba(7,31,58,.09)}.proposal-actions h2{margin:5px 0 8px}.proposal-actions p{margin:0;color:#617184;line-height:1.55}.proposal-actions-kicker{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#b85216}.proposal-action-buttons{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.proposal-action-buttons button,.proposal-action-buttons a{border:0;border-radius:999px;padding:13px 17px;font:inherit;font-weight:900;cursor:pointer;text-decoration:none}.proposal-primary{background:#d96a1c;color:#fff}.proposal-secondary,.proposal-action-buttons a{background:#f4f1eb;color:#071f3a}.proposal-action-success{width:min(1180px,calc(100% - 40px));margin:-24px auto 34px;background:#eff8f2;border:1px solid #b9dec5;border-radius:22px;padding:18px 22px;display:grid;gap:4px}.proposal-action-success span{color:#446553}.proposal-action-inactive{background:#fff5f1;border-color:#ffd5c4}.proposal-action-inactive span{color:#7c2d20}.proposal-action-error{color:#9a3412!important;width:100%;text-align:right}.offer-panel i{display:block;font-style:normal;font-size:11px;margin-top:4px;color:#b85216}@media(max-width:760px){.proposal-actions{grid-template-columns:1fr;margin-top:-10px}.proposal-action-buttons{justify-content:stretch}.proposal-action-buttons>*{width:100%;text-align:center}}
+const styles = `.proposal-actions{width:100%;margin:0 0 18px;background:#fff;border:1px solid #e6dfd5;border-radius:26px;padding:24px;display:grid;grid-template-columns:1fr 1.15fr;gap:24px;align-items:center;box-shadow:0 18px 50px rgba(7,31,58,.09);scroll-margin-top:24px}.proposal-actions h2{margin:5px 0 8px}.proposal-actions p{margin:0;color:#617184;line-height:1.55}.proposal-actions-kicker{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#b85216}.proposal-action-buttons{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.proposal-action-buttons button,.proposal-action-buttons a{border:0;border-radius:999px;padding:13px 17px;font:inherit;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.proposal-action-buttons button:disabled{cursor:not-allowed;opacity:.7}.proposal-primary{background:#d96a1c;color:#fff;box-shadow:0 14px 30px rgba(217,106,28,.22)}.proposal-secondary,.proposal-action-buttons a{background:#f4f1eb;color:#071f3a}.proposal-action-note{font-size:13px!important;color:#617184!important;margin-top:10px!important}.proposal-action-preview-note{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:16px;padding:10px 12px;font-weight:800;font-size:13px}.proposal-action-success{width:100%;margin:0 0 18px;background:#eff8f2;border:1px solid #b9dec5;border-radius:22px;padding:18px 22px;display:grid;gap:4px}.proposal-action-success span{color:#446553}.proposal-action-inactive{background:#fff5f1;border-color:#ffd5c4}.proposal-action-inactive span{color:#7c2d20}.proposal-action-error{color:#9a3412!important;width:100%;text-align:right}.offer-panel i.validity-pill{display:inline-flex;font-style:normal;font-size:12px;margin-top:8px;color:#9a4b12;background:#fff1e6;border:1px solid #f2b885;border-radius:999px;padding:5px 9px;font-weight:900}.offer-panel i.validity-pill.is-urgent{background:#fff7ed;color:#b45309;border-color:#fdba74}.offer-panel i.validity-pill.is-expired{background:#fee2e2;color:#991b1b;border-color:#fecaca}.decision-inline{display:grid;grid-template-columns:1fr auto;gap:8px 16px;align-items:center;background:#fff7ed;border:1px solid #fed7aa;border-radius:20px;padding:17px 18px;margin:14px 0 0}.decision-inline strong{font-size:20px;color:#071f3a}.decision-inline span{color:#5f7083;line-height:1.5}.decision-inline a{grid-row:1 / span 2;grid-column:2;background:#d96a1c;color:#fff;text-decoration:none;font-weight:900;border-radius:999px;padding:12px 16px;white-space:nowrap}@media(max-width:760px){.proposal-actions{grid-template-columns:1fr}.proposal-action-buttons{justify-content:stretch}.proposal-action-buttons>*{width:100%;text-align:center}.decision-inline{grid-template-columns:1fr}.decision-inline a{grid-row:auto;grid-column:auto;text-align:center}}
 
 *{box-sizing:border-box}
 :root{--navy:#071f3a;--navy2:#0d2d52;--orange:#D96A1C;--cream:#f5f2ec;--card:#fffdf9;--line:#e8e3db;--muted:#5f7083;--soft:#FFF1E6;--shadow:0 22px 70px rgba(7,31,58,.12)}
@@ -695,8 +747,8 @@ body{margin:0;background:radial-gradient(circle at 82% 0,#FFF1E6 0,transparent 3
 .proposal-assurance span{font-size:14.5px;line-height:1.5;color:var(--muted)}
 .contact-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .contact-actions a{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--orange);color:#fff;text-decoration:none;font-weight:900;padding:11px 14px;font-size:14px}
-.contact-actions a:nth-child(2){background:#fff;color:var(--navy);border:1px solid rgba(255,255,255,.25)}
-.contact-actions a:nth-child(3){background:#3E8F5E}
+.contact-actions a:nth-child(2),.contact-actions a:nth-child(3){background:#fff;color:var(--navy);border:1px solid rgba(255,255,255,.25)}
+.contact-actions a:nth-child(4){background:#3E8F5E}
 
 .executive-summary,.card,.signature,.disclaimer{background:var(--card);border:1px solid var(--line);border-radius:30px;padding:28px;box-shadow:var(--shadow);margin-bottom:18px}
 .executive-summary{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:center}
