@@ -12,9 +12,6 @@ export const metadata = {
   },
   description:
     "Uw woning snel verkopen? Ontvang een vrijblijvend verkoopvoorstel zonder makelaarskosten of open huis.",
-  alternates: {
-    canonical: "/",
-  },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",

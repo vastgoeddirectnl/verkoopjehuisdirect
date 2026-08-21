@@ -13,7 +13,7 @@ const regionLinks = [
 ];
 
 export const metadata = {
-  title: "Verkoopinformatie per regio | Vastgoed Direct Nederland",
+  title: "Verkoopinformatie per regio",
   description: "Bekijk verkoopmogelijkheden per regio, waaronder Groningen, Drenthe, Friesland, Overijssel en verschillende plaatsen in Noord- en Oost-Nederland.",
   alternates: { canonical: "/regios" },
 };

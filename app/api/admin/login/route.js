@@ -7,6 +7,8 @@ import {
 } from "../../../lib/adminAuth";
 import { enforceRateLimit } from "../../../lib/requestSecurity";
 
+export const runtime = "nodejs";
+
 export async function POST(request) {
   try {
     if (!process.env.ADMIN_PASSWORD || !hasAdminSessionSecret()) {

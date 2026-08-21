@@ -6,6 +6,15 @@ import PrintButton from "./PrintButton";
 import ProposalActions from "./ProposalActions";
 import ProposalViewTracker from "./ProposalViewTracker";
 
+
+export const metadata = {
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+  },
+};
+
 export const dynamic = "force-dynamic";
 
 const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid. Indien partijen overeenstemming bereiken, wordt de koopovereenkomst opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen.";

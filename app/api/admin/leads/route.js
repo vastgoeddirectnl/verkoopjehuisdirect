@@ -20,6 +20,6 @@ export async function GET(request) {
     });
     return NextResponse.json({ leads });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: "Interne serverfout." }, { status: 500 });
   }
 }

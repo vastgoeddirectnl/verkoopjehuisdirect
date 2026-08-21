@@ -72,7 +72,7 @@ const page = {
     "situation": "Woning in Assen waarbij eerst duidelijkheid nodig was",
     "propertyType": "Eengezinswoning / appartement",
     "region": "Assen",
-    "mainProblem": "De eigenaar wilde weten of directe verkoop passend kon zijn voor een woning in In Assen kan de verkoopvraag gaan over een gezinswoning, appartement, erfeniswoning, leegstand of woning die niet verkoopklaar is., zonder eerst kosten te maken voor herstel, presentatie of meerdere bezichtigingen.",
+    "mainProblem": "De eigenaar wilde eerst duidelijkheid over een woning in Assen die niet volledig verkoopklaar was, zonder direct kosten te maken voor presentatie en meerdere bezichtigingen.",
     "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
     "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
     "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",

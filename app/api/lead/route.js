@@ -1,2 +1,3 @@
 // Legacy alias. Nieuwe formulieren gebruiken /api/leads.
-export { runtime, POST } from "../leads/route";
+export const runtime = "nodejs";
+export { POST } from "../leads/route";

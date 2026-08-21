@@ -72,7 +72,7 @@ const page = {
     "situation": "Woning in Winschoten waarbij eerst duidelijkheid nodig was",
     "propertyType": "Dorpswoning / oudere woning",
     "region": "Winschoten",
-    "mainProblem": "De eigenaar wilde weten of directe verkoop passend kon zijn voor een woning in In Winschoten en Oldambt spelen vaak oudere woningvoorraad, onderhoud, leegstand of verkoop na verandering in persoonlijke situatie mee., zonder eerst kosten te maken voor herstel, presentatie of meerdere bezichtigingen.",
+    "mainProblem": "De eigenaar wilde duidelijkheid over een oudere woning in Winschoten en Oldambt, waarbij onderhoud en leegstand meespeelden en meerdere bezichtigingen niet wenselijk waren.",
     "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
     "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
     "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",

@@ -72,7 +72,7 @@ const page = {
     "situation": "Woning in Veendam waarbij eerst duidelijkheid nodig was",
     "propertyType": "Eengezinswoning / jarenwoning",
     "region": "Veendam",
-    "mainProblem": "De eigenaar wilde weten of directe verkoop passend kon zijn voor een woning in In Veendam en omgeving kunnen onderhoud, leegstand, verkoop zonder makelaar of een erfenissituatie aanleiding zijn om eerst vrijblijvend duidelijkheid te vragen., zonder eerst kosten te maken voor herstel, presentatie of meerdere bezichtigingen.",
+    "mainProblem": "De eigenaar wilde eerst vrijblijvend duidelijkheid over een woning in Veendam die onderhoud nodig had en niet eerst volledig verkoopklaar gemaakt moest worden.",
     "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
     "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
     "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",

@@ -72,7 +72,7 @@ const page = {
     "situation": "Woning in Overijssel waarbij eerst duidelijkheid nodig was",
     "propertyType": "Eengezinswoning / oudere bestaande bouw",
     "region": "Overijssel",
-    "mainProblem": "De eigenaar wilde weten of directe verkoop passend kon zijn voor een woning in In Overijssel spelen vaak verschillende woningtypen en verkoopredenen door elkaar: onderhoud, verhuur, leegstand, dubbele lasten of wens tot snelle duidelijkheid., zonder eerst kosten te maken voor herstel, presentatie of meerdere bezichtigingen.",
+    "mainProblem": "De eigenaar wilde eerst weten wat praktisch haalbaar was voor een woning in Overijssel met onderhoud en leegstand, zonder direct een volledig makelaarstraject te starten.",
     "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
     "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
     "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",

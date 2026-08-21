@@ -13,7 +13,13 @@ function hashIdentity(value) {
   const salt =
     process.env.RATE_LIMIT_SECRET ||
     process.env.ADMIN_SESSION_SECRET ||
-    "vdn-v2-rate-limit";
+    (process.env.NODE_ENV !== "production" ? "vdn-v2-rate-limit-dev" : "");
+
+  if (!salt) {
+    throw new Error(
+      "RATE_LIMIT_SECRET of ADMIN_SESSION_SECRET ontbreekt in production."
+    );
+  }
   return crypto.createHash("sha256").update(`${salt}:${value}`).digest("hex");
 }
 

@@ -72,7 +72,7 @@ const page = {
     "situation": "Woning in Friesland waarbij eerst duidelijkheid nodig was",
     "propertyType": "Dorpswoning / woonboerderij",
     "region": "Friesland",
-    "mainProblem": "De eigenaar wilde weten of directe verkoop passend kon zijn voor een woning in In Friesland kan afstand, bereikbaarheid, onderhoud, leegstand of tweede woninggebruik invloed hebben op verkoopmogelijkheden en planning., zonder eerst kosten te maken voor herstel, presentatie of meerdere bezichtigingen.",
+    "mainProblem": "De eigenaar wilde weten welke verkooproute paste bij een woning in Friesland waarbij afstand, onderhoud en de gewenste overdrachtsplanning een rol speelden.",
     "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
     "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
     "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",

@@ -72,7 +72,7 @@ const page = {
     "situation": "Woning in Drenthe waarbij eerst duidelijkheid nodig was",
     "propertyType": "Vrijstaande woning / dorpswoning",
     "region": "Drenthe",
-    "mainProblem": "De eigenaar wilde weten of directe verkoop passend kon zijn voor een woning in In Drenthe spelen vaak grotere kavels, oudere woningen, buitengebied, recreatief gebruik of woningen met onderhoud mee. Daarom kijken we naar meer dan alleen de vraagprijs., zonder eerst kosten te maken voor herstel, presentatie of meerdere bezichtigingen.",
+    "mainProblem": "De eigenaar wilde duidelijkheid over een woning in Drenthe met een groter perceel en onderhoud, zonder vooraf een lang traject met herstel en bezichtigingen te starten.",
     "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
     "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
     "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",

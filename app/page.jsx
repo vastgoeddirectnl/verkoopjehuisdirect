@@ -1,7 +1,7 @@
 import HomeClient from "./components/HomeClient";
 
 export const metadata = {
-  title: "Huis snel verkopen zonder makelaar | VDN",
+  title: "Huis snel verkopen zonder makelaar",
   description:
     "Wilt u uw woning snel verkopen zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
   alternates: {

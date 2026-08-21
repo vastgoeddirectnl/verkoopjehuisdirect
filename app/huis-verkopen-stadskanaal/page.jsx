@@ -72,7 +72,7 @@ const page = {
     "situation": "Woning in Stadskanaal waarbij eerst duidelijkheid nodig was",
     "propertyType": "Dorpswoning / tussenwoning",
     "region": "Stadskanaal",
-    "mainProblem": "De eigenaar wilde weten of directe verkoop passend kon zijn voor een woning in In Stadskanaal en de Kanaalstreek gaat het vaak om oudere woningen, onderhoud, leegstand, erfenis of de wens om zonder open huis duidelijkheid te krijgen., zonder eerst kosten te maken voor herstel, presentatie of meerdere bezichtigingen.",
+    "mainProblem": "De eigenaar wilde weten wat mogelijk was voor een oudere woning in Stadskanaal en de Kanaalstreek, waarbij onderhoud en verkoop zonder open huis belangrijk waren.",
     "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
     "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
     "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",

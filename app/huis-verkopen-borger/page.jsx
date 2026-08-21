@@ -72,7 +72,7 @@ const page = {
     "situation": "Woning in Borger waarbij eerst duidelijkheid nodig was",
     "propertyType": "Vrijstaande woning / woning met kavel",
     "region": "Borger",
-    "mainProblem": "De eigenaar wilde weten of directe verkoop passend kon zijn voor een woning in In Borger en de Hondsrug-regio kunnen grotere kavels, dorpswoningen, recreatieve ligging of onderhoud invloed hebben op de verkooproute., zonder eerst kosten te maken voor herstel, presentatie of meerdere bezichtigingen.",
+    "mainProblem": "De eigenaar wilde weten welke verkooproute paste bij een dorpswoning in Borger en de Hondsrug-regio, waarbij onderhoud en de ligging van het perceel meespeelden.",
     "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
     "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
     "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",

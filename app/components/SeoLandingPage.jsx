@@ -442,10 +442,10 @@ export default function SeoLandingPage({ page }) {
           .header-actions{margin-left:auto}
           .header-actions .btn-green,.header-actions .btn-blue{display:none}
           .header-actions .btn-orange{padding:10px 13px;font-size:13px;max-width:43vw;white-space:normal;text-align:center;line-height:1.1}
-          .hero-grid{padding:26px 0 26px;gap:18px;max-width:100%;overflow:hidden}
+          .hero-grid{padding:22px 0 22px;gap:16px;max-width:100%;overflow:hidden}
           .badge{display:none}
-          h1{font-size:clamp(31px,8.2vw,38px);line-height:1.08;letter-spacing:-.7px;max-width:100%;overflow-wrap:break-word;hyphens:auto}
-          .lead{font-size:16px;line-height:1.5;margin-top:13px;max-width:100%}
+          h1{font-size:clamp(32px,8.4vw,37px);line-height:1.1;letter-spacing:-.65px;max-width:100%;overflow-wrap:break-word;hyphens:auto}
+          .lead{font-size:15.8px;line-height:1.48;margin-top:12px;max-width:100%}
           .hero-cta-row{margin-top:20px}
           .hero-cta-row .btn,.cta-buttons .btn{width:100%;max-width:100%;white-space:normal;text-align:center;line-height:1.15;min-height:46px}
           .hero-cta-row .btn-light{display:none}
@@ -453,12 +453,13 @@ export default function SeoLandingPage({ page }) {
           .mobile-trust-line{display:block;font-size:13px;color:#647386;font-weight:900;margin-top:12px;line-height:1.45}
           .trust-micro{display:none}
           .benefit-grid,.compare-columns,.related-card-grid,.example-details{grid-template-columns:1fr}
-          .section{padding:42px 0}.section-tight{padding:38px 0}
-          .section-head{text-align:left;margin-bottom:20px}
-          .card,.content-block,.cta-card,.comparison-wrap,.why-card,.example-card,.insight-card,.task-card{border-radius:22px;padding:20px}
+          .related-card{min-height:0;padding:15px 16px}.related-card p{line-height:1.42}
+          .section{padding:34px 0}.section-tight{padding:30px 0}
+          .section-head{text-align:left;margin-bottom:17px}
+          .card,.content-block,.cta-card,.comparison-wrap,.why-card,.example-card,.insight-card,.task-card{border-radius:20px;padding:18px}
           .content-block h2,.example-card h2{font-size:24px;line-height:1.15;letter-spacing:-.5px}
           .section-head h2,.short-answer h2{font-size:28px;line-height:1.12;letter-spacing:-.65px}
-          .content-block p,.example-card p,.section-head p,.text{font-size:15px;line-height:1.58}
+          .content-block p,.example-card p,.section-head p,.text{font-size:15px;line-height:1.54}
           .cta-logo{display:none}
           .cta-card h2{font-size:24px}
           .form-conversion-grid{grid-template-columns:1fr;gap:12px}

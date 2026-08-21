@@ -72,7 +72,7 @@ const page = {
     "situation": "Woning in Emmen waarbij eerst duidelijkheid nodig was",
     "propertyType": "Tussenwoning / vrijstaande woning",
     "region": "Emmen",
-    "mainProblem": "De eigenaar wilde weten of directe verkoop passend kon zijn voor een woning in In Emmen en omgeving spelen soms afstand, onderhoud, leegstand of oudere woningtypen mee bij de keuze voor een verkooproute., zonder eerst kosten te maken voor herstel, presentatie of meerdere bezichtigingen.",
+    "mainProblem": "De eigenaar wilde weten welke route paste bij een woning in Emmen met onderhoud en leegstand, waarbij snelheid en heldere opleverafspraken belangrijk waren.",
     "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
     "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
     "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",

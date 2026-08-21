@@ -72,7 +72,7 @@ const page = {
     "situation": "Woning in Gieten waarbij eerst duidelijkheid nodig was",
     "propertyType": "Dorpswoning / vrijstaande woning",
     "region": "Gieten",
-    "mainProblem": "De eigenaar wilde weten of directe verkoop passend kon zijn voor een woning in In Gieten en omgeving spelen vaak dorpswoningen, buitengebied, onderhoud, nalatenschap of verkoop zonder lange bezichtigingsronde mee., zonder eerst kosten te maken voor herstel, presentatie of meerdere bezichtigingen.",
+    "mainProblem": "De eigenaar wilde duidelijkheid over de verkoop van een dorpswoning in Gieten en omgeving, waarbij onderhoud en een rustige planning belangrijker waren dan een uitgebreid verkooptraject.",
     "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
     "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
     "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",
