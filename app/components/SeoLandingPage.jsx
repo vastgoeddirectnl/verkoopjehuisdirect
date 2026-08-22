@@ -124,6 +124,14 @@ function normaliseExample(page) {
   };
 }
 
+function trimText(text, maxLength = 155) {
+  if (!text) return "";
+  const clean = String(text).replace(/\s+/g, " ").trim();
+  if (clean.length <= maxLength) return clean;
+  const shortened = clean.slice(0, maxLength).replace(/\s+\S*$/, "").trim();
+  return `${shortened}...`;
+}
+
 function pageTypeCopy(page) {
   if (page.pageType === "region") {
     return {
@@ -187,6 +195,26 @@ export default function SeoLandingPage({ page }) {
   const afterRequestTitle = page.afterRequestTitle || "Wat gebeurt er na uw aanvraag?";
   const afterRequestText = page.afterRequestText || "Wij beoordelen de woninggegevens en uw situatie. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Als er nog informatie nodig is, nemen wij kort contact met u op.";
   const heroNote = page.heroNote || "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf.";
+  const premiumCards = [
+    {
+      title: page.premiumCardOneTitle || "Eerst duidelijkheid",
+      text: trimText(page.shortAnswer || "U vraagt eerst vrijblijvend duidelijkheid aan over prijs, planning en voorwaarden. Daarna beslist u rustig of u verder wilt.", 165),
+    },
+    {
+      title: page.premiumCardTwoTitle || "Minder verkoopgedoe",
+      text: trimText(solutionCards[0] || benefits[0] || "Geen standaard traject met onnodige voorbereiding, open huis of verkoopdruk wanneer dat niet bij uw situatie past.", 155),
+    },
+    {
+      title: page.premiumCardThreeTitle || "Schriftelijk en notarieel",
+      text: "Bij akkoord worden prijs, planning, oplevering en voorwaarden schriftelijk vastgelegd en loopt de overdracht via de notaris.",
+    },
+  ];
+  const routePreviewCards = relatedCards.slice(0, 4);
+  const comparisonProofs = [
+    ["Niet alleen prijs", "Vergelijk ook kosten, voorbereiding, doorlooptijd en zekerheid."],
+    ["Minder afhankelijkheden", "Geen standaard reeks bezichtigingen of open huis nodig voor een eerste voorstel."],
+    ["Meer zekerheid na akkoord", "Afspraken worden uitgewerkt met duidelijke voorwaarden en notariële afwikkeling."],
+  ];
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -315,6 +343,32 @@ export default function SeoLandingPage({ page }) {
         .seo-review-copy h2{font-size:24px;line-height:1.1;letter-spacing:-.5px;margin:0 0 5px;color:var(--navy)}
         .seo-review-copy p{margin:0;color:#647386;font-size:14.5px;line-height:1.5}
         .seo-review-cta{font-size:13px;font-weight:900;color:var(--orange);white-space:nowrap}
+        .seo-premium-section{background:linear-gradient(180deg,#fff 0%,#fbf3e8 100%);border-top:1px solid #eadfd3;border-bottom:1px solid #eadfd3}
+        .seo-premium-wrap{display:grid;gap:24px}
+        .premium-intro{display:grid;grid-template-columns:.78fr 1.22fr;gap:28px;align-items:end}
+        .premium-intro h2{font-size:clamp(28px,2.8vw,40px);line-height:1.08;letter-spacing:-1px;margin:0;color:var(--navy)}
+        .premium-intro p{margin:0;color:#526274;line-height:1.62;font-size:16px;max-width:650px}
+        .premium-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+        .premium-card{position:relative;background:linear-gradient(180deg,#fff 0%,#fffaf4 100%);border:1px solid #dccbb8;border-radius:24px;padding:22px;box-shadow:0 16px 42px rgba(7,31,58,.08);overflow:hidden;min-height:178px}
+        .premium-card:before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:linear-gradient(90deg,var(--orange) 0%,#F2B885 100%)}
+        .premium-number{width:38px;height:38px;border-radius:14px;background:#FFF1E6;color:var(--orange);display:inline-flex;align-items:center;justify-content:center;font-weight:900;margin-bottom:13px}
+        .premium-card h3{font-size:20px;line-height:1.16;margin:0 0 8px;color:var(--navy)}
+        .premium-card p{margin:0;color:#526274;line-height:1.52;font-size:15px}
+        .seo-route-strip{padding:50px 0;background:linear-gradient(180deg,#fffaf3 0%,#f7efe5 100%);border-top:1px solid #e4d3c0;border-bottom:1px solid #e4d3c0}
+        .seo-route-head{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:20px}
+        .seo-route-head h2{font-size:clamp(28px,2.8vw,40px);line-height:1.1;letter-spacing:-.9px;margin:0;max-width:650px;color:var(--navy)}
+        .seo-route-head p{max-width:430px;margin:0;color:#425266;line-height:1.55;font-size:16px}
+        .seo-route-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+        .seo-route-card{position:relative;background:linear-gradient(180deg,#fff 0%,#fffaf4 100%);border:1px solid #dccbb8;border-radius:22px;padding:19px;text-decoration:none;color:inherit;box-shadow:0 16px 38px rgba(7,31,58,.09);display:grid;gap:10px;min-height:190px;transition:.18s ease;overflow:hidden}
+        .seo-route-card:before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:linear-gradient(90deg,var(--orange) 0%,#F2B885 100%)}
+        .seo-route-card:hover{border-color:#ffc49a;transform:translateY(-1px);box-shadow:0 18px 42px rgba(7,31,58,.12)}
+        .seo-route-tag{width:36px;height:36px;border-radius:14px;background:#FFF1E6;color:var(--orange);display:inline-flex;align-items:center;justify-content:center;font-weight:900}
+        .seo-route-card h3{margin:0;font-size:18px;line-height:1.18;color:var(--navy);letter-spacing:-.25px}
+        .seo-route-card p{margin:0;color:#4f6074;line-height:1.48;font-size:14px}
+        .seo-route-card span:last-child{margin-top:auto;color:var(--orange);font-weight:900;font-size:14px}
+        .comparison-proof-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 18px}
+        .comparison-proof{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:14px 15px;color:#dbe7f3;line-height:1.42;font-size:14px}
+        .comparison-proof strong{display:block;color:#fff;font-size:15px;margin-bottom:5px}
         .section{padding:58px 0}
         .section-white{background:#fff}
         .section-tight{padding:48px 0}
@@ -453,6 +507,8 @@ export default function SeoLandingPage({ page }) {
           .mobile-trust-line{display:block;font-size:13px;color:#647386;font-weight:900;margin-top:12px;line-height:1.45}
           .trust-micro{display:none}
           .benefit-grid,.compare-columns,.related-card-grid,.example-details{grid-template-columns:1fr}
+          .premium-intro,.premium-grid,.seo-route-grid,.comparison-proof-grid{grid-template-columns:1fr}
+          .premium-intro{gap:12px}.premium-card{min-height:0}.seo-route-head{display:grid;gap:10px}.seo-route-grid{gap:10px}.seo-route-card{min-height:0;padding:17px}.comparison-proof-grid{margin-bottom:12px}
           .related-card{min-height:0;padding:15px 16px}.related-card p{line-height:1.42}
           .section{padding:34px 0}.section-tight{padding:30px 0}
           .section-head{text-align:left;margin-bottom:17px}
@@ -582,6 +638,28 @@ export default function SeoLandingPage({ page }) {
 
       <SeoReviewBand />
 
+      <section className="seo-premium-section section-tight" aria-labelledby="seo-premium-title">
+        <div className="container seo-premium-wrap">
+          <div className="premium-intro">
+            <div>
+              <p className="eyebrow">Duidelijke verkooproute</p>
+              <h2 id="seo-premium-title">Dezelfde duidelijke route, toegespitst op deze situatie.</h2>
+            </div>
+            <p>
+              Specifiek voor {page.breadcrumb.toLowerCase()} ziet u direct wat er mogelijk is, welke onzekerheden kunnen worden beperkt en hoe afspraken zorgvuldig worden vastgelegd.
+            </p>
+          </div>
+          <div className="premium-grid">
+            {premiumCards.map((card, index) => (
+              <article className="premium-card" key={card.title}>
+                <span className="premium-number">{index + 1}</span>
+                <h3>{card.title}</h3>
+                <p>{card.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="section section-white">
         <div className="container">
@@ -766,6 +844,15 @@ export default function SeoLandingPage({ page }) {
               </p>
             </div>
 
+            <div className="comparison-proof-grid">
+              {comparisonProofs.map(([title, text]) => (
+                <div className="comparison-proof" key={title}>
+                  <strong>{title}</strong>
+                  <span>{text}</span>
+                </div>
+              ))}
+            </div>
+
             <div className="compare-columns">
               <div className="compare-box">
                 <div className="compare-title">Reguliere verkoop via een makelaar</div>
@@ -805,6 +892,30 @@ export default function SeoLandingPage({ page }) {
                   <h3>{faq.question}</h3>
                   <p>{faq.answer}</p>
                 </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {routePreviewCards.length > 0 && (
+        <section className="seo-route-strip" aria-labelledby="seo-route-title">
+          <div className="container">
+            <div className="seo-route-head">
+              <div>
+                <p className="eyebrow">Verder oriënteren</p>
+                <h2 id="seo-route-title">Vergelijk deze route met verwante verkoopsituaties.</h2>
+              </div>
+              <p>Bekijk verwante verkoopsituaties die vaak samenhangen met deze vraag. Zo kunt u rustig vergelijken welke route het beste past.</p>
+            </div>
+            <div className="seo-route-grid">
+              {routePreviewCards.map((card, index) => (
+                <a href={card.href} key={card.href} className="seo-route-card">
+                  <span className="seo-route-tag">{index + 1}</span>
+                  <h3>{card.label}</h3>
+                  <p>{card.text}</p>
+                  <span>Bekijk route →</span>
+                </a>
               ))}
             </div>
           </div>
