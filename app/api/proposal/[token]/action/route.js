@@ -62,7 +62,11 @@ export async function POST(request, { params }) {
     if (proposal.lead_id) {
       await query(
         `update leads
-         set status = case when $2 = 'Positief' and status not in ('Akkoord','Afgewezen','Afgewezen / vervallen','Afgerond','Gearchiveerd') then 'In onderhandeling' else status end,
+         set status = case
+               when $2 = 'Positief' and status not in ('Akkoord','Afgewezen','Afgewezen / vervallen','Afgerond','Gearchiveerd') then 'In onderhandeling'
+               when $2 in ('Bespreken','Vraag') and status in ('Nieuw','Nieuwe aanvraag','In behandeling','Eerste bod gedaan','Voorstel opgesteld','Voorstel verzonden') then 'Voorstel bekeken'
+               else status
+             end,
              automation_follow_up_at = current_date,
              next_follow_up_at = coalesce(manual_follow_up_at, current_date),
              updated_at = now()
@@ -71,7 +75,7 @@ export async function POST(request, { params }) {
       );
 
       const automationKey = `proposal-interest-${proposal.id}`;
-      const taskTitle = label === "Positief" ? "Klant geeft akkoord op voorstel - direct opvolgen" : "Klant wil voorstel bespreken";
+      const taskTitle = label === "Positief" ? "Klant geeft akkoord op voorstel - direct opvolgen" : label === "Bespreken" ? "Actie: klant wil voorstel bespreken" : "Actie: klant heeft vraag over voorstel";
       const taskNote = message || (label === "Positief" ? "Klant heeft via de voorstelpagina aangegeven akkoord te zijn met het voorstel. Dit is nog geen getekende koopovereenkomst." : `Actie vanaf openbare voorstelpagina: ${label}.`);
       const existingTask = await queryOne(
         "select id from tasks where lead_id = $1 and automation_key = $2 limit 1",

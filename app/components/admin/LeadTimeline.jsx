@@ -13,8 +13,9 @@ const EVENT_LABELS = {
 
 function eventDescription(event) {
   const label = EVENT_LABELS[event.event_type] || event.event_type || "Voorstelactiviteit";
+  const prefix = ["interested", "discuss", "question"].includes(event.event_type) ? "Actie nodig: " : "";
   const suffix = event.message ? ` — ${event.message}` : "";
-  return `${label}${suffix}`;
+  return `${prefix}${label}${suffix}`;
 }
 
 function buildItems({ lead, tasks = [], proposals = [], mailLogs = [], proposalEvents = [] }) {
@@ -63,7 +64,7 @@ function buildItems({ lead, tasks = [], proposals = [], mailLogs = [], proposalE
     items.push({
       id: `event-${event.id}`,
       at: event.created_at,
-      kind: event.event_type === "interested" ? "hot" : "event",
+      kind: ["interested", "discuss", "question"].includes(event.event_type) ? "hot" : "event",
       title: eventDescription(event),
       detail: [event.amount_text, event.property_address].filter(Boolean).join(" · "),
     });
@@ -132,7 +133,7 @@ export default function LeadTimeline(props) {
         .timeline-item{position:relative;display:grid;grid-template-columns:18px 1fr;gap:12px;padding:0 0 18px}
         .timeline-item:not(:last-child):before{content:"";position:absolute;left:6px;top:14px;bottom:0;width:2px;background:#e8e3db}
         .timeline-dot{width:14px;height:14px;border-radius:999px;background:#8ca1b8;border:3px solid #edf2f7;margin-top:4px;z-index:1}
-        .kind-hot .timeline-dot{background:#d96a1c;border-color:#fff1e6}
+        .kind-hot{background:#fff7ef;border-radius:18px;padding:12px 12px 18px}.kind-hot .timeline-dot{background:#d96a1c;border-color:#fff1e6}
         .kind-contact .timeline-dot{background:#3e8f5e;border-color:#eaf7ef}
         .kind-mail .timeline-dot{background:#326aa5;border-color:#edf4fb}
         .kind-done .timeline-dot{background:#789181;border-color:#edf5ef}

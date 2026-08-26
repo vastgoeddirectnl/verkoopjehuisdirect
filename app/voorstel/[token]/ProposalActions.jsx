@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 async function trackEvent(token, event) {
   try {
@@ -28,6 +28,8 @@ export default function ProposalActions({
   const [errorMessage, setErrorMessage] = useState("");
   const [confirming, setConfirming] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
+  const actionSectionRef = useRef(null);
+  const discussTextareaRef = useRef(null);
 
   async function send(action) {
     if (previewMode) return;
@@ -61,10 +63,19 @@ export default function ProposalActions({
     setConfirming(true);
   }
 
-  function startDiscuss() {
+  function startDiscuss({ scrollToAction = false } = {}) {
     if (previewMode) return;
     setErrorMessage("");
     setShowMessage(true);
+
+    if (scrollToAction) {
+      window.setTimeout(() => {
+        actionSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 0);
+      window.setTimeout(() => {
+        discussTextareaRef.current?.focus();
+      }, 450);
+    }
   }
 
   function whatsappUrl() {
@@ -95,7 +106,7 @@ export default function ProposalActions({
 
   return (
     <>
-      <section id="voorstel-actie" className="proposal-actions-v32" aria-label="Akkoord geven of reageren op voorstel">
+      <section ref={actionSectionRef} id="voorstel-actie" className="proposal-actions-v32" aria-label="Akkoord geven of reageren op voorstel">
         <div className="proposal-actions-copy">
           <span className="proposal-actions-kicker">Uw volgende stap</span>
           <h2>Wilt u verder met dit voorstel?</h2>
@@ -125,6 +136,7 @@ export default function ProposalActions({
           <div className="message-box">
             <label htmlFor="proposal-message">Wat wilt u bespreken? <span>(optioneel)</span></label>
             <textarea
+              ref={discussTextareaRef}
               id="proposal-message"
               value={message}
               onChange={(event) => setMessage(event.target.value)}
@@ -180,7 +192,7 @@ export default function ProposalActions({
             {validityText ? <span>{validityText}</span> : null}
           </div>
           <button disabled={previewMode} onClick={startInterested}>Akkoord</button>
-          <button disabled={previewMode} onClick={startDiscuss}>Bespreken</button>
+          <button disabled={previewMode} onClick={() => startDiscuss({ scrollToAction: true })}>Bespreken</button>
         </div>
       ) : null}
 

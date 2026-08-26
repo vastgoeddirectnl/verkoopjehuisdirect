@@ -209,9 +209,17 @@ export default function AdminDashboard() {
           createdAgeHours
         );
 
-        if (lead.interest_status === "Positief" && interestAgeHours <= 24) {
+        const interestStatus = String(lead.interest_status || "").trim().toLowerCase();
+
+        if (interestStatus === "positief" && interestAgeHours <= 24) {
           priority = 100;
           reason = "Klant gaf in de afgelopen 24 uur aan verder te willen";
+        } else if (interestStatus === "bespreken" && interestAgeHours <= 72) {
+          priority = 98;
+          reason = "Klant wil het voorstel bespreken — opvolgen";
+        } else if (interestStatus === "vraag" && interestAgeHours <= 72) {
+          priority = 96;
+          reason = "Klant heeft een vraag over het voorstel — opvolgen";
         } else if (lead.last_proposal_viewed_at && viewAgeHours <= 24) {
           priority = 80 + Math.min(Number(lead.proposal_view_count || 0), 10);
           reason = `Voorstel vandaag/recent bekeken · ${lead.proposal_view_count || 1} sessie(s)`;
