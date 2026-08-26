@@ -57,6 +57,55 @@ function amount(value, fallback = "In overleg") {
   return raw;
 }
 
+function parseMoney(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return 0;
+  const cleaned = raw
+    .replace(/\s/g, "")
+    .replace(/€/g, "")
+    .replace(/[^0-9,.-]/g, "");
+
+  if (!cleaned) return 0;
+
+  let normalized = cleaned;
+  const hasComma = normalized.includes(",");
+  const hasDot = normalized.includes(".");
+
+  if (hasComma && hasDot) {
+    normalized = normalized.replace(/\./g, "").replace(",", ".");
+  } else if (hasComma) {
+    normalized = normalized.replace(",", ".");
+  } else if (hasDot) {
+    const dotParts = normalized.split(".");
+    const lastPart = dotParts[dotParts.length - 1];
+    if (lastPart.length === 3 && dotParts.length > 1) {
+      normalized = normalized.replace(/\./g, "");
+    }
+  }
+
+  const number = Number.parseFloat(normalized);
+  return Number.isFinite(number) ? Math.abs(number) : 0;
+}
+
+function formatMoney(value, negative = false) {
+  const number = Number(value || 0);
+  if (!Number.isFinite(number) || number <= 0) return "";
+  const formatted = new Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0,
+  }).format(Math.round(number));
+  return negative ? `- ${formatted}` : formatted;
+}
+
+function costInclVatValue(value, fallback = "-") {
+  const raw = String(value || "").trim();
+  if (!raw) return fallback;
+  const parsed = parseMoney(raw);
+  if (!parsed) return raw;
+  return formatMoney(parsed * 1.21, true) || raw;
+}
+
 function value(value, fallback = "-") {
   const raw = String(value || "").trim();
   return raw || fallback;
@@ -496,8 +545,8 @@ export default async function ProposalPrintPage({ params }) {
             <div>{amount(proposal.traditional_price_text, "-")}</div>
             <div>{amount(proposal.amount_text)}</div>
 
-            <div><strong>Makelaarskosten</strong></div>
-            <div>{value(proposal.agent_costs_text, "-")}</div>
+            <div><strong>Makelaarskosten incl. 21% btw</strong></div>
+            <div>{costInclVatValue(proposal.agent_costs_text, "-")}</div>
             <div>€ 0</div>
 
             <div><strong>Afwikkelingskosten verkoper</strong></div>
@@ -508,15 +557,15 @@ export default async function ProposalPrintPage({ params }) {
             <div>{value(proposal.renovation_costs_text, "-")}</div>
             <div>Niet noodzakelijk vooraf</div>
 
-            <div><strong>Overige verkoopkosten</strong></div>
-            <div>{value(proposal.other_costs_text, "-")}</div>
+            <div><strong>Overige verkoopkosten incl. 21% btw</strong></div>
+            <div>{costInclVatValue(proposal.other_costs_text, "-")}</div>
             <div>In overleg / niet standaard nodig</div>
 
             <div className="total"><strong>Verwachte netto-opbrengst</strong></div>
             <div className="total">{amount(proposal.traditional_net_text, "-")}</div>
             <div className="total accent">{amount(proposal.direct_net_text || proposal.amount_text)}</div>
           </div>
-          <p className="footnote">Onder afwikkelingskosten verkoper vallen alleen vooraf afgesproken kosten aan verkoperszijde, zoals volmachtskosten, royement/doorhaling van hypotheekinschrijvingen of bijzondere afwikkelingskosten. Kosten die normaal voor koper zijn bij kosten koper worden niet als verkoperskosten meegenomen.</p>
+          <p className="footnote">Makelaarskosten en overige verkoopkosten worden in deze vergelijking inclusief 21% btw getoond, omdat deze kosten ook zo in de netto-opbrengst zijn verwerkt. Onder afwikkelingskosten verkoper vallen alleen vooraf afgesproken kosten aan verkoperszijde, zoals volmachtskosten, royement/doorhaling van hypotheekinschrijvingen of bijzondere afwikkelingskosten. Kosten die normaal voor koper zijn bij kosten koper worden niet als verkoperskosten meegenomen.</p>
         </section>
 
         <section className="section">
