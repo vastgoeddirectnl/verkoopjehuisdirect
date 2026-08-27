@@ -562,6 +562,48 @@ export async function POST(request) {
       return NextResponse.json({ proposal });
     }
 
+    if (action === "recordProposalWhatsapp") {
+      const proposal = await queryOne(
+        "select id, lead_id, lead_naam, lead_telefoon, property_address, amount_text, version_number from proposals where id = $1",
+        [body.id]
+      );
+      if (!proposal) return NextResponse.json({ error: "Voorstel niet gevonden." }, { status: 404 });
+
+      const mode = clean(body.mode, 30) === "sent" ? "sent" : "prepared";
+      const eventType = mode === "sent" ? "admin_whatsapp_sent" : "admin_whatsapp_prepared";
+      const message = mode === "sent"
+        ? "WhatsApp-bericht dat het voorstel klaarstaat is handmatig als verzonden gemarkeerd."
+        : "WhatsApp-bericht dat het voorstel klaarstaat is voorbereid/geopend vanuit de adminomgeving.";
+
+      await query(
+        `insert into proposal_events (proposal_id, lead_id, event_type, message, metadata)
+         values ($1,$2,$3,$4,$5::jsonb)`,
+        [
+          proposal.id,
+          proposal.lead_id || null,
+          eventType,
+          message,
+          JSON.stringify({
+            source: "admin",
+            mode,
+            public_url: clean(body.public_url || "", 600) || undefined,
+          }),
+        ]
+      );
+
+      if (mode === "sent" && proposal.lead_id) {
+        await query(
+          `update leads
+           set last_contact_at = now(),
+               updated_at = now()
+           where id = $1`,
+          [proposal.lead_id]
+        );
+      }
+
+      return NextResponse.json({ ok: true, event_type: eventType });
+    }
+
     if (action === "sendProposalEmail") {
       let proposal = await queryOne("select * from proposals where id = $1", [body.id]);
       if (!proposal) return NextResponse.json({ error: "Voorstel niet gevonden." }, { status: 404 });

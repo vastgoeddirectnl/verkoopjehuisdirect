@@ -23,6 +23,8 @@ const EVENT_LABELS = {
   discuss: "Klant wil bespreken",
   question: "Vraag van klant",
   whatsapp: "WhatsApp geopend",
+  admin_whatsapp_prepared: "WhatsApp voorstelbericht voorbereid",
+  admin_whatsapp_sent: "WhatsApp voorstelbericht verzonden gemarkeerd",
   print: "Print/PDF geopend",
   pdf: "PDF geopend",
   legacy_interest: "Historische reactie",
@@ -30,6 +32,47 @@ const EVENT_LABELS = {
 
 function publicUrl(proposal) {
   return proposal?.public_token ? `/voorstel/${proposal.public_token}` : "";
+}
+
+function absolutePublicUrl(proposal) {
+  const path = publicUrl(proposal);
+  if (!path) return "";
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://www.vastgoeddirectnederland.nl";
+  return `${origin}${path}`;
+}
+
+function whatsappPhone(value) {
+  let phone = String(value || "").replace(/\D/g, "");
+  if (phone.startsWith("00")) phone = phone.slice(2);
+  if (phone.startsWith("0")) phone = `31${phone.slice(1)}`;
+  return phone;
+}
+
+function buildProposalWhatsappText(proposal) {
+  const customerName = String(proposal?.lead_naam || "").trim();
+  const greeting = customerName ? `Goedemiddag ${customerName},` : "Goedemiddag,";
+  const proposalUrl = absolutePublicUrl(proposal);
+  return [
+    greeting,
+    "",
+    "Het verkoopvoorstel van Vastgoed Direct Nederland staat voor u klaar.",
+    "",
+    "U kunt het voorstel hier rustig bekijken:",
+    proposalUrl,
+    "",
+    "Het bekijken van het voorstel betekent niet dat u ergens aan vastzit. Heeft u vragen of wilt u het voorstel bespreken, dan hoor ik het graag.",
+    "",
+    "Met vriendelijke groet,",
+    "Rob",
+    "Vastgoed Direct Nederland",
+  ].join("\n");
+}
+
+function proposalWhatsappUrl(proposal) {
+  const phone = whatsappPhone(proposal?.lead_telefoon);
+  const proposalUrl = absolutePublicUrl(proposal);
+  if (!phone || !proposalUrl) return "";
+  return `https://wa.me/${phone}?text=${encodeURIComponent(buildProposalWhatsappText(proposal))}`;
 }
 
 export default function ProposalAdminPage({ params }) {
@@ -98,7 +141,20 @@ export default function ProposalAdminPage({ params }) {
     if (!window.confirm(`Voorstel verzenden naar ${form.lead_email}?`)) return;
     const result = await post({ action: "sendProposalEmail", id, lead_email: form.lead_email });
     if (result?.ok) {
-      setNotice(result.skipped ? "Mailconfiguratie is niet actief; de voorstelpagina is wel aangemaakt." : "Voorstel is verzonden.");
+      setNotice(result.skipped ? "Mailconfiguratie is niet actief; de voorstelpagina is wel aangemaakt. U kunt daarna eventueel de WhatsApp-knop gebruiken." : "Voorstel is verzonden. Gebruik eventueel de WhatsApp-knop om de klant direct te laten weten dat het voorstel klaarstaat.");
+      await load();
+    }
+  }
+
+  async function recordProposalWhatsApp(mode) {
+    const result = await post({
+      action: "recordProposalWhatsapp",
+      id,
+      mode,
+      public_url: absolutePublicUrl(proposal),
+    });
+    if (result?.ok) {
+      setNotice(mode === "sent" ? "WhatsApp-bericht is handmatig als verzonden gemarkeerd." : "WhatsApp-bericht is voorbereid/geopend.");
       await load();
     }
   }
@@ -124,6 +180,7 @@ export default function ProposalAdminPage({ params }) {
   const events = data?.proposalEvents || [];
   const versions = data?.versions || [];
   const viewCount = useMemo(() => events.filter((event) => event.event_type === "view").length, [events]);
+  const whatsappLink = proposalWhatsappUrl(proposal);
 
   if (!form) {
     return (
@@ -159,6 +216,8 @@ export default function ProposalAdminPage({ params }) {
       <nav className="actionbar">
         <button disabled={saving} onClick={save}>Opslaan</button>
         <button disabled={saving} onClick={send}>Mailen</button>
+        {whatsappLink ? <a className="green" href={whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => recordProposalWhatsApp("prepared")}>WhatsApp klant</a> : null}
+        {whatsappLink ? <button className="secondary" disabled={saving} onClick={() => recordProposalWhatsApp("sent")}>Markeer WhatsApp verzonden</button> : null}
         {publicUrl(proposal) ? <a href={`${publicUrl(proposal)}?admin_preview=1`} target="_blank" rel="noopener noreferrer">Preview klant</a> : null}
         <a href={`/admin/voorstellen/${id}/print`} target="_blank" rel="noopener noreferrer">Print/PDF</a>
         <button className="secondary" disabled={saving} onClick={cloneVersion}>Nieuwe versie</button>
@@ -253,6 +312,7 @@ export default function ProposalAdminPage({ params }) {
       <div className="mobile-actions">
         <button onClick={save} disabled={saving}>Opslaan</button>
         <button onClick={send} disabled={saving}>Mailen</button>
+        {whatsappLink ? <a href={whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => recordProposalWhatsApp("prepared")}>WhatsApp</a> : null}
         {publicUrl(proposal) ? <a href={`${publicUrl(proposal)}?admin_preview=1`} target="_blank" rel="noopener noreferrer">Preview</a> : null}
       </div>
     </main>
@@ -267,7 +327,7 @@ a{color:inherit}.proposal-admin{width:min(1240px,calc(100% - 36px));margin:0 aut
 .eyebrow{display:inline-flex;background:#fff1e6;border:1px solid #f2b885;color:#b85216;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
 .status-box{background:var(--navy);color:#fff;border-radius:22px;padding:18px;min-width:180px;display:grid;gap:5px}.status-box span,.status-box small{color:#c7d5e5}.status-box strong{font-size:22px}
 .actionbar{position:sticky;top:10px;z-index:20;background:rgba(255,253,249,.94);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:22px;padding:10px;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;box-shadow:0 12px 36px rgba(7,31,58,.08)}
-.actionbar button,.actionbar a,.mobile-actions button,.mobile-actions a{border:0;border-radius:999px;background:var(--orange);color:#fff;padding:12px 16px;font:inherit;font-weight:900;text-decoration:none;cursor:pointer}.actionbar .secondary{background:var(--navy)}.actionbar .muted{background:#e9e4dc;color:var(--navy)}
+.actionbar button,.actionbar a,.mobile-actions button,.mobile-actions a{border:0;border-radius:999px;background:var(--orange);color:#fff;padding:12px 16px;font:inherit;font-weight:900;text-decoration:none;cursor:pointer}.actionbar .secondary{background:var(--navy)}.actionbar .green{background:#3e8f5e;color:#fff}.actionbar .muted{background:#e9e4dc;color:var(--navy)}
 .notice,.error{border-radius:16px;padding:12px 14px;margin-bottom:14px;font-weight:800}.notice{background:#eaf7ef;color:#23643f;border:1px solid #c8e7d4}.error{background:#f8eeee;color:#8a2d2d;border:1px solid #eccaca}
 .overview-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.65fr);gap:18px}.side-stack{display:grid;gap:18px;align-content:start}.panel{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:22px;box-shadow:0 12px 42px rgba(7,31,58,.07)}.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}.panel-head h2{margin:7px 0 0}.panel-head>span{font-size:12px;color:var(--muted)}
 .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.form-grid label,.wide-field{display:grid;gap:7px;font-weight:900;font-size:13px}.form-grid input,.wide-field textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px 13px;font:inherit}.wide-field{margin-top:14px}.wide-field textarea{min-height:110px;resize:vertical}

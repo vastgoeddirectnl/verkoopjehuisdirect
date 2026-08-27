@@ -6,6 +6,8 @@ const EVENT_LABELS = {
   discuss: "Klant wil voorstel bespreken",
   question: "Klant stelde een vraag",
   whatsapp: "WhatsApp vanuit voorstel geopend",
+  admin_whatsapp_prepared: "WhatsApp voorstelbericht voorbereid",
+  admin_whatsapp_sent: "WhatsApp voorstelbericht verzonden gemarkeerd",
   print: "Voorstel geprint / PDF geopend",
   pdf: "Voorstel als PDF geopend",
   legacy_interest: "Historische voorstelreactie",
