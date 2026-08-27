@@ -524,6 +524,7 @@ export default async function ProposalPrintPage({ params }) {
           Gebruik dit overzicht om niet alleen het bod, maar vooral de netto-opbrengst en voorwaarden te vergelijken.
         </p>
         <p className="notice"><strong>Let op:</strong> de traditionele verkoopprijs is een indicatieve vergelijkingswaarde. Bij verhuurde, leeg te leveren of gemengde objecten kan deze waarde mede zijn gebaseerd op huurwaarde, leegstand, verhuurrisico, verkoopbaarheid en kosten.</p>
+        <p className="notice"><strong>Huidige staat of na voorbereiding:</strong> De traditionele verkoopprijs kan zijn gebaseerd op verkoop in huidige staat óf op verkoop na noodzakelijke voorbereiding. Herstel-/renovatiekosten worden alleen apart meegenomen als die kosten nodig zijn om de genoemde traditionele verkoopprijs te behalen. Als de traditionele verkoopprijs al uitgaat van verkoop in huidige staat, hoort deze post leeg of op € 0 te staan.</p>
         {showUseRental ? (
           <p className="notice"><strong>Uitgangspunt vergelijking:</strong> Deze financiële vergelijking is gebaseerd op de hierboven genoemde wijze van levering. Wanneer uitgangspunt is dat het object vrij van huur en gebruik wordt geleverd, is de vergelijking daarop gebaseerd. Als het object toch geheel of gedeeltelijk verhuurd of in gebruik geleverd wordt, kan dit invloed hebben op waarde, voorwaarden en haalbaarheid van het voorstel.</p>
         ) : null}

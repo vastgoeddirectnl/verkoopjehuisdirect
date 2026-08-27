@@ -823,7 +823,7 @@ export default function LeadDetailPage({ params }) {
 
                 <div className="form-section">
                   <h3>3. Netto-opbrengstvergelijking</h3>
-                  <p className="calc-help">Vul de traditionele verkoopprijs als indicatieve vergelijkingswaarde in. Bij verhuurde, leeg te leveren of gemengde objecten mag deze waarde ook rendementsmatig worden benaderd op basis van huurwaarde, leegstand, verhuurrisico en kosten. Vul makelaarskosten en overige verkoopkosten exclusief btw in; het adminportaal rekent automatisch 21% btw door. Vul afwikkelingskosten alleen in als deze normaal voor verkoper komen en VDN ze in dit voorstel eventueel overneemt.</p>
+                  <p className="calc-help">Vul de traditionele verkoopprijs als indicatieve vergelijkingswaarde in. Bij verhuurde, leeg te leveren of gemengde objecten mag deze waarde ook rendementsmatig worden benaderd op basis van huurwaarde, leegstand, verhuurrisico en kosten. Geef de traditionele verkoopprijs óf op basis van verkoop in huidige staat óf op basis van verkoop na noodzakelijke voorbereiding op. Vul herstel-/renovatiekosten alleen in als die kosten nodig zijn om de genoemde traditionele verkoopprijs te behalen; laat deze post leeg of op € 0 als de verkoopprijs al uitgaat van huidige staat. Vul makelaarskosten en overige verkoopkosten exclusief btw in; het adminportaal rekent automatisch 21% btw door. Vul afwikkelingskosten alleen in als deze normaal voor verkoper komen en VDN ze in dit voorstel eventueel overneemt.</p>
                   <div className="form-grid">
                     <Field label="Traditionele verkoopprijs"><input inputMode="decimal" placeholder="Bijv. € 240.000" value={proposal.traditional_price_text} onChange={(e) => setProposalField("traditional_price_text", e.target.value)} /></Field>
                     <Field label="Makelaarskosten excl. btw"><input inputMode="decimal" placeholder="Bijv. € 3.600" value={proposal.agent_costs_text} onChange={(e) => setProposalField("agent_costs_text", e.target.value)} /></Field>
@@ -833,6 +833,8 @@ export default function LeadDetailPage({ params }) {
                     <Field label="Netto Vastgoed Direct"><input inputMode="decimal" placeholder="Automatisch uit voorgesteld bedrag" value={proposal.direct_net_text} onChange={(e) => setProposalField("direct_net_text", e.target.value)} /></Field>
                   </div>
 
+
+                  <p className="calc-help small">Let op bij herstel-/renovatiekosten: trek kosten niet dubbel af. Als de traditionele verkoopprijs al de waarde in huidige staat weergeeft, zet herstel-/renovatiekosten op € 0. Gebruik deze post alleen als de verkoper die kosten naar verwachting moet maken om de genoemde traditionele opbrengst te behalen.</p>
 
                   <p className="calc-help small">Onder afwikkelingskosten verkoper vallen alleen vooraf afgesproken kosten aan verkoperszijde, zoals volmachtskosten, royement/doorhaling van hypotheekinschrijvingen of bijzondere afwikkelingskosten. Kosten die normaal voor koper zijn bij kosten koper worden hier niet als verkoperskosten meegenomen. In de klantversie wordt vermeld dat VDN deze kosten overneemt indien dit is afgesproken.</p>
 
