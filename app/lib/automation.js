@@ -1,4 +1,5 @@
 import { query, queryOne } from "./neonDb";
+import { addDaysAmsterdam } from "./date";
 
 const HIGH_VALUE_REGIONS = ["groningen", "drenthe", "friesland", "overijssel", "borger", "stadskanaal", "assen", "emmen", "veendam", "winschoten", "musselkanaal"];
 const INACTIVE_LEAD_STATUSES = ["Akkoord", "Afgewezen", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
@@ -8,9 +9,7 @@ function clean(value) {
 }
 
 function todayPlus(days = 0) {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return date.toISOString().slice(0, 10);
+  return addDaysAmsterdam(days);
 }
 
 function containsAny(text, words) {
@@ -98,8 +97,8 @@ export function calculateLeadAutomation(lead = {}) {
 
   if (status === "Nieuw" || status === "Nieuwe aanvraag") nextFollowUpAt = todayPlus(0);
   else if (["Contact opgenomen", "In behandeling", "In beoordeling", "Eerste bod gedaan", "Beoordeling gepland", "Voorstel opgesteld"].includes(status)) nextFollowUpAt = todayPlus(1);
-  else if (status === "Voorstel verzonden" || status === "Voorstel bekeken" || status === "In onderhandeling") nextFollowUpAt = todayPlus(2);
   else if (status === "Voorstel bekeken") nextFollowUpAt = todayPlus(0);
+  else if (status === "Voorstel verzonden" || status === "In onderhandeling") nextFollowUpAt = todayPlus(2);
   else if (priority === "Hoog" && !INACTIVE_LEAD_STATUSES.includes(status)) nextFollowUpAt = todayPlus(0);
 
   return {
@@ -168,7 +167,8 @@ export async function refreshLeadAutomation(inputLead) {
        set lead_score = $2,
            lead_priority = $3,
            automation_note = $4,
-           next_follow_up_at = $5,
+           automation_follow_up_at = $5,
+           next_follow_up_at = coalesce(manual_follow_up_at, $5::date),
            last_automation_at = now(),
            updated_at = now()
        where id = $1
@@ -240,7 +240,9 @@ export async function markProposalViewed(proposal) {
     await query(
       `update proposals
        set public_viewed_at = coalesce(public_viewed_at, now()),
+           public_last_viewed_at = now(),
            public_view_count = coalesce(public_view_count, 0) + 1,
+           status = case when status = 'Verzonden' then 'Bekeken' else status end,
            updated_at = now()
        where id = $1`,
       [proposal.id]
@@ -256,7 +258,8 @@ export async function markProposalViewed(proposal) {
         `update leads
          set status = case when status in ('Voorstel verzonden','Voorstel opgesteld') then 'Voorstel bekeken' else status end,
              proposal_viewed_at = coalesce(proposal_viewed_at, now()),
-             next_follow_up_at = current_date,
+             automation_follow_up_at = current_date,
+             next_follow_up_at = coalesce(manual_follow_up_at, current_date),
              updated_at = now()
          where id = $1`,
         [lead.id]

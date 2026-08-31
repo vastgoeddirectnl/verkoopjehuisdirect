@@ -22,7 +22,7 @@ const situationLinks = [
 ];
 
 export const metadata = {
-  title: "Verkoopinformatie per situatie | Vastgoed Direct Nederland",
+  title: "Verkoopinformatie per situatie",
   description: "Bekijk verkoopmogelijkheden per situatie, zoals achterstallig onderhoud, leegstand, erfenis, scheiding, verhuur of verkoop zonder leeghalen.",
   alternates: { canonical: "/situaties" },
 };

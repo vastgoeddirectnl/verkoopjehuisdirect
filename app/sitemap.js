@@ -32,12 +32,12 @@ const pages = [
   // Kennisbank / ondersteunende SEO-pagina's
   { path: "/huis-verkopen-zonder-leeghalen", priority: 0.8, changeFrequency: "monthly" },
   { path: "/huis-verkopen-zonder-opknappen", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/huis-verkopen-in-huidige-staat", priority: 0.88, changeFrequency: "monthly" },
   { path: "/huis-verkopen-zonder-verkoopklaar-maken", priority: 0.8, changeFrequency: "monthly" },
   { path: "/woning-verkopen-die-nog-vol-staat", priority: 0.8, changeFrequency: "monthly" },
   { path: "/geerfde-woning-verkopen-zonder-leeghalen", priority: 0.8, changeFrequency: "monthly" },
   { path: "/opknapwoning-verkopen-zonder-makelaar", priority: 0.8, changeFrequency: "monthly" },
   { path: "/leegstaand-huis-verkopen-wat-zijn-de-opties", priority: 0.8, changeFrequency: "monthly" },
-  { path: "/huis-verkopen-zonder-bezichtigingen-uitleg", priority: 0.8, changeFrequency: "monthly" },
 
   // Regiopagina's
   { path: "/huis-verkopen-groningen", priority: 0.75, changeFrequency: "monthly" },

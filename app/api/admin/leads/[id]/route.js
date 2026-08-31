@@ -41,6 +41,6 @@ export async function PATCH(request, context) {
 
     return NextResponse.json({ lead });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: "Interne serverfout." }, { status: 500 });
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { addDaysAmsterdam, formatDateTimeNL, todayAmsterdam } from "../lib/date";
 
 const STATUSES = [
   "Nieuwe aanvraag",
@@ -25,22 +26,9 @@ const LEGACY_STATUS_LABELS = {
 const ARCHIVE_STATUSES = ["Akkoord", "Afgewezen", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
 const TASK_STATUSES = ["Open", "In behandeling", "Afgerond"];
 
-function todayPlus(days) {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return date.toISOString().slice(0, 10);
-}
+function todayPlus(days) { return addDaysAmsterdam(days); }
 
-function fmt(value) {
-  if (!value) return "-";
-  return new Intl.DateTimeFormat("nl-NL", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(value));
-}
+function fmt(value) { return formatDateTimeNL(value); }
 
 
 function displayStatus(status) {
@@ -77,6 +65,58 @@ function whatsappUrl(phone, name) {
   const cleaned = cleanPhone(phone).replace(/^0/, "31");
   const text = `Hallo ${name || ""}, bedankt voor uw aanvraag bij Vastgoed Direct Nederland. Ik neem graag contact met u op over uw woning.`;
   return `https://wa.me/${cleaned}?text=${encodeURIComponent(text)}`;
+}
+
+function parseLeadSourceDetails(lead) {
+  const bron = String(lead?.bron || "");
+  const pagina = String(lead?.pagina || "");
+  const params = {};
+
+  bron.split("|").map((part) => part.trim()).forEach((part) => {
+    const index = part.indexOf("=");
+    if (index > 0) {
+      params[part.slice(0, index).trim()] = part.slice(index + 1).trim();
+    }
+  });
+
+  const pageParts = pagina.split(" · ");
+  const pagePath = pageParts[0] || pagina;
+  const pageTitle = pageParts.slice(1).join(" · ");
+
+  return {
+    pagePath,
+    pageTitle,
+    source: params.utm_source || params.source || (bron === "direct" ? "direct" : ""),
+    medium: params.utm_medium || "",
+    campaign: params.utm_campaign || "",
+    term: params.utm_term || "",
+    content: params.utm_content || "",
+    clickId: params.gclid || params.gbraid || params.wbraid || "",
+    referrer: params.referrer || "",
+  };
+}
+
+function SourceDetails({ lead }) {
+  const details = parseLeadSourceDetails(lead);
+  const hasDetails = [details.pagePath, details.pageTitle, details.source, details.medium, details.campaign, details.term, details.content, details.clickId, details.referrer].some(Boolean);
+  if (!hasDetails) return null;
+
+  return (
+    <div className="source-detail-box">
+      <h3>Meetgegevens</h3>
+      <div className="info-grid">
+        <Info label="Landingspagina" value={details.pagePath} />
+        <Info label="Paginatitel" value={details.pageTitle} />
+        <Info label="UTM source" value={details.source} />
+        <Info label="UTM medium" value={details.medium} />
+        <Info label="Campagne" value={details.campaign} />
+        <Info label="Zoekterm / keyword" value={details.term} />
+        <Info label="Advertentie-inhoud" value={details.content} />
+        <Info label="Click ID" value={details.clickId} />
+        <Info label="Referrer" value={details.referrer} />
+      </div>
+    </div>
+  );
 }
 
 function emptyProposal(days = 14) {
@@ -140,12 +180,81 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState("Alle");
   const [taskFilter, setTaskFilter] = useState("Alle");
   const [search, setSearch] = useState("");
+  const [globalSearch, setGlobalSearch] = useState("");
   const [saving, setSaving] = useState(false);
   const [proposalForm, setProposalForm] = useState(emptyProposal());
   const [taskForm, setTaskForm] = useState({ title: "", due_date: todayPlus(1), note: "" });
 
   const maxPage = useMemo(() => Math.max(1, ...((report.byPage || []).map((r) => Number(r.total) || 0))), [report]);
   const maxSource = useMemo(() => Math.max(1, ...((report.bySource || []).map((r) => Number(r.total) || 0))), [report]);
+  const actionLeads = useMemo(() => {
+    const now = Date.now();
+    const today = todayAmsterdam();
+    const hoursSince = (value) => {
+      const time = value ? new Date(value).getTime() : NaN;
+      return Number.isFinite(time) ? (now - time) / 3600000 : Infinity;
+    };
+
+    return leads
+      .map((lead) => {
+        let priority = 0;
+        let reason = "";
+        const viewAgeHours = hoursSince(lead.last_proposal_viewed_at);
+        const interestAgeHours = hoursSince(lead.last_interest_at);
+        const createdAgeHours = hoursSince(lead.created_at);
+        const lastActivityAgeHours = Math.min(
+          hoursSince(lead.last_contact_at),
+          viewAgeHours,
+          interestAgeHours,
+          createdAgeHours
+        );
+
+        const interestStatus = String(lead.interest_status || "").trim().toLowerCase();
+
+        if (interestStatus === "positief" && interestAgeHours <= 24) {
+          priority = 100;
+          reason = "Klant gaf in de afgelopen 24 uur aan verder te willen";
+        } else if (interestStatus === "bespreken" && interestAgeHours <= 72) {
+          priority = 98;
+          reason = "Klant wil het voorstel bespreken — opvolgen";
+        } else if (interestStatus === "vraag" && interestAgeHours <= 72) {
+          priority = 96;
+          reason = "Klant heeft een vraag over het voorstel — opvolgen";
+        } else if (lead.last_proposal_viewed_at && viewAgeHours <= 24) {
+          priority = 80 + Math.min(Number(lead.proposal_view_count || 0), 10);
+          reason = `Voorstel vandaag/recent bekeken · ${lead.proposal_view_count || 1} sessie(s)`;
+        } else if (lead.next_follow_up_at && lead.next_follow_up_at <= today) {
+          priority = 70;
+          reason = lead.manual_follow_up_at ? "Handmatige opvolging is vandaag of over tijd" : "Opvolging is vandaag of over tijd";
+        } else if (["Nieuwe aanvraag", "Nieuw"].includes(lead.status) && createdAgeHours <= 4) {
+          priority = 60;
+          reason = "Nieuwe aanvraag van minder dan 4 uur geleden";
+        } else if (["Nieuwe aanvraag", "Nieuw"].includes(lead.status)) {
+          priority = 55;
+          reason = "Nieuwe aanvraag nog opvolgen";
+        } else if (lastActivityAgeHours > 72 && !ARCHIVE_STATUSES.includes(lead.status || "")) {
+          priority = 30;
+          reason = "Meer dan 3 dagen geen recente activiteit";
+        } else if (Number(lead.open_tasks || 0) > 0) {
+          priority = 20;
+          reason = `${lead.open_tasks} open taak/taken`;
+        }
+
+        return { ...lead, _priority: priority, _reason: reason };
+      })
+      .filter((lead) => lead._priority > 0)
+      .sort((a, b) => b._priority - a._priority)
+      .slice(0, 10);
+  }, [leads]);
+
+  const kanbanColumns = useMemo(() => [
+    ["Nieuw", ["Nieuw", "Nieuwe aanvraag"], "Nieuwe aanvraag"],
+    ["Contact", ["Contact opgenomen", "In behandeling"], "In behandeling"],
+    ["Beoordeling", ["Eerste bod gedaan", "In beoordeling", "Beoordeling gepland"], "Beoordeling gepland"],
+    ["Voorstel", ["Voorstel opgesteld", "Voorstel verzonden", "Voorstel bekeken"], "Voorstel opgesteld"],
+    ["Onderhandeling", ["In onderhandeling"], "In onderhandeling"],
+    ["Akkoord", ["Akkoord"], "Akkoord"],
+  ], []);
 
   async function apiGet(action, params = {}) {
     const url = new URL(`/api/admin/v2`, window.location.origin);
@@ -437,6 +546,19 @@ export default function AdminDashboard() {
             <h1>{view === "dashboard" ? "Dashboard" : view === "leads" ? "Leads" : view === "tasks" ? "Taken & reminders" : view === "proposals" ? "Verkoopvoorstellen" : view === "archive" ? "Archief" : "Rapportage"}</h1>
           </div>
           <div className="topbar-actions">
+            <input
+              className="global-search"
+              value={globalSearch}
+              onChange={(event) => setGlobalSearch(event.target.value)}
+              placeholder="Zoek klant, telefoon, postcode…"
+              onKeyDown={async (event) => {
+                if (event.key !== "Enter") return;
+                setSearch(globalSearch);
+                setView("leads");
+                await loadLeads({ search: globalSearch });
+              }}
+              aria-label="Globaal zoeken in leads"
+            />
             <a className="add-lead" href="/admin/nieuwe-lead">+ Klant toevoegen</a>
             <button className="automation-btn" disabled={saving} onClick={runAutomation}>Automatisering uitvoeren</button>
             <a className="export" href={`/api/admin/export?status=${encodeURIComponent(statusFilter)}&search=${encodeURIComponent(search)}`}>CSV export</a>
@@ -459,6 +581,20 @@ export default function AdminDashboard() {
 
         {view === "dashboard" ? (
           <section className="dashboard-grid">
+            <article className="panel action-center wide">
+              <div className="panel-head"><div><span className="eyebrow">Vandaag</span><h2>Actiecentrum</h2></div><button onClick={() => setView("tasks")}>Alle taken</button></div>
+              <p className="panel-intro">De warmste leads en acties die nu aandacht vragen, automatisch op prioriteit gesorteerd.</p>
+              <div className="action-list">
+                {actionLeads.map((lead) => (
+                  <button key={lead.id} onClick={() => { setView("leads"); loadLeadDetail(lead.id); }}>
+                    <div><strong>{lead.naam || "Naam onbekend"}</strong><span>{lead.postcode || "-"} {lead.huisnummer || ""} · {displayStatus(lead.status)}</span></div>
+                    <em>{lead._reason}</em>
+                    <b>Open →</b>
+                  </button>
+                ))}
+                {!actionLeads.length ? <p className="empty-state">Geen urgente acties. Alles is bijgewerkt.</p> : null}
+              </div>
+            </article>
             <article className="panel wide">
               <div className="panel-head"><h2>Nieuwste leads</h2><button onClick={() => setView("leads")}>Alle leads</button></div>
               <div className="lead-table compact">
@@ -490,6 +626,46 @@ export default function AdminDashboard() {
         ) : null}
 
         {view === "leads" ? (
+          <>
+          <section className="panel kanban-panel">
+            <div className="panel-head"><div><span className="eyebrow">Pipeline</span><h2>Snelle pipeline</h2></div><span>{leads.length} actieve leads</span></div>
+            <div className="kanban-board">
+              {kanbanColumns.map(([label, statuses, targetStatus]) => {
+                const items = leads.filter((lead) => statuses.includes(displayStatus(lead.status)));
+                return (
+                  <div
+                    className="kanban-column"
+                    key={label}
+                    onDragOver={(event) => event.preventDefault()}
+                    onDrop={(event) => {
+                      event.preventDefault();
+                      const id = event.dataTransfer.getData("text/lead-id");
+                      if (id) updateLead(id, { status: targetStatus });
+                    }}
+                  >
+                    <div className="kanban-title"><strong>{label}</strong><span>{items.length}</span></div>
+                    {items.slice(0, 8).map((lead) => (
+                      <button
+                        key={lead.id}
+                        draggable
+                        onDragStart={(event) => {
+                          event.dataTransfer.setData("text/lead-id", lead.id);
+                          event.dataTransfer.effectAllowed = "move";
+                        }}
+                        onClick={() => loadLeadDetail(lead.id)}
+                        title="Sleep naar een andere kolom om de status te wijzigen"
+                      >
+                        <strong>{lead.naam || "Naam onbekend"}</strong>
+                        <small>{lead.postcode || "-"} {lead.huisnummer || ""}</small>
+                        {lead.last_proposal_viewed_at ? <em>🔥 {lead.proposal_view_count || 1}× bekeken</em> : null}
+                        {lead.next_follow_up_at ? <small>Opvolging: {lead.next_follow_up_at}</small> : null}
+                      </button>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
           <section className="lead-layout">
             <div className="panel lead-list-panel">
               <div className="filters">
@@ -532,6 +708,7 @@ export default function AdminDashboard() {
                     <Info label="Reden" value={selected.reden} />
                     <Info label="Automatisering" value={selected.automation_note} />
                   </div>
+                  <SourceDetails lead={selected} />
 
                   <div className="quick-actions">
                     {selected.telefoon ? <a href={`tel:${cleanPhone(selected.telefoon)}`}>Bellen</a> : null}
@@ -544,7 +721,7 @@ export default function AdminDashboard() {
 
                   <label className="field">Status<select value={selectStatusValue(selected.status)} onChange={(event) => updateLead(selected.id, { status: event.target.value })}>{STATUSES.map((status) => <option key={status}>{status}</option>)}</select></label>
                   <div className="pipeline-panel"><strong>Pipeline</strong><PipelineButtons value={selected.status} onChange={(status) => updateLead(selected.id, { status })} /></div>
-                  <label className="field">Volgende opvolging<input type="date" value={selected.next_follow_up_at || ""} onChange={(event) => updateLead(selected.id, { next_follow_up_at: event.target.value })} /></label>
+                  <label className="field">Handmatige opvolging<input type="date" value={selected.manual_follow_up_at || ""} onChange={(event) => updateLead(selected.id, { next_follow_up_at: event.target.value })} /><small>Handmatig ingesteld krijgt voorrang op de automatische datum.</small></label>
                   <label className="field">Notitie<textarea value={selected.notitie || ""} onChange={(event) => setSelected({ ...selected, notitie: event.target.value })} onBlur={(event) => updateLead(selected.id, { notitie: event.target.value })} placeholder="Interne notitie, bijzonderheden, afspraken..." /></label>
 
                   <div className="split">
@@ -560,6 +737,7 @@ export default function AdminDashboard() {
               )}
             </aside>
           </section>
+          </>
         ) : null}
 
         {view === "tasks" ? (
@@ -582,8 +760,8 @@ export default function AdminDashboard() {
             <div className="proposal-list">
               {proposals.map((proposal) => (
                 <article key={proposal.id}>
-                  <div><strong>{proposal.lead_naam || "Naam onbekend"}</strong><span>{proposal.property_address || "Geen adres"} · {proposal.amount_text || "Geen bedrag"}</span><small>{proposal.status} · aangemaakt {fmt(proposal.created_at)}</small></div>
-                  <div className="row-actions"><a href={`/admin/voorstellen/${proposal.id}/print`} target="_blank">Print/PDF</a>{proposal.lead_email ? <button onClick={() => sendProposalEmail(proposal.id)}>Mail voorstel</button> : null}<button className="secondary" onClick={() => updateProposalStatus(proposal.id, "Gearchiveerd")}>Archiveren</button></div>
+                  <div><strong>{proposal.lead_naam || "Naam onbekend"}</strong><span>{proposal.property_address || "Geen adres"} · {proposal.amount_text || "Geen bedrag"}</span><small>{proposal.status} · aangemaakt {fmt(proposal.created_at)}{proposal.public_view_count ? ` · ${proposal.public_view_count}× bekeken` : ""}{proposal.interest_status ? ` · reactie: ${proposal.interest_status}` : ""}</small></div>
+                  <div className="row-actions"><a href={`/admin/voorstellen/${proposal.id}`}>Beheren</a><a href={`/admin/voorstellen/${proposal.id}/print`} target="_blank">Print/PDF</a>{proposal.lead_email ? <button onClick={() => sendProposalEmail(proposal.id)}>Mail voorstel</button> : null}<button className="secondary" onClick={() => updateProposalStatus(proposal.id, "Gearchiveerd")}>Archiveren</button></div>
                 </article>
               ))}
             </div>
@@ -626,7 +804,7 @@ export default function AdminDashboard() {
                       <small>{proposal.status || "Gearchiveerd"} · aangemaakt {fmt(proposal.created_at)}</small>
                     </div>
                     <div className="row-actions">
-                      <a href={`/admin/voorstellen/${proposal.id}/print`} target="_blank">Print/PDF</a>
+                      <a href={`/admin/voorstellen/${proposal.id}`}>Beheren</a><a href={`/admin/voorstellen/${proposal.id}/print`} target="_blank">Print/PDF</a>
                       <button className="secondary" onClick={() => updateProposalStatus(proposal.id, "Concept")}>Terug actief</button>
                     </div>
                   </article>
@@ -662,9 +840,10 @@ export default function AdminDashboard() {
   );
 }
 
-const styles = `
+const styles = `.action-center{grid-column:1/-1}.action-list{display:grid;gap:10px}.action-list>button{width:100%;border:1px solid var(--line);background:#fff;border-radius:18px;padding:14px 16px;display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:14px;text-align:left;color:var(--navy);cursor:pointer}.action-list>button:hover{border-color:#e57a25;box-shadow:0 8px 24px rgba(217,106,28,.1)}.action-list div{display:grid;gap:3px}.action-list span{font-size:13px;color:var(--muted)}.action-list em{font-style:normal;background:#fff1e6;color:#a94612;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:900}.action-list b{font-size:13px}.kanban-panel{margin-bottom:18px}.kanban-board{display:grid;grid-template-columns:repeat(6,minmax(190px,1fr));gap:12px;overflow-x:auto;padding-bottom:4px}.kanban-column{background:#f7f4ee;transition:.16s ease;border:1px solid var(--line);border-radius:20px;padding:10px;min-height:120px}.kanban-title{display:flex;justify-content:space-between;align-items:center;padding:4px 4px 9px}.kanban-title span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 8px;font-size:12px}.kanban-column>button{display:grid;gap:4px;width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px;margin-bottom:8px;text-align:left;color:var(--navy);cursor:pointer}.kanban-column>button[draggable="true"]{cursor:grab}.kanban-column>button[draggable="true"]:active{cursor:grabbing;opacity:.72}.kanban-column small{color:var(--muted)}.kanban-column em{font-style:normal;color:#b85216;font-size:11px;font-weight:900}@media(max-width:900px){.action-list>button{grid-template-columns:1fr}.action-list em{justify-self:start}.kanban-board{grid-template-columns:repeat(6,230px)}}
+
 :root{--navy:#071f3a;--navy2:#0d3159;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#D96A1C;--green:#3E8F5E;--shadow:0 22px 70px rgba(7,31,58,.12)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.admin-shell{min-height:100vh;background:radial-gradient(circle at top right,#FFF1E6,transparent 38%),var(--bg);display:flex}.login-bg{align-items:center;justify-content:center}.login-card{width:min(460px,calc(100% - 32px));background:rgba(255,253,249,.92);border:1px solid rgba(232,227,219,.9);border-radius:32px;padding:34px;box-shadow:var(--shadow);backdrop-filter:blur(10px)}.login-card img{width:220px;max-width:100%;margin-bottom:24px}.login-card h1,.topbar h1{margin:4px 0 8px;font-size:38px;letter-spacing:-.04em}.login-card p{color:var(--muted);line-height:1.55}.login-card form{display:grid;gap:12px;margin-top:24px}.login-card input,.filters input,.filters select,.field select,.field input,.field textarea,.sub-panel input,.sub-panel textarea,.panel-head select{width:100%;border:1px solid var(--line);border-radius:16px;padding:14px 16px;font:inherit;background:#fff}.login-card button,.filters button,.sub-panel button,.quick-actions a,.quick-actions button,.export,.automation-btn,.panel-head button,.row-actions a,.row-actions button{border:0;border-radius:999px;background:var(--orange);color:white;text-decoration:none;padding:13px 18px;font-weight:900;cursor:pointer}.eyebrow{display:inline-flex;align-items:center;border:1px solid #F2B885;background:#FFF1E6;color:#B85216;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.sidebar{width:286px;background:#061b32;color:#fff;padding:28px;display:flex;flex-direction:column;gap:28px;position:sticky;top:0;height:100vh}.sidebar img{width:205px;background:#fff;border-radius:18px;padding:12px}.sidebar nav{display:grid;gap:10px}.sidebar button{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;border-radius:16px;padding:14px 16px;text-align:left;font-weight:850;cursor:pointer}.sidebar button.active,.sidebar button:hover{background:#fff;color:var(--navy)}.sidebar .logout{margin-top:auto;background:rgba(217,106,28,.14);border-color:rgba(217,106,28,.45)}.workspace{flex:1;padding:34px;min-width:0}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px}.topbar-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.export{background:var(--navy)}.automation-btn{background:#fff;color:var(--navy);border:1px solid var(--line);box-shadow:none}.automation-btn:disabled{opacity:.65;cursor:not-allowed}.add-lead{border:0;border-radius:999px;background:var(--orange);color:#fff;text-decoration:none;padding:13px 18px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap}.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:22px}.kpi-card,.panel,.detail-panel{background:var(--card);border:1px solid var(--line);border-radius:26px;box-shadow:0 12px 42px rgba(7,31,58,.08)}.kpi-card{padding:22px}.kpi-card span,.info-card span,.bar-row span,.proposal-list small,.task-list span,.history-item span,.history-item small{color:var(--muted);font-size:13px}.kpi-card strong{display:block;font-size:34px;letter-spacing:-.04em;margin:8px 0}.dashboard-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.panel{padding:22px}.panel.wide{grid-row:span 2}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}.panel h2,.detail-panel h2{margin:0 0 14px;font-size:24px;letter-spacing:-.03em}.lead-layout{display:grid;grid-template-columns:minmax(420px,.9fr) minmax(520px,1.1fr);gap:18px;align-items:start}.filters{display:grid;grid-template-columns:1fr 170px auto;gap:10px;margin-bottom:16px}.lead-table{display:grid;gap:9px;max-height:72vh;overflow:auto;padding-right:4px}.lead-table button{border:1px solid var(--line);background:#fff;border-radius:18px;padding:14px;display:grid;grid-template-columns:1.2fr .85fr .8fr .7fr .85fr;gap:10px;align-items:center;text-align:left;color:var(--navy);cursor:pointer}.lead-table.compact button{grid-template-columns:1.2fr .8fr .7fr .8fr}.lead-table button.selected,.lead-table button:hover{border-color:#E57A25;box-shadow:0 10px 26px rgba(217,106,28,.12)}.lead-table em{font-style:normal;background:#eef4ff;border-radius:999px;padding:6px 10px;text-align:center;font-weight:850;color:#164575}.detail-panel{padding:24px;position:sticky;top:24px}.detail-title{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:20px}.detail-title h2{font-size:32px;margin:6px 0 4px}.detail-title a{color:var(--orange);font-weight:900}.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.info-card{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.info-card strong{display:block;margin-top:6px;word-break:break-word}.quick-actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}.quick-actions a,.quick-actions button{background:var(--navy)}.quick-actions a.green{background:var(--green)}.quick-actions button.secondary,.row-actions button.secondary{background:#e9f1fb;color:var(--navy)}.quick-actions button.muted-btn{background:#f2eee7;color:var(--navy);border:1px solid var(--line)}.field{display:grid;gap:8px;font-weight:900;margin:12px 0}.field textarea{min-height:110px;resize:vertical}.split,.history-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.sub-panel{background:#f8f5ef;border:1px solid var(--line);border-radius:22px;padding:16px;display:grid;gap:10px}.sub-panel h3,.history-grid h3{margin:0 0 4px}.sub-panel textarea{min-height:86px;resize:vertical}.history-grid article{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px}.history-item,.task-mini{border-bottom:1px solid var(--line);padding:10px 0}.history-item:last-child,.task-mini:last-child{border-bottom:0}.history-item strong,.history-item span,.history-item small,.task-mini strong,.task-mini span{display:block}.task-list,.proposal-list,.archive-list{display:grid;gap:12px}.task-list article,.proposal-list article,.archive-list article{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:18px}.task-list article.done{opacity:.62}.task-list p{margin:6px 0 0;color:var(--muted)}.proposal-list strong,.task-list strong,.archive-list strong{display:block;font-size:17px}.proposal-list span,.archive-list span{display:block;color:var(--muted);margin:6px 0}.archive-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel-intro{color:var(--muted);line-height:1.55;margin:-4px 0 18px}.empty-state{color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:18px;padding:16px}.row-actions{display:flex;gap:8px;white-space:nowrap;flex-wrap:wrap}.row-actions a{background:var(--navy)}.bar-row{display:grid;gap:8px;margin:14px 0}.bar-row div{display:flex;justify-content:space-between;gap:16px}.bar-row em{height:10px;background:#eee8df;border-radius:999px;overflow:hidden}.bar-row i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),#E57A25);border-radius:999px}.pipeline-panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;margin:12px 0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.admin-shell{min-height:100vh;background:radial-gradient(circle at top right,#FFF1E6,transparent 38%),var(--bg);display:flex}.login-bg{align-items:center;justify-content:center}.login-card{width:min(460px,calc(100% - 32px));background:rgba(255,253,249,.92);border:1px solid rgba(232,227,219,.9);border-radius:32px;padding:34px;box-shadow:var(--shadow);backdrop-filter:blur(10px)}.login-card img{width:220px;max-width:100%;margin-bottom:24px}.login-card h1,.topbar h1{margin:4px 0 8px;font-size:38px;letter-spacing:-.04em}.login-card p{color:var(--muted);line-height:1.55}.login-card form{display:grid;gap:12px;margin-top:24px}.login-card input,.filters input,.filters select,.field select,.field input,.field textarea,.sub-panel input,.sub-panel textarea,.panel-head select{width:100%;border:1px solid var(--line);border-radius:16px;padding:14px 16px;font:inherit;background:#fff}.login-card button,.filters button,.sub-panel button,.quick-actions a,.quick-actions button,.export,.automation-btn,.panel-head button,.row-actions a,.row-actions button{border:0;border-radius:999px;background:var(--orange);color:white;text-decoration:none;padding:13px 18px;font-weight:900;cursor:pointer}.eyebrow{display:inline-flex;align-items:center;border:1px solid #F2B885;background:#FFF1E6;color:#B85216;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.sidebar{width:286px;background:#061b32;color:#fff;padding:28px;display:flex;flex-direction:column;gap:28px;position:sticky;top:0;height:100vh}.sidebar img{width:205px;background:#fff;border-radius:18px;padding:12px}.sidebar nav{display:grid;gap:10px}.sidebar button{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;border-radius:16px;padding:14px 16px;text-align:left;font-weight:850;cursor:pointer}.sidebar button.active,.sidebar button:hover{background:#fff;color:var(--navy)}.sidebar .logout{margin-top:auto;background:rgba(217,106,28,.14);border-color:rgba(217,106,28,.45)}.workspace{flex:1;padding:34px;min-width:0}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px}.topbar-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.global-search{min-width:240px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:12px 15px;font:inherit;color:var(--navy)}.export{background:var(--navy)}.automation-btn{background:#fff;color:var(--navy);border:1px solid var(--line);box-shadow:none}.automation-btn:disabled{opacity:.65;cursor:not-allowed}.add-lead{border:0;border-radius:999px;background:var(--orange);color:#fff;text-decoration:none;padding:13px 18px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap}.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:22px}.kpi-card,.panel,.detail-panel{background:var(--card);border:1px solid var(--line);border-radius:26px;box-shadow:0 12px 42px rgba(7,31,58,.08)}.kpi-card{padding:22px}.kpi-card span,.info-card span,.bar-row span,.proposal-list small,.task-list span,.history-item span,.history-item small{color:var(--muted);font-size:13px}.kpi-card strong{display:block;font-size:34px;letter-spacing:-.04em;margin:8px 0}.dashboard-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.panel{padding:22px}.panel.wide{grid-row:span 2}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}.panel h2,.detail-panel h2{margin:0 0 14px;font-size:24px;letter-spacing:-.03em}.lead-layout{display:grid;grid-template-columns:minmax(420px,.9fr) minmax(520px,1.1fr);gap:18px;align-items:start}.filters{display:grid;grid-template-columns:1fr 170px auto;gap:10px;margin-bottom:16px}.lead-table{display:grid;gap:9px;max-height:72vh;overflow:auto;padding-right:4px}.lead-table button{border:1px solid var(--line);background:#fff;border-radius:18px;padding:14px;display:grid;grid-template-columns:1.2fr .85fr .8fr .7fr .85fr;gap:10px;align-items:center;text-align:left;color:var(--navy);cursor:pointer}.lead-table.compact button{grid-template-columns:1.2fr .8fr .7fr .8fr}.lead-table button.selected,.lead-table button:hover{border-color:#E57A25;box-shadow:0 10px 26px rgba(217,106,28,.12)}.lead-table em{font-style:normal;background:#eef4ff;border-radius:999px;padding:6px 10px;text-align:center;font-weight:850;color:#164575}.detail-panel{padding:24px;position:sticky;top:24px}.detail-title{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:20px}.detail-title h2{font-size:32px;margin:6px 0 4px}.detail-title a{color:var(--orange);font-weight:900}.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.info-card{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.source-detail-box{margin:18px 0;background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px}.source-detail-box h3{margin:0 0 12px;font-size:18px}.info-card strong{display:block;margin-top:6px;word-break:break-word}.quick-actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}.quick-actions a,.quick-actions button{background:var(--navy)}.quick-actions a.green{background:var(--green)}.quick-actions button.secondary,.row-actions button.secondary{background:#e9f1fb;color:var(--navy)}.quick-actions button.muted-btn{background:#f2eee7;color:var(--navy);border:1px solid var(--line)}.field{display:grid;gap:8px;font-weight:900;margin:12px 0}.field textarea{min-height:110px;resize:vertical}.split,.history-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.sub-panel{background:#f8f5ef;border:1px solid var(--line);border-radius:22px;padding:16px;display:grid;gap:10px}.sub-panel h3,.history-grid h3{margin:0 0 4px}.sub-panel textarea{min-height:86px;resize:vertical}.history-grid article{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px}.history-item,.task-mini{border-bottom:1px solid var(--line);padding:10px 0}.history-item:last-child,.task-mini:last-child{border-bottom:0}.history-item strong,.history-item span,.history-item small,.task-mini strong,.task-mini span{display:block}.task-list,.proposal-list,.archive-list{display:grid;gap:12px}.task-list article,.proposal-list article,.archive-list article{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:18px}.task-list article.done{opacity:.62}.task-list p{margin:6px 0 0;color:var(--muted)}.proposal-list strong,.task-list strong,.archive-list strong{display:block;font-size:17px}.proposal-list span,.archive-list span{display:block;color:var(--muted);margin:6px 0}.archive-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel-intro{color:var(--muted);line-height:1.55;margin:-4px 0 18px}.empty-state{color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:18px;padding:16px}.row-actions{display:flex;gap:8px;white-space:nowrap;flex-wrap:wrap}.row-actions a{background:var(--navy)}.bar-row{display:grid;gap:8px;margin:14px 0}.bar-row div{display:flex;justify-content:space-between;gap:16px}.bar-row em{height:10px;background:#eee8df;border-radius:999px;overflow:hidden}.bar-row i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),#E57A25);border-radius:999px}.pipeline-panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;margin:12px 0}
 .pipeline-panel>strong{display:block;margin-bottom:10px;color:var(--navy)}
 .pipeline-buttons{display:flex;flex-wrap:wrap;gap:7px}
 .pipeline-buttons button{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:999px;padding:9px 11px;font-size:12px;font-weight:900;cursor:pointer}

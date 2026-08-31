@@ -1,133 +1,226 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Woning verkopen Drenthe",
-  description: "Woning of huis verkopen in Drenthe zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
-  alternates: {
-    canonical: "https://www.vastgoeddirectnederland.nl/woning-verkopen-drenthe",
+  "title": "Woning verkopen in Drenthe | vrijblijvend verkoopvoorstel",
+  "description": "Woning verkopen in Drenthe? Vraag vrijblijvend duidelijkheid over directe verkoop, voorwaarden, oplevering en notariële afwikkeling.",
+  "alternates": {
+    "canonical": "https://www.vastgoeddirectnederland.nl/woning-verkopen-drenthe"
   },
-  openGraph: {
-    title: "Woning verkopen Drenthe",
-    description: "Woning of huis verkopen in Drenthe zonder makelaar, open huis of verkoopstress? Vraag vrijblijvend een helder verkoopvoorstel aan.",
-    url: "https://www.vastgoeddirectnederland.nl/woning-verkopen-drenthe",
-    siteName: "Vastgoed Direct Nederland",
-    locale: "nl_NL",
-    type: "website",
-  },
+  "openGraph": {
+    "title": "Woning verkopen in Drenthe | vrijblijvend verkoopvoorstel",
+    "description": "Woning verkopen in Drenthe? Vraag vrijblijvend duidelijkheid over directe verkoop, voorwaarden, oplevering en notariële afwikkeling.",
+    "url": "https://www.vastgoeddirectnederland.nl/woning-verkopen-drenthe",
+    "siteName": "Vastgoed Direct Nederland",
+    "locale": "nl_NL",
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
+  }
 };
 
 const page = {
   "slug": "/woning-verkopen-drenthe",
-  "breadcrumb": "Woning verkopen Drenthe",
-  "eyebrow": "Woning verkopen Drenthe",
-  "h1": "Woning verkopen in Drenthe zonder makelaar of verkoopstress",
-  "lead": "Wilt u uw woning of huis in Drenthe verkopen en snel duidelijkheid krijgen zonder lang traditioneel verkooptraject?",
-  "shortAnswer": "Vraag vrijblijvend een verkoopvoorstel aan voor uw woning in Drenthe. Ook bij leegstand, onderhoud, verhuur, erfenis of scheiding kunt u rustig bespreken wat mogelijk is.",
+  "pageType": "region",
+  "regionName": "Drenthe",
+  "breadcrumb": "Woning verkopen in Drenthe",
+  "eyebrow": "Regio Drenthe",
+  "h1": "Uw huis verkopen in Drenthe zonder verkoopstress",
+  "lead": "Wilt u een woning in Drenthe verkopen, maar liever zonder lange bezichtigingsrondes of eerst alles verkoopklaar maken? Wij bekijken de woning, de locatie en uw gewenste planning zodat u rustig kunt bepalen welke verkooproute past.",
+  "heroNote": "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
+  "defaultSituation": "Woning verkopen in Drenthe",
+  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Drenthe en uw gewenste planning. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Een verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd.",
+  "shortAnswer": "U kunt vrijblijvend een verkoopvoorstel aanvragen voor een woning in Drenthe. Ook bij onderhoud, leegstand, erfenis, verhuur of een woning die nog vol staat kijken wij welke route passend kan zijn.",
   "benefits": [
-    "Woning verkopen Drenthe",
-    "Huis verkopen Drenthe",
-    "Geen makelaarskosten",
+    "Actief in Drenthe",
+    "Ook bij onderhoud of leegstand",
     "Geen open huis nodig",
-    "Vrijblijvend verkoopvoorstel",
-    "Notariële afwikkeling"
+    "Vrijblijvend voorstel",
+    "Duidelijke opleverafspraken",
+    "Notariële overdracht"
   ],
+  "heroBenefits": [
+    "Regionale beoordeling",
+    "Vrijblijvend voorstel",
+    "Geen verkoopdruk",
+    "Duidelijke afspraken"
+  ],
+  "concernTitle": "Veelvoorkomende verkoopvragen in Drenthe",
+  "concernCards": [
+    "De woning ligt in Drentse dorpen, buitengebied of grotere plaatsen en is niet direct verkoopklaar.",
+    "Er is behoefte aan duidelijke planning, oplevering en voorwaarden.",
+    "De eigenaar wil liever geen open huis of reeks bezichtigingen.",
+    "Er speelt een bijzondere situatie zoals erfenis, leegstand, verhuur of dubbele lasten."
+  ],
+  "solutionTitle": "Wat beoordelen wij in Drenthe?",
+  "solutionCards": [
+    "De woning en staat zoals deze nu is.",
+    "De locatie, het type woning en praktische verkoopmogelijkheden.",
+    "De gewenste termijn en mogelijke opleverafspraken.",
+    "Of directe verkoop of een andere route passend kan zijn."
+  ],
+  "vdnTasks": [
+    "Woninggegevens en regionale situatie beoordelen.",
+    "Meedenken over oplevering, planning en eventuele bijzonderheden.",
+    "Waar mogelijk een eerste inschatting of voorstel uitwerken.",
+    "Bij akkoord zorgen dat afspraken schriftelijk en notarieel worden vastgelegd."
+  ],
+  "ownerTasks": [
+    "De ligging, staat en bekende bijzonderheden van de woning delen.",
+    "Aangeven welke termijn of overdracht gewenst is.",
+    "Controleren of alle eigenaren of betrokkenen kunnen meewerken.",
+    "Het voorstel rustig beoordelen voordat verdere afspraken worden gemaakt."
+  ],
+  "practiceExample": {
+    "situation": "Woning in Drenthe waarbij eerst duidelijkheid nodig was",
+    "propertyType": "Vrijstaande woning / dorpswoning",
+    "region": "Drenthe",
+    "mainProblem": "De eigenaar wilde duidelijkheid over een woning in Drenthe met een groter perceel en onderhoud, zonder vooraf een lang traject met herstel en bezichtigingen te starten.",
+    "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
+    "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
+    "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",
+    "nextStep": "De eigenaar kon het voorstel vergelijken met een regulier verkooptraject."
+  },
   "sections": [
     {
-      "title": "Woning verkopen Drenthe: snel duidelijkheid",
+      "title": "Werkgebied in en rond Drenthe",
       "paragraphs": [
-        "Wilt u uw woning of huis in Drenthe verkopen zonder lang traditioneel verkooptraject? Vastgoed Direct Nederland helpt woningeigenaren met een rustige en duidelijke verkoopoplossing.",
-        "U vraagt vrijblijvend een verkoopvoorstel aan. Daarna bespreken wij uw situatie, de woning en de gewenste overdracht."
+        "Wij beoordelen woningen in Assen, Emmen, Borger, Gieten, Aa en Hunze, Tynaarlo, Coevorden, Hoogeveen en omliggende dorpen.",
+        "Het gaat niet alleen om de plaatsnaam. De staat van de woning, de gewenste termijn, eventuele bewoning en de oplevering bepalen samen welke verkooproute logisch is."
       ]
     },
     {
-      "title": "Verkopen zonder makelaar in Drenthe",
+      "title": "Regionale bijzonderheden",
       "paragraphs": [
-        "Een woning verkopen in Drenthe hoeft niet altijd via een traditioneel makelaarstraject. Als u geen open huis, bezichtigingsrondes of makelaarskosten wilt, kunt u rechtstreeks een voorstel aanvragen.",
-        "De aanvraag is vrijblijvend. U bepaalt zelf of het voorstel past bij uw situatie."
+        "In Drenthe spelen vaak grotere kavels, oudere woningen, buitengebied, recreatief gebruik of woningen met onderhoud mee. Daarom kijken we naar meer dan alleen de vraagprijs.",
+        "Daarom krijgt u geen standaardantwoord, maar eerst een beoordeling van uw woninggegevens en situatie."
       ]
     },
     {
-      "title": "Ook bij bijzondere situaties in Drenthe",
+      "title": "Welke woningen kunnen worden aangemeld?",
+      "paragraphs": [
+        "U kunt ook een aanvraag doen wanneer de woning nog niet verkoopklaar is of wanneer er iets speelt waardoor een regulier verkooptraject minder prettig voelt."
+      ],
       "bullets": [
         "Leegstaande woning",
-        "Opknapwoning",
-        "Woning met achterstallig onderhoud",
-        "Erfeniswoning",
-        "Verhuurde woning",
-        "Woning bij scheiding",
+        "Opknapwoning of woning met achterstallig onderhoud",
+        "Erfeniswoning of woning die nog vol staat",
+        "Verhuurde woning of woning met gebruiksafspraken",
         "Woning waarbij snel duidelijkheid gewenst is"
       ]
+    }
+  ],
+  "processTitle": "Hoe verloopt een regionale aanvraag?",
+  "processSteps": [
+    {
+      "title": "Aanvraag indienen",
+      "text": "U deelt de woninggegevens, locatie en de reden van verkoop."
     },
     {
-      "title": "Hoe werkt het?",
-      "steps": [
-        "U vult de woninggegevens in.",
-        "Wij nemen contact met u op om de situatie rustig te bespreken.",
-        "U ontvangt een vrijblijvend verkoopvoorstel met duidelijke voorwaarden.",
-        "Bij akkoord wordt de overdracht via de notaris geregeld."
-      ]
+      "title": "Beoordeling van woning en regio",
+      "text": "We kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
     },
     {
-      "title": "Kosten en afwikkeling",
-      "paragraphs": [
-        "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
-        "Een aanbetaling of voorschot kan in sommige situaties bespreekbaar zijn, mits dit juridisch en notarieel goed wordt vastgelegd."
-      ]
+      "title": "Vrijblijvende inschatting of voorstel",
+      "text": "Waar mogelijk ontvangt u duidelijkheid over verkoopmogelijkheden en voorwaarden."
+    },
+    {
+      "title": "Afspraken en overdracht",
+      "text": "Alleen bij akkoord worden afspraken schriftelijk uitgewerkt en loopt de overdracht via de notaris."
     }
   ],
   "comparisonRows": [
     [
-      "Makelaarskosten",
-      "Vaak courtage of vast tarief",
-      "Geen makelaarskosten"
+      "Voorbereiding",
+      "Vaak verkoopklaar maken voor presentatie",
+      "Huidige staat kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
-      "Vaak meerdere kijkers",
-      "Niet standaard nodig"
+      "Vaak meerdere kijkers of open huis",
+      "Geen open huis nodig"
     ],
     [
-      "Snelheid",
-      "Kan weken of maanden duren",
-      "Snelle duidelijkheid mogelijk"
+      "Kosten",
+      "Courtage, presentatie of herstel mogelijk",
+      "Geen makelaarskosten bij directe aankoop"
     ],
     [
-      "Onderhoud",
-      "Kan verkoop lastiger maken",
-      "Ook deze woningen kunnen worden aangemeld"
+      "Planning",
+      "Afhankelijk van markt en koper",
+      "In overleg duidelijk te bespreken"
     ],
     [
-      "Opleverdatum",
-      "Afhankelijk van koper",
-      "In overleg bespreekbaar"
+      "Oplevering",
+      "Regulier per koper af te stemmen",
+      "Bijzonderheden vooraf vastleggen"
     ],
     [
       "Afwikkeling",
-      "Afhankelijk van afspraken",
-      "Bij akkoord via de notaris"
+      "Via koopovereenkomst en notaris",
+      "Bij akkoord ook via koopovereenkomst en notaris"
     ]
   ],
   "faqs": [
     {
       "question": "Kan ik mijn woning in Drenthe verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bekijken wij of een directe verkooproute of een andere oplossing passend kan zijn."
     },
     {
-      "question": "Kan ik mijn huis in Drenthe snel verkopen?",
-      "answer": "Snelle duidelijkheid is vaak mogelijk. De exacte planning hangt af van de woning, documenten, afspraken en notariële mogelijkheden."
+      "question": "Moet mijn woning in Drenthe verkoopklaar zijn?",
+      "answer": "Niet altijd. Ook bij onderhoud, leegstand, spullen in de woning of andere bijzonderheden kunt u eerst vrijblijvend duidelijkheid aanvragen."
     },
     {
-      "question": "Is de aanvraag vrijblijvend?",
-      "answer": "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
+      "question": "Krijg ik gegarandeerd snel een bod?",
+      "answer": "Nee, een bod of verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
     },
     {
-      "question": "Betaal ik makelaarskosten?",
-      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
+      "question": "Hoe worden afspraken vastgelegd?",
+      "answer": "Pas bij akkoord worden afspraken over prijs, planning, oplevering en voorwaarden uitgewerkt in een koopovereenkomst. De juridische overdracht verloopt via de notaris."
     }
   ],
-  "ctaTitle": "Wilt u woning verkopen drenthe?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden.",
-  "keywords": "woning verkopen Drenthe, huis verkopen Drenthe, woning snel verkopen Drenthe"
+  "relatedLinks": [
+    [
+      "/opknapwoning-verkopen",
+      "Opknapwoning verkopen"
+    ],
+    [
+      "/leegstaand-huis-verkopen",
+      "Leegstaand huis verkopen"
+    ],
+    [
+      "/huis-verkopen-bij-erfenis",
+      "Huis verkopen bij erfenis"
+    ],
+    [
+      "/woning-verkopen-zonder-makelaar",
+      "Woning verkopen zonder makelaar"
+    ],
+    [
+      "/huis-direct-verkopen",
+      "Huis direct verkopen"
+    ],
+    [
+      "/huis-snel-verkopen",
+      "Huis snel verkopen"
+    ],
+    [
+      "/huis-verkopen-assen",
+      "Huis verkopen in Assen"
+    ],
+    [
+      "/huis-verkopen-emmen",
+      "Huis verkopen in Emmen"
+    ],
+    [
+      "/huis-verkopen-borger",
+      "Huis verkopen in Borger"
+    ],
+    [
+      "/huis-verkopen-gieten",
+      "Huis verkopen in Gieten"
+    ]
+  ],
+  "ctaTitle": "Wilt u uw huis in Drenthe verkopen?",
+  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."
 };
 
 export default function WoningVerkopenDrenthePage() {

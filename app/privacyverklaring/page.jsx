@@ -1,5 +1,8 @@
 export const metadata = {
-  title: "Privacyverklaring | Vastgoed Direct Nederland",
+  alternates: {
+    canonical: "https://www.vastgoeddirectnederland.nl/privacyverklaring",
+  },
+  title: "Privacyverklaring",
   description:
     "Lees hoe Vastgoed Direct Nederland omgaat met persoonsgegevens die via de website, telefoon, e-mail of WhatsApp worden gedeeld.",
 };

@@ -1,6 +1,6 @@
 const DEFAULT_TO = "info@vastgoeddirectnederland.nl";
 
-function escapeHtml(value = "") {
+export function escapeHtml(value = "") {
   return String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
@@ -41,6 +41,7 @@ export async function sendResendMail({ to, subject, html, replyTo }) {
       html,
       ...(replyTo ? { reply_to: replyTo } : {}),
     }),
+    signal: AbortSignal.timeout(10_000),
   });
 
   const json = await response.json().catch(() => ({}));

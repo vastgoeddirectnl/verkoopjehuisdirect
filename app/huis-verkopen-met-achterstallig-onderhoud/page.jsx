@@ -1,134 +1,195 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen met achterstallig onderhoud",
-  description: "Huis verkopen met achterstallig onderhoud, schade of verouderde staat zonder eerst te renoveren? Vraag vrijblijvend een voorstel aan.",
-  alternates: {
-    canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-met-achterstallig-onderhoud",
+  "title": "Huis verkopen met achterstallig onderhoud | zonder eerst renoveren",
+  "description": "Woning verkopen met achterstallig onderhoud? Vraag vrijblijvend een voorstel aan zonder eerst te renoveren of verkoopklaar te maken.",
+  "alternates": {
+    "canonical": "https://www.vastgoeddirectnederland.nl/huis-verkopen-met-achterstallig-onderhoud"
   },
-  openGraph: {
-    title: "Huis verkopen met achterstallig onderhoud",
-    description: "Huis verkopen met achterstallig onderhoud, schade of verouderde staat zonder eerst te renoveren? Vraag vrijblijvend een voorstel aan.",
-    url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-met-achterstallig-onderhoud",
-    siteName: "Vastgoed Direct Nederland",
-    locale: "nl_NL",
-    type: "website",
-  },
+  "openGraph": {
+    "title": "Huis verkopen met achterstallig onderhoud | zonder eerst renoveren",
+    "description": "Woning verkopen met achterstallig onderhoud? Vraag vrijblijvend een voorstel aan zonder eerst te renoveren of verkoopklaar te maken.",
+    "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-met-achterstallig-onderhoud",
+    "siteName": "Vastgoed Direct Nederland",
+    "locale": "nl_NL",
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
+  }
 };
 
 const page = {
-  "slug": "/huis-verkopen-met-achterstallig-onderhoud",
   "breadcrumb": "Huis verkopen met achterstallig onderhoud",
-  "eyebrow": "Huis verkopen met achterstallig onderhoud",
-  "h1": "Huis verkopen met achterstallig onderhoud",
-  "lead": "Wilt u een woning verkopen met achterstallig onderhoud, schade of verouderde staat zonder eerst grote kosten te maken?",
-  "shortAnswer": "Huis verkopen met achterstallig onderhoud, schade of verouderde staat zonder eerst te renoveren? U kunt vrijblijvend een voorstel aan.",
+  "eyebrow": "Onderhoud en gebreken",
+  "h1": "Huis verkopen met achterstallig onderhoud zonder eerst te renoveren",
+  "lead": "Heeft uw woning onderhoud, schade of een verouderde staat? U hoeft niet automatisch eerst te investeren in herstel of presentatie. Wij beoordelen de woning zoals deze nu is en bespreken welke verkoopafspraken mogelijk zijn.",
+  "heroNote": "Vrijblijvend. Bekende gebreken moeten eerlijk worden gemeld; daarna beoordelen wij wat mogelijk is.",
+  "pageType": "situation",
+  "defaultSituation": "Huis verkopen met achterstallig onderhoud",
+  "shortAnswer": "Ook een woning met achterstallig onderhoud kan vrijblijvend worden aangemeld. De staat van de woning wordt meegenomen in de beoordeling en voorwaarden.",
   "benefits": [
-    "Huis verkopen met achterstallig onderhoud",
-    "Geen makelaarskosten",
+    "Niet eerst renoveren",
+    "Ook bij verouderde staat",
     "Geen open huis nodig",
-    "Vrijblijvend verkoopvoorstel",
-    "Duidelijke voorwaarden",
-    "Notariële afwikkeling"
+    "Afspraken over oplevering",
+    "Vrijblijvend voorstel",
+    "Notariële overdracht"
+  ],
+  "heroBenefits": [
+    "Geen renovatie vooraf",
+    "Ook met gebreken bespreekbaar",
+    "Huidige staat beoordelen",
+    "Duidelijke voorwaarden"
+  ],
+  "concernTitle": "Herkenbare zorgen bij achterstallig onderhoud",
+  "concernCards": [
+    "Herstelkosten zijn hoog of onzeker.",
+    "Een reguliere verkoop kan kritische bezichtigingen opleveren.",
+    "De woning is niet representatief voor foto’s of open huis.",
+    "Gebreken moeten wel zorgvuldig en eerlijk worden vermeld."
+  ],
+  "solutionTitle": "Wat beoordelen wij?",
+  "solutionCards": [
+    "De huidige staat van onderhoud.",
+    "Welke werkzaamheden eventueel nodig of bespreekbaar zijn.",
+    "Of oplevering in huidige staat mogelijk is.",
+    "Welke prijs en voorwaarden daarbij passen."
+  ],
+  "vdnTasks": [
+    "Onderhoud en foto’s of omschrijving beoordelen.",
+    "Meedenken over verkoop zonder voorafgaande renovatie.",
+    "Voorwaarden voor oplevering en overdracht duidelijk maken.",
+    "Een voorstel uitwerken wanneer de situatie passend is."
+  ],
+  "ownerTasks": [
+    "Bekende gebreken en onderhoud eerlijk melden.",
+    "Waar mogelijk foto’s of korte toelichting aanleveren.",
+    "Aangeven of er nog werkzaamheden worden uitgevoerd.",
+    "Het voorstel rustig vergelijken met renovatie of reguliere verkoop."
   ],
   "sections": [
     {
-      "title": "Huis verkopen met achterstallig onderhoud: wanneer is dit interessant?",
+      "title": "Niet eerst duizenden euro’s investeren",
       "paragraphs": [
-        "Wilt u een woning verkopen met achterstallig onderhoud, schade of verouderde staat zonder eerst grote kosten te maken?",
-        "Een directe verkoopoplossing kan passend zijn wanneer u snel duidelijkheid wilt, geen lang verkooptraject wilt of de woning niet eerst verkoopklaar wilt maken."
+        "Soms is het niet logisch om nog grote bedragen te investeren voordat duidelijk is wat de woning oplevert. Een directe verkooproute kan dan rust geven.",
+        "De staat van de woning heeft invloed op het voorstel. Daarom werken wij met heldere uitgangspunten in plaats van standaardbeloftes."
       ]
     },
     {
-      "title": "Zonder traditioneel verkooptraject",
+      "title": "Afspraken over werkzaamheden en oplevering",
       "paragraphs": [
-        "U hoeft niet altijd te kiezen voor een verkooptraject met meerdere bezichtigingen, open huis of lange onderhandelingen.",
-        "Bij Vastgoed Direct Nederland vraagt u vrijblijvend een helder verkoopvoorstel aan. Daarna beslist u rustig of het voorstel bij uw situatie past."
+        "Als de verkoper nog werkzaamheden wil uitvoeren, kunnen afspraken daarover apart worden vastgelegd. Ook kan juist worden afgesproken dat de woning in huidige staat wordt geleverd.",
+        "Belangrijk is dat prijs, werkzaamheden, opleverdatum en voorwaarden duidelijk op papier staan voordat er een koopovereenkomst wordt gesloten."
       ]
+    }
+  ],
+  "practiceExample": {
+    "situation": "Woning met uitgesteld onderhoud",
+    "propertyType": "Vrijstaande woning / oudere bouw",
+    "region": "Groningen of Drenthe",
+    "mainProblem": "De eigenaar twijfelde of eerst schilderwerk, opruimen en herstel nodig waren voor verkoop.",
+    "solution": "De woning is beoordeeld op basis van de huidige staat, foto’s en gewenste oplevering. Daarna kon een voorstel worden besproken zonder vooraf te renoveren.",
+    "delivery": "Oplevering in huidige staat of met beperkte afspraken kon worden vergeleken.",
+    "transfer": "Bij akkoord zouden alle afspraken via notaris en koopovereenkomst worden vastgelegd.",
+    "nextStep": "De eigenaar kon afwegen of directe verkoop aantrekkelijker was dan zelf investeren in herstel."
+  },
+  "processTitle": "Zo beoordelen wij een woning met onderhoud",
+  "processSteps": [
+    {
+      "title": "Aanvraag indienen",
+      "text": "U deelt de woninggegevens, de situatie en wat voor u belangrijk is bij verkoop."
     },
     {
-      "title": "Voor welke situaties?",
-      "bullets": [
-        "Huis verkopen met achterstallig onderhoud",
-        "Leegstand",
-        "Achterstallig onderhoud",
-        "Opknapwoning",
-        "Erfenis",
-        "Scheiding",
-        "Verhuur",
-        "Snel duidelijkheid gewenst"
-      ]
+      "title": "Situatie beoordelen",
+      "text": "We kijken naar eigendom, staat, planning, oplevering en eventuele bijzonderheden."
     },
     {
-      "title": "Hoe werkt het?",
-      "steps": [
-        "U vult uw woninggegevens in.",
-        "Wij bespreken uw situatie en gewenste snelheid.",
-        "U ontvangt een vrijblijvend verkoopvoorstel.",
-        "Bij akkoord wordt de overdracht via de notaris geregeld."
-      ]
+      "title": "Vrijblijvend voorstel",
+      "text": "Waar mogelijk ontvangt u een eerste inschatting of verkoopvoorstel met duidelijke uitgangspunten."
     },
     {
-      "title": "Kosten en afwikkeling",
-      "paragraphs": [
-        "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
-        "Een aanbetaling of voorschot kan in sommige situaties bespreekbaar zijn, mits dit juridisch en notarieel goed wordt vastgelegd."
-      ]
+      "title": "Schriftelijke afspraken",
+      "text": "Alleen bij akkoord worden prijs, voorwaarden, levering en notariële overdracht verder uitgewerkt."
     }
   ],
   "comparisonRows": [
     [
-      "Makelaarskosten",
-      "Vaak courtage of vast tarief",
-      "Geen makelaarskosten"
+      "Verkoopklaar maken",
+      "Vaak opruimen, herstellen of presenteren",
+      "Huidige situatie kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
-      "Vaak meerdere kijkers",
+      "Meerdere kijkers of open huis mogelijk",
       "Niet standaard nodig"
     ],
     [
-      "Snelheid",
-      "Kan weken of maanden duren",
-      "Snelle duidelijkheid mogelijk"
+      "Planning",
+      "Afhankelijk van markt, koper en voorbehouden",
+      "In overleg vooraf duidelijk te bespreken"
     ],
     [
-      "Onderhoud",
-      "Kan verkoop lastiger maken",
-      "Ook deze woningen kunnen worden aangemeld"
+      "Kosten",
+      "Courtage, presentatie of herstelkosten mogelijk",
+      "Geen makelaarskosten bij directe aankoop"
     ],
     [
-      "Opleverdatum",
-      "Afhankelijk van koper",
-      "In overleg bespreekbaar"
+      "Voorwaarden",
+      "Afhankelijk van koper en onderhandeling",
+      "Schriftelijk vastleggen vóór akkoord"
     ],
     [
-      "Afwikkeling",
-      "Afhankelijk van afspraken",
-      "Bij akkoord via de notaris"
+      "Overdracht",
+      "Via koopovereenkomst en notaris",
+      "Bij akkoord ook via koopovereenkomst en notaris"
     ]
   ],
   "faqs": [
     {
-      "question": "Kan ik mijn huis verkopen met achterstallig onderhoud zonder makelaar regelen?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
+      "question": "Moet ik de woning eerst opknappen?",
+      "answer": "Niet altijd. U kunt de woning vrijblijvend aanmelden zoals deze nu is. De staat wordt meegenomen in de beoordeling."
     },
     {
-      "question": "Is de aanvraag vrijblijvend?",
-      "answer": "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
+      "question": "Kan ik verkopen met achterstallig onderhoud?",
+      "answer": "Ja, dat kan bespreekbaar zijn. Bekende gebreken moeten wel duidelijk worden vermeld."
     },
     {
-      "question": "Moet de woning verkoopklaar zijn?",
-      "answer": "Niet altijd. Ook woningen met onderhoud, leegstand of renovatiebehoefte kunnen worden aangemeld."
+      "question": "Mag de woning nog vol staan?",
+      "answer": "In veel situaties kan ook een woning met spullen of inboedel worden beoordeeld. Afspraken over oplevering worden apart vastgelegd."
     },
     {
-      "question": "Betaal ik makelaarskosten?",
-      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
+      "question": "Heeft schade invloed op het voorstel?",
+      "answer": "Ja, schade of onderhoud kan invloed hebben op prijs en voorwaarden. Daarom is een zorgvuldige beoordeling nodig."
+    },
+    {
+      "question": "Moet ik gebreken melden?",
+      "answer": "Ja. Bekende gebreken moeten eerlijk worden gemeld, zodat afspraken correct kunnen worden vastgelegd."
     }
   ],
-  "ctaTitle": "Wilt u huis verkopen met achterstallig onderhoud?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden.",
-  "keywords": "huis verkopen met achterstallig onderhoud, woning slechte staat verkopen, verouderd huis verkopen"
+  "relatedLinks": [
+    [
+      "/opknapwoning-verkopen",
+      "Opknapwoning verkopen"
+    ],
+    [
+      "/huis-verkopen-zonder-opknappen",
+      "Huis verkopen zonder opknappen"
+    ],
+    [
+      "/huis-verkopen-in-huidige-staat",
+      "Huis verkopen in huidige staat"
+    ],
+    [
+      "/woning-verkopen-met-schade",
+      "Woning verkopen met schade"
+    ],
+    [
+      "/woning-verkopen-die-nog-vol-staat",
+      "Woning verkopen die nog vol staat"
+    ]
+  ],
+  "ctaTitle": "Wilt u weten wat mogelijk is met een woning met onderhoud?",
+  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan. U hoeft niet eerst te renoveren voordat u duidelijkheid krijgt.",
+  "slug": "/huis-verkopen-met-achterstallig-onderhoud"
 };
 
 export default function HuisVerkopenMetAchterstalligOnderhoudPage() {
