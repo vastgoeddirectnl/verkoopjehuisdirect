@@ -1,0 +1,1462 @@
+diff --git a/README_SEO_LANDINGPAGES_REFERENTIE_PATCH.txt b/README_SEO_LANDINGPAGES_REFERENTIE_PATCH.txt
+new file mode 100644
+index 0000000..bf3e6f7
+--- /dev/null
++++ b/README_SEO_LANDINGPAGES_REFERENTIE_PATCH.txt
+@@ -0,0 +1,63 @@
++SEO/Ads landingspagina referentiepatch
++=====================================
++
++Analyse samengevat
++------------------
++De bestaande site gebruikt de homepage als sterkste conversiepagina: duidelijke hero, rustige huisstijl, directe CTA's, formulier, telefoon/WhatsApp en vertrouwen rond geen open huis, geen makelaarskosten en notariële afwikkeling. De SEO-pagina's gebruiken vooral één centrale SeoLandingPage-component. Dat is technisch efficiënt, maar de inhoud van meerdere pagina's leek sterk op elkaar: vergelijkbare hero, algemene voordelen, herhaalde secties en vaak dezelfde procesuitleg.
++
++De bestaande flow voor formulieren, Google Ads conversietracking, telefoon/WhatsApp-clicktracking, Resend-mailflow en databasekoppeling is behouden. De homepage is niet opnieuw ontworpen.
++
++Wat is aangepast
++----------------
++1. SeoLandingPage.jsx is uitgebreid met optionele, veilige datastructuren:
++   - pageType: high-intent, situation of region
++   - heroBenefits
++   - concernCards en solutionCards
++   - vdnTasks en ownerTasks
++   - practiceExample met velden voor situatie, woningtype, regio, probleem, oplossing, oplevering, overdracht en vervolgstap
++   - processSteps
++
++2. Bestaande pagina's blijven renderen met fallbackwaarden. Ontbrekende velden veroorzaken geen foutmeldingen.
++
++3. Drie referentiepagina's zijn volledig herschreven:
++   - /huis-snel-verkopen
++   - /opknapwoning-verkopen
++   - /huis-verkopen-bij-erfenis
++
++4. CTA-teksten zijn consistenter gemaakt:
++   - primaire CTA: Ontvang een vrijblijvend verkoopvoorstel
++   - secundaire route: Bespreek eerst mijn situatie / WhatsApp
++
++5. Vergelijkingsblok is genuanceerder gemaakt:
++   - reguliere verkoop kan soms hogere opbrengst opleveren;
++   - directe verkoop biedt vooral rust, snelheid, minder voorbereiding en duidelijke afspraken.
++
++6. Aanvraagblok en formulier blijven bestaande lead-API en Google Ads leadconversie gebruiken.
++
++Niet aangepast
++--------------
++- Homepage niet opnieuw ontworpen.
++- Adminportal en proposal-flow niet aangepast.
++- Databasevelden niet gewijzigd.
++- Resend-mailflow niet gewijzigd.
++- Geen nieuwe dependencies toegevoegd.
++- Geen verzonnen reviews of echte transacties toegevoegd.
++
++Testadvies na deploy
++--------------------
++Controleer minimaal:
++1. /huis-snel-verkopen op desktop en mobiel.
++2. /opknapwoning-verkopen op desktop en mobiel.
++3. /huis-verkopen-bij-erfenis op desktop en mobiel.
++4. Formulierverzending vanaf alle drie de pagina's.
++5. Google Ads leadconversie na succesvolle formulierverzending.
++6. WhatsApp- en telefoonlinks.
++7. Structured data via Rich Results Test.
++8. Metadata/canonical in page source.
++9. Oude SEO-pagina's die nog minder data hebben, zodat fallback correct werkt.
++
++Handmatig later aanvullen
++-------------------------
++- Echte reviews of echte cases alleen toevoegen als ze beschikbaar en toegestaan zijn.
++- Overige SEO/GEO-pagina's gefaseerd migreren naar de nieuwe datastructuur.
++- Regionale praktijkvoorbeelden per provincie/stad aanvullen zodra echte informatie beschikbaar is.
+diff --git a/app/components/AdsLeadMiniForm.jsx b/app/components/AdsLeadMiniForm.jsx
+index 9c985f3..2bc0f89 100644
+--- a/app/components/AdsLeadMiniForm.jsx
++++ b/app/components/AdsLeadMiniForm.jsx
+@@ -141,7 +141,7 @@ export default function AdsLeadMiniForm({ pageTitle = "Advertentiepagina", pageS
+       {error && <p className="ad-mini-error">{error}</p>}
+ 
+       <button type="submit" className="btn btn-orange ad-mini-submit" disabled={submitting}>
+-        {submitting ? "Aanvraag verzenden..." : "Vraag vrijblijvend voorstel aan"}
++        {submitting ? "Aanvraag verzenden..." : "Ontvang een vrijblijvend voorstel"}
+       </button>
+ 
+       <p className="ad-mini-note">Vrijblijvend. U zit nergens aan vast.</p>
+diff --git a/app/components/SeoLandingPage.jsx b/app/components/SeoLandingPage.jsx
+index c55d38b..cfebce4 100644
+--- a/app/components/SeoLandingPage.jsx
++++ b/app/components/SeoLandingPage.jsx
+@@ -1,5 +1,8 @@
+ import AdsLeadMiniForm from "./AdsLeadMiniForm";
++
+ const whatsappBase = "https://wa.me/31612238051";
++const primaryCta = "Ontvang een vrijblijvend verkoopvoorstel";
++const secondaryCta = "Bespreek eerst mijn situatie";
+ 
+ const internalLinks = [
+   ["/huis-snel-verkopen", "Huis snel verkopen"],
+@@ -82,7 +85,7 @@ const geoSlugs = new Set([
+ ]);
+ 
+ function isGeoPage(page) {
+-  return geoSlugs.has(page.slug);
++  return geoSlugs.has(page.slug) || page.pageType === "region";
+ }
+ 
+ function relatedSectionCopy(page) {
+@@ -111,15 +114,60 @@ function relatedCardsFor(page) {
+   }));
+ }
+ 
++function normaliseExample(page) {
++  if (page.practiceExample) return page.practiceExample;
++  if (!page.exampleSituation) return null;
++
++  return {
++    situation: page.exampleSituation.title,
++    mainProblem: page.exampleSituation.text,
++  };
++}
++
++function pageTypeCopy(page) {
++  if (page.pageType === "region") {
++    return {
++      eyebrow: "Regionale verkoopoplossing",
++      valueTitle: `Verkopen in ${page.regionName || page.breadcrumb} met duidelijke afspraken`,
++      valueText: "Ook regionaal draait het niet alleen om snelheid. We kijken naar de woning, de situatie en de gewenste planning, zodat u eerst rustig kunt beoordelen welke verkooproute past.",
++    };
++  }
++
++  if (page.pageType === "situation") {
++    return {
++      eyebrow: "Situatiegericht verkopen",
++      valueTitle: "Geen standaard verkooptraject wanneer uw situatie niet standaard is.",
++      valueText: "Bij erfenis, onderhoud, leegstand of een volle woning spelen andere vragen dan bij een reguliere verkoop. Daarom kijken we eerst naar de situatie en leggen we afspraken duidelijk vast.",
++    };
++  }
++
++  return {
++    eyebrow: "Hoge koopintentie",
++    valueTitle: "Snel duidelijkheid zonder direct een lang verkooptraject te starten.",
++    valueText: "U wilt vooral weten wat er concreet mogelijk is. Daarom houden we de aanvraag laagdrempelig en krijgt u waar mogelijk eerst een vrijblijvende inschatting of voorstel.",
++  };
++}
++
+ export default function SeoLandingPage({ page }) {
+   const faqs = Array.isArray(page.faqs) ? page.faqs : [];
+   const sections = Array.isArray(page.sections) ? page.sections : [];
+   const benefits = Array.isArray(page.benefits) ? page.benefits : [];
++  const heroBenefits = Array.isArray(page.heroBenefits) && page.heroBenefits.length
++    ? page.heroBenefits.slice(0, 4)
++    : benefits.slice(0, 4);
+   const comparisonRows = Array.isArray(page.comparisonRows) ? page.comparisonRows : [];
+   const relatedCards = relatedCardsFor(page);
+   const relatedCopy = relatedSectionCopy(page);
+-  const example = page.exampleSituation;
++  const example = normaliseExample(page);
++  const typeCopy = pageTypeCopy(page);
+   const showFaqSchema = faqs.length > 0;
++  const concernCards = Array.isArray(page.concernCards) ? page.concernCards : [];
++  const solutionCards = Array.isArray(page.solutionCards) ? page.solutionCards : [];
++  const ownerTasks = Array.isArray(page.ownerTasks) ? page.ownerTasks : [];
++  const vdnTasks = Array.isArray(page.vdnTasks) ? page.vdnTasks : [];
++  const processSteps = Array.isArray(page.processSteps) && page.processSteps.length
++    ? page.processSteps
++    : sections.find((section) => Array.isArray(section.steps) && section.steps.length)?.steps || [];
+ 
+   const faqSchema = {
+     "@context": "https://schema.org",
+@@ -154,7 +202,7 @@ export default function SeoLandingPage({ page }) {
+   };
+ 
+   const whatsappText = encodeURIComponent(
+-    `Hallo, ik wil graag meer informatie over: ${page.breadcrumb}. Kunt u contact met mij opnemen?`
++    `Hallo, ik wil graag mijn situatie bespreken over: ${page.breadcrumb}. Kunt u met mij meekijken?`
+   );
+   const whatsappLink = `${whatsappBase}?text=${whatsappText}`;
+ 
+@@ -218,9 +266,6 @@ export default function SeoLandingPage({ page }) {
+         .cta-logo{width:205px;max-width:100%;display:block;margin:0 auto 16px;padding-bottom:15px;border-bottom:1px solid #eee9e2}
+         .cta-card h2{font-size:28px;line-height:1.08;letter-spacing:-.9px;margin:0 0 10px;color:var(--navy)}
+         .cta-card p{color:#617184;line-height:1.55;margin:0 0 14px}
+-        .mini-checks{display:grid;gap:8px;margin:16px 0}
+-        .mini-checks div{display:flex;gap:8px;background:#f8f5ef;border:1px solid #eee8df;border-radius:14px;padding:10px 12px;color:#24364a;font-size:13px;font-weight:850;line-height:1.35}
+-        .mini-checks span{color:var(--orange);font-weight:900}
+         .ad-mini-form{display:grid;gap:10px;margin-top:14px}
+         .ad-mini-form label{display:grid;gap:5px;color:#24364a;font-size:12px;font-weight:900}
+         .ad-mini-form input,.ad-mini-form select{width:100%;border:1px solid #ddd4c8;border-radius:13px;background:#fff;padding:11px 12px;color:#071f3a;font-size:14px;outline:none}
+@@ -234,10 +279,6 @@ export default function SeoLandingPage({ page }) {
+         .ad-mini-success p{margin:0!important;color:#315b3f!important;font-size:14px!important;line-height:1.45!important}
+         .after-request{display:grid;gap:4px;margin-top:14px;background:#f8f5ef;border:1px solid #eee8df;border-radius:16px;padding:13px;color:#24364a;font-size:13px;line-height:1.42}
+         .after-request strong{color:#071f3a;font-size:14px}
+-        .review-mini{margin-top:14px;background:#071f3a;color:#fff;border-radius:20px;padding:16px}
+-        .review-mini strong{display:block;font-size:17px;margin-bottom:4px}
+-        .stars{color:#f5a400;letter-spacing:1.5px;font-weight:900}
+-        .review-mini p{color:#d7e3ef;font-size:13px;line-height:1.45;margin:8px 0 0}
+         .section{padding:58px 0}
+         .section-white{background:#fff}
+         .section-tight{padding:48px 0}
+@@ -252,10 +293,18 @@ export default function SeoLandingPage({ page }) {
+         .short-answer{display:grid;grid-template-columns:.76fr 1.24fr;gap:24px;align-items:center}
+         .benefit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:22px}
+         .benefit-item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px 15px;font-size:15px;font-weight:900;color:#24364a;box-shadow:0 12px 30px rgba(7,31,58,.055)}
++        .insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
++        .insight-card{background:#fff;border:1px solid var(--line);border-radius:26px;padding:24px;box-shadow:0 16px 44px rgba(7,31,58,.07)}
++        .insight-card h2{font-size:clamp(24px,2.1vw,34px);line-height:1.14;letter-spacing:-.75px;margin-bottom:12px}
++        .insight-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
++        .insight-list li{background:#f8f5ef;border:1px solid #eee8df;border-radius:15px;padding:11px 13px;color:#24364a;font-size:15px;font-weight:850;line-height:1.42}
+         .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+         .why-card{background:#fff;border:1px solid var(--line);border-radius:26px;padding:24px;box-shadow:0 16px 44px rgba(7,31,58,.07)}
+         .why-card strong{display:block;font-size:18px;line-height:1.2;color:var(--navy);margin-bottom:9px}
+         .why-card p{margin:0;color:#647386;line-height:1.55;font-size:15px}
++        .two-column-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
++        .task-card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 14px 38px rgba(7,31,58,.055)}
++        .task-card h3{font-size:21px;margin-bottom:12px}
+         .content-grid{display:grid;gap:18px}
+         .content-block{background:#fff;border:1px solid var(--line);border-radius:26px;padding:26px;box-shadow:0 14px 38px rgba(7,31,58,.055)}
+         .content-block h2{font-size:clamp(24px,2vw,32px);line-height:1.14;letter-spacing:-.7px;margin:0 0 12px}
+@@ -264,6 +313,10 @@ export default function SeoLandingPage({ page }) {
+         .example-card{background:linear-gradient(135deg,#F7F2EC 0%,#ffffff 100%);border:1px solid #F2B885;border-radius:28px;padding:28px;box-shadow:0 16px 44px rgba(217,106,28,.08)}
+         .example-card h2{font-size:clamp(24px,2.1vw,33px);line-height:1.12;letter-spacing:-.75px;margin-bottom:10px}
+         .example-card p{color:#5f7083;font-size:16px;line-height:1.62;margin:0}
++        .example-details{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px}
++        .example-detail{background:#fff;border:1px solid #eadbca;border-radius:16px;padding:13px 14px}
++        .example-detail strong{display:block;color:#071f3a;font-size:13px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
++        .example-detail span{display:block;color:#526274;font-size:14px;line-height:1.45}
+         .list{display:grid;gap:10px;margin:12px 0 0;padding:0;list-style:none}
+         .list li{background:#f8f5ef;border:1px solid #eee8df;border-radius:15px;padding:10px 13px;color:#24364a;font-size:15px;font-weight:850;line-height:1.35}
+         .steps{counter-reset:step;display:grid;gap:10px;margin:14px 0 0;padding:0;list-style:none}
+@@ -289,11 +342,10 @@ export default function SeoLandingPage({ page }) {
+         .related-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+         .related-card{background:linear-gradient(180deg,#fff 0%,#fffaf4 100%);border:1px solid #dfd2c4;border-left:4px solid #F2B885;border-radius:18px;padding:17px 18px;min-height:108px;display:grid;grid-template-columns:1fr;gap:0;align-items:start;color:#071f3a;text-decoration:none;box-shadow:0 10px 26px rgba(7,31,58,.055);transition:.18s ease}
+         .related-card:hover{border-color:#D96A1C;border-left-color:#D96A1C;transform:translateY(-1px);box-shadow:0 14px 32px rgba(7,31,58,.10)}
+-        .related-card-icon{display:none}
+         .related-card-content{display:grid;gap:6px}
+         .related-card strong{display:block;font-size:17px;line-height:1.2;color:#071f3a}
+         .related-card p{margin:0;color:#526274;line-height:1.5;font-size:14px;font-weight:400}
+-        .related-card span:not(.related-card-icon):not(.related-card-content){margin-top:2px;color:var(--orange);font-weight:900;font-size:14px}
++        .related-card span:not(.related-card-content){margin-top:2px;color:var(--orange);font-weight:900;font-size:14px}
+         .final-cta{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:58px 0;text-align:center}
+         .final-cta h2{color:#fff}
+         .final-cta p{color:#d7e3ef;font-size:18px;line-height:1.6;max-width:730px;margin:16px auto 0}
+@@ -337,9 +389,9 @@ export default function SeoLandingPage({ page }) {
+           .header-inner{grid-template-columns:auto auto}
+           .nav{grid-column:1/-1;justify-content:flex-start;overflow-x:auto;gap:18px;padding:0 0 12px;scrollbar-width:none}
+           .nav::-webkit-scrollbar{display:none}
+-          .hero-grid,.comparison-top,.short-answer{grid-template-columns:1fr}
++          .hero-grid,.comparison-top,.short-answer,.insight-grid{grid-template-columns:1fr}
+           .trust-micro,.benefit-grid{grid-template-columns:repeat(2,1fr)}
+-          .why-grid{grid-template-columns:1fr}
++          .why-grid,.two-column-cards{grid-template-columns:1fr}
+           .cta-card{max-width:620px;margin:0 auto}
+           .footer-grid{grid-template-columns:repeat(2,1fr)}
+         }
+@@ -363,16 +415,15 @@ export default function SeoLandingPage({ page }) {
+           .micro-note{display:none}
+           .mobile-trust-line{display:block;font-size:13px;color:#647386;font-weight:900;margin-top:12px;line-height:1.45}
+           .trust-micro{display:none}
+-          .benefit-grid,.compare-columns,.related-card-grid{grid-template-columns:1fr}
++          .benefit-grid,.compare-columns,.related-card-grid,.example-details{grid-template-columns:1fr}
+           .section{padding:42px 0}.section-tight{padding:38px 0}
+           .section-head{text-align:left;margin-bottom:20px}
+-          .card,.content-block,.cta-card,.comparison-wrap,.why-card,.example-card{border-radius:22px;padding:20px}
++          .card,.content-block,.cta-card,.comparison-wrap,.why-card,.example-card,.insight-card,.task-card{border-radius:22px;padding:20px}
+           .content-block h2,.example-card h2{font-size:24px;line-height:1.15;letter-spacing:-.5px}
+           .section-head h2,.short-answer h2{font-size:28px;line-height:1.12;letter-spacing:-.65px}
+           .content-block p,.example-card p,.section-head p,.text{font-size:15px;line-height:1.58}
+           .cta-logo{display:none}
+           .cta-card h2{font-size:24px}
+-          .review-mini{display:none}
+           .compare-row{grid-template-columns:1fr;gap:5px}
+           .faq-item{display:block}
+           .faq-item h3{margin-bottom:7px}
+@@ -410,7 +461,7 @@ export default function SeoLandingPage({ page }) {
+           <div className="header-actions">
+             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
+             <a href="tel:0612238051" className="btn btn-blue">Bel direct</a>
+-            <a href="#aanvraag" className="btn btn-orange">Vraag voorstel aan</a>
++            <a href="#aanvraag" className="btn btn-orange">Voorstel aanvragen</a>
+           </div>
+         </div>
+       </header>
+@@ -418,24 +469,23 @@ export default function SeoLandingPage({ page }) {
+       <section className="hero">
+         <div className="container hero-grid">
+           <div>
+-            <div className="badge">Ook als de woning niet verkoopklaar is</div>
++            <div className="badge">{page.eyebrow || typeCopy.eyebrow}</div>
+             <h1>{page.h1}</h1>
+             <p className="lead">{page.lead}</p>
+ 
+             <div className="hero-cta-row">
+-              <a href="#aanvraag" className="btn btn-orange">Vraag vrijblijvend voorstel aan</a>
+-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">Eerst even overleggen</a>
++              <a href="#aanvraag" className="btn btn-orange">{primaryCta}</a>
++              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-light">{secondaryCta}</a>
+             </div>
+ 
+-            <p className="micro-note">De woning hoeft niet eerst opgeknapt of leeggehaald te worden. U zit nergens aan vast.</p>
+-            <p className="mobile-trust-line">Niet opknappen · Niet leeghalen · Vrijblijvend</p>
++            <p className="micro-note">Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf.</p>
++            <p className="mobile-trust-line">Vrijblijvend · Schriftelijke afspraken · Notariële afwikkeling</p>
+ 
+-            <div className="trust-micro" aria-label="Voordelen">
+-              <div>✓ Niet eerst opknappen</div>
+-              <div>✓ Niet leeghalen</div>
+-              <div>✓ Geen open huis</div>
+-              <div>✓ Vrijblijvend</div>
+-            </div>
++            {heroBenefits.length > 0 && (
++              <div className="trust-micro" aria-label="Voordelen">
++                {heroBenefits.map((item) => <div key={item}>✓ {item}</div>)}
++              </div>
++            )}
+           </div>
+ 
+           <aside className="cta-card" id="aanvraag">
+@@ -451,7 +501,7 @@ export default function SeoLandingPage({ page }) {
+             />
+             <div className="after-request">
+               <strong>Wat gebeurt er na uw aanvraag?</strong>
+-              <span>Na uw aanvraag bekijken wij de woninggegevens en uw situatie. Als er nog informatie nodig is om dit goed te beoordelen, nemen wij kort contact met u op. U zit nergens aan vast.</span>
++              <span>Wij beoordelen de woninggegevens en uw situatie. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Als er nog informatie nodig is, nemen wij kort contact met u op.</span>
+             </div>
+           </aside>
+         </div>
+@@ -477,40 +527,100 @@ export default function SeoLandingPage({ page }) {
+         </div>
+       </section>
+ 
++      {(concernCards.length > 0 || solutionCards.length > 0) && (
++        <section className="section-tight">
++          <div className="container insight-grid">
++            {concernCards.length > 0 && (
++              <div className="insight-card">
++                <p className="eyebrow">Herkenbaar</p>
++                <h2>{page.concernTitle || "Welke zorgen spelen vaak?"}</h2>
++                <ul className="insight-list">
++                  {concernCards.map((item) => <li key={item}>✓ {item}</li>)}
++                </ul>
++              </div>
++            )}
++            {solutionCards.length > 0 && (
++              <div className="insight-card">
++                <p className="eyebrow">Oplossing</p>
++                <h2>{page.solutionTitle || "Wat kan Vastgoed Direct Nederland vereenvoudigen?"}</h2>
++                <ul className="insight-list">
++                  {solutionCards.map((item) => <li key={item}>✓ {item}</li>)}
++                </ul>
++              </div>
++            )}
++          </div>
++        </section>
++      )}
++
+       <section id="waarom-vdn" className="section-tight">
+         <div className="container">
+           <div className="section-head">
+-            <p className="eyebrow">Waarom VDN</p>
+-            <h2>Geen standaard verkooptraject. Eerst rustig duidelijkheid.</h2>
+-            <p>
+-              Veel verkopers willen vooral weten waar ze aan toe zijn. Daarom maken we het laagdrempelig: u hoeft de woning niet eerst op te knappen, leeg te halen of verkoopklaar te maken om een voorstel aan te vragen.
+-            </p>
++            <p className="eyebrow">{typeCopy.eyebrow}</p>
++            <h2>{page.valueTitle || typeCopy.valueTitle}</h2>
++            <p>{page.valueText || typeCopy.valueText}</p>
+           </div>
+ 
+           <div className="why-grid">
+             <div className="why-card">
+-              <strong>Niet eerst opknappen of leeghalen</strong>
+-              <p>Ook als de woning nog vol spullen staat, onderhoud nodig heeft of niet verkoopklaar is, kijken wij met u mee.</p>
++              <strong>Duidelijkheid vóór verplichtingen</strong>
++              <p>U vraagt eerst vrijblijvend een voorstel aan. Pas als het voorstel past, worden afspraken verder uitgewerkt.</p>
+             </div>
+             <div className="why-card">
+-              <strong>Geen open huis of verkoopdruk</strong>
+-              <p>U vraagt rustig informatie aan. Daarna beslist u zelf of het eerste bod en het vervolg bij uw situatie passen.</p>
++              <strong>Schriftelijke afspraken</strong>
++              <p>Prijs, planning, oplevering en bijzondere voorwaarden worden helder vastgelegd voordat er sprake is van verkoop.</p>
+             </div>
+             <div className="why-card">
+-              <strong>Voorstel dat u kunt beoordelen</strong>
+-              <p>U krijgt eerst een eerste vrijblijvend bod. Als beoordeling nodig is, volgt daarna een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.</p>
++              <strong>Correcte notariële afwikkeling</strong>
++              <p>Bij akkoord loopt de juridische levering via de notaris. Zo blijft duidelijk wie waarvoor verantwoordelijk is.</p>
+             </div>
+           </div>
+         </div>
+       </section>
+ 
++      {(ownerTasks.length > 0 || vdnTasks.length > 0) && (
++        <section className="section-tight section-white">
++          <div className="container">
++            <div className="section-head">
++              <p className="eyebrow">Rollen en verwachtingen</p>
++              <h2>Wat hoeft u niet zelf te doen en wat blijft belangrijk?</h2>
++            </div>
++            <div className="two-column-cards">
++              {vdnTasks.length > 0 && (
++                <div className="task-card">
++                  <h3>Wat wij kunnen vereenvoudigen</h3>
++                  <ul className="list">
++                    {vdnTasks.map((item) => <li key={item}>✓ {item}</li>)}
++                  </ul>
++                </div>
++              )}
++              {ownerTasks.length > 0 && (
++                <div className="task-card">
++                  <h3>Wat u zelf moet weten of regelen</h3>
++                  <ul className="list">
++                    {ownerTasks.map((item) => <li key={item}>✓ {item}</li>)}
++                  </ul>
++                </div>
++              )}
++            </div>
++          </div>
++        </section>
++      )}
++
+       {example && (
+         <section className="section-tight section-white">
+           <div className="container">
+             <div className="example-card">
+-              <p className="eyebrow">Voorbeeldsituatie</p>
+-              <h2>{example.title}</h2>
+-              <p>{example.text}</p>
++              <p className="eyebrow">Geanonimiseerde voorbeeldsituatie</p>
++              <h2>{example.situation || example.title || "Praktijkvoorbeeld"}</h2>
++              {example.mainProblem && <p>{example.mainProblem}</p>}
++              <div className="example-details">
++                {example.propertyType && <div className="example-detail"><strong>Type woning</strong><span>{example.propertyType}</span></div>}
++                {example.region && <div className="example-detail"><strong>Regio</strong><span>{example.region}</span></div>}
++                {example.solution && <div className="example-detail"><strong>Oplossing</strong><span>{example.solution}</span></div>}
++                {example.delivery && <div className="example-detail"><strong>Oplevering</strong><span>{example.delivery}</span></div>}
++                {example.transfer && <div className="example-detail"><strong>Overdracht</strong><span>{example.transfer}</span></div>}
++                {example.nextStep && <div className="example-detail"><strong>Vervolgstap</strong><span>{example.nextStep}</span></div>}
++              </div>
+             </div>
+           </div>
+         </section>
+@@ -543,23 +653,37 @@ export default function SeoLandingPage({ page }) {
+         </div>
+       </section>
+ 
++      {processSteps.length > 0 && (
++        <section className="section-tight">
++          <div className="container">
++            <div className="section-head">
++              <p className="eyebrow">Proces</p>
++              <h2>{page.processTitle || "Zo verloopt een vrijblijvende aanvraag"}</h2>
++              <p>De aanvraag is bedoeld om eerst duidelijkheid te krijgen. Een koopovereenkomst ontstaat pas na uitwerking en ondertekening door beide partijen.</p>
++            </div>
++            <ol className="steps">
++              {processSteps.map((step) => <li key={step}>{step}</li>)}
++            </ol>
++          </div>
++        </section>
++      )}
++
+       {comparisonRows.length > 0 && (
+         <section id="vergelijking" className="section-tight">
+           <div className="container comparison-wrap">
+             <div className="comparison-top">
+               <div>
+                 <p className="eyebrow">Vergelijking</p>
+-                <h2>Niet alleen de prijs telt. Ook rust, tijd en duidelijkheid.</h2>
++                <h2>Reguliere verkoop of directe verkoop?</h2>
+               </div>
+               <p>
+-                Bij verkoop gaat het niet alleen om het hoogste bod. Ook kosten, bezichtigingen,
+-                oplevering, spullen in de woning, koopovereenkomst en overdrachtsdatum zijn belangrijk.
++                Een reguliere verkoop kan soms een hogere opbrengst opleveren. Directe verkoop kan juist aantrekkelijk zijn als rust, snelheid, minder voorbereiding en duidelijke afspraken zwaarder wegen.
+               </p>
+             </div>
+ 
+             <div className="compare-columns">
+               <div className="compare-box">
+-                <div className="compare-title">Traditionele verkoop</div>
++                <div className="compare-title">Reguliere verkoop via een makelaar</div>
+                 {comparisonRows.map((row) => (
+                   <div className="compare-row" key={`normal-${row[0]}`}>
+                     <strong>{row[0]}</strong>
+@@ -569,7 +693,7 @@ export default function SeoLandingPage({ page }) {
+               </div>
+ 
+               <div className="compare-box">
+-                <div className="compare-title orange">Vastgoed Direct Nederland</div>
++                <div className="compare-title orange">Directe verkoop aan VDN</div>
+                 {comparisonRows.map((row) => (
+                   <div className="compare-row" key={`direct-${row[0]}`}>
+                     <strong>{row[0]}</strong>
+@@ -632,9 +756,9 @@ export default function SeoLandingPage({ page }) {
+           <h2>{page.ctaTitle}</h2>
+           <p>{page.ctaText}</p>
+           <div className="cta-buttons">
+-            <a href="#aanvraag" className="btn btn-orange">Vraag vrijblijvend voorstel aan</a>
++            <a href="#aanvraag" className="btn btn-orange">{primaryCta}</a>
+             <a href="tel:0612238051" className="btn btn-light">Bel direct</a>
+-            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">WhatsApp</a>
++            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="btn btn-green">Stuur uw situatie via WhatsApp</a>
+           </div>
+         </div>
+       </section>
+diff --git a/app/huis-snel-verkopen/page.jsx b/app/huis-snel-verkopen/page.jsx
+index a364da3..e2a1cdf 100644
+--- a/app/huis-snel-verkopen/page.jsx
++++ b/app/huis-snel-verkopen/page.jsx
+@@ -1,171 +1,189 @@
+ import SeoLandingPage from "../components/SeoLandingPage";
+ 
+ export const metadata = {
+-  "title": "Huis snel verkopen zonder gedoe",
+-  "description": "Huis snel verkopen zonder open huis, verkoopdruk of eerst opknappen? Vraag vrijblijvend duidelijkheid aan.",
+-  "alternates": {
+-    "canonical": "https://www.vastgoeddirectnederland.nl/huis-snel-verkopen"
++  title: "Huis snel verkopen met duidelijke afspraken",
++  description:
++    "Wilt u snel duidelijkheid over verkoop van uw woning? Vraag vrijblijvend een verkoopvoorstel aan zonder open huis, verkoopdruk of eerst opknappen.",
++  alternates: {
++    canonical: "https://www.vastgoeddirectnederland.nl/huis-snel-verkopen",
++  },
++  openGraph: {
++    title: "Huis snel verkopen met duidelijke afspraken",
++    description:
++      "Vraag vrijblijvend een verkoopvoorstel aan. Geen open huis nodig, geen verkoopdruk en heldere afspraken over prijs, planning en overdracht.",
++    url: "https://www.vastgoeddirectnederland.nl/huis-snel-verkopen",
++    siteName: "Vastgoed Direct Nederland",
++    locale: "nl_NL",
++    type: "website",
++  },
++  twitter: {
++    card: "summary_large_image",
++    title: "Huis snel verkopen met duidelijke afspraken",
++    description:
++      "Snel duidelijkheid over uw woningverkoop zonder eerst een regulier verkooptraject te starten.",
+   },
+-  "openGraph": {
+-    "title": "Huis snel verkopen zonder gedoe",
+-    "description": "Huis snel verkopen zonder open huis, verkoopdruk of eerst opknappen? Vraag vrijblijvend duidelijkheid aan.",
+-    "url": "https://www.vastgoeddirectnederland.nl/huis-snel-verkopen",
+-    "siteName": "Vastgoed Direct Nederland",
+-    "locale": "nl_NL",
+-    "type": "website"
+-  }
+ };
+ 
+ const page = {
+-  "slug": "/huis-snel-verkopen",
+-  "breadcrumb": "Huis snel verkopen",
+-  "eyebrow": "Huis snel verkopen",
+-  "h1": "Huis snel verkopen zonder gedoe",
+-  "lead": "Wilt u snel weten wat er mogelijk is met uw woning? Vraag vrijblijvend een voorstel aan. Ook als de woning onderhoud nodig heeft, nog vol spullen staat of niet verkoopklaar is.",
+-  "shortAnswer": "Ja, snel duidelijkheid krijgen kan zonder dat de woning eerst opgeknapt, leeggehaald of verkoopklaar gemaakt hoeft te worden. U vraagt vrijblijvend informatie aan en beslist daarna zelf of u verder wilt.",
+-  "benefits": [
++  slug: "/huis-snel-verkopen",
++  breadcrumb: "Huis snel verkopen",
++  pageType: "high-intent",
++  eyebrow: "Snel duidelijkheid bij woningverkoop",
++  defaultSituation: "Snel duidelijkheid gewenst",
++  h1: "Huis snel verkopen zonder eerst een lang verkooptraject te starten",
++  lead:
++    "Wilt u snel weten waar u aan toe bent? Wij bekijken uw woning en situatie zoals die nu zijn. U hoeft niet eerst op te knappen, leeg te halen of een reeks bezichtigingen te organiseren om vrijblijvend duidelijkheid te krijgen.",
++  shortAnswer:
++    "Snel verkopen betekent niet dat u overhaast hoeft te beslissen. U kunt eerst vrijblijvend een verkoopvoorstel aanvragen met een duidelijke uitleg over prijs, planning, voorwaarden en notariële afwikkeling.",
++  heroBenefits: [
+     "Snel duidelijkheid",
+-    "Geen open huis",
+-    "Niet eerst opknappen",
+-    "Niet leeghalen",
+-    "Geen verkoopdruk",
+-    "Vrijblijvend voorstel"
++    "Geen open huis nodig",
++    "Niet eerst verkoopklaar maken",
++    "U beslist zelf",
++  ],
++  benefits: [
++    "Vrijblijvend verkoopvoorstel",
++    "Geen open huis nodig",
++    "Niet eerst opknappen of leeghalen",
++    "Duidelijke planning en voorwaarden",
++    "Geen makelaarskosten bij directe aankoop",
++    "Notariële afwikkeling",
++  ],
++  concernTitle: "Waarom willen eigenaren vaak snel duidelijkheid?",
++  concernCards: [
++    "Er lopen dubbele lasten of de woning staat al leeg.",
++    "Een regulier traject met bezichtigingen voelt te onzeker of te belastend.",
++    "De woning is nog niet verkoopklaar, maar u wilt wel weten wat mogelijk is.",
++    "Er moet een planning komen rond verhuizing, aankoop, erfenis of scheiding.",
++  ],
++  solutionTitle: "Wat kunt u concreet verwachten?",
++  solutionCards: [
++    "Een eerste beoordeling op basis van woninggegevens en uw situatie.",
++    "Waar mogelijk een eerste vrijblijvende inschatting of verkoopvoorstel.",
++    "Duidelijke uitleg over koopprijs, oplevering, voorwaarden en termijn.",
++    "Alleen vervolgstappen als het voorstel voor u interessant is.",
+   ],
+-  "exampleSituation": {
+-    "title": "Wanneer snelheid vooral rust moet geven",
+-    "text": "Een veelvoorkomende situatie is dat een eigenaar dubbele lasten heeft of een woning leeg ziet staan. Dan gaat het niet alleen om snel handelen, maar vooral om weten waar u aan toe bent zonder meteen een open huis, herstelwerk of verkoopklaar maken te organiseren."
++  valueTitle: "Snelheid is pas waardevol als de afspraken duidelijk zijn.",
++  valueText:
++    "Daarom sturen wij niet op druk of overhaaste beslissingen. U vraagt eerst informatie aan, ontvangt waar mogelijk een eerste inschatting en kunt daarna rustig beoordelen of directe verkoop bij uw situatie past.",
++  vdnTasks: [
++    "Meedenken over een realistische verkooproute zonder open huis.",
++    "Beoordelen of de woning in huidige staat kan worden meegenomen.",
++    "Afspraken over oplevering, spullen, planning en overdracht concreet maken.",
++    "Het vervolg bij akkoord via koopovereenkomst en notaris laten verlopen.",
++  ],
++  ownerTasks: [
++    "Bekende gebreken en bijzonderheden eerlijk melden.",
++    "Aangeven welke termijn of leverdatum voor u belangrijk is.",
++    "Eventuele mede-eigenaren of betrokkenen tijdig laten meekijken.",
++    "Het voorstel rustig beoordelen voordat u ergens mee instemt.",
++  ],
++  practiceExample: {
++    situation: "Eigenaar wil snel rust door leegstaande woning",
++    propertyType: "Eengezinswoning",
++    region: "Noord-Nederland",
++    mainProblem:
++      "De woning stond leeg en de eigenaar wilde geen maandenlange verkoopcampagne met onderhoud, foto's en bezichtigingen organiseren.",
++    solution:
++      "Eerst een vrijblijvende inschatting, daarna een voorstel met duidelijke planning en opleverafspraken.",
++    delivery:
++      "Woning kon in huidige staat worden beoordeeld; leeghalen werd apart besproken.",
++    transfer:
++      "Overdracht via de notaris na ondertekening van de koopovereenkomst.",
++    nextStep:
++      "Eigenaar kon het voorstel vergelijken met regulier verkopen en daarna pas beslissen.",
+   },
+-  "sections": [
++  sections: [
+     {
+-      "title": "Wanneer speelt dit?",
+-      "paragraphs": [
+-        "Snel verkopen speelt vaak bij dubbele lasten, leegstand, een verhuizing, scheiding, erfenis of wanneer u geen zin heeft in een lang verkooptraject.",
+-        "Ook als de woning nog niet netjes of leeg is, kunt u eerst laten bekijken wat er mogelijk is."
+-      ]
++      title: "Wanneer is snel verkopen vooral interessant?",
++      paragraphs: [
++        "Snel verkopen speelt vaak bij dubbele lasten, leegstand, verhuizing, scheiding, erfenis of wanneer u geen langdurige onzekerheid wilt over bezichtigingen, biedingen en financieringsvoorbehoud.",
++        "Het kan ook gaan om een woning die nog niet klaar is voor presentatie. In dat geval is eerst duidelijkheid krijgen vaak praktischer dan direct investeren in herstel, styling of opruimen.",
++      ],
+     },
+     {
+-      "title": "Welke opties heeft u?",
+-      "bullets": [
+-        "Regulier verkopen via een makelaar",
+-        "Eerst opknappen en verkoopklaar maken",
+-        "Zelf verkopen zonder makelaar",
+-        "Direct vrijblijvend een verkoopvoorstel aanvragen"
+-      ]
++      title: "Wat is het verschil met regulier verkopen?",
++      paragraphs: [
++        "Bij reguliere verkoop wordt de woning vaak eerst gepresenteerd aan de markt. Dat kan een hogere opbrengst opleveren, maar vraagt ook tijd, voorbereiding en onzekerheid over koper, financiering en oplevering.",
++        "Bij directe verkoop ligt de nadruk op rust en duidelijkheid. U ontvangt eerst een voorstel en beoordeelt daarna of prijs, planning en voorwaarden voor u passend zijn.",
++      ],
+     },
+     {
+-      "title": "Wanneer is directe verkoop logisch?",
+-      "paragraphs": [
+-        "Directe verkoop kan logisch zijn als snelheid, rust en duidelijkheid belangrijker zijn dan een lang traject met meerdere bezichtigingen.",
+-        "U krijgt eerst een eerste vrijblijvend bod. Als dat passend lijkt, kan daarna een definitief voorstel volgen met planning en uitleg over het vervolg."
+-      ]
++      title: "Hoe komt een voorstel tot stand?",
++      steps: [
++        "U vult de belangrijkste woninggegevens en uw situatie in.",
++        "Wij bekijken de woning, locatie, staat en gewenste termijn.",
++        "Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel.",
++        "Als er meer informatie nodig is, nemen wij kort contact op of plannen we een beoordeling.",
++        "Bij akkoord worden afspraken schriftelijk uitgewerkt en verloopt overdracht via de notaris.",
++      ],
+     },
+     {
+-      "title": "Hoe werkt het proces?",
+-      "steps": [
+-        "U vult kort uw woning en situatie in.",
+-        "Op basis van de eerste gegevens ontvangt u een eerste vrijblijvend bod.",
+-        "We bespreken uw situatie en bekijken de woning eventueel in de huidige staat.",
+-        "Na beoordeling ontvangt u een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.",
+-        "Bij akkoord worden de afspraken vastgelegd in een koopovereenkomst en volgt de overdracht via de notaris."
+-      ]
++      title: "Wat wordt schriftelijk vastgelegd?",
++      bullets: [
++        "De koopprijs en eventuele voorwaarden.",
++        "De gewenste leverdatum of passeertermijn.",
++        "Afspraken over oplevering, leegstand, spullen of onderhoud.",
++        "Eventuele voorbehouden of aanvullende afspraken.",
++        "De notariële afwikkeling van de eigendomsoverdracht.",
++      ],
+     },
+-    {
+-      "title": "Waar moet u op letten?",
+-      "paragraphs": [
+-        "Vergelijk niet alleen het bedrag, maar ook de planning, opleverdatum, eventuele spullen in de woning, kosten en zekerheid van afwikkeling."
+-      ]
+-    }
+   ],
+-  "comparisonRows": [
+-    [
+-      "Opknappen",
+-      "Vaak eerst nodig voor presentatie",
+-      "Niet vooraf nodig voor een eerste voorstel"
+-    ],
+-    [
+-      "Leeghalen",
+-      "Vaak nodig voor foto's en bezichtigingen",
+-      "Kan worden meegenomen in het voorstel"
+-    ],
+-    [
+-      "Bezichtigingen",
+-      "Vaak meerdere kijkers",
+-      "Geen open huis nodig"
+-    ],
+-    [
+-      "Kosten",
+-      "Mogelijk courtage, styling of herstel",
+-      "Geen makelaarskosten voor de aanvraag"
+-    ],
+-    [
+-      "Planning",
+-      "Afhankelijk van koper en markt",
+-      "In overleg duidelijk af te spreken"
+-    ],
+-    [
+-      "Beslissing",
+-      "Vaak langer traject",
+-      "U beslist zelf na het voorstel"
+-    ]
++  processSteps: [
++    "Aanvraag met woninggegevens invullen.",
++    "Eerste beoordeling van woning en situatie.",
++    "Vrijblijvende inschatting of voorstel ontvangen.",
++    "Vragen bespreken en afspraken verduidelijken.",
++    "Bij akkoord vastleggen in koopovereenkomst en overdracht via de notaris.",
+   ],
+-  "faqs": [
++  comparisonRows: [
++    ["Verkoopklaar maken", "Vaak eerst opruimen, styling of herstel", "Niet nodig voor een eerste beoordeling"],
++    ["Fotografie en presentatie", "Meestal onderdeel van verkoopcampagne", "Geen campagne nodig voor een voorstel"],
++    ["Bezichtigingen", "Vaak meerdere kijkers of open huis", "Meestal niet nodig"],
++    ["Onzekerheid koper", "Afhankelijk van biedingen en financiering", "Voorwaarden worden vooraf besproken"],
++    ["Verkooptermijn", "Kan weken of maanden duren", "Planning kan gericht worden afgesproken"],
++    ["Makelaarskosten", "Vaak courtage of vast tarief", "Geen makelaarskosten bij directe aankoop"],
++    ["Oplevering", "Onderhandeling met koper", "Afspraken vooraf duidelijk vastleggen"],
++    ["Afwikkeling", "Via koopovereenkomst en notaris", "Ook via koopovereenkomst en notaris"],
++  ],
++  faqs: [
+     {
+-      "question": "Kan ik mijn huis snel verkopen zonder open huis?",
+-      "answer": "Ja, dat kan. Bij een directe verkoop is een open huis meestal niet nodig. U kunt vrijblijvend laten bekijken wat er mogelijk is en daarna zelf beslissen of u verder wilt."
++      question: "Kan ik mijn huis snel verkopen zonder open huis?",
++      answer:
++        "Ja. Bij directe verkoop is een open huis meestal niet nodig. U vraagt eerst vrijblijvend een voorstel aan en beslist daarna zelf of u verder wilt.",
+     },
+     {
+-      "question": "Moet mijn woning verkoopklaar zijn voor een snelle verkoop?",
+-      "answer": "Nee, dat hoeft niet altijd. Ook als de woning onderhoud nodig heeft, nog vol spullen staat of niet verkoopklaar is, kunt u vrijblijvend een voorstel aanvragen."
++      question: "Moet mijn woning eerst verkoopklaar zijn?",
++      answer:
++        "Nee, niet altijd. Ook als de woning onderhoud nodig heeft, nog vol spullen staat of niet verkoopklaar is, kunt u vrijblijvend laten beoordelen wat mogelijk is.",
+     },
+     {
+-      "question": "Zit ik ergens aan vast na een aanvraag?",
+-      "answer": "Nee. Een aanvraag is gratis en vrijblijvend. U ontvangt eerst duidelijkheid over de mogelijkheden en beslist daarna zelf of u verder wilt."
++      question: "Krijg ik gegarandeerd direct een bod?",
++      answer:
++        "Nee, dat garanderen wij niet. Wij beoordelen eerst de woninggegevens en situatie. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of voorstel.",
+     },
+     {
+-      "question": "Wanneer is snel verkopen logisch?",
+-      "answer": "Snel verkopen kan logisch zijn bij dubbele lasten, leegstand, verhuizing, scheiding, erfenis of wanneer u geen regulier verkooptraject wilt met bezichtigingen en onzekerheid."
++      question: "Zit ik ergens aan vast na de aanvraag?",
++      answer:
++        "Nee. De aanvraag is vrijblijvend. Een koopovereenkomst ontstaat pas nadat alle afspraken zijn uitgewerkt en door koper en verkoper zijn ondertekend.",
+     },
+     {
+-      "question": "Krijg ik alleen een bedrag of ook uitleg?",
+-      "answer": "U ontvangt niet alleen een bedrag, maar ook uitleg over het bod, de planning, de koopovereenkomst en de notariële overdracht."
+-    }
++      question: "Is snel verkopen altijd financieel het beste?",
++      answer:
++        "Niet altijd. Regulier verkopen kan soms een hogere opbrengst opleveren. Directe verkoop kan vooral aantrekkelijk zijn wanneer rust, snelheid, oplevering en zekerheid zwaar meewegen.",
++    },
+   ],
+-  "relatedLinks": [
+-    [
+-      "/huis-verkopen-zonder-leeghalen",
+-      "Huis verkopen zonder leeghalen"
+-    ],
+-    [
+-      "/huis-verkopen-zonder-opknappen",
+-      "Huis verkopen zonder opknappen"
+-    ],
+-    [
+-      "/woning-verkopen-die-nog-vol-staat",
+-      "Woning verkopen die nog vol staat"
+-    ],
+-    [
+-      "/opknapwoning-verkopen-zonder-makelaar",
+-      "Opknapwoning verkopen zonder makelaar"
+-    ],
+-    [
+-      "/leegstaand-huis-verkopen-wat-zijn-de-opties",
+-      "Leegstaand huis verkopen: wat zijn de opties?"
+-    ],
+-    [
+-      "/huis-verkopen-bij-dubbele-lasten",
+-      "Huis verkopen bij dubbele lasten"
+-    ],
+-    [
+-      "/huis-verkopen-zonder-bezichtigingen-uitleg",
+-      "Huis verkopen zonder bezichtigingen"
+-    ],
+-    [
+-      "/geerfde-woning-verkopen-zonder-leeghalen",
+-      "Geërfde woning verkopen zonder leeghalen"
+-    ]
++  relatedLinks: [
++    ["/huis-direct-verkopen", "Huis direct verkopen", "Rechtstreeks duidelijkheid over de verkoopmogelijkheden."],
++    ["/huis-verkopen-aan-opkoper", "Huis verkopen aan opkoper", "Vergelijk rustig wat directe verkoop betekent."],
++    ["/huis-verkopen-bij-dubbele-lasten", "Huis verkopen bij dubbele lasten", "Wanneer planning en lasten snel duidelijk moeten worden."],
++    ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen", "Bij leegstand, zorgen of doorlopende kosten."],
++    ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen", "Zonder eerst te verbouwen of herstellen."],
++    ["/woning-verkopen-zonder-makelaar", "Woning verkopen zonder makelaar", "Geen traditioneel makelaarstraject nodig."],
+   ],
+-  "ctaTitle": "Wilt u snel duidelijkheid?",
+-  "ctaText": "Vraag vrijblijvend een voorstel aan. Ook als de woning nog vol spullen staat, onderhoud nodig heeft of niet verkoopklaar is."
++  ctaTitle: "Wilt u snel duidelijkheid over uw woning?",
++  ctaText:
++    "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid over prijs, planning en voorwaarden. Daarna beslist u zelf.",
+ };
+ 
+ export default function HuisSnelVerkopenPage() {
+diff --git a/app/huis-verkopen-bij-erfenis/page.jsx b/app/huis-verkopen-bij-erfenis/page.jsx
+index 60bd7b9..718e944 100644
+--- a/app/huis-verkopen-bij-erfenis/page.jsx
++++ b/app/huis-verkopen-bij-erfenis/page.jsx
+@@ -1,134 +1,195 @@
+ import SeoLandingPage from "../components/SeoLandingPage";
+ 
+ export const metadata = {
+-  title: "Huis verkopen bij erfenis",
+-  description: "Huis verkopen bij erfenis of nalatenschap? Vraag vrijblijvend een helder verkoopvoorstel aan.",
++  title: "Huis verkopen bij erfenis of nalatenschap",
++  description:
++    "Geërfde woning verkopen? Vraag vrijblijvend duidelijkheid aan over verkoop, oplevering, erfgenamen, spullen in de woning en notariële afwikkeling.",
+   alternates: {
+     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-bij-erfenis",
+   },
+   openGraph: {
+-    title: "Huis verkopen bij erfenis",
+-    description: "Huis verkopen bij erfenis of nalatenschap? Vraag vrijblijvend een helder verkoopvoorstel aan.",
++    title: "Huis verkopen bij erfenis of nalatenschap",
++    description:
++      "Rustige verkoopoplossing voor een geërfde woning. Vrijblijvend voorstel, duidelijke afspraken en notariële afwikkeling.",
+     url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-bij-erfenis",
+     siteName: "Vastgoed Direct Nederland",
+     locale: "nl_NL",
+     type: "website",
+   },
++  twitter: {
++    card: "summary_large_image",
++    title: "Huis verkopen bij erfenis of nalatenschap",
++    description:
++      "Vraag vrijblijvend duidelijkheid aan over verkoop van een geërfde woning zonder direct een regulier verkooptraject te starten.",
++  },
+ };
+ 
+ const page = {
+-  "slug": "/huis-verkopen-bij-erfenis",
+-  "breadcrumb": "Huis verkopen bij erfenis",
+-  "eyebrow": "Huis verkopen bij erfenis",
+-  "h1": "Huis verkopen bij erfenis of nalatenschap",
+-  "lead": "Een erfeniswoning verkopen kan veel vragen oproepen. Wij helpen met een rustige aanpak en een vrijblijvend verkoopvoorstel.",
+-  "shortAnswer": "Huis verkopen bij erfenis of nalatenschap? U kunt vrijblijvend een helder verkoopvoorstel aan.",
+-  "benefits": [
+-    "Huis verkopen bij erfenis",
+-    "Geen makelaarskosten",
+-    "Geen open huis nodig",
++  slug: "/huis-verkopen-bij-erfenis",
++  breadcrumb: "Huis verkopen bij erfenis",
++  pageType: "situation",
++  eyebrow: "Erfeniswoning verkopen",
++  defaultSituation: "Erfenis / nalatenschap",
++  h1: "Een huis verkopen bij erfenis zonder onnodige druk of onduidelijkheid",
++  lead:
++    "Een geërfde woning verkopen roept vaak praktische en juridische vragen op. Denk aan erfgenamen, spullen in de woning, een bestaande hypotheek, onderhoud en het moment van overdracht. Wij helpen u eerst rustig duidelijkheid te krijgen.",
++  shortAnswer:
++    "Een woning uit een erfenis kan vaak worden verkocht zodra duidelijk is wie bevoegd is om te tekenen en welke afspraken nodig zijn. U kunt vrijblijvend een voorstel aanvragen, ook als de woning nog vol staat of onderhoud nodig heeft.",
++  heroBenefits: [
++    "Rustige aanpak bij nalatenschap",
++    "Ook als de woning nog vol staat",
++    "Duidelijke schriftelijke afspraken",
++    "Notariële afwikkeling",
++  ],
++  benefits: [
+     "Vrijblijvend verkoopvoorstel",
+-    "Duidelijke voorwaarden",
+-    "Notariële afwikkeling"
++    "Geen open huis nodig",
++    "Afspraken over spullen en oplevering",
++    "Ook bij onderhoud of leegstand",
++    "Duidelijkheid voor erfgenamen",
++    "Overdracht via de notaris",
++  ],
++  concernTitle: "Welke vragen spelen vaak bij een erfeniswoning?",
++  concernCards: [
++    "Moeten alle erfgenamen akkoord zijn voordat er verkocht kan worden?",
++    "Wat gebeurt er met spullen, inboedel of achterstallig onderhoud?",
++    "Wie is bevoegd om afspraken te maken en te tekenen?",
++    "Hoe wordt een bestaande hypotheek, verzekering of leegstand praktisch opgepakt?",
++  ],
++  solutionTitle: "Wat kan de verkoop eenvoudiger maken?",
++  solutionCards: [
++    "Eerst een vrijblijvende beoordeling zonder open huis.",
++    "Afspraken over leeghalen, oplevering en overdrachtsdatum vooraf bespreken.",
++    "Een voorstel dat erfgenamen rustig kunnen beoordelen.",
++    "Duidelijke vastlegging in koopovereenkomst en notariële afwikkeling.",
++  ],
++  valueTitle: "Bij een erfeniswoning is rust vaak belangrijker dan haast.",
++  valueText:
++    "Er zijn meestal meerdere belangen, documenten en praktische stappen. Daarom is het belangrijk dat een voorstel niet alleen over prijs gaat, maar ook over wie beslist, wat met de woning gebeurt en hoe de overdracht zorgvuldig wordt geregeld.",
++  vdnTasks: [
++    "Meedenken over verkoop zonder open huis of lange bezichtigingsperiode.",
++    "Afspraken over spullen, onderhoud en oplevering overzichtelijk maken.",
++    "Een voorstel opstellen dat erfgenamen kunnen bespreken.",
++    "Bij akkoord de verkoop laten verlopen via koopovereenkomst en notaris.",
++  ],
++  ownerTasks: [
++    "Nagaan wie erfgenaam is en wie bevoegd is om te tekenen.",
++    "Controleren of de nalatenschap zuiver of beneficiair is aanvaard.",
++    "Informatie verzamelen over hypotheek, verzekeringen en eventuele lasten.",
++    "Onderling afstemmen of alle betrokkenen akkoord zijn met verkoop.",
+   ],
+-  "sections": [
++  practiceExample: {
++    situation: "Geërfde woning die nog niet leeg was",
++    propertyType: "Tussenwoning",
++    region: "Groningen / Drenthe",
++    mainProblem:
++      "Er waren meerdere erfgenamen, de woning stond nog vol spullen en niemand wilde direct een regulier verkooptraject met bezichtigingen starten.",
++    solution:
++      "Eerst werd vrijblijvend bekeken welke verkooproute mogelijk was en welke opleverafspraken nodig konden zijn.",
++    delivery:
++      "Spullen en oplevering werden als apart bespreekpunt meegenomen, zodat erfgenamen niet direct alles hoefden op te lossen.",
++    transfer:
++      "Bij akkoord zou de koopovereenkomst pas worden opgesteld nadat bevoegdheid en voorwaarden duidelijk waren.",
++    nextStep:
++      "Erfgenamen konden het voorstel eerst gezamenlijk beoordelen voordat verdere stappen werden gezet.",
++  },
++  sections: [
+     {
+-      "title": "Huis verkopen bij erfenis: wanneer is dit interessant?",
+-      "paragraphs": [
+-        "Een erfeniswoning verkopen kan veel vragen oproepen. Wij helpen met een rustige aanpak en een vrijblijvend verkoopvoorstel.",
+-        "Een directe verkoopoplossing kan passend zijn wanneer u snel duidelijkheid wilt, geen lang verkooptraject wilt of de woning niet eerst verkoopklaar wilt maken."
+-      ]
++      title: "Wie mag de woning verkopen?",
++      paragraphs: [
++        "Bij een erfenis moet eerst duidelijk zijn wie eigenaar of erfgenaam is en wie bevoegd is om namens de nalatenschap te tekenen. Soms zijn alle erfgenamen nodig, soms is er een executeur of gevolmachtigde.",
++        "Wij kunnen geen erfrechtelijk advies vervangen, maar we kunnen wel helpen om verkoopafspraken rustig en overzichtelijk te maken zodra duidelijk is wie mag beslissen.",
++      ],
+     },
+     {
+-      "title": "Zonder traditioneel verkooptraject",
+-      "paragraphs": [
+-        "U hoeft niet altijd te kiezen voor een verkooptraject met meerdere bezichtigingen, open huis of lange onderhandelingen.",
+-        "Bij Vastgoed Direct Nederland vraagt u vrijblijvend een helder verkoopvoorstel aan. Daarna beslist u rustig of het voorstel bij uw situatie past."
+-      ]
++      title: "Als de woning nog vol spullen staat",
++      paragraphs: [
++        "Een erfeniswoning is niet altijd direct leeg of verkoopklaar. Dat hoeft een eerste aanvraag niet te blokkeren. Het kan juist verstandig zijn eerst te weten wat de verkoopmogelijkheden zijn voordat u kosten maakt voor ontruiming, opslag of herstel.",
++        "Afspraken over inboedel, achterblijvende spullen of oplevering kunnen later expliciet worden vastgelegd.",
++      ],
+     },
+     {
+-      "title": "Voor welke situaties?",
+-      "bullets": [
+-        "Huis verkopen bij erfenis",
+-        "Leegstand",
+-        "Achterstallig onderhoud",
+-        "Opknapwoning",
+-        "Erfenis",
+-        "Scheiding",
+-        "Verhuur",
+-        "Snel duidelijkheid gewenst"
+-      ]
++      title: "Hypotheek, verzekeringen en lasten",
++      paragraphs: [
++        "Bij een geërfde woning kunnen doorlopende lasten blijven bestaan, zoals hypotheekrente, verzekeringen, energie of gemeentelijke lasten. Ook kan er een bestaande hypotheek zijn die bij overdracht moet worden afgelost.",
++        "Voor de uiteindelijke overdracht kijkt de notaris mee naar eigendom, hypotheekaflossing en juridische levering.",
++      ],
+     },
+     {
+-      "title": "Hoe werkt het?",
+-      "steps": [
+-        "U vult uw woninggegevens in.",
+-        "Wij bespreken uw situatie en gewenste snelheid.",
+-        "U ontvangt een vrijblijvend verkoopvoorstel.",
+-        "Bij akkoord wordt de overdracht via de notaris geregeld."
+-      ]
++      title: "Welke verkooproutes zijn mogelijk?",
++      bullets: [
++        "Reguliere verkoop via een makelaar, mogelijk met hogere opbrengstkans maar meer voorbereiding.",
++        "Eerst leeghalen, herstellen en daarna verkopen.",
++        "Direct vrijblijvend een voorstel aanvragen voor verkoop met duidelijke opleverafspraken.",
++        "Eerst de situatie bespreken wanneer erfgenamen nog niet overal uit zijn.",
++      ],
+     },
+     {
+-      "title": "Kosten en afwikkeling",
+-      "paragraphs": [
+-        "U betaalt geen makelaarskosten voor een aanvraag via Vastgoed Direct Nederland. Bij een passende verkoop nemen wij de standaard notariskosten voor de levering voor onze rekening.",
+-        "Een aanbetaling of voorschot kan in sommige situaties bespreekbaar zijn, mits dit juridisch en notarieel goed wordt vastgelegd."
+-      ]
+-    }
++      title: "Hoe verloopt het proces?",
++      steps: [
++        "U vult de woninggegevens en de erfenissituatie in.",
++        "Wij bekijken de woning, staat, locatie en gewenste planning.",
++        "Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of voorstel.",
++        "Erfgenamen of betrokkenen kunnen het voorstel rustig beoordelen.",
++        "Bij akkoord worden voorwaarden uitgewerkt en verloopt overdracht via de notaris.",
++      ],
++    },
+   ],
+-  "comparisonRows": [
+-    [
+-      "Makelaarskosten",
+-      "Vaak courtage of vast tarief",
+-      "Geen makelaarskosten"
+-    ],
+-    [
+-      "Bezichtigingen",
+-      "Vaak meerdere kijkers",
+-      "Niet standaard nodig"
+-    ],
+-    [
+-      "Snelheid",
+-      "Kan weken of maanden duren",
+-      "Snelle duidelijkheid mogelijk"
+-    ],
+-    [
+-      "Onderhoud",
+-      "Kan verkoop lastiger maken",
+-      "Ook deze woningen kunnen worden aangemeld"
+-    ],
+-    [
+-      "Opleverdatum",
+-      "Afhankelijk van koper",
+-      "In overleg bespreekbaar"
+-    ],
+-    [
+-      "Afwikkeling",
+-      "Afhankelijk van afspraken",
+-      "Bij akkoord via de notaris"
+-    ]
++  processSteps: [
++    "Woninggegevens en betrokkenen in kaart brengen.",
++    "Bevoegdheid, nalatenschap en praktische situatie laten controleren waar nodig.",
++    "Vrijblijvende inschatting of voorstel ontvangen.",
++    "Oplevering, spullen, termijn en voorwaarden afstemmen.",
++    "Bij akkoord koopovereenkomst ondertekenen en overdracht via de notaris laten verlopen.",
+   ],
+-  "faqs": [
++  comparisonRows: [
++    ["Voorbereiding", "Vaak eerst leeghalen, herstellen en presenteren", "Eerste beoordeling kan ook vóór volledige voorbereiding"],
++    ["Erfgenamen", "Afstemming blijft nodig", "Voorstel kan eerst gezamenlijk worden beoordeeld"],
++    ["Bezichtigingen", "Meerdere kijkers of open huis mogelijk", "Geen brede kijkersronde nodig"],
++    ["Inboedel", "Vaak eerst oplossen voor verkoop", "Kan als opleverafspraak worden besproken"],
++    ["Verkooptermijn", "Afhankelijk van markt en koper", "Planning kan gericht worden afgesproken"],
++    ["Makelaarskosten", "Vaak courtage of verkoopkosten", "Geen makelaarskosten bij directe aankoop"],
++    ["Hypotheek", "Aflossing via notaris bij overdracht", "Ook via notaris bij overdracht"],
++    ["Afwikkeling", "Via koopovereenkomst en notaris", "Via koopovereenkomst en notaris"],
++  ],
++  faqs: [
+     {
+-      "question": "Kan ik mijn huis verkopen bij erfenis zonder makelaar regelen?",
+-      "answer": "Ja, u kunt rechtstreeks een vrijblijvend verkoopvoorstel aanvragen zonder traditioneel makelaarstraject."
++      question: "Kan een geërfde woning direct worden verkocht?",
++      answer:
++        "Dat kan vaak, maar eerst moet duidelijk zijn wie bevoegd is om te verkopen en te tekenen. Een aanvraag voor een eerste voorstel kan wel alvast helpen om de mogelijkheden te verkennen.",
+     },
+     {
+-      "question": "Is de aanvraag vrijblijvend?",
+-      "answer": "Ja, uw aanvraag is gratis en vrijblijvend. U zit nergens aan vast."
++      question: "Moeten alle erfgenamen akkoord zijn?",
++      answer:
++        "Meestal moeten alle gerechtigden akkoord zijn, tenzij er een executeur, gevolmachtigde of andere bevoegdheid is geregeld. Laat dit bij twijfel juridisch of notarieel controleren.",
+     },
+     {
+-      "question": "Moet de woning verkoopklaar zijn?",
+-      "answer": "Niet altijd. Ook woningen met onderhoud, leegstand of renovatiebehoefte kunnen worden aangemeld."
++      question: "Kan de woning worden verkocht als deze nog vol staat?",
++      answer:
++        "Ja, dat kan worden besproken. Spullen, inboedel en oplevering kunnen onderdeel zijn van de afspraken, mits dit duidelijk wordt vastgelegd.",
+     },
+     {
+-      "question": "Betaal ik makelaarskosten?",
+-      "answer": "Nee, u betaalt geen makelaarskosten voor een vrijblijvende aanvraag via Vastgoed Direct Nederland."
+-    }
++      question: "Wat gebeurt er met een bestaande hypotheek?",
++      answer:
++        "Een bestaande hypotheek moet normaal gesproken bij de overdracht worden afgelost via de notaris. De notaris controleert dit in het overdrachtsproces.",
++    },
++    {
++      question: "Wie tekent de koopovereenkomst?",
++      answer:
++        "De bevoegde eigenaar, erfgenamen, executeur of gevolmachtigde ondertekent. Wie dat precies is, hangt af van de nalatenschap en de beschikbare documenten.",
++    },
++  ],
++  relatedLinks: [
++    ["/geerfde-woning-verkopen-zonder-leeghalen", "Geërfde woning verkopen zonder leeghalen", "Als de woning nog vol spullen staat."],
++    ["/huis-verkopen-na-overlijden", "Huis verkopen na overlijden", "Rustig overzicht na overlijden van een eigenaar."],
++    ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen", "Bij leegstand, zorgen of doorlopende lasten."],
++    ["/huis-verkopen-zonder-leeghalen", "Huis verkopen zonder leeghalen", "Oplevering en spullen bespreekbaar maken."],
++    ["/opknapwoning-verkopen", "Opknapwoning verkopen", "Wanneer onderhoud of staat een rol speelt."],
++    ["/huis-snel-verkopen", "Huis snel verkopen", "Wanneer erfgenamen snel duidelijkheid willen."],
+   ],
+-  "ctaTitle": "Wilt u huis verkopen bij erfenis?",
+-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan en ontvang duidelijkheid over uw mogelijkheden.",
+-  "keywords": "huis verkopen bij erfenis, erfeniswoning verkopen, woning nalatenschap verkopen"
++  ctaTitle: "Wilt u een geërfde woning rustig laten beoordelen?",
++  ctaText:
++    "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid over mogelijkheden, voorwaarden, oplevering en vervolgstappen.",
+ };
+ 
+ export default function HuisVerkopenBijErfenisPage() {
+diff --git a/app/opknapwoning-verkopen/page.jsx b/app/opknapwoning-verkopen/page.jsx
+index 45e8b32..fbeb56a 100644
+--- a/app/opknapwoning-verkopen/page.jsx
++++ b/app/opknapwoning-verkopen/page.jsx
+@@ -1,170 +1,195 @@
+ import SeoLandingPage from "../components/SeoLandingPage";
+ 
+ export const metadata = {
+-  "title": "Opknapwoning verkopen zonder opknappen",
+-  "description": "Opknapwoning verkopen zonder eerst te verbouwen, herstellen of leeghalen? Vraag vrijblijvend duidelijkheid aan.",
+-  "alternates": {
+-    "canonical": "https://www.vastgoeddirectnederland.nl/opknapwoning-verkopen"
++  title: "Opknapwoning verkopen zonder eerst te renoveren",
++  description:
++    "Opknapwoning verkopen met onderhoud, schade of volle woning? Vraag vrijblijvend een voorstel aan zonder eerst te verbouwen, schilderen of leeghalen.",
++  alternates: {
++    canonical: "https://www.vastgoeddirectnederland.nl/opknapwoning-verkopen",
++  },
++  openGraph: {
++    title: "Opknapwoning verkopen zonder eerst te renoveren",
++    description:
++      "Vraag vrijblijvend duidelijkheid aan voor verkoop van een opknapwoning in huidige staat. Niet eerst opknappen, leeghalen of verkoopklaar maken.",
++    url: "https://www.vastgoeddirectnederland.nl/opknapwoning-verkopen",
++    siteName: "Vastgoed Direct Nederland",
++    locale: "nl_NL",
++    type: "website",
++  },
++  twitter: {
++    card: "summary_large_image",
++    title: "Opknapwoning verkopen zonder eerst te renoveren",
++    description:
++      "Ook bij achterstallig onderhoud, schade of een woning die nog vol staat kunt u vrijblijvend een verkoopvoorstel aanvragen.",
+   },
+-  "openGraph": {
+-    "title": "Opknapwoning verkopen zonder opknappen",
+-    "description": "Opknapwoning verkopen zonder eerst te verbouwen, herstellen of leeghalen? Vraag vrijblijvend duidelijkheid aan.",
+-    "url": "https://www.vastgoeddirectnederland.nl/opknapwoning-verkopen",
+-    "siteName": "Vastgoed Direct Nederland",
+-    "locale": "nl_NL",
+-    "type": "website"
+-  }
+ };
+ 
+ const page = {
+-  "slug": "/opknapwoning-verkopen",
+-  "breadcrumb": "Opknapwoning verkopen",
+-  "eyebrow": "Opknapwoning verkopen",
+-  "h1": "Opknapwoning verkopen zonder eerst op te knappen",
+-  "lead": "Heeft de woning onderhoud nodig of is deze niet verkoopklaar? Vraag vrijblijvend een voorstel aan. U hoeft niet eerst te renoveren, herstellen of leeg te halen.",
+-  "shortAnswer": "Een opknapwoning, klushuis of woning met achterstallig onderhoud kan vrijblijvend worden aangemeld. U hoeft de woning niet eerst te verbouwen, schilderen, herstellen of leeghalen.",
+-  "benefits": [
++  slug: "/opknapwoning-verkopen",
++  breadcrumb: "Opknapwoning verkopen",
++  pageType: "situation",
++  eyebrow: "Opknapwoning verkopen",
++  defaultSituation: "Achterstallig onderhoud",
++  h1: "Uw opknapwoning verkopen zonder eerst duizenden euro’s te investeren",
++  lead:
++    "Heeft uw woning achterstallig onderhoud, een verouderde inrichting of schade? U hoeft niet eerst te schilderen, verbouwen of leeghalen. Wij bekijken de woning zoals deze nu is en bespreken vrijblijvend welke verkoopafspraken mogelijk zijn.",
++  shortAnswer:
++    "Een opknapwoning kan ook in huidige staat worden beoordeeld. U hoeft niet vooraf te renoveren om duidelijkheid te krijgen over een mogelijke verkooproute, koopprijs, oplevering en overdracht.",
++  heroBenefits: [
++    "Geen renovatie vooraf",
++    "Ook mogelijk met gebreken",
++    "Geen open huis nodig",
++    "Duidelijke opleverafspraken",
++  ],
++  benefits: [
+     "Niet eerst renoveren",
+-    "Niet leeghalen",
+-    "Ook bij schade",
+-    "Ook als de woning vol staat",
+-    "Geen open huis",
+-    "Vrijblijvend voorstel"
++    "Ook bij achterstallig onderhoud",
++    "Ook als de woning nog vol staat",
++    "Gebreken kunnen worden besproken",
++    "Geen uitgebreide bezichtigingsrondes",
++    "Vrijblijvend voorstel",
++  ],
++  concernTitle: "Wat maakt een opknapwoning vaak lastig?",
++  concernCards: [
++    "Kopers rekenen met verbouwingskosten en bouwkundige risico’s.",
++    "Foto’s en bezichtigingen vragen vaak eerst opruimen, herstel of styling.",
++    "Investeren in herstel voelt niet logisch als u toch wilt verkopen.",
++    "Gebreken moeten goed worden gemeld en verwerkt in de afspraken.",
++  ],
++  solutionTitle: "Welke afspraken kunnen helpen?",
++  solutionCards: [
++    "Beoordeling van de woning in huidige staat.",
++    "Afspraken over spullen, oplevering en eventuele werkzaamheden.",
++    "Duidelijkheid over welke gebreken bekend zijn en hoe die worden meegenomen.",
++    "Een voorstel waarbij verbouwen vooraf niet het uitgangspunt is.",
+   ],
+-  "exampleSituation": {
+-    "title": "Als opknappen niet logisch voelt",
+-    "text": "Soms is duidelijk dat een woning onderhoud nodig heeft, maar is het niet logisch om daar eerst nog veel geld in te steken. Denk aan schilderwerk, verouderde installaties, schade of een gedateerde keuken. Dan kan eerst vrijblijvend duidelijkheid krijgen verstandiger zijn dan direct verbouwen."
++  valueTitle: "Bij een opknapwoning draait verkoop niet alleen om de vraagprijs.",
++  valueText:
++    "De staat van de woning, bekende gebreken, oplevering en mogelijke kosten voor herstel zijn minstens zo belangrijk. Daarom leggen we afspraken over de woning zoals deze is zo duidelijk mogelijk vast.",
++  vdnTasks: [
++    "Meekijken naar verkoop in huidige staat zonder renovatie vooraf.",
++    "Bespreken hoe onderhoud, schade of spullen in de woning worden meegenomen.",
++    "Duidelijke afspraken maken over oplevering en juridische levering.",
++    "Een voorstel uitwerken dat u rustig kunt beoordelen.",
++  ],
++  ownerTasks: [
++    "Bekende gebreken en bijzonderheden melden.",
++    "Aangeven wat wel of niet vóór levering wordt gedaan.",
++    "Foto’s of aanvullende informatie delen als dat helpt bij beoordeling.",
++    "Het voorstel controleren op prijs, voorwaarden en opleverafspraken.",
++  ],
++  practiceExample: {
++    situation: "Verouderde woning met achterstallig onderhoud",
++    propertyType: "Vrijstaande woning",
++    region: "Drenthe / Groningen",
++    mainProblem:
++      "De eigenaar wilde niet meer investeren in schilderwerk, installaties en verkoopstyling voordat duidelijk was wat verkoop kon opleveren.",
++    solution:
++      "De woning werd beoordeeld in huidige staat. Onderhoud en mogelijke herstelkosten werden meegenomen in het voorstel.",
++    delivery:
++      "Oplevering kon worden besproken zonder dat eerst alles volledig werd opgeknapt.",
++    transfer:
++      "Bij akkoord zouden de afspraken schriftelijk worden vastgelegd en via de notaris worden afgewikkeld.",
++    nextStep:
++      "Eigenaar ontving eerst duidelijkheid en kon daarna kiezen tussen direct verkopen of regulier aanbieden.",
+   },
+-  "sections": [
++  sections: [
+     {
+-      "title": "Wanneer speelt dit?",
+-      "paragraphs": [
+-        "Een opknapwoning verkopen speelt vaak wanneer herstel, schilderwerk, installaties of een gedateerde binnenkant verkoop lastiger maken.",
+-        "Soms is investeren in opknappen niet logisch of niet haalbaar. Dan kan het verstandig zijn eerst te weten wat verkoop in huidige staat betekent."
+-      ]
++      title: "Moet u eerst opknappen voordat u verkoopt?",
++      paragraphs: [
++        "Dat hoeft niet altijd. Bij een reguliere verkoop kan opknappen helpen bij presentatie of opbrengst, maar het kost ook geld, tijd en energie. Bij een directe verkoopoplossing kan de woning juist in huidige staat worden beoordeeld.",
++        "Dat is vooral relevant wanneer de woning verouderd is, herstel nodig heeft, schade heeft of nog niet leeg is.",
++      ],
+     },
+     {
+-      "title": "Welke opties heeft u?",
+-      "bullets": [
+-        "Eerst renoveren en daarna verkopen",
+-        "Verkopen via een makelaar als kluswoning",
+-        "Zelf een koper zoeken",
+-        "Direct vrijblijvend een voorstel aanvragen in huidige staat"
+-      ]
++      title: "Welke verkoopoplossingen zijn mogelijk?",
++      bullets: [
++        "Eerst renoveren en daarna regulier verkopen.",
++        "Via een makelaar aanbieden als kluswoning of opknapwoning.",
++        "Zelf een koper zoeken en alle afspraken zelf regelen.",
++        "Vrijblijvend laten beoordelen of directe verkoop in huidige staat past.",
++      ],
+     },
+     {
+-      "title": "Nadelen van regulier verkopen",
+-      "paragraphs": [
+-        "Bij reguliere verkoop kunnen kopers afhaken op onderhoud, bouwkundige risico's, financiering of verbouwkosten. Ook kan een woning die nog vol staat minder goed worden gepresenteerd."
+-      ]
++      title: "Gebreken en meldingsplicht",
++      paragraphs: [
++        "Bij verkoop van een woning is het belangrijk dat bekende gebreken en bijzonderheden eerlijk worden gemeld. Dat geldt ook bij directe verkoop.",
++        "Het voordeel is dat deze punten vooraf kunnen worden besproken en vervolgens in prijs, voorwaarden en opleverafspraken kunnen worden meegenomen.",
++      ],
+     },
+     {
+-      "title": "Wanneer is directe verkoop logisch?",
+-      "paragraphs": [
+-        "Directe verkoop kan logisch zijn als u geen geld of energie meer wilt steken in herstel, leeghalen, foto's en bezichtigingen."
+-      ]
++      title: "Oplevering en levering",
++      paragraphs: [
++        "Bij een opknapwoning zijn opleverafspraken extra belangrijk. Denk aan spullen die achterblijven, werkzaamheden die nog worden uitgevoerd of juist de afspraak dat de woning wordt geleverd in de huidige staat.",
++        "Als u verder wilt met een voorstel, worden dit soort afspraken schriftelijk uitgewerkt voordat de koopovereenkomst wordt ondertekend.",
++      ],
+     },
+     {
+-      "title": "Hoe werkt het?",
+-      "steps": [
+-        "U vult kort uw woning en situatie in.",
+-        "Op basis van de eerste gegevens ontvangt u een eerste vrijblijvend bod.",
+-        "We bespreken uw situatie en bekijken de woning eventueel in de huidige staat.",
+-        "Na beoordeling ontvangt u een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.",
+-        "Bij akkoord worden de afspraken vastgelegd in een koopovereenkomst en volgt de overdracht via de notaris."
+-      ]
+-    }
++      title: "Hoe verloopt de aanvraag?",
++      steps: [
++        "U vult de woninggegevens en de staat van de woning in.",
++        "Wij bekijken onderhoud, locatie, type woning en gewenste planning.",
++        "Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of voorstel.",
++        "Eventuele gebreken, spullen en opleverafspraken worden besproken.",
++        "Bij akkoord volgen schriftelijke afspraken en notariële overdracht.",
++      ],
++    },
+   ],
+-  "comparisonRows": [
+-    [
+-      "Opknappen",
+-      "Vaak eerst nodig voor presentatie",
+-      "Niet vooraf nodig voor een eerste voorstel"
+-    ],
+-    [
+-      "Leeghalen",
+-      "Vaak nodig voor foto's en bezichtigingen",
+-      "Kan worden meegenomen in het voorstel"
+-    ],
+-    [
+-      "Bezichtigingen",
+-      "Vaak meerdere kijkers",
+-      "Geen open huis nodig"
+-    ],
+-    [
+-      "Kosten",
+-      "Mogelijk courtage, styling of herstel",
+-      "Geen makelaarskosten voor de aanvraag"
+-    ],
+-    [
+-      "Planning",
+-      "Afhankelijk van koper en markt",
+-      "In overleg duidelijk af te spreken"
+-    ],
+-    [
+-      "Beslissing",
+-      "Vaak langer traject",
+-      "U beslist zelf na het voorstel"
+-    ]
++  processSteps: [
++    "Woninggegevens en onderhoudssituatie invullen.",
++    "Bekende gebreken, spullen en gewenste oplevering benoemen.",
++    "Vrijblijvende inschatting of voorstel ontvangen.",
++    "Afspraken over staat, oplevering en levering controleren.",
++    "Bij akkoord vastleggen en via de notaris afronden.",
+   ],
+-  "faqs": [
++  comparisonRows: [
++    ["Verkoopklaar maken", "Vaak eerst opruimen, herstellen of stylen", "Niet nodig voor een eerste voorstel"],
++    ["Renovatiekosten", "Vaak vooraf investeren", "Geen verplichte renovatie vooraf"],
++    ["Bezichtigingen", "Kopers letten sterk op gebreken", "Geen open huis of brede kijkersronde nodig"],
++    ["Gebreken", "Kunnen onderhandelingen lastiger maken", "Vooraf bespreken en schriftelijk vastleggen"],
++    ["Oplevering", "Vaak leeg en netjes verwacht", "In overleg afspraken over huidige staat"],
++    ["Makelaarskosten", "Vaak courtage of verkoopkosten", "Geen makelaarskosten bij directe aankoop"],
++    ["Planning", "Afhankelijk van markt en koper", "In overleg concreet af te spreken"],
++    ["Afwikkeling", "Via koopovereenkomst en notaris", "Ook via koopovereenkomst en notaris"],
++  ],
++  faqs: [
+     {
+-      "question": "Moet ik mijn woning eerst opknappen voordat ik deze verkoop?",
+-      "answer": "Nee, dat hoeft niet altijd. Ook als de woning onderhoud nodig heeft, schade heeft of nog vol spullen staat, kunt u vrijblijvend laten bekijken wat er mogelijk is."
++      question: "Moet ik de woning eerst opknappen?",
++      answer:
++        "Nee, dat hoeft niet altijd. U kunt vrijblijvend laten bekijken wat verkoop in huidige staat betekent, zonder eerst te schilderen, herstellen of verbouwen.",
+     },
+     {
+-      "question": "Kan ik een woning met achterstallig onderhoud verkopen?",
+-      "answer": "Ja. Juist bij achterstallig onderhoud kan een directe verkoop interessant zijn, omdat u niet eerst hoeft te investeren in herstel, styling of verkoopklaar maken."
++      question: "Kan ik verkopen met achterstallig onderhoud?",
++      answer:
++        "Ja, dat kan worden beoordeeld. Achterstallig onderhoud heeft invloed op de waarde en voorwaarden, maar hoeft verkoop niet onmogelijk te maken.",
+     },
+     {
+-      "question": "Is een opknapwoning moeilijker te verkopen via een makelaar?",
+-      "answer": "Dat kan. Bij reguliere verkoop kunnen kopers afhaken op onderhoud, financiering of verbouwkosten. Een directe verkoop kan dan een rustiger alternatief zijn."
++      question: "Mag de woning nog vol staan?",
++      answer:
++        "Dat kan worden besproken. Soms kan inboedel of achtergebleven materiaal onderdeel worden van de opleverafspraken.",
+     },
+     {
+-      "question": "Kan ik verkopen als de woning nog vol spullen staat?",
+-      "answer": "Ja, dat kan worden besproken. De woning hoeft niet altijd eerst volledig leeg te zijn voordat u duidelijkheid kunt krijgen over de mogelijkheden."
++      question: "Heeft schade invloed op het voorstel?",
++      answer:
++        "Ja, schade of gebreken kunnen invloed hebben op het voorstel. Daarom is het belangrijk deze punten vooraf duidelijk te melden.",
+     },
+     {
+-      "question": "Krijg ik ook een voorstel als de woning schade heeft?",
+-      "answer": "Ja, ook bij schade of gebreken kunt u vrijblijvend informatie aanvragen. Er wordt gekeken naar de woning zoals deze nu is."
+-    }
++      question: "Moet ik gebreken melden?",
++      answer:
++        "Ja. Bekende gebreken en bijzonderheden moeten eerlijk worden gemeld. Zo kunnen ze correct worden meegenomen in de afspraken.",
++    },
+   ],
+-  "relatedLinks": [
+-    [
+-      "/huis-verkopen-zonder-leeghalen",
+-      "Huis verkopen zonder leeghalen"
+-    ],
+-    [
+-      "/huis-verkopen-zonder-opknappen",
+-      "Huis verkopen zonder opknappen"
+-    ],
+-    [
+-      "/woning-verkopen-die-nog-vol-staat",
+-      "Woning verkopen die nog vol staat"
+-    ],
+-    [
+-      "/opknapwoning-verkopen-zonder-makelaar",
+-      "Opknapwoning verkopen zonder makelaar"
+-    ],
+-    [
+-      "/leegstaand-huis-verkopen-wat-zijn-de-opties",
+-      "Leegstaand huis verkopen: wat zijn de opties?"
+-    ],
+-    [
+-      "/huis-verkopen-bij-dubbele-lasten",
+-      "Huis verkopen bij dubbele lasten"
+-    ],
+-    [
+-      "/huis-verkopen-zonder-bezichtigingen-uitleg",
+-      "Huis verkopen zonder bezichtigingen"
+-    ],
+-    [
+-      "/geerfde-woning-verkopen-zonder-leeghalen",
+-      "Geërfde woning verkopen zonder leeghalen"
+-    ]
++  relatedLinks: [
++    ["/huis-verkopen-met-achterstallig-onderhoud", "Huis verkopen met achterstallig onderhoud", "Als herstel niet wenselijk of haalbaar is."],
++    ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen", "Bekijk verkoopmogelijkheden zonder verbouwing vooraf."],
++    ["/huis-verkopen-in-huidige-staat", "Huis verkopen in huidige staat", "Niet eerst verkoopklaar maken."],
++    ["/woning-verkopen-die-nog-vol-staat", "Woning verkopen die nog vol staat", "Voor woningen met spullen of inboedel."],
++    ["/woning-verkopen-met-schade", "Woning verkopen met schade", "Schade of gebreken vooraf duidelijk meenemen."],
++    ["/huis-verkopen-zonder-bezichtigingen", "Huis verkopen zonder bezichtigingen", "Geen open huis of reeks kijkers nodig."],
+   ],
+-  "ctaTitle": "Wilt u een opknapwoning verkopen?",
+-  "ctaText": "Vraag vrijblijvend een voorstel aan zonder eerst te renoveren, herstellen of leeghalen."
++  ctaTitle: "Wilt u weten wat uw opknapwoning in huidige staat kan betekenen?",
++  ctaText:
++    "Vraag vrijblijvend een verkoopvoorstel aan. U hoeft niet eerst te renoveren, herstellen of leeghalen om duidelijkheid te krijgen.",
+ };
+ 
+ export default function OpknapwoningVerkopenPage() {
