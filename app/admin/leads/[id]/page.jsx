@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { parseLeadSourceDetails, sourceChannelLabel } from "../../../lib/sourceParser";
 import { addDaysAmsterdam, formatDateTimeNL } from "../../../lib/date";
+import { proposalValidationIssues } from "../../../lib/proposalValidation";
 import LeadTimeline from "../../../components/admin/LeadTimeline";
 
 const STATUSES = ["Nieuwe aanvraag", "In behandeling", "Eerste bod gedaan", "Beoordeling gepland", "Voorstel opgesteld", "Voorstel verzonden", "Voorstel bekeken", "In onderhandeling", "Akkoord", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
@@ -278,18 +279,26 @@ function formatPercent(value) {
 }
 
 function applyAdditionalAgreementDefaults(current = {}) {
+  const sellerWorkEnabled = Boolean(current.seller_work_enabled);
+  const sellerWorkBase = current.seller_work_base_price_text || (sellerWorkEnabled ? current.amount_text || "" : "");
+  const sellerWorkAmount = current.seller_work_amount_text || "";
+  const sellerWorkTotal = current.seller_work_total_price_text || calculateSellerWorkTotal({
+    seller_work_base_price_text: sellerWorkBase,
+    seller_work_amount_text: sellerWorkAmount,
+  });
+
   return {
     ...current,
-    seller_work_enabled: Boolean(current.seller_work_enabled),
+    seller_work_enabled: sellerWorkEnabled,
     seller_work_description: current.seller_work_description || "",
     seller_work_deadline: current.seller_work_deadline || "",
-    seller_work_amount_text: current.seller_work_amount_text || "€ 5.700",
-    seller_work_base_price_text: current.seller_work_base_price_text || current.amount_text || "€ 300.000",
-    seller_work_total_price_text: current.seller_work_total_price_text || "€ 305.700",
-    seller_work_conditions_text: current.seller_work_conditions_text || "Wanneer de werkzaamheden niet, niet volledig of niet deugdelijk zijn uitgevoerd, kan de aanvullende koopprijs worden verminderd met de redelijkerwijs benodigde kosten om de werkzaamheden alsnog te voltooien of te herstellen.",
+    seller_work_amount_text: sellerWorkAmount,
+    seller_work_base_price_text: sellerWorkBase,
+    seller_work_total_price_text: sellerWorkTotal,
+    seller_work_conditions_text: current.seller_work_conditions_text || "",
     resale_payment_enabled: Boolean(current.resale_payment_enabled),
-    resale_threshold_text: current.resale_threshold_text || "€ 350.000",
-    resale_percentage_text: current.resale_percentage_text || "20",
+    resale_threshold_text: current.resale_threshold_text || "",
+    resale_percentage_text: current.resale_percentage_text || "",
     resale_deduct_courtage: current.resale_deduct_courtage === undefined || current.resale_deduct_courtage === null ? true : Boolean(current.resale_deduct_courtage),
     resale_period_months: current.resale_period_months || 12,
     resale_cap_text: current.resale_cap_text || "",
@@ -568,7 +577,7 @@ function defaultProposalForLead(lead) {
     amount_text: "",
     validity_date: todayPlus(14),
     transfer_date_text: "In overleg",
-    deposit_text: "In overleg bespreekbaar",
+    deposit_text: "",
     conditions_text: "Dit voorstel is vrijblijvend en bedoeld om duidelijkheid te geven over een mogelijke verkoop. Definitieve afspraken worden pas schriftelijk en notarieel vastgelegd. Als een koopovereenkomst wordt uitgewerkt, geldt als uitgangspunt dat koper koopt zonder financieringsvoorbehoud, bouwkundig voorbehoud, verkoopvoorbehoud of andere ontbindende voorbehouden, tenzij schriftelijk anders overeengekomen.",
     assumptions_text: "Dit voorstel is gebaseerd op de door u verstrekte gegevens, openbare woning- of objectinformatie en de huidige bekende staat van de woning of het object. Eventuele afwijkingen, bijzondere juridische situaties, verborgen gebreken, beperkte toegang tot documenten of aanvullende kosten kunnen invloed hebben op de definitieve afspraken.",
     included_items: "Heldere communicatie\nGeen makelaarskosten\nGeen openbare bezichtigingen nodig\nVerkoop in huidige staat bespreekbaar\nFlexibele overdrachtsdatum\nNotariële afwikkeling\nMeer zekerheid na akkoord\nVerkoopoplossing op maat\nVrijblijvend voorstel",
@@ -599,13 +608,13 @@ function defaultProposalForLead(lead) {
     seller_work_enabled: false,
     seller_work_description: "",
     seller_work_deadline: "",
-    seller_work_amount_text: "€ 5.700",
-    seller_work_base_price_text: "€ 300.000",
-    seller_work_total_price_text: "€ 305.700",
-    seller_work_conditions_text: "Wanneer de werkzaamheden niet, niet volledig of niet deugdelijk zijn uitgevoerd, kan de aanvullende koopprijs worden verminderd met de redelijkerwijs benodigde kosten om de werkzaamheden alsnog te voltooien of te herstellen.",
+    seller_work_amount_text: "",
+    seller_work_base_price_text: "",
+    seller_work_total_price_text: "",
+    seller_work_conditions_text: "",
     resale_payment_enabled: false,
-    resale_threshold_text: "€ 350.000",
-    resale_percentage_text: "20",
+    resale_threshold_text: "",
+    resale_percentage_text: "",
     resale_deduct_courtage: true,
     resale_period_months: 12,
     resale_cap_text: "",
@@ -715,20 +724,27 @@ export default function LeadDetailPage({ params }) {
 
   const sellerWorkTotal = useMemo(() => calculateSellerWorkTotal(proposal || {}), [proposal]);
   const resaleExample = useMemo(() => calculateResaleExample(proposal || {}), [proposal]);
+  const proposalIssues = useMemo(() => proposalValidationIssues(buildCalculatedProposalPayload(proposal || {})), [proposal]);
 
   function setProposalField(field, value) {
     setProposal((current) => {
       const next = { ...(current || {}), [field]: value };
+      if (field === "amount_text" && current?.seller_work_enabled) {
+        const currentAmount = parseMoney(current.amount_text);
+        const currentBase = parseMoney(current.seller_work_base_price_text);
+        if (!currentBase || currentBase === currentAmount) next.seller_work_base_price_text = value;
+      }
       if (["seller_work_base_price_text", "seller_work_amount_text", "seller_work_enabled"].includes(field)) {
         if (field === "seller_work_enabled" && value) {
-          next.seller_work_base_price_text = next.seller_work_base_price_text || next.amount_text || "€ 300.000";
-          next.seller_work_amount_text = next.seller_work_amount_text || "€ 5.700";
+          next.seller_work_base_price_text = next.amount_text || "";
         }
         next.seller_work_total_price_text = calculateSellerWorkTotal(next);
       }
+      if (field === "amount_text" && next.seller_work_enabled) {
+        next.seller_work_total_price_text = calculateSellerWorkTotal(next);
+      }
       if (field === "resale_payment_enabled" && value) {
-        next.resale_threshold_text = next.resale_threshold_text || "€ 350.000";
-        next.resale_percentage_text = next.resale_percentage_text || "20";
+        next.resale_threshold_text = next.resale_threshold_text || next.amount_text || "";
         next.resale_period_months = next.resale_period_months || 12;
         next.resale_deduct_courtage = next.resale_deduct_courtage === undefined || next.resale_deduct_courtage === null ? true : next.resale_deduct_courtage;
       }
@@ -773,6 +789,11 @@ export default function LeadDetailPage({ params }) {
   async function createProposal() {
     if (!proposal) return;
     const calculatedProposal = buildCalculatedProposalPayload(applyAdditionalAgreementDefaults(proposal));
+    const issues = proposalValidationIssues(calculatedProposal);
+    if (issues.length) {
+      setError(`Controleer het voorstel: ${issues.join(" ")}`);
+      return;
+    }
     const result = await post({ action: "createProposal", ...calculatedProposal });
     if (result?.proposal?.id) {
       setNotice("Voorstel is aangemaakt. Controleer de print/PDF-versie voordat u het voorstel mailt.");
@@ -876,6 +897,7 @@ export default function LeadDetailPage({ params }) {
   return (
     <main className="detail-page">
       <style>{styles}</style>
+      <style>{`.proposal-validation{border:1px solid #ffd5c4;background:#fff5f1;color:#7c2d20;border-radius:20px;padding:16px 18px}.proposal-validation strong{display:block}.proposal-validation ul{margin:8px 0 0;padding-left:20px}.proposal-validation li{margin-top:4px}.proposal-validation.ready{background:#f0fff6;border-color:#bff3d0;color:#075c2a}`}</style>
       <header>
         <a href="/admin">← Dashboard</a>
         <img src="/logo.png" alt="Vastgoed Direct Nederland" />
@@ -1021,7 +1043,7 @@ export default function LeadDetailPage({ params }) {
                     <Field label="Voorgesteld bedrag"><input placeholder="Bijv. € 190.000" value={proposal.amount_text} onChange={(e) => setProposalField("amount_text", e.target.value)} /></Field>
                     <Field label="Geldig tot"><input type="date" value={proposal.validity_date} onChange={(e) => setProposalField("validity_date", e.target.value)} /></Field>
                     <Field label="Oplevering"><input value={proposal.transfer_date_text} onChange={(e) => setProposalField("transfer_date_text", e.target.value)} /></Field>
-                    <Field label="Aanbetaling / voorschot"><input value={proposal.deposit_text} onChange={(e) => setProposalField("deposit_text", e.target.value)} /></Field>
+                    <Field label="Aanbetaling / voorschot (alleen indien afgesproken)"><input placeholder="Leeg laten als dit niet van toepassing is" value={proposal.deposit_text} onChange={(e) => setProposalField("deposit_text", e.target.value)} /></Field>
                   </div>
                 </div>
 
@@ -1225,13 +1247,22 @@ export default function LeadDetailPage({ params }) {
                   <Field label="Vervolgstappen — één regel per stap">
                     <textarea value={proposal.next_steps_text} onChange={(e) => setProposalField("next_steps_text", e.target.value)} />
                   </Field>
-                  <Field label="Aanvullende opmerkingen">
+                  <Field label="Interne notities — niet zichtbaar voor de klant">
                     <textarea value={proposal.notes} onChange={(e) => setProposalField("notes", e.target.value)} />
                   </Field>
                 </div>
 
+                {proposalIssues.length ? (
+                  <div className="proposal-validation" role="alert">
+                    <strong>Nog controleren voordat u het voorstel maakt</strong>
+                    <ul>{proposalIssues.map((issue) => <li key={issue}>{issue}</li>)}</ul>
+                  </div>
+                ) : (
+                  <div className="proposal-validation ready"><strong>Voorstel is inhoudelijk gereed om aan te maken.</strong></div>
+                )}
+
                 <div className="proposal-actions">
-                  <button disabled={saving || !proposal.amount_text} onClick={createProposal}>Voorstel maken en openen</button>
+                  <button disabled={saving || proposalIssues.length > 0} onClick={createProposal}>Voorstel maken en openen</button>
                   <button type="button" className="ghost" onClick={() => setProposal(applyAdditionalAgreementDefaults(defaultProposalForLead(lead)))}>Velden herstellen</button>
                 </div>
               </div>

@@ -7,6 +7,7 @@ import { logMailEventSafe } from "../../../lib/mailLog";
 import { markProposalSentAutomation, refreshLeadAutomation, refreshAllLeadAutomation } from "../../../lib/automation";
 import { isValidEmail } from "../../../lib/admin/validators";
 import { formatDateNL } from "../../../lib/date";
+import { proposalValidationIssues } from "../../../lib/proposalValidation";
 
 export const runtime = "nodejs";
 
@@ -527,6 +528,10 @@ export async function POST(request) {
         const work = parseNonNegativeNumber(proposalBody.seller_work_amount_text);
         proposalBody.seller_work_total_price_text = base || work ? euroText(base + work) : null;
       }
+      const proposalIssues = proposalValidationIssues(proposalBody);
+      if (proposalIssues.length) {
+        return NextResponse.json({ error: proposalIssues.join(" "), issues: proposalIssues }, { status: 400 });
+      }
       const params = columns.map((field) => cleanForField(field, proposalBody[field]));
       const placeholders = columns.map((_, index) => `$${index + 1}`).join(",");
       const proposal = await queryOne(
@@ -726,6 +731,14 @@ export async function POST(request) {
         proposal = await queryOne("update proposals set lead_email = $1, updated_at = now() where id = $2 returning *", [recipientOverride, proposal.id]);
       }
       if (!proposal.lead_email || !isValidEmail(proposal.lead_email)) return NextResponse.json({ error: "Geen geldig e-mailadres bekend." }, { status: 400 });
+
+      const proposalIssues = proposalValidationIssues(proposal, { forSending: true });
+      if (proposalIssues.length) {
+        return NextResponse.json({
+          error: `Het voorstel is nog niet verzendklaar. ${proposalIssues.join(" ")}`,
+          issues: proposalIssues,
+        }, { status: 400 });
+      }
 
       const token = await ensurePublicToken(proposal);
       proposal = { ...proposal, public_token: token };

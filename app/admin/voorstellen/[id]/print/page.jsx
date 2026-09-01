@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { queryOne } from "../../../../lib/neonDb";
 import PrintButton from "./PrintButton";
 import { daysUntilAmsterdam, formatDateNL } from "../../../../lib/date";
+import { isSellerWorkComplete } from "../../../../lib/proposalValidation";
 
 export const dynamic = "force-dynamic";
 
@@ -109,6 +110,18 @@ function costInclVatValue(value, fallback = "-") {
 function value(value, fallback = "-") {
   const raw = String(value || "").trim();
   return raw || fallback;
+}
+
+function hasMeaningfulDeposit(value) {
+  const raw = String(value || "").replace(/\s+/g, " ").trim();
+  return Boolean(raw && !/^in overleg(?: bespreekbaar)?$/i.test(raw));
+}
+
+function additionalSellerWorkCondition(value) {
+  const raw = String(value || "").replace(/\s+/g, " ").trim();
+  if (!raw) return "";
+  const standard = "Wanneer de werkzaamheden niet, niet volledig of niet deugdelijk zijn uitgevoerd, kan de aanvullende koopprijs worden verminderd met de redelijkerwijs benodigde kosten om de werkzaamheden alsnog te voltooien of te herstellen.";
+  return raw.toLowerCase() === standard.toLowerCase() ? "" : raw;
 }
 
 function areaValue(value, fallback = "-") {
@@ -233,6 +246,7 @@ function objectAwareText(text, proposal) {
   const raw = String(text || "");
   if (!isObjectProposal(proposal)) return raw;
   return raw
+    .replace(/de woning of het object/gi, "het object")
     .replace(/openbare woninginformatie/gi, "openbare objectinformatie")
     .replace(/huidige bekende staat van de woning of het object/gi, "huidige bekende staat van het object")
     .replace(/huidige bekende staat van de woning/gi, "huidige bekende staat van het object")
@@ -271,6 +285,11 @@ export default async function ProposalPrintPage({ params }) {
     "Dit voorstel is gebaseerd op de door u verstrekte gegevens, openbare woninginformatie en de huidige bekende staat van de woning. Eventuele afwijkingen, bijzondere juridische situaties, verborgen gebreken of aanvullende kosten kunnen invloed hebben op de definitieve afspraken."
   ), proposal);
 
+  const conditions = objectAwareText(value(
+    proposal.conditions_text,
+    "Het voorstel is vrijblijvend en onder voorbehoud van definitieve controle, akkoord van betrokken partijen en schriftelijke vastlegging."
+  ), proposal);
+
   const reservations = lines(proposal.reservations_text, [
     "Controle woninggegevens",
     "Controle eigendomssituatie",
@@ -283,9 +302,9 @@ export default async function ProposalPrintPage({ params }) {
   const nextSteps = lines(proposal.next_steps_text, [
     "U beoordeelt het voorstel rustig.",
     "Wij bespreken vragen, bijzonderheden en eventuele voorwaarden.",
-    "Bij akkoord worden afspraken juridisch en notarieel vastgelegd.",
-    "De overdracht vindt plaats via de notaris.",
-    "Bij akkoord werken wij de afspraken uit in een koopovereenkomst; de definitieve overdracht en betaling verlopen via de notaris.",
+    "Als u verder wilt, werken wij de afspraken uit in een koopovereenkomst.",
+    "Na ondertekening wordt de notariële afwikkeling opgestart.",
+    "De overdracht en betaling vinden plaats via de notaris.",
   ]).map((item) => objectAwareText(item, proposal));
 
   const proposalType = value(proposal.proposal_type, proposal.proposal_variant || "Standaard aankoop");
@@ -305,8 +324,13 @@ export default async function ProposalPrintPage({ params }) {
   );
   const showDeliveryConstructie = specialProposal || hasDeliveryData;
   const showBridge = proposalType === "Overbruggingsoplossing" || hasBridgeData;
-  const showSellerWork = Boolean(proposal.seller_work_enabled);
-  const showResalePayment = Boolean(proposal.resale_payment_enabled);
+  const showSellerWork = isSellerWorkComplete(proposal);
+  const showResalePayment = Boolean(
+    proposal.resale_payment_enabled &&
+    parseMoney(proposal.resale_threshold_text) &&
+    parseMoney(proposal.resale_percentage_text) &&
+    Number(proposal.resale_period_months || 0) > 0
+  );
   const showUseRental = Boolean(proposal.use_rental_enabled);
   const showAdditionalAgreements = showSellerWork || showResalePayment;
   const deliverySectionNumber = showDeliveryConstructie ? 4 : null;
@@ -357,7 +381,7 @@ export default async function ProposalPrintPage({ params }) {
         <header className="doc-header">
           <img src="/logo.png" alt="Vastgoed Direct Nederland" />
           <div>
-            <strong>{value(proposal.status, "Concept")} voorstel</strong>
+            <strong>Persoonlijk verkoopvoorstel</strong>
             <span>Voorstelnummer: {proposalNumber(proposal)}</span>
             <span>Datum: {formatDate(proposal.created_at)}</span>
             <span>Geldig tot: {formatDate(proposal.validity_date)}{validityText ? ` · ${validityText}` : ""}</span>
@@ -383,7 +407,7 @@ export default async function ProposalPrintPage({ params }) {
             <div className="facts">
               <div><span>Overdrachtsdatum / oplevering</span><strong>{value(proposal.transfer_date_text, "In overleg")}</strong></div>
               <div><span>Geldigheid voorstel</span><strong>{formatDate(proposal.validity_date)}</strong></div>
-              <div><span>Aanbetaling / voorschot</span><strong>{amount(proposal.deposit_text, "In overleg bespreekbaar")}</strong></div>
+              {hasMeaningfulDeposit(proposal.deposit_text) ? <div><span>Aanbetaling / voorschot</span><strong>{amount(proposal.deposit_text, "")}</strong></div> : null}
             </div>
           </div>
         </section>
@@ -482,7 +506,7 @@ export default async function ProposalPrintPage({ params }) {
                 </div>
                 <p className="notice">Verkoper zal vóór de juridische levering de in dit voorstel omschreven herstelwerkzaamheden uitvoeren. Wanneer deze werkzaamheden volledig en deugdelijk zijn uitgevoerd en door koper zijn goedgekeurd, wordt de basiskoopprijs verhoogd met {amount(proposal.seller_work_amount_text)}. De totale koopprijs bedraagt in dat geval {amount(proposal.seller_work_total_price_text)} kosten koper.</p>
                 <p className="notice">Wanneer de werkzaamheden niet, niet volledig of niet deugdelijk zijn uitgevoerd, kan de aanvullende koopprijs worden verminderd met de redelijkerwijs benodigde kosten om de werkzaamheden alsnog te voltooien of te herstellen. Het bedrag voor de werkzaamheden wordt niet als losse betaling vóór levering weergegeven, maar als mogelijke verhoging van de koopsom bij de notariële levering.</p>
-                {proposal.seller_work_conditions_text ? <p className="notice">{proposal.seller_work_conditions_text}</p> : null}
+                {additionalSellerWorkCondition(proposal.seller_work_conditions_text) ? <p className="notice">{additionalSellerWorkCondition(proposal.seller_work_conditions_text)}</p> : null}
               </div>
             ) : null}
 
@@ -508,6 +532,9 @@ export default async function ProposalPrintPage({ params }) {
         <section className="notice">
           <strong>Uitgangspunten:</strong> {assumptions}
         </section>
+        <section className="notice">
+          <strong>Voorwaarden:</strong> {conditions}
+        </section>
       </article>
 
       <article className="page">
@@ -523,8 +550,7 @@ export default async function ProposalPrintPage({ params }) {
         <p className="subtle">
           Gebruik dit overzicht om niet alleen het bod, maar vooral de netto-opbrengst en voorwaarden te vergelijken.
         </p>
-        <p className="notice"><strong>Let op:</strong> de traditionele verkoopprijs is een indicatieve vergelijkingswaarde. Bij verhuurde, leeg te leveren of gemengde objecten kan deze waarde mede zijn gebaseerd op huurwaarde, leegstand, verhuurrisico, verkoopbaarheid en kosten.</p>
-        <p className="notice"><strong>Huidige staat of na voorbereiding:</strong> De traditionele verkoopprijs kan zijn gebaseerd op verkoop in huidige staat óf op verkoop na noodzakelijke voorbereiding. Herstel-/renovatiekosten worden alleen apart meegenomen als die kosten nodig zijn om de genoemde traditionele verkoopprijs te behalen. Als de traditionele verkoopprijs al uitgaat van verkoop in huidige staat, hoort deze post leeg of op € 0 te staan.</p>
+        <p className="notice"><strong>Belangrijk:</strong> de traditionele verkoopprijs is een indicatieve vergelijkingswaarde. Kosten voor herstel of voorbereiding zijn alleen opgenomen als deze naar verwachting nodig zijn om die waarde te behalen.</p>
         {showUseRental ? (
           <p className="notice"><strong>Uitgangspunt vergelijking:</strong> Deze financiële vergelijking is gebaseerd op de genoemde wijze van levering. Als het object toch geheel of gedeeltelijk verhuurd of in gebruik wordt geleverd, kan dit invloed hebben op waarde, voorwaarden en haalbaarheid van het voorstel.</p>
         ) : null}
@@ -532,7 +558,7 @@ export default async function ProposalPrintPage({ params }) {
           <strong>{NO_BUYER_CONDITIONS_NOTICE_TITLE}:</strong> {NO_BUYER_CONDITIONS_NOTICE_TEXT}
         </section>
         <section className="notice action-print">
-          <strong>Akkoord geven of bespreken:</strong> Via de persoonlijke voorstelpagina kan verkoper aangeven akkoord te zijn met dit voorstel of het voorstel eerst te willen bespreken. Een online reactie is nog geen getekende koopovereenkomst; de definitieve afspraken worden daarna schriftelijk uitgewerkt.
+          <strong>Verdergaan of bespreken:</strong> Via de persoonlijke voorstelpagina kunt u aangeven dat u verder wilt of het voorstel eerst wilt bespreken. Een online reactie is nog geen koopovereenkomst; de definitieve afspraken worden daarna schriftelijk uitgewerkt.
         </section>
 
         <section className="section">
@@ -624,12 +650,6 @@ export default async function ProposalPrintPage({ params }) {
             </div>
           </div>
         </section>
-
-        {proposal.notes ? (
-          <section className="notice">
-            <strong>Aanvullende opmerkingen:</strong> {proposal.notes}
-          </section>
-        ) : null}
 
         <section className="disclaimer">
           <strong>Voorbehoud en totstandkoming:</strong> {nonbindingText}
