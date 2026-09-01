@@ -383,7 +383,7 @@ textarea.field { min-height: 82px; resize: vertical; }
 .check-list { margin: 25px 0 0; padding: 0; display: grid; gap: 11px; list-style: none; }
 .check-list li { color: #33495d; line-height: 1.5; }
 .check-list li::before { content: "✓"; margin-right: 10px; color: var(--green); font-weight: 900; }
-.proposal-preview { padding: 28px; border: 1px solid #d8d0c5; border-radius: 26px; background: #fff; box-shadow: 0 32px 70px rgba(8, 35, 61, 0.14); transform: rotate(1deg); }
+.proposal-preview { padding: 28px; border: 1px solid #d8d0c5; border-radius: 26px; background: #fff; box-shadow: 0 32px 70px rgba(8, 35, 61, 0.14); }
 .proposal-preview-top { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 17px; border-bottom: 1px solid var(--line); }
 .proposal-preview-top img { width: 185px; }
 .proposal-preview-top span { color: var(--muted); font-size: 11px; font-weight: 900; text-transform: uppercase; }
