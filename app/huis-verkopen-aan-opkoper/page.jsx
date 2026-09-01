@@ -60,19 +60,19 @@ const page = {
     "U ontvangt eerst een voorstel met uitgangspunten en voorwaarden.",
     "Bijzondere afspraken over oplevering, spullen of planning worden apart benoemd.",
     "Kostenafspraken worden niet verstopt, maar vooraf besproken en schriftelijk vastgelegd.",
-    "Definitieve verkoop ontstaat pas na ondertekening van de koopovereenkomst.",
+    "Een definitieve verkoop komt pas tot stand na ondertekening van de koopovereenkomst.",
   ],
   vdnTasks: [
     "Woning en situatie beoordelen op basis van de aangeleverde gegevens.",
     "Uitleg geven over bedrag, planning en voorwaarden.",
     "Oplevering, overdracht en eventuele bijzonderheden duidelijk maken.",
-    "Bij akkoord meewerken aan correcte notariële afwikkeling.",
+    "Bij akkoord meewerken aan een correcte notariële afwikkeling.",
   ],
   ownerTasks: [
     "Bekende gebreken en juridische bijzonderheden melden.",
     "Controleren of alle eigenaren of betrokkenen kunnen meewerken.",
-    "Het voorstel rustig vergelijken met reguliere verkoop of ander advies.",
-    "Alleen tekenen als alle afspraken duidelijk en akkoord zijn.",
+    "Het voorstel rustig vergelijken met een regulier verkooptraject of onafhankelijk advies.",
+    "Alleen tekenen wanneer alle afspraken duidelijk zijn en u ermee akkoord bent.",
   ],
   practiceExample: {
     situation: "Eigenaar vergelijkt reguliere verkoop met directe verkoop",
@@ -95,8 +95,8 @@ const page = {
     {
       title: "Kosten en afspraken zorgvuldig benoemen",
       paragraphs: [
-        "U betaalt geen makelaarskosten voor het indienen van een vrijblijvende aanvraag bij Vastgoed Direct Nederland.",
-        "Eventuele afspraken over kosten, overdracht, oplevering, notaris of aanvullende voorwaarden worden vooraf besproken en schriftelijk vastgelegd. Wij gebruiken geen vaste belofte dat bepaalde kosten altijd worden overgenomen, tenzij dat in het concrete voorstel staat.",
+        "Een vrijblijvende aanvraag kost u niets. Bij rechtstreekse aankoop door Vastgoed Direct Nederland betaalt u aan ons geen makelaarscourtage.",
+        "Eventuele afspraken over kosten, overdracht, oplevering, notaris of aanvullende voorwaarden bespreken we vooraf en leggen we schriftelijk vast. Welke kosten voor onze rekening komen, staat uitsluitend in uw persoonlijke voorstel.",
       ],
     },
   ],
@@ -113,7 +113,7 @@ const page = {
     ["Prijs", "Marktwerking kan hogere opbrengst geven", "Voorstel biedt vooral duidelijkheid en gemak"],
     ["Kosten", "Vaak courtage of vaste kosten", "Kostenafspraken vooraf schriftelijk"],
     ["Voorbehouden", "Afhankelijk van koper", "Voorwaarden worden in het voorstel benoemd"],
-    ["Overdracht", "Via notaris na akkoord", "Ook via notaris na schriftelijke afspraken"],
+    ["Overdracht", "Via de notaris na akkoord", "Ook via de notaris na schriftelijke afspraken"],
   ],
   faqs: [
     {
@@ -130,7 +130,7 @@ const page = {
     },
     {
       question: "Betaal ik makelaarskosten?",
-      answer: "Voor de vrijblijvende aanvraag via Vastgoed Direct Nederland betaalt u geen makelaarskosten. Eventuele verdere kostenafspraken worden vooraf duidelijk besproken.",
+      answer: "Een vrijblijvende aanvraag kost u niets. Bij rechtstreekse aankoop door Vastgoed Direct Nederland betaalt u aan ons geen makelaarscourtage. Andere eventuele kostenafspraken worden vooraf besproken en schriftelijk vastgelegd.",
     },
     {
       question: "Hoe weet ik dat afspraken goed zijn vastgelegd?",

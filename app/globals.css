@@ -403,7 +403,7 @@ textarea.field { min-height: 82px; resize: vertical; }
 
 .comparison-section { background: var(--navy-950); color: #fff; }
 .comparison-heading h2 { color: #fff; }
-.comparison-heading > p { color: #cbd7e1; }
+.comparison-section .comparison-heading > p { color: #cbd7e1; }
 .comparison-table { overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 22px; }
 .comparison-row { display: grid; grid-template-columns: 0.65fr 1fr 1fr; }
 .comparison-row > * { min-height: 64px; padding: 15px 18px; display: flex; align-items: center; border-right: 1px solid rgba(255, 255, 255, 0.12); border-bottom: 1px solid rgba(255, 255, 255, 0.12); color: #d7e1e9; font-size: 13px; line-height: 1.45; }

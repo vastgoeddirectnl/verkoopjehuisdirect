@@ -77,7 +77,7 @@ const situationCards = [
     href: "/leegstaand-huis-verkopen",
     kicker: "Doorlopende lasten",
     title: "Leegstand of dubbele lasten",
-    text: "Krijg snel zicht op een haalbare verkooproute wanneer kosten en zorgen blijven doorlopen.",
+      text: "Krijg snel zicht op een haalbare verkooproute wanneer de kosten blijven doorlopen en u duidelijkheid wilt.",
   },
   {
     href: "/woning-verkopen-met-schade",
@@ -345,7 +345,7 @@ export default function HomeClient() {
         <div className="site-container faq-layout">
           <div className="faq-intro">
             <p className="section-eyebrow">Veelgestelde vragen</p>
-            <h2>Eerst antwoord. Daarna pas uw aanvraag.</h2>
+            <h2>Eerst antwoord. Daarna beslist u zelf.</h2>
             <p>Staat uw vraag er niet tussen? U kunt ook eerst bellen of uw situatie via WhatsApp sturen.</p>
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="button button-secondary">Stel uw vraag via WhatsApp</a>
           </div>
