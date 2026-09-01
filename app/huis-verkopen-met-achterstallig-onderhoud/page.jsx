@@ -1,18 +1,19 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Huis verkopen met achterstallig onderhoud | zonder eerst renoveren",
+  "title": "Huis met achterstallig onderhoud verkopen",
   "description": "Woning verkopen met achterstallig onderhoud? Vraag vrijblijvend een voorstel aan zonder eerst te renoveren of verkoopklaar te maken.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/huis-verkopen-met-achterstallig-onderhoud"
   },
   "openGraph": {
-    "title": "Huis verkopen met achterstallig onderhoud | zonder eerst renoveren",
+    "title": "Huis met achterstallig onderhoud verkopen",
     "description": "Woning verkopen met achterstallig onderhoud? Vraag vrijblijvend een voorstel aan zonder eerst te renoveren of verkoopklaar te maken.",
     "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-met-achterstallig-onderhoud",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -49,8 +50,8 @@ const page = {
   "solutionTitle": "Wat beoordelen wij?",
   "solutionCards": [
     "De huidige staat van onderhoud.",
-    "Welke werkzaamheden eventueel nodig of bespreekbaar zijn.",
-    "Of oplevering in huidige staat mogelijk is.",
+    "Welke werkzaamheden nog nodig zijn of in het voorstel kunnen worden meegenomen.",
+    "Of oplevering in de huidige staat mogelijk is.",
     "Welke prijs en voorwaarden daarbij passen."
   ],
   "vdnTasks": [
@@ -76,7 +77,7 @@ const page = {
     {
       "title": "Afspraken over werkzaamheden en oplevering",
       "paragraphs": [
-        "Als de verkoper nog werkzaamheden wil uitvoeren, kunnen afspraken daarover apart worden vastgelegd. Ook kan juist worden afgesproken dat de woning in huidige staat wordt geleverd.",
+        "Als de verkoper nog werkzaamheden wil uitvoeren, kunnen afspraken daarover apart worden vastgelegd. Ook kan juist worden afgesproken dat de woning in de huidige staat wordt geleverd.",
         "Belangrijk is dat prijs, werkzaamheden, opleverdatum en voorwaarden duidelijk op papier staan voordat er een koopovereenkomst wordt gesloten."
       ]
     }
@@ -87,7 +88,7 @@ const page = {
     "region": "Groningen of Drenthe",
     "mainProblem": "De eigenaar twijfelde of eerst schilderwerk, opruimen en herstel nodig waren voor verkoop.",
     "solution": "De woning is beoordeeld op basis van de huidige staat, foto’s en gewenste oplevering. Daarna kon een voorstel worden besproken zonder vooraf te renoveren.",
-    "delivery": "Oplevering in huidige staat of met beperkte afspraken kon worden vergeleken.",
+    "delivery": "Oplevering in de huidige staat of met beperkte afspraken kon worden vergeleken.",
     "transfer": "Bij akkoord zouden alle afspraken via notaris en koopovereenkomst worden vastgelegd.",
     "nextStep": "De eigenaar kon afwegen of directe verkoop aantrekkelijker was dan zelf investeren in herstel."
   },
@@ -99,11 +100,11 @@ const page = {
     },
     {
       "title": "Situatie beoordelen",
-      "text": "We kijken naar eigendom, staat, planning, oplevering en eventuele bijzonderheden."
+      "text": "Wij kijken naar eigendom, staat, planning, oplevering en eventuele bijzonderheden."
     },
     {
       "title": "Vrijblijvend voorstel",
-      "text": "Waar mogelijk ontvangt u een eerste inschatting of verkoopvoorstel met duidelijke uitgangspunten."
+      "text": "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel met duidelijke uitgangspunten."
     },
     {
       "title": "Schriftelijke afspraken",
@@ -114,12 +115,12 @@ const page = {
     [
       "Verkoopklaar maken",
       "Vaak opruimen, herstellen of presenteren",
-      "Huidige situatie kan worden beoordeeld"
+      "De huidige situatie kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
       "Meerdere kijkers of open huis mogelijk",
-      "Niet standaard nodig"
+      "Doorgaans niet nodig"
     ],
     [
       "Planning",
@@ -149,7 +150,7 @@ const page = {
     },
     {
       "question": "Kan ik verkopen met achterstallig onderhoud?",
-      "answer": "Ja, dat kan bespreekbaar zijn. Bekende gebreken moeten wel duidelijk worden vermeld."
+      "answer": "Ja, dat kan worden besproken. Bekende gebreken moeten wel duidelijk worden vermeld."
     },
     {
       "question": "Mag de woning nog vol staan?",
@@ -175,7 +176,7 @@ const page = {
     ],
     [
       "/huis-verkopen-in-huidige-staat",
-      "Huis verkopen in huidige staat"
+      "Huis verkopen in de huidige staat"
     ],
     [
       "/woning-verkopen-met-schade",

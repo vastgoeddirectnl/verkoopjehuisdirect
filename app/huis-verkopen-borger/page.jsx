@@ -12,7 +12,8 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-borger",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -22,12 +23,12 @@ const page = {
   "regionName": "Borger",
   "breadcrumb": "Huis verkopen in Borger",
   "eyebrow": "Regio Borger",
-  "h1": "Uw huis verkopen in Borger zonder verkoopstress",
-  "lead": "Wilt u een woning in Borger verkopen, maar liever zonder lange bezichtigingsrondes of eerst alles verkoopklaar maken? Wij bekijken de woning, de locatie en uw gewenste planning zodat u rustig kunt bepalen welke verkooproute past.",
+  "h1": "Uw woning in Borger verkopen, ook met onderhoud of een groter perceel",
+  "lead": "Een woning in Borger of de Hondsrug-regio is niet altijd een standaard tussenwoning. Een vrijstaande woning, dorpswoning of woning met kavel vraagt om aandacht voor staat, ligging en oplevering. Wij beoordelen eerst welke verkooproute praktisch past.",
   "heroNote": "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
   "defaultSituation": "Huis verkopen in Borger",
-  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Borger en uw gewenste planning. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Een verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd.",
-  "shortAnswer": "U kunt vrijblijvend een verkoopvoorstel aanvragen voor een woning in Borger. Ook bij onderhoud, leegstand, erfenis, verhuur of een woning die nog vol staat kijken wij welke route passend kan zijn.",
+  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Borger en uw gewenste planning. Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel. Wij garanderen vooraf geen verkoop binnen een vaste termijn.",
+  "shortAnswer": "U kunt een woning in Borger vrijblijvend laten beoordelen zonder deze eerst op te knappen of verkoopklaar te maken. Wij kijken naar het huis, het perceel, eventuele bijzonderheden en uw gewenste planning.",
   "benefits": [
     "Actief in Borger",
     "Ook bij onderhoud of leegstand",
@@ -42,24 +43,24 @@ const page = {
     "Geen verkoopdruk",
     "Duidelijke afspraken"
   ],
-  "concernTitle": "Veelvoorkomende verkoopvragen in Borger",
+  "concernTitle": "Wat kan verkoop in Borger ingewikkelder maken?",
   "concernCards": [
-    "De woning ligt in Borger en de Hondsrug-regio en is niet direct verkoopklaar.",
-    "Er is behoefte aan duidelijke planning, oplevering en voorwaarden.",
-    "De eigenaar wil liever geen open huis of reeks bezichtigingen.",
-    "Er speelt een bijzondere situatie zoals erfenis, leegstand, verhuur of dubbele lasten."
+    "De woning heeft een groter perceel, bijgebouwen of onderhoudspunten.",
+    "Er is geen behoefte aan veel kijkers of een openbaar verkooptraject.",
+    "De woning staat leeg of moet na een nalatenschap worden verkocht.",
+    "Oplevering, spullen en gewenste overdrachtsdatum vragen maatwerk."
   ],
-  "solutionTitle": "Wat beoordelen wij in Borger?",
+  "solutionTitle": "Een beoordeling die verder kijkt dan het adres",
   "solutionCards": [
-    "De woning en staat zoals deze nu is.",
-    "De locatie, het type woning en praktische verkoopmogelijkheden.",
-    "De gewenste termijn en mogelijke opleverafspraken.",
-    "Of directe verkoop of een andere route passend kan zijn."
+    "Wij bekijken woning, kavel en bijbehorende bijzonderheden in samenhang.",
+    "Onderhoud en gewenste oplevering worden vanaf het begin meegenomen.",
+    "U hoort welke gegevens nodig zijn voor een zorgvuldig voorstel.",
+    "U vergelijkt het verkoopvoorstel rustig met een reguliere verkooproute."
   ],
   "vdnTasks": [
     "Woninggegevens en regionale situatie beoordelen.",
     "Meedenken over oplevering, planning en eventuele bijzonderheden.",
-    "Waar mogelijk een eerste inschatting of voorstel uitwerken.",
+    "Als directe verkoop passend is, een vrijblijvend verkoopvoorstel uitwerken.",
     "Bij akkoord zorgen dat afspraken schriftelijk en notarieel worden vastgelegd."
   ],
   "ownerTasks": [
@@ -69,41 +70,37 @@ const page = {
     "Het voorstel rustig beoordelen voordat verdere afspraken worden gemaakt."
   ],
   "practiceExample": {
-    "situation": "Woning in Borger waarbij eerst duidelijkheid nodig was",
-    "propertyType": "Vrijstaande woning / woning met kavel",
+    "situation": "Vrijstaande woning in Borger met onderhoudspunten",
+    "propertyType": "Vrijstaande woning met kavel",
     "region": "Borger",
-    "mainProblem": "De eigenaar wilde weten welke verkooproute paste bij een dorpswoning in Borger en de Hondsrug-regio, waarbij onderhoud en de ligging van het perceel meespeelden.",
-    "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
-    "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
-    "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",
-    "nextStep": "De eigenaar kon het voorstel vergelijken met een regulier verkooptraject."
+    "mainProblem": "De eigenaar wilde niet vooraf investeren in onderhoud en een volledige woningpresentatie, maar wel weten welke invloed perceel en woningstaat op de verkooproute hadden.",
+    "solution": "Woning, kavel, onderhoud en gewenste termijn zijn samen beoordeeld voordat een voorstel werd uitgewerkt.",
+    "delivery": "Oplevering in de huidige staat is als uitgangspunt besproken.",
+    "transfer": "De definitieve afspraken zouden bij akkoord via koopovereenkomst en notaris lopen.",
+    "nextStep": "De eigenaar kon het voorstel vergelijken zonder vooraf herstelkosten te maken."
   },
   "sections": [
     {
-      "title": "Werkgebied in en rond Borger",
+      "title": "Werkgebied rond Borger en de Hondsrug",
       "paragraphs": [
         "Wij beoordelen woningen in Borger, Borger-Odoorn, Exloo, Buinen, Drouwen en omliggende dorpen.",
-        "Het gaat niet alleen om de plaatsnaam. De staat van de woning, de gewenste termijn, eventuele bewoning en de oplevering bepalen samen welke verkooproute logisch is."
+        "Bij dorpswoningen, vrijstaande huizen en woningen met een kavel kunnen perceel, bijgebouwen en onderhoud een belangrijke rol spelen. Die onderdelen nemen wij mee in de eerste beoordeling."
       ]
     },
     {
-      "title": "Regionale bijzonderheden",
+      "title": "Verkopen zonder eerst alles aan te pakken",
       "paragraphs": [
-        "In Borger en de Hondsrug-regio kunnen grotere kavels, dorpswoningen, recreatieve ligging of onderhoud invloed hebben op de verkooproute.",
-        "Daarom krijgt u geen standaardantwoord, maar eerst een beoordeling van uw woninggegevens en situatie."
+        "Een woning hoeft niet eerst geschilderd, opgeruimd of gemoderniseerd te worden om de mogelijkheden te bespreken. Bekende gebreken en werkzaamheden moeten wel duidelijk worden gemeld, zodat het voorstel op realistische uitgangspunten rust."
       ]
     },
     {
-      "title": "Welke woningen kunnen worden aangemeld?",
-      "paragraphs": [
-        "U kunt ook een aanvraag doen wanneer de woning nog niet verkoopklaar is of wanneer er iets speelt waardoor een regulier verkooptraject minder prettig voelt."
-      ],
+      "title": "Ook passend bij bijzondere omstandigheden",
       "bullets": [
-        "Leegstaande woning",
-        "Opknapwoning of woning met achterstallig onderhoud",
-        "Erfeniswoning of woning die nog vol staat",
-        "Verhuurde woning of woning met gebruiksafspraken",
-        "Woning waarbij snel duidelijkheid gewenst is"
+        "Vrijstaande woning of dorpswoning met onderhoud",
+        "Woning met schuur, bijgebouw of groter perceel",
+        "Erfeniswoning die nog niet leeg is",
+        "Leegstaande of tijdelijk niet gebruikte woning",
+        "Verkoop waarbij rust en privacy belangrijk zijn"
       ]
     }
   ],
@@ -115,10 +112,10 @@ const page = {
     },
     {
       "title": "Beoordeling van woning en regio",
-      "text": "We kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
+      "text": "Wij kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
     },
     {
-      "title": "Vrijblijvende inschatting of voorstel",
+      "title": "Vrijblijvend verkoopvoorstel",
       "text": "Waar mogelijk ontvangt u duidelijkheid over verkoopmogelijkheden en voorwaarden."
     },
     {
@@ -130,7 +127,7 @@ const page = {
     [
       "Voorbereiding",
       "Vaak verkoopklaar maken voor presentatie",
-      "Huidige staat kan worden beoordeeld"
+      "De huidige staat kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
@@ -145,7 +142,7 @@ const page = {
     [
       "Planning",
       "Afhankelijk van markt en koper",
-      "In overleg duidelijk te bespreken"
+      "In overleg vast te leggen"
     ],
     [
       "Oplevering",
@@ -161,7 +158,7 @@ const page = {
   "faqs": [
     {
       "question": "Kan ik mijn woning in Borger verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bekijken wij of een directe verkooproute of een andere oplossing passend kan zijn."
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bespreken wij welke verkooproute het beste bij de woning en uw situatie past."
     },
     {
       "question": "Moet mijn woning in Borger verkoopklaar zijn?",
@@ -169,7 +166,7 @@ const page = {
     },
     {
       "question": "Krijg ik gegarandeerd snel een bod?",
-      "answer": "Nee, een bod of verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
+      "answer": "Nee. Wij garanderen vooraf geen bod of verkoop binnen een vaste termijn. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
     },
     {
       "question": "Hoe worden afspraken vastgelegd?",
@@ -214,8 +211,8 @@ const page = {
       "Huis verkopen in Gieten"
     ]
   ],
-  "ctaTitle": "Wilt u uw huis in Borger verkopen?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."
+  "ctaTitle": "Woning in Borger laten beoordelen?",
+  "ctaText": "Deel kort de woninggegevens en uw situatie. Daarna hoort u welke verkooproute haalbaar is."
 };
 
 export default function HuisVerkopenBorgerPage() {

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { formatDateTimeNL } from "../../../lib/date";
+import { proposalReviewWarnings, proposalValidationIssues } from "../../../lib/proposalValidation";
 
 const EDITABLE_FIELDS = [
   ["lead_naam", "Naam klant", "text"],
@@ -14,7 +15,7 @@ const EDITABLE_FIELDS = [
   ["amount_text", "Voorgesteld bedrag", "text"],
   ["validity_date", "Geldig tot", "date"],
   ["transfer_date_text", "Oplevering", "text"],
-  ["deposit_text", "Aanbetaling / voorschot", "text"],
+  ["deposit_text", "Aanbetaling / voorschot (alleen indien afgesproken)", "text"],
 ];
 
 const EVENT_LABELS = {
@@ -97,7 +98,10 @@ export default function ProposalAdminPage({ params }) {
       return;
     }
     setData(json);
-    setForm(json.proposal);
+    setForm({
+      ...json.proposal,
+      validity_date: json.proposal?.validity_date ? String(json.proposal.validity_date).slice(0, 10) : "",
+    });
   }
 
   useEffect(() => {
@@ -139,6 +143,13 @@ export default function ProposalAdminPage({ params }) {
       return;
     }
     if (!window.confirm(`Voorstel verzenden naar ${form.lead_email}?`)) return;
+    const issues = proposalValidationIssues(form, { forSending: true });
+    if (issues.length) {
+      setError(`Het voorstel is nog niet verzendklaar. ${issues.join(" ")}`);
+      return;
+    }
+    const saved = await post({ action: "updateProposal", id, ...form });
+    if (!saved?.proposal) return;
     const result = await post({ action: "sendProposalEmail", id, lead_email: form.lead_email });
     if (result?.ok) {
       setNotice(result.skipped ? "Mailconfiguratie is niet actief; de voorstelpagina is wel aangemaakt. U kunt daarna eventueel de WhatsApp-knop gebruiken." : "Voorstel is verzonden. Gebruik eventueel de WhatsApp-knop om de klant direct te laten weten dat het voorstel klaarstaat.");
@@ -181,6 +192,8 @@ export default function ProposalAdminPage({ params }) {
   const versions = data?.versions || [];
   const viewCount = useMemo(() => events.filter((event) => event.event_type === "view").length, [events]);
   const whatsappLink = proposalWhatsappUrl(proposal);
+  const proposalIssues = useMemo(() => proposalValidationIssues(form || {}, { forSending: true }), [form]);
+  const proposalWarnings = useMemo(() => proposalReviewWarnings(form || {}), [form]);
 
   if (!form) {
     return (
@@ -195,6 +208,7 @@ export default function ProposalAdminPage({ params }) {
   return (
     <main className="proposal-admin">
       <style>{styles}</style>
+      <style>{`.validation-panel{margin:0 0 16px;border:1px solid #ffd5c4;background:#fff5f1;color:#7c2d20;border-radius:18px;padding:14px 16px}.validation-panel strong{display:block}.validation-panel ul{margin:7px 0 0;padding-left:20px}.validation-panel a{display:inline-block;margin-top:10px;color:inherit;font-weight:900}.validation-panel.ready{background:#f0fff6;border-color:#bff3d0;color:#075c2a}.review-panel{margin:0 0 16px;border:1px solid #f2b885;background:#fffaf4;color:#7c4a23;border-radius:18px;padding:14px 16px}.review-panel strong{display:block}.review-panel ul{margin:7px 0 0;padding-left:20px}`}</style>
 
       <header className="admin-head">
         <div>
@@ -213,9 +227,26 @@ export default function ProposalAdminPage({ params }) {
       {notice ? <div className="notice">{notice}</div> : null}
       {error ? <div className="error">{error}</div> : null}
 
+      {proposalIssues.length ? (
+        <div className="validation-panel" role="alert">
+          <strong>Nog controleren vóór verzending</strong>
+          <ul>{proposalIssues.map((issue) => <li key={issue}>{issue}</li>)}</ul>
+          {proposal?.lead_id ? <a href={`/admin/leads/${proposal.lead_id}#voorstel-maken`}>Maak via de lead een gecorrigeerde versie</a> : null}
+        </div>
+      ) : (
+        <div className="validation-panel ready"><strong>Voorstel is inhoudelijk gereed voor verzending.</strong></div>
+      )}
+
+      {proposalWarnings.length ? (
+        <div className="review-panel">
+          <strong>Advies voor een overtuigender voorstel</strong>
+          <ul>{proposalWarnings.map((warning) => <li key={warning}>{warning}</li>)}</ul>
+        </div>
+      ) : null}
+
       <nav className="actionbar">
         <button disabled={saving} onClick={save}>Opslaan</button>
-        <button disabled={saving} onClick={send}>Mailen</button>
+        <button disabled={saving || proposalIssues.length > 0} onClick={send}>Opslaan en mailen</button>
         {whatsappLink ? <a className="green" href={whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => recordProposalWhatsApp("prepared")}>WhatsApp klant</a> : null}
         {whatsappLink ? <button className="secondary" disabled={saving} onClick={() => recordProposalWhatsApp("sent")}>Markeer WhatsApp verzonden</button> : null}
         {publicUrl(proposal) ? <a href={`${publicUrl(proposal)}?admin_preview=1`} target="_blank" rel="noopener noreferrer">Preview klant</a> : null}
@@ -256,7 +287,7 @@ export default function ProposalAdminPage({ params }) {
             <textarea value={form.assumptions_text || ""} onChange={(event) => setForm({ ...form, assumptions_text: event.target.value })} />
           </label>
           <label className="wide-field">
-            <span>Interne notities</span>
+            <span>Interne notities — nooit zichtbaar voor de klant</span>
             <textarea value={form.notes || ""} onChange={(event) => setForm({ ...form, notes: event.target.value })} />
           </label>
         </article>
@@ -311,7 +342,7 @@ export default function ProposalAdminPage({ params }) {
 
       <div className="mobile-actions">
         <button onClick={save} disabled={saving}>Opslaan</button>
-        <button onClick={send} disabled={saving}>Mailen</button>
+        <button onClick={send} disabled={saving || proposalIssues.length > 0}>Opslaan en mailen</button>
         {whatsappLink ? <a href={whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => recordProposalWhatsApp("prepared")}>WhatsApp</a> : null}
         {publicUrl(proposal) ? <a href={`${publicUrl(proposal)}?admin_preview=1`} target="_blank" rel="noopener noreferrer">Preview</a> : null}
       </div>

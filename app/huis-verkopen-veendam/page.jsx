@@ -12,7 +12,8 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-veendam",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -22,12 +23,12 @@ const page = {
   "regionName": "Veendam",
   "breadcrumb": "Huis verkopen in Veendam",
   "eyebrow": "Regio Veendam",
-  "h1": "Uw huis verkopen in Veendam zonder verkoopstress",
-  "lead": "Wilt u een woning in Veendam verkopen, maar liever zonder lange bezichtigingsrondes of eerst alles verkoopklaar maken? Wij bekijken de woning, de locatie en uw gewenste planning zodat u rustig kunt bepalen welke verkooproute past.",
+  "h1": "Uw woning in Veendam verkopen met minder voorbereiding en bezichtigingen",
+  "lead": "Wilt u in Veendam of Wildervank verkopen zonder eerst te renoveren, stylen en meerdere kijkdagen te plannen? Wij beoordelen de woning en uw situatie en maken de praktische verschillen tussen regulier en direct verkopen inzichtelijk.",
   "heroNote": "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
   "defaultSituation": "Huis verkopen in Veendam",
-  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Veendam en uw gewenste planning. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Een verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd.",
-  "shortAnswer": "U kunt vrijblijvend een verkoopvoorstel aanvragen voor een woning in Veendam. Ook bij onderhoud, leegstand, erfenis, verhuur of een woning die nog vol staat kijken wij welke route passend kan zijn.",
+  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Veendam en uw gewenste planning. Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel. Wij garanderen vooraf geen verkoop binnen een vaste termijn.",
+  "shortAnswer": "Een woning in Veendam, Wildervank, Muntendam of Meeden kan ook in de huidige staat worden beoordeeld. U hoeft geen open huis te organiseren om eerst duidelijkheid te krijgen.",
   "benefits": [
     "Actief in Veendam",
     "Ook bij onderhoud of leegstand",
@@ -42,24 +43,24 @@ const page = {
     "Geen verkoopdruk",
     "Duidelijke afspraken"
   ],
-  "concernTitle": "Veelvoorkomende verkoopvragen in Veendam",
+  "concernTitle": "Wanneer kan directe verkoop rond Veendam rust geven?",
   "concernCards": [
-    "De woning ligt in Veendam en omliggende dorpen en is niet direct verkoopklaar.",
-    "Er is behoefte aan duidelijke planning, oplevering en voorwaarden.",
-    "De eigenaar wil liever geen open huis of reeks bezichtigingen.",
-    "Er speelt een bijzondere situatie zoals erfenis, leegstand, verhuur of dubbele lasten."
+    "De woning is gedateerd of heeft onderhoud nodig.",
+    "Leegstand of dubbele lasten maken een lange doorlooptijd onwenselijk.",
+    "Er is behoefte aan privacy en zo min mogelijk bezichtigingen.",
+    "Na een erfenis zijn oplevering en spullen nog niet geregeld."
   ],
-  "solutionTitle": "Wat beoordelen wij in Veendam?",
+  "solutionTitle": "Minder voorbereiding, wel heldere afspraken",
   "solutionCards": [
-    "De woning en staat zoals deze nu is.",
-    "De locatie, het type woning en praktische verkoopmogelijkheden.",
-    "De gewenste termijn en mogelijke opleverafspraken.",
-    "Of directe verkoop of een andere route passend kan zijn."
+    "De eerste beoordeling kan plaatsvinden zonder verkoopstyling.",
+    "Afspraken over spullen en staat komen in het voorstel terug.",
+    "De planning wordt afgestemd op uw situatie en de notaris.",
+    "U beslist pas nadat u het volledige voorstel hebt gezien."
   ],
   "vdnTasks": [
     "Woninggegevens en regionale situatie beoordelen.",
     "Meedenken over oplevering, planning en eventuele bijzonderheden.",
-    "Waar mogelijk een eerste inschatting of voorstel uitwerken.",
+    "Als directe verkoop passend is, een vrijblijvend verkoopvoorstel uitwerken.",
     "Bij akkoord zorgen dat afspraken schriftelijk en notarieel worden vastgelegd."
   ],
   "ownerTasks": [
@@ -69,41 +70,37 @@ const page = {
     "Het voorstel rustig beoordelen voordat verdere afspraken worden gemaakt."
   ],
   "practiceExample": {
-    "situation": "Woning in Veendam waarbij eerst duidelijkheid nodig was",
-    "propertyType": "Eengezinswoning / jarenwoning",
+    "situation": "Gedateerde woning in Veendam",
+    "propertyType": "Eengezinswoning",
     "region": "Veendam",
-    "mainProblem": "De eigenaar wilde eerst vrijblijvend duidelijkheid over een woning in Veendam die onderhoud nodig had en niet eerst volledig verkoopklaar gemaakt moest worden.",
-    "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
-    "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
-    "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",
-    "nextStep": "De eigenaar kon het voorstel vergelijken met een regulier verkooptraject."
+    "mainProblem": "De eigenaar wilde de woning niet eerst volledig moderniseren en zag op tegen een lang traject met presentatie en kijkers.",
+    "solution": "De woning is in de huidige staat beoordeeld en de directe route is vergeleken met regulier verkopen na voorbereiding.",
+    "delivery": "Beperkte opruimwerkzaamheden en oplevering zijn afzonderlijk besproken.",
+    "transfer": "Bij akkoord zouden prijs en datum via de koopovereenkomst worden vastgelegd.",
+    "nextStep": "De eigenaar kon kiezen zonder eerst renovatiekosten te maken."
   },
   "sections": [
     {
-      "title": "Werkgebied in en rond Veendam",
+      "title": "Woningen in Veendam, Wildervank en omgeving",
       "paragraphs": [
         "Wij beoordelen woningen in Veendam, Wildervank, Muntendam, Meeden en omliggende plaatsen.",
-        "Het gaat niet alleen om de plaatsnaam. De staat van de woning, de gewenste termijn, eventuele bewoning en de oplevering bepalen samen welke verkooproute logisch is."
+        "De reden van verkoop kan uiteenlopen van verhuizing en dubbele lasten tot leegstand of nalatenschap. Daarom begint de beoordeling bij uw situatie en niet bij een standaard verkoopstappenplan."
       ]
     },
     {
-      "title": "Regionale bijzonderheden",
+      "title": "Geen uitgebreide woningpresentatie nodig om te starten",
       "paragraphs": [
-        "In Veendam en omgeving kunnen onderhoud, leegstand, verkoop zonder makelaar of een erfenissituatie aanleiding zijn om eerst vrijblijvend duidelijkheid te vragen.",
-        "Daarom krijgt u geen standaardantwoord, maar eerst een beoordeling van uw woninggegevens en situatie."
+        "Foto’s, styling en herstel kunnen nuttig zijn bij een reguliere verkoop. Voor een eerste directe beoordeling hoeft u die stappen niet altijd vooraf te zetten. Dat maakt het mogelijk eerst te vergelijken."
       ]
     },
     {
-      "title": "Welke woningen kunnen worden aangemeld?",
-      "paragraphs": [
-        "U kunt ook een aanvraag doen wanneer de woning nog niet verkoopklaar is of wanneer er iets speelt waardoor een regulier verkooptraject minder prettig voelt."
-      ],
+      "title": "Mogelijke verkoopsituaties",
       "bullets": [
+        "Jarenwoning met onderhoud",
         "Leegstaande woning",
-        "Opknapwoning of woning met achterstallig onderhoud",
-        "Erfeniswoning of woning die nog vol staat",
-        "Verhuurde woning of woning met gebruiksafspraken",
-        "Woning waarbij snel duidelijkheid gewenst is"
+        "Erfeniswoning met inboedel",
+        "Woning waarvoor geen open huis gewenst is",
+        "Woning met een gewenste flexibele overdrachtsdatum"
       ]
     }
   ],
@@ -115,10 +112,10 @@ const page = {
     },
     {
       "title": "Beoordeling van woning en regio",
-      "text": "We kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
+      "text": "Wij kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
     },
     {
-      "title": "Vrijblijvende inschatting of voorstel",
+      "title": "Vrijblijvend verkoopvoorstel",
       "text": "Waar mogelijk ontvangt u duidelijkheid over verkoopmogelijkheden en voorwaarden."
     },
     {
@@ -130,7 +127,7 @@ const page = {
     [
       "Voorbereiding",
       "Vaak verkoopklaar maken voor presentatie",
-      "Huidige staat kan worden beoordeeld"
+      "De huidige staat kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
@@ -145,7 +142,7 @@ const page = {
     [
       "Planning",
       "Afhankelijk van markt en koper",
-      "In overleg duidelijk te bespreken"
+      "In overleg vast te leggen"
     ],
     [
       "Oplevering",
@@ -161,7 +158,7 @@ const page = {
   "faqs": [
     {
       "question": "Kan ik mijn woning in Veendam verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bekijken wij of een directe verkooproute of een andere oplossing passend kan zijn."
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bespreken wij welke verkooproute het beste bij de woning en uw situatie past."
     },
     {
       "question": "Moet mijn woning in Veendam verkoopklaar zijn?",
@@ -169,7 +166,7 @@ const page = {
     },
     {
       "question": "Krijg ik gegarandeerd snel een bod?",
-      "answer": "Nee, een bod of verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
+      "answer": "Nee. Wij garanderen vooraf geen bod of verkoop binnen een vaste termijn. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
     },
     {
       "question": "Hoe worden afspraken vastgelegd?",
@@ -214,8 +211,8 @@ const page = {
       "Huis verkopen in Winschoten"
     ]
   ],
-  "ctaTitle": "Wilt u uw huis in Veendam verkopen?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."
+  "ctaTitle": "Uw woning in Veendam zonder uitgebreide voorbereiding laten beoordelen?",
+  "ctaText": "Deel de belangrijkste woninggegevens en ontvang eerst duidelijkheid over de mogelijkheden."
 };
 
 export default function HuisVerkopenVeendamPage() {

@@ -2,17 +2,18 @@ import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
   title: "Huis verkopen zonder Funda-campagne of open huis",
-  description: "U kunt uw woning zonder Funda-campagne rechtstreeks laten beoordelen. Directe verkoop kan rust en privacy bieden, maar de afspraken worden altijd schriftel",
+  description: "Laat uw woning zonder Funda-campagne beoordelen. Directe verkoop kan rust en privacy bieden, met schriftelijke afspraken en notariële overdracht.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-funda",
   },
   openGraph: {
     title: "Huis verkopen zonder Funda-campagne of open huis",
-    description: "U kunt uw woning zonder Funda-campagne rechtstreeks laten beoordelen. Directe verkoop kan rust en privacy bieden, maar de afspraken worden altijd schriftel",
+    description: "Laat uw woning zonder Funda-campagne beoordelen. Directe verkoop kan rust en privacy bieden, met schriftelijke afspraken en notariële overdracht.",
     url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-funda",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
   },
 };
 
@@ -80,7 +81,7 @@ const page = {
   "processSteps": [
     "U vult de aanvraag in.",
     "Wij bekijken woning en situatie zonder openbare campagne.",
-    "U ontvangt waar mogelijk een vrijblijvend voorstel.",
+    "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel.",
     "Bij akkoord worden afspraken schriftelijk en notarieel vastgelegd."
   ],
   "practiceExample": {
@@ -96,7 +97,7 @@ const page = {
     [
       "Online zichtbaarheid",
       "Vaak Funda en woningplatforms",
-      "Geen openbare campagne standaard nodig"
+      "Geen openbare campagne nodig"
     ],
     [
       "Makelaarsproces",

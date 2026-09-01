@@ -12,7 +12,8 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/woning-verkopen-drenthe",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -22,12 +23,12 @@ const page = {
   "regionName": "Drenthe",
   "breadcrumb": "Woning verkopen in Drenthe",
   "eyebrow": "Regio Drenthe",
-  "h1": "Uw huis verkopen in Drenthe zonder verkoopstress",
-  "lead": "Wilt u een woning in Drenthe verkopen, maar liever zonder lange bezichtigingsrondes of eerst alles verkoopklaar maken? Wij bekijken de woning, de locatie en uw gewenste planning zodat u rustig kunt bepalen welke verkooproute past.",
+  "h1": "Uw woning in Drenthe verkopen met aandacht voor perceel, staat en ligging",
+  "lead": "Drenthe kent veel verschillende verkoopsituaties: van een appartement in Assen tot een dorpswoning, woonboerderij of vrijstaande woning met een groter perceel. Wij beoordelen daarom meer dan alleen woningtype en postcode.",
   "heroNote": "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
   "defaultSituation": "Woning verkopen in Drenthe",
-  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Drenthe en uw gewenste planning. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Een verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd.",
-  "shortAnswer": "U kunt vrijblijvend een verkoopvoorstel aanvragen voor een woning in Drenthe. Ook bij onderhoud, leegstand, erfenis, verhuur of een woning die nog vol staat kijken wij welke route passend kan zijn.",
+  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Drenthe en uw gewenste planning. Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel. Wij garanderen vooraf geen verkoop binnen een vaste termijn.",
+  "shortAnswer": "In Drenthe kunt u ook voor woningen buiten de grotere plaatsen een directe verkooproute laten beoordelen. Onderhoud, bijgebouwen, verhuur, leegstand en gewenste overdracht kunnen onderdeel zijn van het voorstel.",
   "benefits": [
     "Actief in Drenthe",
     "Ook bij onderhoud of leegstand",
@@ -42,24 +43,24 @@ const page = {
     "Geen verkoopdruk",
     "Duidelijke afspraken"
   ],
-  "concernTitle": "Veelvoorkomende verkoopvragen in Drenthe",
+  "concernTitle": "Waarom verkoop in Drenthe maatwerk kan vragen",
   "concernCards": [
-    "De woning ligt in Drentse dorpen, buitengebied of grotere plaatsen en is niet direct verkoopklaar.",
-    "Er is behoefte aan duidelijke planning, oplevering en voorwaarden.",
-    "De eigenaar wil liever geen open huis of reeks bezichtigingen.",
-    "Er speelt een bijzondere situatie zoals erfenis, leegstand, verhuur of dubbele lasten."
+    "Perceel, bijgebouwen of buitenligging maken de woning minder standaard.",
+    "Onderhoud of recreatief gebruik vraagt om extra uitleg en afspraken.",
+    "De woning ligt op afstand van de eigenaar en staat mogelijk leeg.",
+    "Een reguliere verkoopcampagne past niet bij de gewenste rust of planning."
   ],
-  "solutionTitle": "Wat beoordelen wij in Drenthe?",
+  "solutionTitle": "Beoordeling van het volledige object",
   "solutionCards": [
-    "De woning en staat zoals deze nu is.",
-    "De locatie, het type woning en praktische verkoopmogelijkheden.",
-    "De gewenste termijn en mogelijke opleverafspraken.",
-    "Of directe verkoop of een andere route passend kan zijn."
+    "Wij nemen woning, perceel en relevante bijgebouwen samen mee.",
+    "De huidige staat en het gebruik worden duidelijk beschreven.",
+    "Oplevering en gewenste passeertermijn worden vooraf besproken.",
+    "U krijgt een verkooproute die aansluit op de praktische werkelijkheid."
   ],
   "vdnTasks": [
     "Woninggegevens en regionale situatie beoordelen.",
     "Meedenken over oplevering, planning en eventuele bijzonderheden.",
-    "Waar mogelijk een eerste inschatting of voorstel uitwerken.",
+    "Als directe verkoop passend is, een vrijblijvend verkoopvoorstel uitwerken.",
     "Bij akkoord zorgen dat afspraken schriftelijk en notarieel worden vastgelegd."
   ],
   "ownerTasks": [
@@ -69,41 +70,37 @@ const page = {
     "Het voorstel rustig beoordelen voordat verdere afspraken worden gemaakt."
   ],
   "practiceExample": {
-    "situation": "Woning in Drenthe waarbij eerst duidelijkheid nodig was",
-    "propertyType": "Vrijstaande woning / dorpswoning",
+    "situation": "Vrijstaande woning in Drenthe met perceel en bijgebouw",
+    "propertyType": "Vrijstaande woning",
     "region": "Drenthe",
-    "mainProblem": "De eigenaar wilde duidelijkheid over een woning in Drenthe met een groter perceel en onderhoud, zonder vooraf een lang traject met herstel en bezichtigingen te starten.",
-    "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
-    "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
-    "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",
-    "nextStep": "De eigenaar kon het voorstel vergelijken met een regulier verkooptraject."
+    "mainProblem": "De eigenaar wilde eerst weten hoe woning, perceel, bijgebouw en onderhoud samen in een directe verkoopbeoordeling zouden worden meegenomen.",
+    "solution": "Het volledige object en de gewenste oplevering zijn als één geheel beoordeeld.",
+    "delivery": "Afspraken over achterblijvende zaken en de staat konden worden gespecificeerd.",
+    "transfer": "Bij akkoord zou de overdracht via koopovereenkomst en notaris verlopen.",
+    "nextStep": "De eigenaar kreeg een bruikbaar vergelijkingspunt naast reguliere verkoop."
   },
   "sections": [
     {
-      "title": "Werkgebied in en rond Drenthe",
+      "title": "Werkgebied in Drenthe",
       "paragraphs": [
-        "Wij beoordelen woningen in Assen, Emmen, Borger, Gieten, Aa en Hunze, Tynaarlo, Coevorden, Hoogeveen en omliggende dorpen.",
-        "Het gaat niet alleen om de plaatsnaam. De staat van de woning, de gewenste termijn, eventuele bewoning en de oplevering bepalen samen welke verkooproute logisch is."
+        "Wij beoordelen aanvragen uit onder meer Assen, Emmen, Borger, Gieten, Aa en Hunze, Tynaarlo, Coevorden, Hoogeveen en omliggende dorpen.",
+        "Naast plaats en woningtype kijken wij naar perceel, bijgebouwen, onderhoud, bewoning en bereikbaarheid. Die combinatie bepaalt welke verkooproute logisch is."
       ]
     },
     {
-      "title": "Regionale bijzonderheden",
+      "title": "Ook voor dorpen en buitengebied",
       "paragraphs": [
-        "In Drenthe spelen vaak grotere kavels, oudere woningen, buitengebied, recreatief gebruik of woningen met onderhoud mee. Daarom kijken we naar meer dan alleen de vraagprijs.",
-        "Daarom krijgt u geen standaardantwoord, maar eerst een beoordeling van uw woninggegevens en situatie."
+        "Een woning buiten de grote kernen kan een grotere kavel, schuur of bijzonder gebruik hebben. Zulke kenmerken vragen om concrete uitgangspunten in plaats van een automatisch standaardvoorstel."
       ]
     },
     {
-      "title": "Welke woningen kunnen worden aangemeld?",
-      "paragraphs": [
-        "U kunt ook een aanvraag doen wanneer de woning nog niet verkoopklaar is of wanneer er iets speelt waardoor een regulier verkooptraject minder prettig voelt."
-      ],
+      "title": "Voorbeelden van woningen en situaties",
       "bullets": [
-        "Leegstaande woning",
-        "Opknapwoning of woning met achterstallig onderhoud",
-        "Erfeniswoning of woning die nog vol staat",
-        "Verhuurde woning of woning met gebruiksafspraken",
-        "Woning waarbij snel duidelijkheid gewenst is"
+        "Vrijstaande woning met groter perceel",
+        "Dorpswoning of woonboerderij met onderhoud",
+        "Leegstaande woning op afstand",
+        "Verhuurde of recreatief gebruikte woning",
+        "Erfeniswoning met bijgebouwen of inboedel"
       ]
     }
   ],
@@ -115,10 +112,10 @@ const page = {
     },
     {
       "title": "Beoordeling van woning en regio",
-      "text": "We kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
+      "text": "Wij kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
     },
     {
-      "title": "Vrijblijvende inschatting of voorstel",
+      "title": "Vrijblijvend verkoopvoorstel",
       "text": "Waar mogelijk ontvangt u duidelijkheid over verkoopmogelijkheden en voorwaarden."
     },
     {
@@ -130,7 +127,7 @@ const page = {
     [
       "Voorbereiding",
       "Vaak verkoopklaar maken voor presentatie",
-      "Huidige staat kan worden beoordeeld"
+      "De huidige staat kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
@@ -145,7 +142,7 @@ const page = {
     [
       "Planning",
       "Afhankelijk van markt en koper",
-      "In overleg duidelijk te bespreken"
+      "In overleg vast te leggen"
     ],
     [
       "Oplevering",
@@ -161,7 +158,7 @@ const page = {
   "faqs": [
     {
       "question": "Kan ik mijn woning in Drenthe verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bekijken wij of een directe verkooproute of een andere oplossing passend kan zijn."
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bespreken wij welke verkooproute het beste bij de woning en uw situatie past."
     },
     {
       "question": "Moet mijn woning in Drenthe verkoopklaar zijn?",
@@ -169,7 +166,7 @@ const page = {
     },
     {
       "question": "Krijg ik gegarandeerd snel een bod?",
-      "answer": "Nee, een bod of verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
+      "answer": "Nee. Wij garanderen vooraf geen bod of verkoop binnen een vaste termijn. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
     },
     {
       "question": "Hoe worden afspraken vastgelegd?",
@@ -218,8 +215,8 @@ const page = {
       "Huis verkopen in Gieten"
     ]
   ],
-  "ctaTitle": "Wilt u uw huis in Drenthe verkopen?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."
+  "ctaTitle": "Uw woning of object in Drenthe laten beoordelen?",
+  "ctaText": "Vraag vrijblijvend een beoordeling aan van woning, perceel en verkoopsituatie."
 };
 
 export default function WoningVerkopenDrenthePage() {

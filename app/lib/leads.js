@@ -215,9 +215,19 @@ export async function listLeads({ status, search, limit = 300, archive = "active
       m.last_mail_at
     from leads l
     left join (
-      select lead_id, count(*) filter (where status <> 'Afgerond') as open_tasks
-      from tasks
-      group by lead_id
+      select
+        t.lead_id,
+        count(*) filter (
+          where t.status <> 'Afgerond'
+            and not (
+              coalesce(t.automation_key, '') like 'proposal-interest-%'
+              and l2.last_contact_at is not null
+              and l2.last_contact_at >= t.created_at
+            )
+        ) as open_tasks
+      from tasks t
+      left join leads l2 on l2.id = t.lead_id
+      group by t.lead_id
     ) t on t.lead_id = l.id
     left join (
       select

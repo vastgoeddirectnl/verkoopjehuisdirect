@@ -15,9 +15,11 @@ export const metadata = {
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/og.png"],
     title: "Huis verkopen bij erfenis of nalatenschap",
     description:
       "Vraag vrijblijvend duidelijkheid aan over verkoop van een geërfde woning zonder direct een regulier verkooptraject te starten.",
@@ -98,7 +100,7 @@ const page = {
       title: "Wie mag de woning verkopen?",
       paragraphs: [
         "Bij een erfenis moet eerst duidelijk zijn wie eigenaar of erfgenaam is en wie bevoegd is om namens de nalatenschap te tekenen. Soms zijn alle erfgenamen nodig, soms is er een executeur of gevolmachtigde.",
-        "Wij kunnen geen erfrechtelijk advies vervangen, maar we kunnen wel helpen om verkoopafspraken rustig en overzichtelijk te maken zodra duidelijk is wie mag beslissen.",
+        "Wij kunnen geen erfrechtelijk advies vervangen, maar wij kunnen wel helpen om verkoopafspraken rustig en overzichtelijk te maken zodra duidelijk is wie mag beslissen.",
       ],
     },
     {
@@ -129,7 +131,7 @@ const page = {
       steps: [
         "U vult de woninggegevens en de erfenissituatie in.",
         "Wij bekijken de woning, staat, locatie en gewenste planning.",
-        "Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of voorstel.",
+        "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel.",
         "Erfgenamen of betrokkenen kunnen het voorstel rustig beoordelen.",
         "Bij akkoord worden voorwaarden uitgewerkt en verloopt overdracht via de notaris.",
       ],
@@ -138,7 +140,7 @@ const page = {
   processSteps: [
     "Woninggegevens en betrokkenen in kaart brengen.",
     "Bevoegdheid, nalatenschap en praktische situatie laten controleren waar nodig.",
-    "Vrijblijvende inschatting of voorstel ontvangen.",
+    "Vrijblijvend verkoopvoorstel ontvangen.",
     "Oplevering, spullen, termijn en voorwaarden afstemmen.",
     "Bij akkoord koopovereenkomst ondertekenen en overdracht via de notaris laten verlopen.",
   ],

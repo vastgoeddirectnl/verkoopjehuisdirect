@@ -1,18 +1,19 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen binnen één week? Eerst duidelijkheid over de haalba",
+  title: "Huis verkopen binnen één week? Bekijk wat haalbaar is",
   description: "Binnen één week verkopen is afhankelijk van woning, gegevens en notariële planning. U kunt wel snel een vrijblijvende beoordeling aanvragen.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-binnen-1-week",
   },
   openGraph: {
-    title: "Huis verkopen binnen één week? Eerst duidelijkheid over de haalba",
+    title: "Huis verkopen binnen één week? Bekijk wat haalbaar is",
     description: "Binnen één week verkopen is afhankelijk van woning, gegevens en notariële planning. U kunt wel snel een vrijblijvende beoordeling aanvragen.",
     url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-binnen-1-week",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
   },
 };
 
@@ -21,7 +22,7 @@ const page = {
   "breadcrumb": "Huis verkopen binnen 1 week",
   "eyebrow": "Snel verkooptraject",
   "h1": "Huis verkopen binnen één week? Eerst duidelijkheid over de haalbare route",
-  "lead": "Wanneer u binnen korte tijd duidelijkheid nodig heeft, kan directe verkoop een alternatief zijn. We bekijken de woning en bespreken realistisch welke planning mogelijk is.",
+  "lead": "Wanneer u binnen korte tijd duidelijkheid nodig heeft, kan directe verkoop een alternatief zijn. Wij bekijken de woning en bespreken realistisch welke planning mogelijk is.",
   "heroNote": "Een snelle route betekent niet dat afspraken vluchtig worden gemaakt. Definitieve afspraken worden schriftelijk vastgelegd.",
   "heroBenefits": [
     "Korte route naar duidelijkheid",
@@ -65,8 +66,8 @@ const page = {
     {
       "title": "Wanneer is één week als planning bespreekbaar?",
       "paragraphs": [
-        "Een korte termijn kan soms bespreekbaar zijn als woninggegevens, eigendomssituatie en notariële afwikkeling duidelijk zijn.",
-        "We beloven geen vaste termijn, maar geven wel snel inzicht in wat realistisch is."
+        "Een korte termijn kan haalbaar zijn als de woninggegevens, eigendomssituatie en notariële planning duidelijk zijn.",
+        "Wij beloven geen vaste termijn, maar geven wel snel inzicht in wat realistisch is."
       ]
     },
     {
@@ -83,8 +84,8 @@ const page = {
   "processSteps": [
     "U vult de aanvraag in.",
     "Wij bespreken de woning en gewenste planning.",
-    "U ontvangt waar mogelijk een vrijblijvend voorstel.",
-    "Bij akkoord leggen we voorwaarden schriftelijk vast en plant de notaris de overdracht."
+    "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel.",
+    "Bij akkoord leggen wij voorwaarden schriftelijk vast en plant de notaris de overdracht."
   ],
   "practiceExample": {
     "situation": "Korte verkooptermijn gewenst",
@@ -104,7 +105,7 @@ const page = {
     [
       "Bezichtigingen",
       "Meerdere rondes mogelijk",
-      "Niet standaard nodig"
+      "Doorgaans niet nodig"
     ],
     [
       "Voorwaarden",
@@ -124,11 +125,11 @@ const page = {
     },
     {
       "question": "Is de aanvraag vrijblijvend?",
-      "answer": "Ja. U zit nergens aan vast."
+      "answer": "Ja. U beslist zelf of u verder wilt."
     },
     {
       "question": "Moet ik de woning leegmaken?",
-      "answer": "Niet altijd. Oplevering in huidige staat of met spullen kan bespreekbaar zijn."
+      "answer": "Niet altijd. Oplevering in de huidige staat of met achterblijvende spullen kan onderdeel zijn van de afspraken."
     },
     {
       "question": "Kan ik eerst overleggen?",
@@ -136,7 +137,7 @@ const page = {
     }
   ],
   "ctaTitle": "Wilt u snel duidelijkheid over verkoop?",
-  "ctaText": "Vraag vrijblijvend uw mogelijkheden op."
+  "ctaText": "Vraag vrijblijvend een beoordeling aan en ontdek welke planning haalbaar is."
 };
 
 export default function HuisVerkopenBinnen1WeekPage() {

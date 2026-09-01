@@ -15,11 +15,13 @@ export const metadata = {
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
   },
 };
 
 const page = {
   "slug": "/huis-verkopen-na-overlijden",
+  "pageType": "situation",
   "breadcrumb": "Huis verkopen na overlijden",
   "eyebrow": "Huis verkopen na overlijden",
   "h1": "Huis verkopen na overlijden met rust en duidelijke afspraken",
@@ -103,7 +105,7 @@ const page = {
     },
     {
       "question": "Is het voorstel verplichtend?",
-      "answer": "Nee, de aanvraag is gratis en vrijblijvend."
+      "answer": "Nee, de aanvraag is vrijblijvend."
     }
   ],
   "ctaTitle": "Wilt u een huis verkopen na overlijden?",

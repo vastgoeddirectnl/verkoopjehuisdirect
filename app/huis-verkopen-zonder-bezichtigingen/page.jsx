@@ -2,17 +2,18 @@ import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
   title: "Huis verkopen zonder uitgebreide bezichtigingsrondes",
-  description: "Verkoop zonder uitgebreide bezichtigingen kan via een directe verkooproute bespreekbaar zijn. U vraagt eerst vrijblijvend een voorstel aan.",
+  description: "Wilt u verkopen zonder uitgebreide bezichtigingsrondes? Laat vrijblijvend beoordelen of een directe verkooproute bij uw woning en situatie past.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-bezichtigingen",
   },
   openGraph: {
     title: "Huis verkopen zonder uitgebreide bezichtigingsrondes",
-    description: "Verkoop zonder uitgebreide bezichtigingen kan via een directe verkooproute bespreekbaar zijn. U vraagt eerst vrijblijvend een voorstel aan.",
+    description: "Wilt u verkopen zonder uitgebreide bezichtigingsrondes? Laat vrijblijvend beoordelen of een directe verkooproute bij uw woning en situatie past.",
     url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-bezichtigingen",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
   },
 };
 
@@ -35,7 +36,7 @@ const page = {
     "Ook bij volle of bewoonde woning",
     "Notariële overdracht"
   ],
-  "shortAnswer": "Verkoop zonder uitgebreide bezichtigingen kan via een directe verkooproute bespreekbaar zijn. U vraagt eerst vrijblijvend een voorstel aan.",
+  "shortAnswer": "Bij directe verkoop is een openbare bezichtigingsronde meestal niet nodig. Soms is wel aanvullende informatie of één gerichte woningopname nodig voordat een voorstel kan worden uitgewerkt.",
   "pageType": "high-intent",
   "concernCards": [
     "Ik wil privacy houden",
@@ -66,7 +67,7 @@ const page = {
       "title": "Waarom verkopen zonder bezichtigingen?",
       "paragraphs": [
         "Niet iedere eigenaar wil een traditioneel traject met kijkers en open huis. Soms gaat het om privacy, rust, een volle woning of praktische omstandigheden.",
-        "Bij Vastgoed Direct Nederland bespreken we of een directe verkooproute past bij uw situatie."
+        "Bij Vastgoed Direct Nederland bespreken wij of een directe verkooproute past bij uw situatie."
       ]
     },
     {
@@ -83,7 +84,7 @@ const page = {
   "processSteps": [
     "U stuurt de woninggegevens en situatie.",
     "Wij beoordelen of aanvullende informatie nodig is.",
-    "U ontvangt waar mogelijk een vrijblijvend voorstel.",
+    "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel.",
     "Bij akkoord worden afspraken schriftelijk en notarieel vastgelegd."
   ],
   "practiceExample": {
@@ -99,7 +100,7 @@ const page = {
     [
       "Bezichtigingen",
       "Vaak meerdere kijkers",
-      "Geen open huis standaard nodig"
+      "Geen open huis nodig"
     ],
     [
       "Privacy",
@@ -109,18 +110,18 @@ const page = {
     [
       "Voorbereiding",
       "Opruimen en presenteren",
-      "Huidige staat bespreekbaar"
+      "De huidige staat is bespreekbaar"
     ],
     [
       "Beslissing",
       "Afhankelijk van kijkers en biedingen",
-      "Eerst vrijblijvend voorstel"
+      "Eerst een vrijblijvend voorstel"
     ]
   ],
   "faqs": [
     {
       "question": "Kan ik mijn huis verkopen zonder bezichtigingen?",
-      "answer": "Een traject zonder uitgebreide bezichtigingsrondes kan bespreekbaar zijn. Soms is aanvullende informatie of een gerichte afspraak nodig."
+      "answer": "Ja. Een openbare bezichtigingsronde is meestal niet nodig. Soms is aanvullende informatie of één gerichte woningopname nodig."
     },
     {
       "question": "Moet mijn woning op Funda?",
@@ -128,14 +129,14 @@ const page = {
     },
     {
       "question": "Kan dit als de woning nog vol staat?",
-      "answer": "Ja, dat kan bespreekbaar zijn. Geef wel duidelijk aan wat er achterblijft."
+      "answer": "Ja, dat kan worden besproken. Geef wel duidelijk aan wat er achterblijft."
     },
     {
       "question": "Is de aanvraag vrijblijvend?",
       "answer": "Ja. U beslist pas nadat u het voorstel heeft bekeken."
     }
   ],
-  "ctaTitle": "Wilt u verkopen zonder open huis?",
+  "ctaTitle": "Wilt u verkopen zonder uitgebreide bezichtigingsrondes?",
   "ctaText": "Vraag vrijblijvend uw verkoopmogelijkheden aan."
 };
 

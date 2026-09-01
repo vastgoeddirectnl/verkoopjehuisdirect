@@ -15,9 +15,11 @@ export const metadata = {
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/og.png"],
     title: "Huis snel verkopen met duidelijke afspraken",
     description:
       "Snel duidelijkheid over uw woningverkoop zonder eerst een regulier verkooptraject te starten.",
@@ -37,7 +39,7 @@ const page = {
     "Snel duidelijkheid krijgen betekent niet dat u overhaast hoeft te beslissen. U ontvangt eerst informatie en beoordeelt daarna rustig of het past.",
   formSubmitLabel: "Ontvang een vrijblijvend verkoopvoorstel",
   formSuccessText:
-    "Wij bekijken de woninggegevens en nemen doorgaans binnen één werkdag contact met u op. Waar mogelijk ontvangt u daarna een eerste vrijblijvende inschatting of verkoopvoorstel.",
+    "Wij bekijken de woninggegevens en nemen doorgaans binnen één werkdag contact met u op. Als directe verkoop passend is, ontvangt u daarna een vrijblijvend verkoopvoorstel.",
   formPrivacyNote:
     "Vrijblijvend. Uw gegevens worden alleen gebruikt om uw aanvraag te beoordelen en contact met u op te nemen.",
   afterRequestTitle: "Hoe snel hoort u iets na uw aanvraag?",
@@ -76,16 +78,16 @@ const page = {
   solutionTitle: "Wat kunt u concreet verwachten?",
   solutionCards: [
     "Een eerste beoordeling op basis van woninggegevens en uw situatie.",
-    "Waar mogelijk een eerste vrijblijvende inschatting of verkoopvoorstel.",
+    "Als directe verkoop passend is, een vrijblijvend verkoopvoorstel.",
     "Duidelijke uitleg over koopprijs, oplevering, voorwaarden en termijn.",
     "Alleen vervolgstappen als het voorstel voor u interessant is.",
   ],
   valueTitle: "Snelheid is pas waardevol als de afspraken duidelijk zijn.",
   valueText:
-    "Daarom sturen wij niet op druk of overhaaste beslissingen. U vraagt eerst informatie aan, ontvangt waar mogelijk een eerste inschatting en kunt daarna rustig beoordelen of directe verkoop bij uw situatie past.",
+    "Daarom sturen wij niet op druk of overhaaste beslissingen. U vraagt eerst informatie aan en ontvangt na de beoordeling een duidelijke terugkoppeling. Als directe verkoop past, kunt u het verkoopvoorstel rustig beoordelen.",
   vdnTasks: [
     "Meedenken over een realistische verkooproute zonder open huis.",
-    "Beoordelen of de woning in huidige staat kan worden meegenomen.",
+    "Beoordelen of de woning in de huidige staat kan worden meegenomen.",
     "Afspraken over oplevering, spullen, planning en overdracht concreet maken.",
     "Het vervolg bij akkoord via koopovereenkomst en notaris laten verlopen.",
   ],
@@ -102,9 +104,9 @@ const page = {
     mainProblem:
       "De woning stond leeg en de eigenaar wilde geen maandenlange verkoopcampagne met onderhoud, foto's en bezichtigingen organiseren.",
     solution:
-      "Eerst een vrijblijvende inschatting, daarna een voorstel met duidelijke planning en opleverafspraken.",
+      "Eerst zijn de woninggegevens en situatie beoordeeld. Daarna is een vrijblijvend verkoopvoorstel met duidelijke planning en opleverafspraken uitgewerkt.",
     delivery:
-      "Woning kon in huidige staat worden beoordeeld; leeghalen werd apart besproken.",
+      "De woning kon in de huidige staat worden beoordeeld; leeghalen werd apart besproken.",
     transfer:
       "Overdracht via de notaris na ondertekening van de koopovereenkomst.",
     nextStep:
@@ -148,7 +150,7 @@ const page = {
     },
     {
       title: "Vrijblijvend voorstel",
-      text: "Waar mogelijk ontvangt u een eerste inschatting of verkoopvoorstel met prijs, planning en voorwaarden.",
+      text: "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel met prijs, planning en voorwaarden.",
     },
     {
       title: "Schriftelijke afspraken en notariële overdracht",
@@ -184,7 +186,7 @@ const page = {
     {
       question: "Krijg ik gegarandeerd direct een bod?",
       answer:
-        "Nee, dat garanderen wij niet. Wij beoordelen eerst de woninggegevens en situatie. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of voorstel.",
+        "Nee, dat garanderen wij niet. Wij beoordelen eerst de woninggegevens en situatie. Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel.",
     },
     {
       question: "Zit ik ergens aan vast na de aanvraag?",
@@ -199,7 +201,7 @@ const page = {
   ],
   relatedLinks: [
     ["/huis-direct-verkopen", "Huis direct verkopen", "Rechtstreeks duidelijkheid over de verkoopmogelijkheden."],
-    ["/huis-verkopen-aan-opkoper", "Huis verkopen aan opkoper", "Vergelijk rustig wat directe verkoop betekent."],
+    ["/huis-verkopen-aan-opkoper", "Huis verkopen aan een opkoper", "Vergelijk rustig wat directe verkoop betekent."],
     ["/huis-verkopen-bij-dubbele-lasten", "Huis verkopen bij dubbele lasten", "Wanneer planning en lasten snel duidelijk moeten worden."],
     ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen", "Bij leegstand, zorgen of doorlopende kosten."],
     ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen", "Zonder eerst te verbouwen of herstellen."],

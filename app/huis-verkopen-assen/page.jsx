@@ -12,7 +12,8 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-assen",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -22,12 +23,12 @@ const page = {
   "regionName": "Assen",
   "breadcrumb": "Huis verkopen in Assen",
   "eyebrow": "Regio Assen",
-  "h1": "Uw huis verkopen in Assen zonder verkoopstress",
-  "lead": "Wilt u een woning in Assen verkopen, maar liever zonder lange bezichtigingsrondes of eerst alles verkoopklaar maken? Wij bekijken de woning, de locatie en uw gewenste planning zodat u rustig kunt bepalen welke verkooproute past.",
+  "h1": "Uw woning in Assen verkopen zonder lange verkoopcampagne",
+  "lead": "Verkoopt u een appartement, gezinswoning of erfeniswoning in Assen? Ook wanneer de woning nog niet verkoopklaar is, kunt u eerst laten beoordelen of directe verkoop past. Wij kijken naar de woning, uw planning en de gewenste oplevering.",
   "heroNote": "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
   "defaultSituation": "Huis verkopen in Assen",
-  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Assen en uw gewenste planning. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Een verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd.",
-  "shortAnswer": "U kunt vrijblijvend een verkoopvoorstel aanvragen voor een woning in Assen. Ook bij onderhoud, leegstand, erfenis, verhuur of een woning die nog vol staat kijken wij welke route passend kan zijn.",
+  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Assen en uw gewenste planning. Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel. Wij garanderen vooraf geen verkoop binnen een vaste termijn.",
+  "shortAnswer": "Voor een woning in Assen kunt u rechtstreeks een vrijblijvende beoordeling aanvragen. Dat kan ook bij onderhoud, leegstand, verhuur of spullen in de woning. Als directe verkoop passend is, ontvangt u een helder verkoopvoorstel.",
   "benefits": [
     "Actief in Assen",
     "Ook bij onderhoud of leegstand",
@@ -42,24 +43,24 @@ const page = {
     "Geen verkoopdruk",
     "Duidelijke afspraken"
   ],
-  "concernTitle": "Veelvoorkomende verkoopvragen in Assen",
+  "concernTitle": "Welke situaties zien wij in Assen en omgeving?",
   "concernCards": [
-    "De woning ligt in Assen en omliggende dorpen en is niet direct verkoopklaar.",
-    "Er is behoefte aan duidelijke planning, oplevering en voorwaarden.",
-    "De eigenaar wil liever geen open huis of reeks bezichtigingen.",
-    "Er speelt een bijzondere situatie zoals erfenis, leegstand, verhuur of dubbele lasten."
+    "Een appartement of gezinswoning moet worden verkocht zonder lange bezichtigingsperiode.",
+    "De woning is door verhuizing, erfenis of leegstand niet direct verkoopklaar.",
+    "De gewenste overdrachtsdatum moet aansluiten op een volgende woning of andere planning.",
+    "De eigenaar wil vooraf duidelijkheid over prijs, oplevering en voorwaarden."
   ],
-  "solutionTitle": "Wat beoordelen wij in Assen?",
+  "solutionTitle": "Wat nemen wij mee in de beoordeling?",
   "solutionCards": [
-    "De woning en staat zoals deze nu is.",
-    "De locatie, het type woning en praktische verkoopmogelijkheden.",
-    "De gewenste termijn en mogelijke opleverafspraken.",
-    "Of directe verkoop of een andere route passend kan zijn."
+    "Het woningtype en de ligging in Assen of een omliggend dorp.",
+    "De huidige staat, bewoning en eventuele achtergebleven spullen.",
+    "Uw gewenste planning en praktische opleverafspraken.",
+    "De vraag of directe verkoop voldoende voordeel biedt ten opzichte van regulier verkopen."
   ],
   "vdnTasks": [
     "Woninggegevens en regionale situatie beoordelen.",
     "Meedenken over oplevering, planning en eventuele bijzonderheden.",
-    "Waar mogelijk een eerste inschatting of voorstel uitwerken.",
+    "Als directe verkoop passend is, een vrijblijvend verkoopvoorstel uitwerken.",
     "Bij akkoord zorgen dat afspraken schriftelijk en notarieel worden vastgelegd."
   ],
   "ownerTasks": [
@@ -69,41 +70,37 @@ const page = {
     "Het voorstel rustig beoordelen voordat verdere afspraken worden gemaakt."
   ],
   "practiceExample": {
-    "situation": "Woning in Assen waarbij eerst duidelijkheid nodig was",
-    "propertyType": "Eengezinswoning / appartement",
+    "situation": "Appartement in Assen zonder uitgebreid bezichtigingstraject",
+    "propertyType": "Appartement",
     "region": "Assen",
-    "mainProblem": "De eigenaar wilde eerst duidelijkheid over een woning in Assen die niet volledig verkoopklaar was, zonder direct kosten te maken voor presentatie en meerdere bezichtigingen.",
-    "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
-    "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
-    "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",
-    "nextStep": "De eigenaar kon het voorstel vergelijken met een regulier verkooptraject."
+    "mainProblem": "De eigenaar wilde vanwege een verhuizing snel weten wat mogelijk was, zonder het appartement eerst volledig te stylen en meerdere kijkdagen te organiseren.",
+    "solution": "De staat, stukken en gewenste overdrachtsdatum zijn eerst beoordeeld. Daarna kon een directe verkooproute naast reguliere verkoop worden gelegd.",
+    "delivery": "De praktische oplevering is vooraf besproken.",
+    "transfer": "Bij akkoord worden prijs en voorwaarden in de koopovereenkomst vastgelegd.",
+    "nextStep": "De eigenaar kon op basis van twee duidelijke routes een keuze maken."
   },
   "sections": [
     {
-      "title": "Werkgebied in en rond Assen",
+      "title": "Woning verkopen in Assen en omliggende plaatsen",
       "paragraphs": [
-        "Wij beoordelen woningen in Assen en omliggende plaatsen zoals Rolde, Bovensmilde, Vries, Marsdijk en omliggende dorpen.",
-        "Het gaat niet alleen om de plaatsnaam. De staat van de woning, de gewenste termijn, eventuele bewoning en de oplevering bepalen samen welke verkooproute logisch is."
+        "Wij beoordelen woningen in Assen en omliggende plaatsen zoals Rolde, Bovensmilde en Vries. Ook voor woningen in wijken zoals Marsdijk kunt u rechtstreeks een aanvraag doen.",
+        "Een appartement in de stad vraagt een andere beoordeling dan een vrijstaande woning in een omliggend dorp. Daarom kijken wij altijd naar woningtype, staat en gewenste overdracht."
       ]
     },
     {
-      "title": "Regionale bijzonderheden",
+      "title": "Niet eerst investeren in presentatie",
       "paragraphs": [
-        "In Assen kan de verkoopvraag gaan over een gezinswoning, appartement, erfeniswoning, leegstand of woning die niet verkoopklaar is.",
-        "Daarom krijgt u geen standaardantwoord, maar eerst een beoordeling van uw woninggegevens en situatie."
+        "Wanneer onderhoud, leegstand of een volle woning meespeelt, kan het prettig zijn eerst te weten wat directe verkoop betekent. Zo voorkomt u dat u al kosten maakt voor herstel, fotografie of styling voordat u de mogelijkheden kent."
       ]
     },
     {
-      "title": "Welke woningen kunnen worden aangemeld?",
-      "paragraphs": [
-        "U kunt ook een aanvraag doen wanneer de woning nog niet verkoopklaar is of wanneer er iets speelt waardoor een regulier verkooptraject minder prettig voelt."
-      ],
+      "title": "Situaties waarvoor u een beoordeling kunt aanvragen",
       "bullets": [
-        "Leegstaande woning",
-        "Opknapwoning of woning met achterstallig onderhoud",
-        "Erfeniswoning of woning die nog vol staat",
+        "Appartement of gezinswoning die niet verkoopklaar is",
+        "Leegstaande woning of woning met dubbele lasten",
+        "Erfeniswoning met inboedel",
         "Verhuurde woning of woning met gebruiksafspraken",
-        "Woning waarbij snel duidelijkheid gewenst is"
+        "Woning waarvoor privacy of een duidelijke planning belangrijk is"
       ]
     }
   ],
@@ -115,10 +112,10 @@ const page = {
     },
     {
       "title": "Beoordeling van woning en regio",
-      "text": "We kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
+      "text": "Wij kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
     },
     {
-      "title": "Vrijblijvende inschatting of voorstel",
+      "title": "Vrijblijvend verkoopvoorstel",
       "text": "Waar mogelijk ontvangt u duidelijkheid over verkoopmogelijkheden en voorwaarden."
     },
     {
@@ -130,7 +127,7 @@ const page = {
     [
       "Voorbereiding",
       "Vaak verkoopklaar maken voor presentatie",
-      "Huidige staat kan worden beoordeeld"
+      "De huidige staat kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
@@ -145,7 +142,7 @@ const page = {
     [
       "Planning",
       "Afhankelijk van markt en koper",
-      "In overleg duidelijk te bespreken"
+      "In overleg vast te leggen"
     ],
     [
       "Oplevering",
@@ -161,7 +158,7 @@ const page = {
   "faqs": [
     {
       "question": "Kan ik mijn woning in Assen verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bekijken wij of een directe verkooproute of een andere oplossing passend kan zijn."
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bespreken wij welke verkooproute het beste bij de woning en uw situatie past."
     },
     {
       "question": "Moet mijn woning in Assen verkoopklaar zijn?",
@@ -169,7 +166,7 @@ const page = {
     },
     {
       "question": "Krijg ik gegarandeerd snel een bod?",
-      "answer": "Nee, een bod of verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
+      "answer": "Nee. Wij garanderen vooraf geen bod of verkoop binnen een vaste termijn. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
     },
     {
       "question": "Hoe worden afspraken vastgelegd?",
@@ -210,8 +207,8 @@ const page = {
       "Huis verkopen in Gieten"
     ]
   ],
-  "ctaTitle": "Wilt u uw huis in Assen verkopen?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."
+  "ctaTitle": "Wilt u weten wat directe verkoop in Assen voor u betekent?",
+  "ctaText": "Vraag een vrijblijvende beoordeling aan. U ontvangt eerst duidelijkheid en beslist daarna zelf."
 };
 
 export default function HuisVerkopenAssenPage() {

@@ -15,9 +15,11 @@ export const metadata = {
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/og.png"],
     title: "Woning verkopen zonder makelaar",
     description:
       "Vraag vrijblijvend een verkoopvoorstel aan zonder traditioneel verkooptraject of open huis.",
@@ -32,7 +34,7 @@ const page = {
   defaultSituation: "Woning verkopen zonder makelaar",
   h1: "Woning verkopen zonder makelaar, maar niet alles zelf hoeven regelen",
   lead:
-    "Wilt u geen regulier makelaarstraject met Funda, fotografie, open huis en bezichtigingen? Dan kunt u ook eerst vrijblijvend laten bekijken of directe verkoop past. U ontvangt waar mogelijk een eerste inschatting of verkoopvoorstel, zonder verkoopdruk.",
+    "Wilt u geen regulier makelaarstraject met Funda, fotografie, open huis en bezichtigingen? Dan kunt u eerst vrijblijvend laten beoordelen of directe verkoop past. Als dat zo is, ontvangt u een verkoopvoorstel zonder verkoopdruk.",
   shortAnswer:
     "U bent niet verplicht om via een makelaar te verkopen. Bij directe verkoop vraagt u eerst vrijblijvend duidelijkheid aan. U hoeft niet zelf een verkoopcampagne te organiseren en afspraken over prijs, oplevering en overdracht worden schriftelijk vastgelegd.",
   heroBenefits: [
@@ -60,14 +62,14 @@ const page = {
   solutionCards: [
     "U hoeft niet zelf een Funda-campagne of verkoopwebsite op te zetten.",
     "Wij bekijken de woning en situatie als geheel, ook als deze niet verkoopklaar is.",
-    "U ontvangt waar mogelijk een voorstel met prijs, planning en voorwaarden.",
+    "Als directe verkoop passend is, ontvangt u een voorstel met prijs, planning en voorwaarden.",
     "Bij akkoord worden afspraken vastgelegd en verloopt levering via de notaris.",
   ],
   valueTitle: "Zonder makelaar verkopen moet wel duidelijk en zorgvuldig blijven.",
   valueText:
     "Zelf verkopen kan passend zijn, maar vraagt vaak veel regelwerk. Directe verkoop kan een rustiger alternatief zijn wanneer u geen traditioneel verkooptraject wilt, maar wel duidelijke schriftelijke afspraken en een correcte notariële afwikkeling belangrijk vindt.",
   vdnTasks: [
-    "Beoordelen of directe verkoop in uw situatie passend kan zijn.",
+    "Beoordelen of directe verkoop bij uw situatie past.",
     "Meedenken over prijs, planning, oplevering en eventuele spullen of onderhoud.",
     "Een voorstel uitwerken dat u rustig kunt beoordelen.",
     "Bij akkoord de afspraken laten vastleggen en overdracht via de notaris laten verlopen.",
@@ -85,7 +87,7 @@ const page = {
     mainProblem:
       "De eigenaar wilde de woning niet eerst verkoopklaar maken en zag op tegen foto's, bezichtigingen en onderhandelingen met meerdere geïnteresseerden.",
     solution:
-      "Eerst werd vrijblijvend gekeken of directe verkoop in huidige staat mogelijk was, met een voorstel waarin prijs, termijn en oplevering duidelijk stonden.",
+      "Eerst werd vrijblijvend gekeken of directe verkoop in de huidige staat mogelijk was, met een voorstel waarin prijs, termijn en oplevering duidelijk stonden.",
     delivery:
       "Afspraken over achterblijvende spullen en staat van oplevering werden als apart aandachtspunt meegenomen.",
     transfer:
@@ -123,8 +125,8 @@ const page = {
       steps: [
         "U vult de woninggegevens en uw situatie in.",
         "Wij beoordelen de woning, locatie, staat en gewenste planning.",
-        "Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel.",
-        "Als er nog informatie nodig is, nemen wij kort contact op of plannen we een beoordeling.",
+        "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel.",
+        "Als er nog informatie nodig is, nemen wij kort contact op of plannen wij een beoordeling.",
         "Bij akkoord worden prijs, voorwaarden en oplevering schriftelijk vastgelegd en verloopt overdracht via de notaris.",
       ],
     },
@@ -139,7 +141,7 @@ const page = {
   processSteps: [
     "Woninggegevens en reden van verkoop invullen.",
     "Eerste beoordeling van woning, staat en verkoopwens.",
-    "Vrijblijvende inschatting of verkoopvoorstel ontvangen.",
+    "Vrijblijvend verkoopvoorstel ontvangen.",
     "Vragen, oplevering en voorwaarden rustig bespreken.",
     "Bij akkoord afspraken vastleggen en overdracht via de notaris voorbereiden.",
   ],
@@ -188,7 +190,7 @@ const page = {
   relatedLinks: [
     ["/huis-direct-verkopen", "Huis direct verkopen", "Rechtstreeks duidelijkheid zonder traditioneel verkooptraject."],
     ["/huis-snel-verkopen", "Huis snel verkopen", "Wanneer snelheid en duidelijkheid belangrijk zijn."],
-    ["/huis-verkopen-aan-opkoper", "Huis verkopen aan opkoper", "Verkoop aan een directe koper rustig vergelijken."],
+    ["/huis-verkopen-aan-opkoper", "Huis verkopen aan een opkoper", "Verkoop aan een directe koper rustig vergelijken."],
     ["/huis-verkopen-zonder-bezichtigingen", "Huis verkopen zonder bezichtigingen", "Geen open huis of brede kijkersronde nodig."],
     ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen", "Niet eerst verbouwen of verkoopklaar maken."],
     ["/woning-verkopen-die-nog-vol-staat", "Woning verkopen die nog vol staat", "Oplevering en spullen bespreekbaar maken."],

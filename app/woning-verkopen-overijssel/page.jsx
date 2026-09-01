@@ -12,7 +12,8 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/woning-verkopen-overijssel",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -22,12 +23,12 @@ const page = {
   "regionName": "Overijssel",
   "breadcrumb": "Woning verkopen in Overijssel",
   "eyebrow": "Regio Overijssel",
-  "h1": "Uw huis verkopen in Overijssel zonder verkoopstress",
-  "lead": "Wilt u een woning in Overijssel verkopen, maar liever zonder lange bezichtigingsrondes of eerst alles verkoopklaar maken? Wij bekijken de woning, de locatie en uw gewenste planning zodat u rustig kunt bepalen welke verkooproute past.",
+  "h1": "Uw woning in Overijssel verkopen zonder standaard verkooptraject",
+  "lead": "In Overijssel kan het gaan om een stadswoning, dorpswoning, verhuurd object of woning in het buitengebied. Bij onderhoud, leegstand of dubbele lasten beoordelen wij eerst welke route praktisch en financieel verdedigbaar is.",
   "heroNote": "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
   "defaultSituation": "Woning verkopen in Overijssel",
-  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Overijssel en uw gewenste planning. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Een verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd.",
-  "shortAnswer": "U kunt vrijblijvend een verkoopvoorstel aanvragen voor een woning in Overijssel. Ook bij onderhoud, leegstand, erfenis, verhuur of een woning die nog vol staat kijken wij welke route passend kan zijn.",
+  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Overijssel en uw gewenste planning. Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel. Wij garanderen vooraf geen verkoop binnen een vaste termijn.",
+  "shortAnswer": "U kunt voor een woning in Overijssel een directe verkooproute laten beoordelen zonder meteen een openbare campagne te starten. Wij kijken naar woningtype, staat, gebruik en gewenste planning.",
   "benefits": [
     "Actief in Overijssel",
     "Ook bij onderhoud of leegstand",
@@ -42,24 +43,24 @@ const page = {
     "Geen verkoopdruk",
     "Duidelijke afspraken"
   ],
-  "concernTitle": "Veelvoorkomende verkoopvragen in Overijssel",
+  "concernTitle": "Verschillende woningen vragen verschillende afspraken",
   "concernCards": [
-    "De woning ligt in Overijsselse dorpen, steden of buitengebied en is niet direct verkoopklaar.",
-    "Er is behoefte aan duidelijke planning, oplevering en voorwaarden.",
-    "De eigenaar wil liever geen open huis of reeks bezichtigingen.",
-    "Er speelt een bijzondere situatie zoals erfenis, leegstand, verhuur of dubbele lasten."
+    "De woning is verhuurd of er gelden andere gebruiksafspraken.",
+    "Leegstand of dubbele lasten maken de planning belangrijk.",
+    "Onderhoud of buitenligging vraagt om een realistische beoordeling.",
+    "De eigenaar wil eerst vergelijken voordat een makelaarstraject start."
   ],
-  "solutionTitle": "Wat beoordelen wij in Overijssel?",
+  "solutionTitle": "Eerst de situatie ontrafelen, daarna een voorstel",
   "solutionCards": [
-    "De woning en staat zoals deze nu is.",
-    "De locatie, het type woning en praktische verkoopmogelijkheden.",
-    "De gewenste termijn en mogelijke opleverafspraken.",
-    "Of directe verkoop of een andere route passend kan zijn."
+    "Gebruik, bewoning en eigendomssituatie worden eerst besproken.",
+    "Wij beoordelen de woning met de bekende onderhoudspunten.",
+    "De gewenste planning wordt gekoppeld aan haalbare vervolgstappen.",
+    "U ontvangt alleen bij een passende directe route een verkoopvoorstel."
   ],
   "vdnTasks": [
     "Woninggegevens en regionale situatie beoordelen.",
     "Meedenken over oplevering, planning en eventuele bijzonderheden.",
-    "Waar mogelijk een eerste inschatting of voorstel uitwerken.",
+    "Als directe verkoop passend is, een vrijblijvend verkoopvoorstel uitwerken.",
     "Bij akkoord zorgen dat afspraken schriftelijk en notarieel worden vastgelegd."
   ],
   "ownerTasks": [
@@ -69,41 +70,37 @@ const page = {
     "Het voorstel rustig beoordelen voordat verdere afspraken worden gemaakt."
   ],
   "practiceExample": {
-    "situation": "Woning in Overijssel waarbij eerst duidelijkheid nodig was",
-    "propertyType": "Eengezinswoning / oudere bestaande bouw",
+    "situation": "Woning in Overijssel met leegstand en onderhoud",
+    "propertyType": "Eengezinswoning",
     "region": "Overijssel",
-    "mainProblem": "De eigenaar wilde eerst weten wat praktisch haalbaar was voor een woning in Overijssel met onderhoud en leegstand, zonder direct een volledig makelaarstraject te starten.",
-    "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
-    "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
-    "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",
-    "nextStep": "De eigenaar kon het voorstel vergelijken met een regulier verkooptraject."
+    "mainProblem": "Door leegstand liepen kosten door, terwijl de woning eerst onderhoud nodig leek te hebben voor een reguliere presentatie.",
+    "solution": "De directe verkooproute is in de huidige staat beoordeeld en naast herstel plus reguliere verkoop gezet.",
+    "delivery": "De oplevering en gewenste passeerdatum zijn vooraf besproken.",
+    "transfer": "Definitieve afspraken zouden bij akkoord schriftelijk en via de notaris worden vastgelegd.",
+    "nextStep": "De eigenaar kon tijd, kosten en risico’s beter tegen elkaar afwegen."
   },
   "sections": [
     {
-      "title": "Werkgebied in en rond Overijssel",
+      "title": "Woningen in Overijssel",
       "paragraphs": [
-        "Wij beoordelen woningen in Overijssel en omliggende regio’s, waaronder dorpen, buitengebieden en woningen met een bijzondere verkoopsituatie.",
-        "Het gaat niet alleen om de plaatsnaam. De staat van de woning, de gewenste termijn, eventuele bewoning en de oplevering bepalen samen welke verkooproute logisch is."
+        "Wij bekijken aanvragen voor woningen in steden, dorpen en buitengebieden in Overijssel en aangrenzende delen van ons werkgebied.",
+        "De verkoopvraag kan gaan over onderhoud, verhuur, leegstand, dubbele lasten of de wens om zonder brede campagne te verkopen. De concrete situatie bepaalt welke route passend is."
       ]
     },
     {
-      "title": "Regionale bijzonderheden",
+      "title": "Verhuur, gebruik en oplevering vooraf bespreken",
       "paragraphs": [
-        "In Overijssel spelen vaak verschillende woningtypen en verkoopredenen door elkaar: onderhoud, verhuur, leegstand, dubbele lasten of wens tot snelle duidelijkheid.",
-        "Daarom krijgt u geen standaardantwoord, maar eerst een beoordeling van uw woninggegevens en situatie."
+        "Bij een verhuurde of anders gebruikte woning moeten huurafspraken, beschikbaarheid en gewenste oplevering duidelijk zijn. Ook bij leegstand of eigen bewoning is het belangrijk vooraf vast te leggen in welke staat wordt geleverd."
       ]
     },
     {
-      "title": "Welke woningen kunnen worden aangemeld?",
-      "paragraphs": [
-        "U kunt ook een aanvraag doen wanneer de woning nog niet verkoopklaar is of wanneer er iets speelt waardoor een regulier verkooptraject minder prettig voelt."
-      ],
+      "title": "Aanvragen kunnen bijvoorbeeld gaan over",
       "bullets": [
-        "Leegstaande woning",
-        "Opknapwoning of woning met achterstallig onderhoud",
-        "Erfeniswoning of woning die nog vol staat",
-        "Verhuurde woning of woning met gebruiksafspraken",
-        "Woning waarbij snel duidelijkheid gewenst is"
+        "Verhuurde woning of beleggingsobject",
+        "Leegstaande woning met dubbele lasten",
+        "Woning met achterstallig onderhoud",
+        "Dorpswoning of woning in het buitengebied",
+        "Verkoop zonder Funda-campagne of open huis"
       ]
     }
   ],
@@ -115,10 +112,10 @@ const page = {
     },
     {
       "title": "Beoordeling van woning en regio",
-      "text": "We kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
+      "text": "Wij kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
     },
     {
-      "title": "Vrijblijvende inschatting of voorstel",
+      "title": "Vrijblijvend verkoopvoorstel",
       "text": "Waar mogelijk ontvangt u duidelijkheid over verkoopmogelijkheden en voorwaarden."
     },
     {
@@ -130,7 +127,7 @@ const page = {
     [
       "Voorbereiding",
       "Vaak verkoopklaar maken voor presentatie",
-      "Huidige staat kan worden beoordeeld"
+      "De huidige staat kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
@@ -145,7 +142,7 @@ const page = {
     [
       "Planning",
       "Afhankelijk van markt en koper",
-      "In overleg duidelijk te bespreken"
+      "In overleg vast te leggen"
     ],
     [
       "Oplevering",
@@ -161,7 +158,7 @@ const page = {
   "faqs": [
     {
       "question": "Kan ik mijn woning in Overijssel verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bekijken wij of een directe verkooproute of een andere oplossing passend kan zijn."
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bespreken wij welke verkooproute het beste bij de woning en uw situatie past."
     },
     {
       "question": "Moet mijn woning in Overijssel verkoopklaar zijn?",
@@ -169,7 +166,7 @@ const page = {
     },
     {
       "question": "Krijg ik gegarandeerd snel een bod?",
-      "answer": "Nee, een bod of verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
+      "answer": "Nee. Wij garanderen vooraf geen bod of verkoop binnen een vaste termijn. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
     },
     {
       "question": "Hoe worden afspraken vastgelegd?",
@@ -210,8 +207,8 @@ const page = {
       "Woning verkopen in Friesland"
     ]
   ],
-  "ctaTitle": "Wilt u uw huis in Overijssel verkopen?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."
+  "ctaTitle": "Woning in Overijssel zonder standaardtraject laten beoordelen?",
+  "ctaText": "Vraag vrijblijvend duidelijkheid aan over de woning, planning en mogelijke directe verkoop."
 };
 
 export default function WoningVerkopenOverijsselPage() {

@@ -7,6 +7,7 @@ import { logMailEventSafe } from "../../../lib/mailLog";
 import { markProposalSentAutomation, refreshLeadAutomation, refreshAllLeadAutomation } from "../../../lib/automation";
 import { isValidEmail } from "../../../lib/admin/validators";
 import { formatDateNL } from "../../../lib/date";
+import { proposalValidationIssues } from "../../../lib/proposalValidation";
 
 export const runtime = "nodejs";
 
@@ -224,6 +225,19 @@ function formatAddress(proposal) {
   return [proposal.property_postcode, proposal.property_house_number].filter(Boolean).join(" ").toUpperCase();
 }
 
+function isObjectProposal(proposal) {
+  const text = [
+    proposal?.object_usage_type,
+    proposal?.property_type,
+    proposal?.current_situation,
+  ].filter(Boolean).join(" ").toLowerCase();
+  return /(woon\s*-?\s*winkelpand|gemengd|bedrijfspand|bedrijfsruimte|winkelruimte|winkelpand|kantoor|horeca|beleggingspand|object)/i.test(text);
+}
+
+function emailObjectLabel(proposal) {
+  return isObjectProposal(proposal) ? "Object" : "Woning";
+}
+
 function formatDateShort(value) {
   return value ? formatDateNL(value, { fallback: "" }) : "";
 }
@@ -291,6 +305,15 @@ export async function GET(request) {
         params.push(status);
         where.push(`status = $${params.length}`);
       }
+      where.push(`not (
+        coalesce(automation_key, '') like 'proposal-interest-%'
+        and exists (
+          select 1 from leads l
+          where l.id = tasks.lead_id
+            and l.last_contact_at is not null
+            and l.last_contact_at >= tasks.created_at
+        )
+      )`);
       const { rows } = await query(
         `select * from tasks ${where.length ? `where ${where.join(" and ")}` : ""} order by due_date asc nulls last, created_at desc limit 300`,
         params
@@ -353,7 +376,15 @@ export async function GET(request) {
             count(*) filter (where created_at >= now() - interval '30 days' and coalesce(status, 'Nieuw') <> all($1))::int as leads_30d,
             count(*) filter (where coalesce(status, 'Nieuw') in ('Nieuw','Nieuwe aanvraag'))::int as new_leads,
             count(*) filter (where coalesce(status, 'Nieuw') = any($1))::int as archived_leads,
-            (select count(*)::int from tasks where status <> 'Afgerond') as open_tasks,
+            (select count(*)::int
+             from tasks t
+             left join leads l2 on l2.id = t.lead_id
+             where t.status <> 'Afgerond'
+               and not (
+                 coalesce(t.automation_key, '') like 'proposal-interest-%'
+                 and l2.last_contact_at is not null
+                 and l2.last_contact_at >= t.created_at
+               )) as open_tasks,
             count(*) filter (where lead_priority = 'Hoog' and coalesce(status, 'Nieuw') <> all($1))::int as high_priority_leads,
             count(*) filter (where next_follow_up_at is not null and next_follow_up_at <= current_date and coalesce(status, 'Nieuw') <> all($1))::int as followups_due,
             count(*) filter (where status = 'Voorstel bekeken')::int as proposal_viewed_leads,
@@ -379,7 +410,17 @@ export async function GET(request) {
           from leads where coalesce(status, 'Nieuw') <> all($1) group by 1 order by label desc limit 12
         `, [ARCHIVE_LEAD_STATUSES]),
         query(`
-          select * from tasks where status <> 'Afgerond' order by due_date asc nulls last, created_at desc limit 10
+          select t.*
+          from tasks t
+          left join leads l2 on l2.id = t.lead_id
+          where t.status <> 'Afgerond'
+            and not (
+              coalesce(t.automation_key, '') like 'proposal-interest-%'
+              and l2.last_contact_at is not null
+              and l2.last_contact_at >= t.created_at
+            )
+          order by t.due_date asc nulls last, t.created_at desc
+          limit 10
         `),
       ]);
 
@@ -487,6 +528,10 @@ export async function POST(request) {
         const work = parseNonNegativeNumber(proposalBody.seller_work_amount_text);
         proposalBody.seller_work_total_price_text = base || work ? euroText(base + work) : null;
       }
+      const proposalIssues = proposalValidationIssues(proposalBody);
+      if (proposalIssues.length) {
+        return NextResponse.json({ error: proposalIssues.join(" "), issues: proposalIssues }, { status: 400 });
+      }
       const params = columns.map((field) => cleanForField(field, proposalBody[field]));
       const placeholders = columns.map((_, index) => `$${index + 1}`).join(",");
       const proposal = await queryOne(
@@ -562,6 +607,79 @@ export async function POST(request) {
       return NextResponse.json({ proposal });
     }
 
+    if (action === "resolveCustomerAction") {
+      const leadId = clean(body.lead_id, 80);
+      if (!leadId) return NextResponse.json({ error: "Lead ontbreekt." }, { status: 400 });
+
+      const eventParams = [leadId];
+      let eventWhere = "e.lead_id = $1 and e.event_type in ('interested','discuss','question')";
+      if (body.event_id) {
+        eventParams.push(clean(body.event_id, 80));
+        eventWhere += ` and e.id = $${eventParams.length}`;
+      }
+      if (body.proposal_id) {
+        eventParams.push(clean(body.proposal_id, 80));
+        eventWhere += ` and e.proposal_id = $${eventParams.length}`;
+      }
+
+      const customerEvent = await queryOne(
+        `select e.*, p.lead_naam
+         from proposal_events e
+         left join proposals p on p.id = e.proposal_id
+         where ${eventWhere}
+         order by e.created_at desc
+         limit 1`,
+        eventParams
+      );
+      if (!customerEvent) return NextResponse.json({ error: "Klantactie niet gevonden." }, { status: 404 });
+
+      const lead = await queryOne(
+        `update leads
+         set last_contact_at = now(),
+             status = case
+               when status in ('Nieuw','Nieuwe aanvraag') then 'In behandeling'
+               else status
+             end,
+             automation_follow_up_at = null,
+             next_follow_up_at = case
+               when manual_follow_up_at is not null and manual_follow_up_at > current_date then manual_follow_up_at
+               else null
+             end,
+             updated_at = now()
+         where id = $1
+         returning *`,
+        [leadId]
+      );
+      if (!lead) return NextResponse.json({ error: "Lead niet gevonden." }, { status: 404 });
+
+      const automationKey = customerEvent.proposal_id ? `proposal-interest-${customerEvent.proposal_id}` : null;
+      if (automationKey) {
+        await query(
+          `update tasks
+           set status = 'Afgerond',
+               note = trim(coalesce(note, '') || E'\n\nAfgehandeld: contactmoment vastgelegd na klantactie in voorstel.'),
+               updated_at = now()
+           where lead_id = $1
+             and automation_key = $2
+             and status <> 'Afgerond'`,
+          [leadId, automationKey]
+        );
+      }
+
+      await query(
+        `insert into proposal_events (proposal_id, lead_id, event_type, message, metadata)
+         values ($1,$2,'admin_customer_action_resolved',$3,$4::jsonb)`,
+        [
+          customerEvent.proposal_id,
+          leadId,
+          "Klantactie is afgehandeld; contactmoment is vastgelegd in de adminomgeving.",
+          JSON.stringify({ source: "admin", resolved_event_id: customerEvent.id }),
+        ]
+      );
+
+      return NextResponse.json({ ok: true, lead });
+    }
+
     if (action === "recordProposalWhatsapp") {
       const proposal = await queryOne(
         "select id, lead_id, lead_naam, lead_telefoon, property_address, amount_text, version_number from proposals where id = $1",
@@ -614,6 +732,14 @@ export async function POST(request) {
       }
       if (!proposal.lead_email || !isValidEmail(proposal.lead_email)) return NextResponse.json({ error: "Geen geldig e-mailadres bekend." }, { status: 400 });
 
+      const proposalIssues = proposalValidationIssues(proposal, { forSending: true });
+      if (proposalIssues.length) {
+        return NextResponse.json({
+          error: `Het voorstel is nog niet verzendklaar. ${proposalIssues.join(" ")}`,
+          issues: proposalIssues,
+        }, { status: 400 });
+      }
+
       const token = await ensurePublicToken(proposal);
       proposal = { ...proposal, public_token: token };
 
@@ -630,6 +756,7 @@ export async function POST(request) {
       const safePreviewText = escapeHtml(previewText);
       const safeLeadName = escapeHtml(proposal.lead_naam || "heer/mevrouw");
       const safeAddress = escapeHtml(address || "-");
+      const safeObjectLabel = escapeHtml(emailObjectLabel(proposal));
       const safeValidity = escapeHtml(validity || "");
       const safePublicUrl = escapeHtml(publicUrl);
       const safeNonbinding = escapeHtml(proposal.nonbinding_text || "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid. Indien partijen overeenstemming bereiken, wordt de koopovereenkomst opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen.");
@@ -712,7 +839,7 @@ export async function POST(request) {
                 <table role="presentation" width="100%" bgcolor="#F7F2EC" style="width:100%;background:#F7F2EC !important;border:1px solid #F2B885;border-radius:17px;margin:16px 0;">
                   <tr>
                     <td class="compact-box" style="padding:18px;">
-                      <div style="font-size:11px;color:#B85216;text-transform:uppercase;font-weight:bold;letter-spacing:.07em;">Woning</div>
+                      <div style="font-size:11px;color:#B85216;text-transform:uppercase;font-weight:bold;letter-spacing:.07em;">${safeObjectLabel}</div>
                       <div class="text-dark" style="font-size:18px;font-weight:bold;margin-top:5px;color:#071f3a;line-height:1.3;">${safeAddress}</div>
                       ${validity ? `<div class="text-body" style="font-size:13px;color:#48586b;margin-top:8px;">Geldig tot: ${safeValidity}</div>` : ""}
                     </td>

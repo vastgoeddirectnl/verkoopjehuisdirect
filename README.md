@@ -12,15 +12,15 @@ Deze versie is gecontroleerd voor de overstap naar Neon Postgres.
 - `package.json` gebruikt vaste versies, zodat Vercel-builds minder snel breken door updates van `latest`.
 
 
-## V4 complete GitHub-versie
+## V5 complete GitHub-versie
 
-Deze zip bevat de complete V4-code inclusief de V3.2-databasebestanden:
+Deze zip bevat de complete V5-code inclusief de V3.2-databasebestanden:
 
 - `neon/v3_upgrade.sql`
 - `neon/v3_2_upgrade.sql`
 - `neon/v3_2_full_setup.sql`
 
-Als de live Neon-database al op V3.2 staat, is voor deze V4 geen extra migratie nodig. Voor een nieuwe database kan `neon/v3_2_full_setup.sql` worden gebruikt. Zie ook `CHANGELOG_V4.md`.
+Als de live Neon-database al op V3.2 staat, is voor deze V5 geen extra migratie nodig. Voor een nieuwe database kan `neon/v3_2_full_setup.sql` worden gebruikt. Zie ook `CHANGELOG_V5.md`.
 
 ## Installatie
 

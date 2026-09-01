@@ -16,7 +16,7 @@ const situationLinks = [
   ["/woning-verkopen-zonder-open-huis", "Zonder open huis", "Voor wie privacy en rust belangrijk vindt."],
   ["/huis-verkopen-zonder-funda", "Zonder Funda", "Verkoopmogelijkheden zonder openbare presentatie."],
   ["/huis-verkopen-met-spoed", "Met spoed verkopen", "Als snelheid en duidelijkheid belangrijk zijn."],
-  ["/huis-snel-verkopen", "Huis snel verkopen", "Rustig starten met een eerste inschatting."],
+  ["/huis-snel-verkopen", "Huis snel verkopen", "Rustig starten met een persoonlijke beoordeling."],
   ["/huis-direct-verkopen", "Huis direct verkopen", "Voor wie snel duidelijkheid wil over de mogelijkheden."],
   ["/woning-verkopen-zonder-makelaar", "Zonder makelaar", "Geen traditioneel makelaarstraject nodig."],
 ];

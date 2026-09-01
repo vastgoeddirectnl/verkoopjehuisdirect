@@ -1,33 +1,35 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Huis verkopen zonder bezichtigingen",
-  "description": "Wilt u uw huis verkopen zonder reeks bezichtigingen of open huis? Lees hoe dit werkt en wanneer het passend kan zijn.",
+  "title": "Huis verkopen zonder bezichtigingen: uitleg en opties",
+  "description": "Lees welke verkooproutes er zijn zonder open huis of uitgebreide bezichtigingsrondes en wanneer een gerichte woningopname toch nodig kan zijn.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-bezichtigingen-uitleg"
   },
   "openGraph": {
-    "title": "Huis verkopen zonder bezichtigingen",
-    "description": "Wilt u uw huis verkopen zonder reeks bezichtigingen of open huis? Lees hoe dit werkt en wanneer het passend kan zijn.",
+    "title": "Huis verkopen zonder bezichtigingen: uitleg en opties",
+    "description": "Lees welke verkooproutes er zijn zonder open huis of uitgebreide bezichtigingsrondes en wanneer een gerichte woningopname toch nodig kan zijn.",
     "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-bezichtigingen-uitleg",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
 const page = {
   "slug": "/huis-verkopen-zonder-bezichtigingen-uitleg",
-  "breadcrumb": "Huis verkopen zonder bezichtigingen",
-  "eyebrow": "Zonder bezichtigingen",
-  "h1": "Huis verkopen zonder bezichtigingen",
-  "lead": "Niet iedereen wil onbekenden door de woning laten lopen. Soms is er behoefte aan privacy, rust of snelheid. Dan kan verkoop zonder open huis of reeks bezichtigingen een alternatief zijn.",
-  "shortAnswer": "Ja, een huis verkopen zonder bezichtigingen kan in bepaalde situaties. Bij directe verkoop is een open huis meestal niet nodig en krijgt u eerst rustig duidelijkheid.",
+  "pageType": "situation",
+  "breadcrumb": "Huis verkopen zonder bezichtigingen: uitleg",
+  "eyebrow": "Uitleg en mogelijkheden",
+  "h1": "Huis verkopen zonder bezichtigingen: welke opties heeft u?",
+  "lead": "Niet iedereen wil onbekenden door de woning laten lopen. Op deze pagina vergelijkt u stille verkoop, zelf verkopen en directe verkoop zonder openbare kijkersronde. Zo ziet u ook wanneer aanvullende informatie of een gerichte woningopname nodig kan zijn.",
+  "shortAnswer": "Een open huis of reeks openbare bezichtigingen is niet verplicht. Bij directe verkoop kan meestal worden volstaan met woninginformatie en, als dat nodig is, één gerichte opname voordat een voorstel wordt uitgewerkt.",
   "benefits": [
     "Geen open huis",
     "Meer privacy",
     "Geen reeks kijkers",
-    "Niet eerst styling",
+    "Geen styling vooraf",
     "Vrijblijvend voorstel",
     "Persoonlijk contact"
   ],
@@ -67,9 +69,9 @@ const page = {
       "title": "Hoe werkt het proces?",
       "steps": [
         "U vult kort uw woning en situatie in.",
-        "Op basis van de eerste gegevens ontvangt u een eerste vrijblijvend bod.",
-        "We bespreken uw situatie en bekijken de woning eventueel in de huidige staat.",
-        "Na beoordeling ontvangt u een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.",
+        "Wij beoordelen de woninggegevens en bespreken welke informatie nog nodig is.",
+        "Wij bespreken uw situatie en bekijken de woning eventueel in de huidige staat.",
+        "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel met bedrag, planning en duidelijke vervolgstappen.",
         "Bij akkoord worden de afspraken vastgelegd in een koopovereenkomst en volgt de overdracht via de notaris."
       ]
     }
@@ -93,12 +95,12 @@ const page = {
     [
       "Kosten",
       "Mogelijk courtage, styling of herstel",
-      "Geen makelaarskosten voor de aanvraag"
+      "Geen makelaarskosten bij directe aankoop"
     ],
     [
       "Planning",
       "Afhankelijk van koper en markt",
-      "In overleg duidelijk af te spreken"
+      "In overleg vast te leggen"
     ],
     [
       "Beslissing",

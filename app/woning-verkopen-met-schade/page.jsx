@@ -2,17 +2,18 @@ import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
   "title": "Woning verkopen met schade | vrijblijvend voorstel",
-  "description": "Woning verkopen met schade? Vraag vrijblijvend duidelijkheid aan over verkoop in huidige staat, voorwaarden en notariële afwikkeling.",
+  "description": "Woning verkopen met schade? Vraag vrijblijvend duidelijkheid aan over verkoop in de huidige staat, voorwaarden en notariële afwikkeling.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/woning-verkopen-met-schade"
   },
   "openGraph": {
     "title": "Woning verkopen met schade | vrijblijvend voorstel",
-    "description": "Woning verkopen met schade? Vraag vrijblijvend duidelijkheid aan over verkoop in huidige staat, voorwaarden en notariële afwikkeling.",
+    "description": "Woning verkopen met schade? Vraag vrijblijvend duidelijkheid aan over verkoop in de huidige staat, voorwaarden en notariële afwikkeling.",
     "url": "https://www.vastgoeddirectnederland.nl/woning-verkopen-met-schade",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -36,7 +37,7 @@ const page = {
   "heroBenefits": [
     "Schade eerlijk meenemen",
     "Huidige staat beoordelen",
-    "Geen verkoopklaar maken",
+    "Niet eerst verkoopklaar maken",
     "Schriftelijke afspraken"
   ],
   "concernTitle": "Wat speelt vaak bij schade?",
@@ -46,10 +47,10 @@ const page = {
     "Vragen over meldingsplicht en aansprakelijkheid.",
     "Behoefte aan verkoop zonder eerst herstel te regelen."
   ],
-  "solutionTitle": "Hoe maken we dit overzichtelijk?",
+  "solutionTitle": "Hoe maken wij dit overzichtelijk?",
   "solutionCards": [
     "De schade wordt onderdeel van de beoordeling.",
-    "Waar nodig vragen we aanvullende informatie of foto’s.",
+    "Waar nodig vragen wij aanvullende informatie of foto’s.",
     "Prijs en voorwaarden worden gekoppeld aan de bekende staat.",
     "Oplevering en risico’s worden schriftelijk vastgelegd."
   ],
@@ -70,7 +71,7 @@ const page = {
       "title": "Schade hoeft verkoop niet onmogelijk te maken",
       "paragraphs": [
         "Bij schade is vooral duidelijkheid belangrijk. Denk aan lekkage, constructieve problemen, stormschade, brandschade of achterstallig herstel.",
-        "Niet elke schade vraagt dezelfde aanpak. Soms is verkoop in huidige staat bespreekbaar, soms is extra documentatie nodig."
+        "Niet elke schade vraagt dezelfde aanpak. Soms is verkoop in de huidige staat bespreekbaar, soms is extra documentatie nodig."
       ]
     },
     {
@@ -85,7 +86,7 @@ const page = {
     "propertyType": "Eengezinswoning",
     "region": "Noord-Nederland",
     "mainProblem": "De eigenaar wilde niet eerst herstelkosten maken zonder te weten of verkoop daarna voldoende zou opleveren.",
-    "solution": "De schade en woninggegevens zijn eerst vrijblijvend beoordeeld. Daarna kon worden besproken of verkoop in huidige staat passend was.",
+    "solution": "De schade en woninggegevens zijn eerst vrijblijvend beoordeeld. Daarna kon worden besproken of verkoop in de huidige staat passend was.",
     "delivery": "Oplevering met bekende schade moest expliciet worden vastgelegd.",
     "transfer": "Bij akkoord zouden risico’s en voorwaarden worden opgenomen in de koopovereenkomst.",
     "nextStep": "De eigenaar kreeg duidelijkheid zonder direct herstelwerk te starten."
@@ -98,11 +99,11 @@ const page = {
     },
     {
       "title": "Situatie beoordelen",
-      "text": "We kijken naar eigendom, staat, planning, oplevering en eventuele bijzonderheden."
+      "text": "Wij kijken naar eigendom, staat, planning, oplevering en eventuele bijzonderheden."
     },
     {
       "title": "Vrijblijvend voorstel",
-      "text": "Waar mogelijk ontvangt u een eerste inschatting of verkoopvoorstel met duidelijke uitgangspunten."
+      "text": "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel met duidelijke uitgangspunten."
     },
     {
       "title": "Schriftelijke afspraken",
@@ -113,12 +114,12 @@ const page = {
     [
       "Verkoopklaar maken",
       "Vaak opruimen, herstellen of presenteren",
-      "Huidige situatie kan worden beoordeeld"
+      "De huidige situatie kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
       "Meerdere kijkers of open huis mogelijk",
-      "Niet standaard nodig"
+      "Doorgaans niet nodig"
     ],
     [
       "Planning",
@@ -144,11 +145,11 @@ const page = {
   "faqs": [
     {
       "question": "Kan ik een woning met schade verkopen?",
-      "answer": "Ja, dat kan bespreekbaar zijn. De aard, omvang en oorzaak van de schade worden meegenomen in de beoordeling."
+      "answer": "Ja, dat kan worden beoordeeld. De aard, omvang en oorzaak van de schade worden meegenomen in het verkoopvoorstel."
     },
     {
       "question": "Moet ik schade eerst laten herstellen?",
-      "answer": "Niet altijd. Soms kan verkoop in huidige staat worden besproken. Dat hangt af van de woning, schade en voorwaarden."
+      "answer": "Niet altijd. Soms kan verkoop in de huidige staat worden besproken. Dat hangt af van de woning, schade en voorwaarden."
     },
     {
       "question": "Moet ik schade melden?",
@@ -174,7 +175,7 @@ const page = {
     ],
     [
       "/huis-verkopen-in-huidige-staat",
-      "Huis verkopen in huidige staat"
+      "Huis verkopen in de huidige staat"
     ],
     [
       "/opknapwoning-verkopen",

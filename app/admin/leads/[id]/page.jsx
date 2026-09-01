@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { parseLeadSourceDetails, sourceChannelLabel } from "../../../lib/sourceParser";
 import { addDaysAmsterdam, formatDateTimeNL } from "../../../lib/date";
+import { proposalReviewWarnings, proposalValidationIssues } from "../../../lib/proposalValidation";
 import LeadTimeline from "../../../components/admin/LeadTimeline";
 
 const STATUSES = ["Nieuwe aanvraag", "In behandeling", "Eerste bod gedaan", "Beoordeling gepland", "Voorstel opgesteld", "Voorstel verzonden", "Voorstel bekeken", "In onderhandeling", "Akkoord", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
@@ -97,10 +98,29 @@ function sameEmail(a, b) {
 }
 
 
-function latestCustomerProposalAction(events = []) {
+const CUSTOMER_PROPOSAL_ACTION_TYPES = ["interested", "discuss", "question"];
+
+function timestampMs(value) {
+  const time = value ? new Date(value).getTime() : NaN;
+  return Number.isFinite(time) ? time : null;
+}
+
+function isCustomerActionHandled(event, lead) {
+  const actionAt = timestampMs(event?.created_at);
+  const contactAt = timestampMs(lead?.last_contact_at);
+  return Boolean(actionAt && contactAt && contactAt >= actionAt);
+}
+
+function sortedCustomerProposalActions(events = []) {
   return [...events]
-    .filter((event) => ["interested", "discuss", "question"].includes(event.event_type))
-    .sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime())[0] || null;
+    .filter((event) => CUSTOMER_PROPOSAL_ACTION_TYPES.includes(event.event_type))
+    .sort((a, b) => (timestampMs(b.created_at) || 0) - (timestampMs(a.created_at) || 0));
+}
+
+function latestCustomerProposalAction(events = [], lead, { includeHandled = false } = {}) {
+  const actions = sortedCustomerProposalActions(events);
+  if (includeHandled) return actions[0] || null;
+  return actions.find((event) => !isCustomerActionHandled(event, lead)) || null;
 }
 
 function customerActionCopy(event) {
@@ -149,6 +169,21 @@ function CustomerProposalActionAlert({ event, lead, saving, onContactDone }) {
         {lead?.telefoon ? <a className="green" href={`https://wa.me/${whatsappPhone(lead.telefoon)}`} target="_blank" rel="noopener noreferrer">WhatsApp</a> : null}
         {lead?.email ? <a className="secondary" href={`mailto:${lead.email}`}>Mail</a> : null}
         <button disabled={saving} onClick={onContactDone}>Contact vastleggen</button>
+      </div>
+    </section>
+  );
+}
+
+function CustomerProposalActionHandledNotice({ event, lead }) {
+  if (!event || !isCustomerActionHandled(event, lead)) return null;
+  const copy = customerActionCopy(event);
+  if (!copy) return null;
+  return (
+    <section className="customer-action-handled" aria-label="Afgehandelde klantactie">
+      <div>
+        <span>Afgehandeld</span>
+        <strong>{copy.title}</strong>
+        <small>Klantactie van {fmt(event.created_at)} is opgevolgd. Laatste contact: {fmt(lead?.last_contact_at)}.</small>
       </div>
     </section>
   );
@@ -244,18 +279,26 @@ function formatPercent(value) {
 }
 
 function applyAdditionalAgreementDefaults(current = {}) {
+  const sellerWorkEnabled = Boolean(current.seller_work_enabled);
+  const sellerWorkBase = current.seller_work_base_price_text || (sellerWorkEnabled ? current.amount_text || "" : "");
+  const sellerWorkAmount = current.seller_work_amount_text || "";
+  const sellerWorkTotal = current.seller_work_total_price_text || calculateSellerWorkTotal({
+    seller_work_base_price_text: sellerWorkBase,
+    seller_work_amount_text: sellerWorkAmount,
+  });
+
   return {
     ...current,
-    seller_work_enabled: Boolean(current.seller_work_enabled),
+    seller_work_enabled: sellerWorkEnabled,
     seller_work_description: current.seller_work_description || "",
     seller_work_deadline: current.seller_work_deadline || "",
-    seller_work_amount_text: current.seller_work_amount_text || "€ 5.700",
-    seller_work_base_price_text: current.seller_work_base_price_text || current.amount_text || "€ 300.000",
-    seller_work_total_price_text: current.seller_work_total_price_text || "€ 305.700",
-    seller_work_conditions_text: current.seller_work_conditions_text || "Wanneer de werkzaamheden niet, niet volledig of niet deugdelijk zijn uitgevoerd, kan de aanvullende koopprijs worden verminderd met de redelijkerwijs benodigde kosten om de werkzaamheden alsnog te voltooien of te herstellen.",
+    seller_work_amount_text: sellerWorkAmount,
+    seller_work_base_price_text: sellerWorkBase,
+    seller_work_total_price_text: sellerWorkTotal,
+    seller_work_conditions_text: current.seller_work_conditions_text || "",
     resale_payment_enabled: Boolean(current.resale_payment_enabled),
-    resale_threshold_text: current.resale_threshold_text || "€ 350.000",
-    resale_percentage_text: current.resale_percentage_text || "20",
+    resale_threshold_text: current.resale_threshold_text || "",
+    resale_percentage_text: current.resale_percentage_text || "",
     resale_deduct_courtage: current.resale_deduct_courtage === undefined || current.resale_deduct_courtage === null ? true : Boolean(current.resale_deduct_courtage),
     resale_period_months: current.resale_period_months || 12,
     resale_cap_text: current.resale_cap_text || "",
@@ -401,7 +444,11 @@ function ProposalWhatsAppFollowUp({ item, lead, saving, onPrepared, onSent }) {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => onPrepared(item.id, publicUrl)}
+            onClick={async (event) => {
+              event.preventDefault();
+              await onPrepared(item.id, publicUrl);
+              window.open(url, "_blank", "noopener,noreferrer");
+            }}
           >
             WhatsApp klant: voorstel staat klaar
           </a>
@@ -429,7 +476,16 @@ function ProposalSentWhatsAppNotice({ details, saving, onPrepared, onSent, onClo
       </div>
       <div className="whatsapp-after-actions">
         {url ? (
-          <a href={url} target="_blank" rel="noopener noreferrer" onClick={() => onPrepared(details.proposalId, details.publicUrl)}>
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={async (event) => {
+              event.preventDefault();
+              await onPrepared(details.proposalId, details.publicUrl);
+              window.open(url, "_blank", "noopener,noreferrer");
+            }}
+          >
             WhatsApp klant
           </a>
         ) : <small>Geen telefoonnummer beschikbaar.</small>}
@@ -521,10 +577,10 @@ function defaultProposalForLead(lead) {
     amount_text: "",
     validity_date: todayPlus(14),
     transfer_date_text: "In overleg",
-    deposit_text: "In overleg bespreekbaar",
+    deposit_text: "",
     conditions_text: "Dit voorstel is vrijblijvend en bedoeld om duidelijkheid te geven over een mogelijke verkoop. Definitieve afspraken worden pas schriftelijk en notarieel vastgelegd. Als een koopovereenkomst wordt uitgewerkt, geldt als uitgangspunt dat koper koopt zonder financieringsvoorbehoud, bouwkundig voorbehoud, verkoopvoorbehoud of andere ontbindende voorbehouden, tenzij schriftelijk anders overeengekomen.",
-    assumptions_text: "Dit voorstel is gebaseerd op de door u verstrekte gegevens, openbare woning-/objectinformatie en de huidige bekende staat van de woning of het object. Eventuele afwijkingen, bijzondere juridische situaties, verborgen gebreken, beperkte toegang tot documenten of aanvullende kosten kunnen invloed hebben op de definitieve afspraken.",
-    included_items: "Heldere communicatie\nGeen makelaarskosten\nGeen openbare bezichtigingen nodig\nVerkoop in huidige staat bespreekbaar\nFlexibele overdrachtsdatum\nNotariële afwikkeling\nMeer zekerheid na akkoord\nVerkoopoplossing op maat\nVrijblijvend voorstel",
+    assumptions_text: "Dit voorstel is gebaseerd op de door u verstrekte gegevens, openbare woning- of objectinformatie en de huidige bekende staat van de woning of het object. Eventuele afwijkingen, bijzondere juridische situaties, verborgen gebreken, beperkte toegang tot documenten of aanvullende kosten kunnen invloed hebben op de definitieve afspraken.",
+    included_items: "Heldere communicatie\nGeen makelaarskosten\nGeen openbare bezichtigingen nodig\nVerkoop in huidige staat bespreekbaar\nFlexibele overdrachtsdatum\nNotariële afwikkeling\nMeer zekerheid na overeenstemming\nVerkoopoplossing op maat\nVrijblijvend voorstel",
     traditional_price_text: "",
     agent_costs_text: "",
     notary_costs_text: "",
@@ -532,9 +588,9 @@ function defaultProposalForLead(lead) {
     other_costs_text: "",
     traditional_net_text: "",
     direct_net_text: "",
-    short_comparison_text: "De netto-opbrengstvergelijking is indicatief. Bij verhuurde, leeg te leveren of gemengde objecten kan de traditionele vergelijkingswaarde mede worden benaderd vanuit huurwaarde, leegstand, verhuurrisico, verkoopbaarheid en kosten. Een direct voorstel kan lager zijn dan een optimistische marktwaarde, maar geeft meer duidelijkheid over voorwaarden, planning, afwikkeling en zekerheid na akkoord.",
-    reservations_text: "Controle woninggegevens\nControle eigendomssituatie\nControle beschikbare documenten\nControle eventuele huur-, gebruiks- of beslaggegevens\nNotariële toetsing\nAkkoord op voorwaarden\nGeen bijzondere belemmeringen\nDefinitieve schriftelijke vastlegging",
-    next_steps_text: "U beoordeelt het voorstel rustig.\nWij bespreken eventuele vragen, bijzonderheden en voorwaarden.\nIndien gewenst verzamelen wij aanvullende gegevens over de woning of het object.\nBij akkoord worden de afspraken schriftelijk bevestigd.\nDe overdracht en betaling verlopen via de notaris.",
+    short_comparison_text: "De netto-opbrengstvergelijking is indicatief. Bij verhuurde, leeg te leveren of gemengde objecten kan de traditionele vergelijkingswaarde mede worden benaderd vanuit huurwaarde, leegstand, verhuurrisico, verkoopbaarheid en kosten. Een direct voorstel kan lager zijn dan een optimistische marktwaarde, maar geeft meer duidelijkheid over voorwaarden, planning, afwikkeling en zekerheid bij overeenstemming.",
+    reservations_text: "Controle woninggegevens\nControle eigendomssituatie\nControle beschikbare documenten\nControle eventuele huur-, gebruiks- of beslaggegevens\nNotariële toetsing\nOvereenstemming over voorwaarden\nGeen bijzondere belemmeringen\nDefinitieve schriftelijke vastlegging",
+    next_steps_text: "U beoordeelt het voorstel rustig.\nWij bespreken eventuele vragen, bijzonderheden en voorwaarden.\nIndien gewenst verzamelen wij aanvullende gegevens over de woning of het object.\nAls u verder wilt, werken wij de afspraken uit in een koopovereenkomst.\nDe overdracht en betaling verlopen via de notaris.",
     contact_person: "Rob Schiphuis",
     proposal_type: "Standaard aankoop",
     delivery_term_text: "Uiterlijk binnen 6 maanden",
@@ -552,13 +608,13 @@ function defaultProposalForLead(lead) {
     seller_work_enabled: false,
     seller_work_description: "",
     seller_work_deadline: "",
-    seller_work_amount_text: "€ 5.700",
-    seller_work_base_price_text: "€ 300.000",
-    seller_work_total_price_text: "€ 305.700",
-    seller_work_conditions_text: "Wanneer de werkzaamheden niet, niet volledig of niet deugdelijk zijn uitgevoerd, kan de aanvullende koopprijs worden verminderd met de redelijkerwijs benodigde kosten om de werkzaamheden alsnog te voltooien of te herstellen.",
+    seller_work_amount_text: "",
+    seller_work_base_price_text: "",
+    seller_work_total_price_text: "",
+    seller_work_conditions_text: "",
     resale_payment_enabled: false,
-    resale_threshold_text: "€ 350.000",
-    resale_percentage_text: "20",
+    resale_threshold_text: "",
+    resale_percentage_text: "",
     resale_deduct_courtage: true,
     resale_period_months: 12,
     resale_cap_text: "",
@@ -653,9 +709,14 @@ export default function LeadDetailPage({ params }) {
     return (data?.proposals || [])[0] || null;
   }, [data?.proposals]);
 
-  const latestCustomerAction = useMemo(() => {
-    return latestCustomerProposalAction(data?.proposalEvents || []);
-  }, [data?.proposalEvents]);
+  const latestOpenCustomerAction = useMemo(() => {
+    return latestCustomerProposalAction(data?.proposalEvents || [], lead);
+  }, [data?.proposalEvents, lead?.last_contact_at]);
+
+  const latestHandledCustomerAction = useMemo(() => {
+    const latest = latestCustomerProposalAction(data?.proposalEvents || [], lead, { includeHandled: true });
+    return latest && isCustomerActionHandled(latest, lead) ? latest : null;
+  }, [data?.proposalEvents, lead?.last_contact_at]);
 
   const netComparison = useMemo(() => {
     return calculateNetComparison(proposal || {});
@@ -663,20 +724,28 @@ export default function LeadDetailPage({ params }) {
 
   const sellerWorkTotal = useMemo(() => calculateSellerWorkTotal(proposal || {}), [proposal]);
   const resaleExample = useMemo(() => calculateResaleExample(proposal || {}), [proposal]);
+  const proposalIssues = useMemo(() => proposalValidationIssues(buildCalculatedProposalPayload(proposal || {})), [proposal]);
+  const proposalWarnings = useMemo(() => proposalReviewWarnings(buildCalculatedProposalPayload(proposal || {})), [proposal]);
 
   function setProposalField(field, value) {
     setProposal((current) => {
       const next = { ...(current || {}), [field]: value };
+      if (field === "amount_text" && current?.seller_work_enabled) {
+        const currentAmount = parseMoney(current.amount_text);
+        const currentBase = parseMoney(current.seller_work_base_price_text);
+        if (!currentBase || currentBase === currentAmount) next.seller_work_base_price_text = value;
+      }
       if (["seller_work_base_price_text", "seller_work_amount_text", "seller_work_enabled"].includes(field)) {
         if (field === "seller_work_enabled" && value) {
-          next.seller_work_base_price_text = next.seller_work_base_price_text || next.amount_text || "€ 300.000";
-          next.seller_work_amount_text = next.seller_work_amount_text || "€ 5.700";
+          next.seller_work_base_price_text = next.amount_text || "";
         }
         next.seller_work_total_price_text = calculateSellerWorkTotal(next);
       }
+      if (field === "amount_text" && next.seller_work_enabled) {
+        next.seller_work_total_price_text = calculateSellerWorkTotal(next);
+      }
       if (field === "resale_payment_enabled" && value) {
-        next.resale_threshold_text = next.resale_threshold_text || "€ 350.000";
-        next.resale_percentage_text = next.resale_percentage_text || "20";
+        next.resale_threshold_text = next.resale_threshold_text || next.amount_text || "";
         next.resale_period_months = next.resale_period_months || 12;
         next.resale_deduct_courtage = next.resale_deduct_courtage === undefined || next.resale_deduct_courtage === null ? true : next.resale_deduct_courtage;
       }
@@ -721,6 +790,11 @@ export default function LeadDetailPage({ params }) {
   async function createProposal() {
     if (!proposal) return;
     const calculatedProposal = buildCalculatedProposalPayload(applyAdditionalAgreementDefaults(proposal));
+    const issues = proposalValidationIssues(calculatedProposal);
+    if (issues.length) {
+      setError(`Controleer het voorstel: ${issues.join(" ")}`);
+      return;
+    }
     const result = await post({ action: "createProposal", ...calculatedProposal });
     if (result?.proposal?.id) {
       setNotice("Voorstel is aangemaakt. Controleer de print/PDF-versie voordat u het voorstel mailt.");
@@ -778,6 +852,19 @@ export default function LeadDetailPage({ params }) {
     }
   }
 
+  async function resolveCustomerAction(event) {
+    if (!lead?.id || !event?.id) return;
+    const result = await post({
+      action: "resolveCustomerAction",
+      lead_id: lead.id,
+      event_id: event.id,
+      proposal_id: event.proposal_id,
+    });
+    if (result?.ok) {
+      setNotice("Klantactie is afgehandeld. Het contactmoment is vastgelegd en de bijbehorende opvolgtaak is afgerond.");
+    }
+  }
+
   async function sendProposal(item, recipientEmail) {
     const proposalItem = typeof item === "object" ? item : (data?.proposals || []).find((candidate) => candidate.id === item);
     const id = proposalItem?.id || item;
@@ -811,6 +898,7 @@ export default function LeadDetailPage({ params }) {
   return (
     <main className="detail-page">
       <style>{styles}</style>
+      <style>{`.proposal-validation{border:1px solid #ffd5c4;background:#fff5f1;color:#7c2d20;border-radius:20px;padding:16px 18px}.proposal-validation strong{display:block}.proposal-validation ul{margin:8px 0 0;padding-left:20px}.proposal-validation li{margin-top:4px}.proposal-validation.ready{background:#f0fff6;border-color:#bff3d0;color:#075c2a}.proposal-review{border:1px solid #f2b885;background:#fffaf4;color:#7c4a23;border-radius:20px;padding:16px 18px}.proposal-review strong{display:block}.proposal-review ul{margin:8px 0 0;padding-left:20px}.proposal-review li{margin-top:4px}`}</style>
       <header>
         <a href="/admin">← Dashboard</a>
         <img src="/logo.png" alt="Vastgoed Direct Nederland" />
@@ -837,21 +925,17 @@ export default function LeadDetailPage({ params }) {
               {lead.telefoon ? <a href={`tel:${cleanPhone(lead.telefoon)}`}>Bellen</a> : null}
               {lead.telefoon ? <a href={`https://wa.me/${whatsappPhone(lead.telefoon)}`} target="_blank" rel="noopener noreferrer">WhatsApp</a> : null}
               {lead.email ? <a href={`mailto:${lead.email}`}>Mailen</a> : null}
-              <button disabled={saving} onClick={() => post({ action: "updateLead", id: lead.id, last_contact_at: new Date().toISOString(), status: ["Nieuw", "Nieuwe aanvraag"].includes(lead.status) ? "In behandeling" : lead.status })}>Contact gehad</button>
+              <button disabled={saving} onClick={() => latestOpenCustomerAction ? resolveCustomerAction(latestOpenCustomerAction) : post({ action: "updateLead", id: lead.id, last_contact_at: new Date().toISOString(), status: ["Nieuw", "Nieuwe aanvraag"].includes(lead.status) ? "In behandeling" : lead.status })}>Contact gehad</button>
             </div>
           </section>
 
           <CustomerProposalActionAlert
-            event={latestCustomerAction}
+            event={latestOpenCustomerAction}
             lead={lead}
             saving={saving}
-            onContactDone={() => post({
-              action: "updateLead",
-              id: lead.id,
-              last_contact_at: new Date().toISOString(),
-              status: ["Nieuw", "Nieuwe aanvraag"].includes(lead.status) ? "In behandeling" : lead.status,
-            })}
+            onContactDone={() => resolveCustomerAction(latestOpenCustomerAction)}
           />
+          {!latestOpenCustomerAction ? <CustomerProposalActionHandledNotice event={latestHandledCustomerAction} lead={lead} /> : null}
 
           <nav className="admin-quick-nav" aria-label="Admin snelnavigatie">
             <a href="#contact">Contact</a>
@@ -943,7 +1027,7 @@ export default function LeadDetailPage({ params }) {
               <div>
                 <span>Premium voorstel</span>
                 <h2>Uitgebreid verkoopvoorstel maken</h2>
-                <p>Maak een voorstel met voorblad, woning-/objectgegevens, uitgangspunten, netto-opbrengstvergelijking, voorwaarden en vervolgstappen.</p>
+                <p>Maak een voorstel met voorblad, woning- of objectgegevens, uitgangspunten, netto-opbrengstvergelijking, voorwaarden en vervolgstappen.</p>
               </div>
               {latestProposal ? <a className="secondary-link" href={`/admin/voorstellen/${latestProposal.id}`}>Laatste voorstel beheren</a> : null}
             </div>
@@ -960,7 +1044,7 @@ export default function LeadDetailPage({ params }) {
                     <Field label="Voorgesteld bedrag"><input placeholder="Bijv. € 190.000" value={proposal.amount_text} onChange={(e) => setProposalField("amount_text", e.target.value)} /></Field>
                     <Field label="Geldig tot"><input type="date" value={proposal.validity_date} onChange={(e) => setProposalField("validity_date", e.target.value)} /></Field>
                     <Field label="Oplevering"><input value={proposal.transfer_date_text} onChange={(e) => setProposalField("transfer_date_text", e.target.value)} /></Field>
-                    <Field label="Aanbetaling / voorschot"><input value={proposal.deposit_text} onChange={(e) => setProposalField("deposit_text", e.target.value)} /></Field>
+                    <Field label="Aanbetaling / voorschot (alleen indien afgesproken)"><input placeholder="Leeg laten als dit niet van toepassing is" value={proposal.deposit_text} onChange={(e) => setProposalField("deposit_text", e.target.value)} /></Field>
                   </div>
                 </div>
 
@@ -980,7 +1064,7 @@ export default function LeadDetailPage({ params }) {
 
                 <div className="form-section">
                   <h3>3. Netto-opbrengstvergelijking</h3>
-                  <p className="calc-help">Vul de traditionele verkoopprijs als indicatieve vergelijkingswaarde in. Bij verhuurde, leeg te leveren of gemengde objecten mag deze waarde ook rendementsmatig worden benaderd op basis van huurwaarde, leegstand, verhuurrisico en kosten. Geef de traditionele verkoopprijs óf op basis van verkoop in huidige staat óf op basis van verkoop na noodzakelijke voorbereiding op. Vul herstel-/renovatiekosten alleen in als die kosten nodig zijn om de genoemde traditionele verkoopprijs te behalen; laat deze post leeg of op € 0 als de verkoopprijs al uitgaat van huidige staat. Vul makelaarskosten en overige verkoopkosten exclusief btw in; het adminportaal rekent automatisch 21% btw door. Vul afwikkelingskosten alleen in als deze normaal voor verkoper komen en VDN ze in dit voorstel eventueel overneemt.</p>
+                  <p className="calc-help">Vul de traditionele verkoopprijs als indicatieve vergelijkingswaarde in. Bij verhuurde, leeg te leveren of gemengde objecten mag deze waarde ook rendementsmatig worden benaderd op basis van huurwaarde, leegstand, verhuurrisico en kosten. Kies één uitgangspunt voor de traditionele verkoopprijs: verkoop in huidige staat of verkoop na noodzakelijke voorbereiding. Neem herstel-/renovatiekosten alleen mee als die kosten nodig zijn om de genoemde traditionele verkoopprijs te behalen; laat deze post leeg of op € 0 als de verkoopprijs al uitgaat van huidige staat. Vul makelaarskosten en overige verkoopkosten exclusief btw in; het adminportaal rekent automatisch 21% btw door. Vul afwikkelingskosten alleen in als deze normaal voor verkoper komen en VDN ze in dit voorstel eventueel overneemt.</p>
                   <div className="form-grid">
                     <Field label="Traditionele verkoopprijs"><input inputMode="decimal" placeholder="Bijv. € 240.000" value={proposal.traditional_price_text} onChange={(e) => setProposalField("traditional_price_text", e.target.value)} /></Field>
                     <Field label="Makelaarskosten excl. btw"><input inputMode="decimal" placeholder="Bijv. € 3.600" value={proposal.agent_costs_text} onChange={(e) => setProposalField("agent_costs_text", e.target.value)} /></Field>
@@ -1133,7 +1217,7 @@ export default function LeadDetailPage({ params }) {
                       <div className="agreement-preview">
                         <strong>Voorsteltekst</strong>
                         <p>Uitgangspunt van dit voorstel is dat het object bij juridische levering {String(proposal.delivery_occupancy_status || "vrij van huur en gebruik").toLowerCase()} wordt geleverd, tenzij schriftelijk anders overeengekomen.</p>
-                        <p><strong>Gevolg voor het voorstel:</strong> Dit voorstel is gebaseerd op de hierboven genoemde wijze van levering. Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen.</p>
+                        <p><strong>Gevolg voor het voorstel:</strong> Dit voorstel is gebaseerd op deze wijze van levering. Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen.</p>
                         <p>Bij verhuur of gemengd gebruik worden huur, gebruik, ontruiming, bestemming, vergunningen, brandveiligheid en eventuele splitsingsmogelijkheden vóór definitieve vastlegging gecontroleerd.</p>
                         <small>Deze sectie is bedoeld voor verhuurde woningen, bedrijfsruimtes, woon-winkelpanden en gemengde objecten. De financiële vergelijking blijft apart staan, maar wordt gelezen vanuit dit leveringsuitgangspunt.</small>
                       </div>
@@ -1164,13 +1248,29 @@ export default function LeadDetailPage({ params }) {
                   <Field label="Vervolgstappen — één regel per stap">
                     <textarea value={proposal.next_steps_text} onChange={(e) => setProposalField("next_steps_text", e.target.value)} />
                   </Field>
-                  <Field label="Aanvullende opmerkingen">
+                  <Field label="Interne notities — niet zichtbaar voor de klant">
                     <textarea value={proposal.notes} onChange={(e) => setProposalField("notes", e.target.value)} />
                   </Field>
                 </div>
 
+                {proposalIssues.length ? (
+                  <div className="proposal-validation" role="alert">
+                    <strong>Nog controleren voordat u het voorstel maakt</strong>
+                    <ul>{proposalIssues.map((issue) => <li key={issue}>{issue}</li>)}</ul>
+                  </div>
+                ) : (
+                  <div className="proposal-validation ready"><strong>Voorstel is inhoudelijk gereed om aan te maken.</strong></div>
+                )}
+
+                {proposalWarnings.length ? (
+                  <div className="proposal-review">
+                    <strong>Advies voor een overtuigender voorstel</strong>
+                    <ul>{proposalWarnings.map((warning) => <li key={warning}>{warning}</li>)}</ul>
+                  </div>
+                ) : null}
+
                 <div className="proposal-actions">
-                  <button disabled={saving || !proposal.amount_text} onClick={createProposal}>Voorstel maken en openen</button>
+                  <button disabled={saving || proposalIssues.length > 0} onClick={createProposal}>Voorstel maken en openen</button>
                   <button type="button" className="ghost" onClick={() => setProposal(applyAdditionalAgreementDefaults(defaultProposalForLead(lead)))}>Velden herstellen</button>
                 </div>
               </div>
@@ -1178,7 +1278,7 @@ export default function LeadDetailPage({ params }) {
           </section>
 
           <section className="grid three">
-            <article className="card" id="taken"><h2>Taken</h2>{(data.tasks || []).map((item) => { const isCustomerActionTask = /voorstel bespreken|akkoord op voorstel|klant geeft akkoord/i.test(item.title || ""); return <div className={`item ${isCustomerActionTask && item.status !== "Afgerond" ? "customer-action-task" : ""}`} key={item.id}><strong>{item.title}</strong><span>{item.status} · {item.due_date || "geen datum"}</span>{item.note ? <small>{item.note}</small> : null}<select value={item.status || "Open"} onChange={(e) => post({ action: "updateTask", id: item.id, status: e.target.value })}>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select></div>; })}</article>
+            <article className="card" id="taken"><h2>Taken</h2>{(data.tasks || []).map((item) => { const isCustomerActionTask = /voorstel bespreken|klant wil voorstel bespreken|akkoord op voorstel|klant geeft akkoord|klant heeft vraag/i.test(item.title || ""); return <div className={`item ${isCustomerActionTask && item.status !== "Afgerond" ? "customer-action-task" : ""}`} key={item.id}><strong>{item.title}</strong><span>{item.status} · {item.due_date || "geen datum"}</span>{item.note ? <small>{item.note}</small> : null}<select value={item.status || "Open"} onChange={(e) => post({ action: "updateTask", id: item.id, status: e.target.value })}>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select></div>; })}</article>
             <article className="card" id="voorstellen"><h2>Voorstellen</h2>{(data.proposals || []).map((item) => <ProposalListItem key={item.id} item={item} lead={lead} saving={saving} sendProposal={sendProposal} useProposalAsBase={useProposalAsBase} updateProposalEmail={updateProposalEmail} recordProposalWhatsApp={recordProposalWhatsApp} />)}</article>
             <article className="card"><h2>Mailhistorie</h2>{(data.mailLogs || []).map((item) => <div className="item" key={item.id}><strong>{item.type}</strong><span>{item.status} · {item.recipient}</span><small>{fmt(item.created_at)}</small></div>)}</article>
           </section>
@@ -1189,5 +1289,5 @@ export default function LeadDetailPage({ params }) {
 }
 
 const styles = `
-:root{--navy:#071f3a;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#D96A1C;--green:#3E8F5E;--shadow:0 22px 70px rgba(7,31,58,.12)}body{margin:0;background:radial-gradient(circle at top right,#FFF1E6,transparent 34%),var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.detail-page{max-width:1280px;margin:0 auto;padding:28px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}header a{color:var(--navy);font-weight:900;text-decoration:none}header img{width:220px;background:#fff;border-radius:18px;padding:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero span,.section-head span{color:#B85216;background:#FFF1E6;border:1px solid #F2B885;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase}.hero h1{font-size:42px;letter-spacing:-.04em;margin:12px 0 6px}.hero p,.section-head p{color:var(--muted);font-size:18px}.actions,.proposal-actions{display:flex;gap:10px;flex-wrap:wrap}.actions a,.actions button,.card button,.item a,.secondary-link{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer;display:inline-block;margin-right:8px;margin-top:8px}.actions a:first-child{background:var(--navy)}.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:18px}.grid.three{grid-template-columns:repeat(3,1fr)}h2{margin:0 0 18px;font-size:24px;letter-spacing:-.03em}h3{margin:0 0 16px;font-size:20px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}.info{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.source-detail-box{margin:18px 0;background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px}.source-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:12px}.source-head h3{margin:0 0 4px}.source-head p{margin:0;color:var(--muted);font-size:13px}.source-pill{background:#071f3a;color:#fff;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:900;white-space:nowrap}.source-summary-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}.source-summary-row span{background:#f8f5ef;border:1px solid var(--line);border-radius:999px;padding:6px 9px;color:var(--muted);font-size:12px;font-weight:800}.admin-quick-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}.admin-quick-nav a{background:#fffdf9;border:1px solid var(--line);color:var(--navy);border-radius:999px;padding:10px 13px;text-decoration:none;font-weight:900;box-shadow:0 8px 24px rgba(7,31,58,.05)}.admin-checklist{margin-bottom:18px}.checklist-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.checklist-grid span{border-radius:16px;border:1px solid var(--line);background:#f8f5ef;padding:12px;font-weight:900;font-size:13px}.checklist-grid .ok{background:#f0fff6;border-color:#bff3d0;color:#075c2a}.checklist-grid .warn{background:#fff5f1;border-color:#ffd5c4;color:#7c2d20}.checklist-grid .muted{color:var(--muted)}.customer-action-alert{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;margin:0 0 18px;padding:22px 24px;border-radius:26px;border:1px solid #f2b885;background:linear-gradient(135deg,#fff7ef,#fffdf9);box-shadow:0 18px 48px rgba(217,106,28,.14)}.customer-action-alert.discuss{border-color:#f2b885;background:linear-gradient(135deg,#fff4e8,#fffdf9)}.customer-action-alert.positive{border-color:#bff3d0;background:linear-gradient(135deg,#effff6,#fffdf9)}.customer-action-alert.question{border-color:#cfe0f4;background:linear-gradient(135deg,#f1f7ff,#fffdf9)}.customer-action-alert span{display:inline-flex;color:#B85216;background:#FFF1E6;border:1px solid #F2B885;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.customer-action-alert h2{margin:10px 0 8px;font-size:28px;color:var(--navy)}.customer-action-alert p{margin:0;color:var(--muted);font-weight:800;line-height:1.55}.customer-action-alert blockquote{margin:12px 0 0;padding:12px 14px;border-left:4px solid var(--orange);background:#fff;border-radius:14px;color:var(--navy);font-weight:800}.customer-action-alert small{display:block;margin-top:10px;color:#7a8797;font-weight:800}.customer-action-buttons{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.customer-action-buttons a,.customer-action-buttons button{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 15px;font-weight:900;cursor:pointer}.customer-action-buttons .green{background:var(--green)}.customer-action-buttons .secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.customer-action-task{background:#fff7ef;border:1px solid #f2b885;border-radius:18px;padding:14px!important;margin:8px 0}.customer-action-task strong{color:#B85216}.customer-action-task small{margin-top:5px;color:#7c4a23;font-weight:800}.source-detail-box h3{margin:0 0 12px;font-size:18px}.info span,.item span,.item small,label span{display:block;color:var(--muted);font-size:13px}.info strong{display:block;margin-top:6px;word-break:break-word}label{display:grid;gap:8px;font-weight:900;margin-top:12px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}.item{border-bottom:1px solid var(--line);padding:12px 0}.item:last-child{border-bottom:0}.item strong{display:block}.item a{margin-top:8px;background:var(--navy)}.item button.small{margin-top:8px;margin-left:8px;padding:9px 12px;font-size:13px}.error,.notice-top{border-radius:16px;padding:12px 14px;margin-bottom:16px}.error{background:#F8EEE9;color:#7C2D20;border:1px solid #E8C7BC}.notice-top{background:#f0fff6;color:#075c2a;border:1px solid #bff3d0}.proposal-card{margin:18px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.section-head h2{font-size:34px;margin:12px 0 8px}.secondary-link{background:var(--navy);white-space:nowrap}.proposal-form{display:grid;gap:20px}.form-section{border:1px solid var(--line);border-radius:24px;background:#fff;padding:20px}.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.form-section textarea{min-height:96px}.calc-help{margin:14px 0 0;color:var(--muted);font-weight:700}.checkbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.checkbox-label{display:flex;align-items:flex-start;gap:10px;margin:0;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:13px 14px;font-weight:900}.checkbox-label input{width:auto;margin-top:2px;accent-color:var(--orange)}.checkbox-label span{display:block;color:var(--navy);font-size:13px;line-height:1.35}.calc-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}.calc-summary div{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.calc-summary span{display:block;color:var(--muted);font-size:12px;font-weight:900}.calc-summary strong{display:block;margin-top:6px;font-size:18px}.calc-summary .positive{background:#f0fff6;border-color:#bff3d0}.calc-summary .negative{background:#fff5f1;border-color:#ffd5c4}.proposal-actions button{padding:14px 20px}.proposal-actions .ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}.agreement-block{border:1px solid var(--line);border-radius:22px;background:#fffdf9;padding:16px;margin-top:14px}.wide-check{margin:0 0 12px}.checkbox-grid.single{grid-template-columns:1fr}.agreement-preview{margin-top:14px;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.agreement-preview strong{display:block;margin-bottom:6px}.agreement-preview p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}.agreement-preview small{display:block;color:#7b8795;margin-top:8px;font-weight:700}.secondary-small{background:#fff!important;color:var(--navy)!important;border:1px solid var(--line)!important}.subheading{margin-top:24px}.compact-two{grid-template-columns:repeat(2,1fr)}.contact-save-box{align-self:end}.contact-save-box small{display:block;margin-top:8px;color:var(--muted);font-size:12px;font-weight:700}.proposal-item-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.status-pill{border-radius:999px;background:#fff1e6;color:#9a4314;border:1px solid #f2b885;padding:5px 9px;font-size:12px;font-weight:900}.status-pill.green{background:#f0fff6;color:#075c2a;border-color:#bff3d0}.status-pill.muted{background:#f8f5ef;color:var(--muted);border-color:var(--line)}.proposal-recipient-box{margin:12px 0;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.recipient-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.recipient-meta span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 8px;font-size:12px;color:var(--muted);font-weight:800}.warning-line{margin-top:8px;border-radius:12px;background:#fff5f1;border:1px solid #ffd5c4;color:#7c2d20;padding:8px 10px;font-size:12px;font-weight:800}.proposal-mail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.proposal-whatsapp-box{margin:12px 0;background:#f0fff6;border:1px solid #bff3d0;border-radius:18px;padding:14px}.proposal-whatsapp-box>div:first-child strong{display:block;color:#075c2a}.proposal-whatsapp-box>div:first-child small{display:block;margin-top:4px;color:#416b52;font-weight:800}.proposal-whatsapp-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.whatsapp-small{background:var(--green)!important}.whatsapp-after-send{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;margin:0 0 18px;padding:20px 22px;border-radius:26px;border:1px solid #bff3d0;background:linear-gradient(135deg,#effff6,#fffdf9);box-shadow:0 18px 48px rgba(62,143,94,.14)}.whatsapp-after-send span{display:inline-flex;color:#075c2a;background:#eafff1;border:1px solid #bff3d0;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.whatsapp-after-send h2{margin:9px 0 7px;font-size:26px;color:var(--navy)}.whatsapp-after-send p{margin:0;color:var(--muted);font-weight:800;line-height:1.55}.whatsapp-after-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.whatsapp-after-actions a,.whatsapp-after-actions button{border:0;background:var(--green);color:#fff;text-decoration:none;border-radius:999px;padding:12px 15px;font-weight:900;cursor:pointer}.whatsapp-after-actions .secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}@media(max-width:1100px){.form-grid{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:1fr}.calc-summary{grid-template-columns:repeat(2,1fr)}.checkbox-grid{grid-template-columns:1fr}.checklist-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:900px){.customer-action-alert,.whatsapp-after-send{grid-template-columns:1fr}.customer-action-buttons,.whatsapp-after-actions{justify-content:flex-start}.grid,.hero,.section-head{grid-template-columns:1fr;display:grid}.info-grid,.form-grid,.calc-summary,.checklist-grid{grid-template-columns:1fr}.detail-page{padding:18px}.admin-quick-nav{position:static}.source-head{display:grid}.source-pill{justify-self:start}}
+:root{--navy:#071f3a;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9;--orange:#D96A1C;--green:#3E8F5E;--shadow:0 22px 70px rgba(7,31,58,.12)}body{margin:0;background:radial-gradient(circle at top right,#FFF1E6,transparent 34%),var(--bg);color:var(--navy);font-family:Inter,Arial,Helvetica,sans-serif}.detail-page{max-width:1280px;margin:0 auto;padding:28px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}header a{color:var(--navy);font-weight:900;text-decoration:none}header img{width:220px;background:#fff;border-radius:18px;padding:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero span,.section-head span{color:#B85216;background:#FFF1E6;border:1px solid #F2B885;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase}.hero h1{font-size:42px;letter-spacing:-.04em;margin:12px 0 6px}.hero p,.section-head p{color:var(--muted);font-size:18px}.actions,.proposal-actions{display:flex;gap:10px;flex-wrap:wrap}.actions a,.actions button,.card button,.item a,.secondary-link{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer;display:inline-block;margin-right:8px;margin-top:8px}.actions a:first-child{background:var(--navy)}.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:18px}.grid.three{grid-template-columns:repeat(3,1fr)}h2{margin:0 0 18px;font-size:24px;letter-spacing:-.03em}h3{margin:0 0 16px;font-size:20px}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}.info{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.source-detail-box{margin:18px 0;background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px}.source-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:12px}.source-head h3{margin:0 0 4px}.source-head p{margin:0;color:var(--muted);font-size:13px}.source-pill{background:#071f3a;color:#fff;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:900;white-space:nowrap}.source-summary-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}.source-summary-row span{background:#f8f5ef;border:1px solid var(--line);border-radius:999px;padding:6px 9px;color:var(--muted);font-size:12px;font-weight:800}.admin-quick-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}.admin-quick-nav a{background:#fffdf9;border:1px solid var(--line);color:var(--navy);border-radius:999px;padding:10px 13px;text-decoration:none;font-weight:900;box-shadow:0 8px 24px rgba(7,31,58,.05)}.admin-checklist{margin-bottom:18px}.checklist-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.checklist-grid span{border-radius:16px;border:1px solid var(--line);background:#f8f5ef;padding:12px;font-weight:900;font-size:13px}.checklist-grid .ok{background:#f0fff6;border-color:#bff3d0;color:#075c2a}.checklist-grid .warn{background:#fff5f1;border-color:#ffd5c4;color:#7c2d20}.checklist-grid .muted{color:var(--muted)}.customer-action-alert{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;margin:0 0 18px;padding:22px 24px;border-radius:26px;border:1px solid #f2b885;background:linear-gradient(135deg,#fff7ef,#fffdf9);box-shadow:0 18px 48px rgba(217,106,28,.14)}.customer-action-handled{margin:0 0 18px;padding:14px 18px;border-radius:20px;border:1px solid #bff3d0;background:#f0fff6;color:#075c2a}.customer-action-handled span,.customer-action-handled strong,.customer-action-handled small{display:block}.customer-action-handled span{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.customer-action-handled strong{margin-top:4px;color:#075c2a}.customer-action-handled small{margin-top:4px;color:#416b52;font-weight:800}.customer-action-alert.discuss{border-color:#f2b885;background:linear-gradient(135deg,#fff4e8,#fffdf9)}.customer-action-alert.positive{border-color:#bff3d0;background:linear-gradient(135deg,#effff6,#fffdf9)}.customer-action-alert.question{border-color:#cfe0f4;background:linear-gradient(135deg,#f1f7ff,#fffdf9)}.customer-action-alert span{display:inline-flex;color:#B85216;background:#FFF1E6;border:1px solid #F2B885;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.customer-action-alert h2{margin:10px 0 8px;font-size:28px;color:var(--navy)}.customer-action-alert p{margin:0;color:var(--muted);font-weight:800;line-height:1.55}.customer-action-alert blockquote{margin:12px 0 0;padding:12px 14px;border-left:4px solid var(--orange);background:#fff;border-radius:14px;color:var(--navy);font-weight:800}.customer-action-alert small{display:block;margin-top:10px;color:#7a8797;font-weight:800}.customer-action-buttons{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.customer-action-buttons a,.customer-action-buttons button{border:0;background:var(--orange);color:#fff;text-decoration:none;border-radius:999px;padding:12px 15px;font-weight:900;cursor:pointer}.customer-action-buttons .green{background:var(--green)}.customer-action-buttons .secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.customer-action-task{background:#fff7ef;border:1px solid #f2b885;border-radius:18px;padding:14px!important;margin:8px 0}.customer-action-task strong{color:#B85216}.customer-action-task small{margin-top:5px;color:#7c4a23;font-weight:800}.source-detail-box h3{margin:0 0 12px;font-size:18px}.info span,.item span,.item small,label span{display:block;color:var(--muted);font-size:13px}.info strong{display:block;margin-top:6px;word-break:break-word}label{display:grid;gap:8px;font-weight:900;margin-top:12px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:16px;padding:13px 14px;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}.item{border-bottom:1px solid var(--line);padding:12px 0}.item:last-child{border-bottom:0}.item strong{display:block}.item a{margin-top:8px;background:var(--navy)}.item button.small{margin-top:8px;margin-left:8px;padding:9px 12px;font-size:13px}.error,.notice-top{border-radius:16px;padding:12px 14px;margin-bottom:16px}.error{background:#F8EEE9;color:#7C2D20;border:1px solid #E8C7BC}.notice-top{background:#f0fff6;color:#075c2a;border:1px solid #bff3d0}.proposal-card{margin:18px 0}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.section-head h2{font-size:34px;margin:12px 0 8px}.secondary-link{background:var(--navy);white-space:nowrap}.proposal-form{display:grid;gap:20px}.form-section{border:1px solid var(--line);border-radius:24px;background:#fff;padding:20px}.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.form-section textarea{min-height:96px}.calc-help{margin:14px 0 0;color:var(--muted);font-weight:700}.checkbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.checkbox-label{display:flex;align-items:flex-start;gap:10px;margin:0;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:13px 14px;font-weight:900}.checkbox-label input{width:auto;margin-top:2px;accent-color:var(--orange)}.checkbox-label span{display:block;color:var(--navy);font-size:13px;line-height:1.35}.calc-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}.calc-summary div{background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.calc-summary span{display:block;color:var(--muted);font-size:12px;font-weight:900}.calc-summary strong{display:block;margin-top:6px;font-size:18px}.calc-summary .positive{background:#f0fff6;border-color:#bff3d0}.calc-summary .negative{background:#fff5f1;border-color:#ffd5c4}.proposal-actions button{padding:14px 20px}.proposal-actions .ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}.agreement-block{border:1px solid var(--line);border-radius:22px;background:#fffdf9;padding:16px;margin-top:14px}.wide-check{margin:0 0 12px}.checkbox-grid.single{grid-template-columns:1fr}.agreement-preview{margin-top:14px;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.agreement-preview strong{display:block;margin-bottom:6px}.agreement-preview p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}.agreement-preview small{display:block;color:#7b8795;margin-top:8px;font-weight:700}.secondary-small{background:#fff!important;color:var(--navy)!important;border:1px solid var(--line)!important}.subheading{margin-top:24px}.compact-two{grid-template-columns:repeat(2,1fr)}.contact-save-box{align-self:end}.contact-save-box small{display:block;margin-top:8px;color:var(--muted);font-size:12px;font-weight:700}.proposal-item-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.status-pill{border-radius:999px;background:#fff1e6;color:#9a4314;border:1px solid #f2b885;padding:5px 9px;font-size:12px;font-weight:900}.status-pill.green{background:#f0fff6;color:#075c2a;border-color:#bff3d0}.status-pill.muted{background:#f8f5ef;color:var(--muted);border-color:var(--line)}.proposal-recipient-box{margin:12px 0;background:#f8f5ef;border:1px solid var(--line);border-radius:18px;padding:14px}.recipient-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.recipient-meta span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 8px;font-size:12px;color:var(--muted);font-weight:800}.warning-line{margin-top:8px;border-radius:12px;background:#fff5f1;border:1px solid #ffd5c4;color:#7c2d20;padding:8px 10px;font-size:12px;font-weight:800}.proposal-mail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.proposal-whatsapp-box{margin:12px 0;background:#f0fff6;border:1px solid #bff3d0;border-radius:18px;padding:14px}.proposal-whatsapp-box>div:first-child strong{display:block;color:#075c2a}.proposal-whatsapp-box>div:first-child small{display:block;margin-top:4px;color:#416b52;font-weight:800}.proposal-whatsapp-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.whatsapp-small{background:var(--green)!important}.whatsapp-after-send{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;margin:0 0 18px;padding:20px 22px;border-radius:26px;border:1px solid #bff3d0;background:linear-gradient(135deg,#effff6,#fffdf9);box-shadow:0 18px 48px rgba(62,143,94,.14)}.whatsapp-after-send span{display:inline-flex;color:#075c2a;background:#eafff1;border:1px solid #bff3d0;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.whatsapp-after-send h2{margin:9px 0 7px;font-size:26px;color:var(--navy)}.whatsapp-after-send p{margin:0;color:var(--muted);font-weight:800;line-height:1.55}.whatsapp-after-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.whatsapp-after-actions a,.whatsapp-after-actions button{border:0;background:var(--green);color:#fff;text-decoration:none;border-radius:999px;padding:12px 15px;font-weight:900;cursor:pointer}.whatsapp-after-actions .secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}@media(max-width:1100px){.form-grid{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:1fr}.calc-summary{grid-template-columns:repeat(2,1fr)}.checkbox-grid{grid-template-columns:1fr}.checklist-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:900px){.customer-action-alert,.whatsapp-after-send{grid-template-columns:1fr}.customer-action-buttons,.whatsapp-after-actions{justify-content:flex-start}.grid,.hero,.section-head{grid-template-columns:1fr;display:grid}.info-grid,.form-grid,.calc-summary,.checklist-grid{grid-template-columns:1fr}.detail-page{padding:18px}.admin-quick-nav{position:static}.source-head{display:grid}.source-pill{justify-self:start}}
 `;

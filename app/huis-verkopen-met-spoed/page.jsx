@@ -13,6 +13,7 @@ export const metadata = {
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
   },
 };
 
@@ -47,13 +48,13 @@ const page = {
     "Rustige beoordeling ondanks spoed",
     "Duidelijke uitleg over planning en voorwaarden",
     "Directe verkooproute als alternatief",
-    "Afwikkeling via notaris bij akkoord"
+    "Afwikkeling via de notaris bij akkoord"
   ],
   "vdnTasks": [
     "Snel reageren op uw aanvraag",
     "Situatie en woning beoordelen",
-    "Voorstel of indicatie bespreken",
-    "Vervolgstappen schriftelijk maken"
+    "Mogelijkheden en verkoopvoorstel bespreken",
+    "Vervolgstappen schriftelijk vastleggen"
   ],
   "ownerTasks": [
     "Belangrijke documenten verzamelen waar mogelijk",
@@ -83,7 +84,7 @@ const page = {
   "processSteps": [
     "U legt kort uit waarom er spoed is.",
     "Wij beoordelen woning en planning.",
-    "U ontvangt waar mogelijk een vrijblijvende inschatting of voorstel.",
+    "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel.",
     "Bij akkoord volgt schriftelijke uitwerking en notariële overdracht."
   ],
   "practiceExample": {
@@ -104,12 +105,12 @@ const page = {
     [
       "Verkoopdruk",
       "Afhankelijk van kopersproces",
-      "U beslist pas na voorstel"
+      "U beslist pas na het voorstel"
     ],
     [
       "Woningstaat",
       "Kan invloed hebben op presentatie",
-      "Ook huidige staat bespreekbaar"
+      "Ook de huidige staat is bespreekbaar"
     ],
     [
       "Afspraken",

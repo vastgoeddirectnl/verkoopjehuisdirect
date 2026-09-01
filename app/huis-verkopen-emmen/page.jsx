@@ -12,7 +12,8 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-emmen",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -22,12 +23,12 @@ const page = {
   "regionName": "Emmen",
   "breadcrumb": "Huis verkopen in Emmen",
   "eyebrow": "Regio Emmen",
-  "h1": "Uw huis verkopen in Emmen zonder verkoopstress",
-  "lead": "Wilt u een woning in Emmen verkopen, maar liever zonder lange bezichtigingsrondes of eerst alles verkoopklaar maken? Wij bekijken de woning, de locatie en uw gewenste planning zodat u rustig kunt bepalen welke verkooproute past.",
+  "h1": "Uw woning in Emmen verkopen met duidelijkheid over planning en oplevering",
+  "lead": "In Emmen en Zuidoost-Drenthe kan directe verkoop uitkomst bieden bij leegstand, onderhoud of een verhuizing met dubbele lasten. U hoeft niet eerst een volledige verkoopcampagne te starten om te weten wat haalbaar is.",
   "heroNote": "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
   "defaultSituation": "Huis verkopen in Emmen",
-  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Emmen en uw gewenste planning. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Een verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd.",
-  "shortAnswer": "U kunt vrijblijvend een verkoopvoorstel aanvragen voor een woning in Emmen. Ook bij onderhoud, leegstand, erfenis, verhuur of een woning die nog vol staat kijken wij welke route passend kan zijn.",
+  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Emmen en uw gewenste planning. Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel. Wij garanderen vooraf geen verkoop binnen een vaste termijn.",
+  "shortAnswer": "Voor woningen in Emmen, Klazienaveen, Nieuw-Amsterdam, Erica en Schoonebeek kunt u een vrijblijvende beoordeling aanvragen. Wij bespreken de staat van de woning, de reden van verkoop en de gewenste overdrachtsdatum.",
   "benefits": [
     "Actief in Emmen",
     "Ook bij onderhoud of leegstand",
@@ -42,24 +43,24 @@ const page = {
     "Geen verkoopdruk",
     "Duidelijke afspraken"
   ],
-  "concernTitle": "Veelvoorkomende verkoopvragen in Emmen",
+  "concernTitle": "Wanneer is een directe route in Emmen het onderzoeken waard?",
   "concernCards": [
-    "De woning ligt in Emmen en Zuidoost-Drenthe en is niet direct verkoopklaar.",
-    "Er is behoefte aan duidelijke planning, oplevering en voorwaarden.",
-    "De eigenaar wil liever geen open huis of reeks bezichtigingen.",
-    "Er speelt een bijzondere situatie zoals erfenis, leegstand, verhuur of dubbele lasten."
+    "De woning staat leeg en de vaste lasten lopen door.",
+    "Onderhoud of een verouderde inrichting maakt verkoopklaar maken kostbaar.",
+    "Een verhuizing vraagt om een voorspelbare overdrachtsplanning.",
+    "De eigenaar wil geen langdurig traject met meerdere bezichtigingen."
   ],
-  "solutionTitle": "Wat beoordelen wij in Emmen?",
+  "solutionTitle": "Van verkoopsituatie naar een concrete keuze",
   "solutionCards": [
-    "De woning en staat zoals deze nu is.",
-    "De locatie, het type woning en praktische verkoopmogelijkheden.",
-    "De gewenste termijn en mogelijke opleverafspraken.",
-    "Of directe verkoop of een andere route passend kan zijn."
+    "Wij beoordelen de woning in de huidige staat.",
+    "Leegstand, onderhoud en gewenste termijn worden expliciet meegenomen.",
+    "Het voorstel vermeldt bedrag, planning, oplevering en voorwaarden.",
+    "U houdt ruimte om reguliere en directe verkoop te vergelijken."
   ],
   "vdnTasks": [
     "Woninggegevens en regionale situatie beoordelen.",
     "Meedenken over oplevering, planning en eventuele bijzonderheden.",
-    "Waar mogelijk een eerste inschatting of voorstel uitwerken.",
+    "Als directe verkoop passend is, een vrijblijvend verkoopvoorstel uitwerken.",
     "Bij akkoord zorgen dat afspraken schriftelijk en notarieel worden vastgelegd."
   ],
   "ownerTasks": [
@@ -69,41 +70,37 @@ const page = {
     "Het voorstel rustig beoordelen voordat verdere afspraken worden gemaakt."
   ],
   "practiceExample": {
-    "situation": "Woning in Emmen waarbij eerst duidelijkheid nodig was",
-    "propertyType": "Tussenwoning / vrijstaande woning",
+    "situation": "Leegstaande woning in Emmen met doorlopende lasten",
+    "propertyType": "Eengezinswoning",
     "region": "Emmen",
-    "mainProblem": "De eigenaar wilde weten welke route paste bij een woning in Emmen met onderhoud en leegstand, waarbij snelheid en heldere opleverafspraken belangrijk waren.",
-    "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
-    "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
-    "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",
-    "nextStep": "De eigenaar kon het voorstel vergelijken met een regulier verkooptraject."
+    "mainProblem": "Na een verhuizing stond de woning leeg. De eigenaar wilde weten of directe verkoop voldoende zekerheid bood om de doorlopende lasten te beperken.",
+    "solution": "De huidige staat, maandlasten en gewenste passeerdatum zijn meegenomen in de vergelijking.",
+    "delivery": "Een praktische oplevering zonder uitgebreide voorbereiding is besproken.",
+    "transfer": "De overdrachtsdatum bleef afhankelijk van stukken en notariële planning.",
+    "nextStep": "De eigenaar kreeg een concreet beslismoment zonder meteen vast te zitten."
   },
   "sections": [
     {
-      "title": "Werkgebied in en rond Emmen",
+      "title": "Woningen in Emmen en Zuidoost-Drenthe",
       "paragraphs": [
-        "Wij beoordelen woningen in Emmen, Klazienaveen, Nieuw-Amsterdam, Erica, Schoonebeek en omliggende dorpen.",
-        "Het gaat niet alleen om de plaatsnaam. De staat van de woning, de gewenste termijn, eventuele bewoning en de oplevering bepalen samen welke verkooproute logisch is."
+        "Wij bekijken aanvragen uit Emmen, Klazienaveen, Nieuw-Amsterdam, Erica, Schoonebeek en omliggende dorpen.",
+        "De afstand tot de woning, de staat en eventuele leegstand kunnen het beheer en de voorbereiding lastiger maken. Daarom bespreken wij ook wat u praktisch nog wel of niet wilt regelen."
       ]
     },
     {
-      "title": "Regionale bijzonderheden",
+      "title": "Duidelijkheid wanneer lasten blijven doorlopen",
       "paragraphs": [
-        "In Emmen en omgeving spelen soms afstand, onderhoud, leegstand of oudere woningtypen mee bij de keuze voor een verkooproute.",
-        "Daarom krijgt u geen standaardantwoord, maar eerst een beoordeling van uw woninggegevens en situatie."
+        "Bij leegstand of een volgende woning telt niet alleen de mogelijke verkoopprijs. Ook maandlasten, onderhoud, tijd en zekerheid zijn onderdeel van de vergelijking tussen regulier en direct verkopen."
       ]
     },
     {
-      "title": "Welke woningen kunnen worden aangemeld?",
-      "paragraphs": [
-        "U kunt ook een aanvraag doen wanneer de woning nog niet verkoopklaar is of wanneer er iets speelt waardoor een regulier verkooptraject minder prettig voelt."
-      ],
+      "title": "Woningen en situaties die u kunt aanmelden",
       "bullets": [
-        "Leegstaande woning",
-        "Opknapwoning of woning met achterstallig onderhoud",
-        "Erfeniswoning of woning die nog vol staat",
-        "Verhuurde woning of woning met gebruiksafspraken",
-        "Woning waarbij snel duidelijkheid gewenst is"
+        "Leegstaande eengezinswoning",
+        "Woning met achterstallig onderhoud",
+        "Erfeniswoning met spullen",
+        "Verhuurde woning",
+        "Woning waarbij een concrete overdrachtsplanning nodig is"
       ]
     }
   ],
@@ -115,10 +112,10 @@ const page = {
     },
     {
       "title": "Beoordeling van woning en regio",
-      "text": "We kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
+      "text": "Wij kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
     },
     {
-      "title": "Vrijblijvende inschatting of voorstel",
+      "title": "Vrijblijvend verkoopvoorstel",
       "text": "Waar mogelijk ontvangt u duidelijkheid over verkoopmogelijkheden en voorwaarden."
     },
     {
@@ -130,7 +127,7 @@ const page = {
     [
       "Voorbereiding",
       "Vaak verkoopklaar maken voor presentatie",
-      "Huidige staat kan worden beoordeeld"
+      "De huidige staat kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
@@ -145,7 +142,7 @@ const page = {
     [
       "Planning",
       "Afhankelijk van markt en koper",
-      "In overleg duidelijk te bespreken"
+      "In overleg vast te leggen"
     ],
     [
       "Oplevering",
@@ -161,7 +158,7 @@ const page = {
   "faqs": [
     {
       "question": "Kan ik mijn woning in Emmen verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bekijken wij of een directe verkooproute of een andere oplossing passend kan zijn."
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bespreken wij welke verkooproute het beste bij de woning en uw situatie past."
     },
     {
       "question": "Moet mijn woning in Emmen verkoopklaar zijn?",
@@ -169,7 +166,7 @@ const page = {
     },
     {
       "question": "Krijg ik gegarandeerd snel een bod?",
-      "answer": "Nee, een bod of verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
+      "answer": "Nee. Wij garanderen vooraf geen bod of verkoop binnen een vaste termijn. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
     },
     {
       "question": "Hoe worden afspraken vastgelegd?",
@@ -210,8 +207,8 @@ const page = {
       "Huis verkopen in Borger"
     ]
   ],
-  "ctaTitle": "Wilt u uw huis in Emmen verkopen?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."
+  "ctaTitle": "Snel weten wat er met uw woning in Emmen mogelijk is?",
+  "ctaText": "Vraag vrijblijvend een beoordeling aan van de woning, planning en gewenste oplevering."
 };
 
 export default function HuisVerkopenEmmenPage() {

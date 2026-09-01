@@ -12,17 +12,19 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/opknapwoning-verkopen-zonder-makelaar",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
 const page = {
   "slug": "/opknapwoning-verkopen-zonder-makelaar",
+  "pageType": "situation",
   "breadcrumb": "Opknapwoning verkopen zonder makelaar",
   "eyebrow": "Opknapwoning zonder makelaar",
   "h1": "Opknapwoning verkopen zonder makelaar",
   "lead": "Een opknapwoning verkopen via de reguliere markt kan extra vragen oproepen. Kopers letten op onderhoud, financiering, risico's en verbouwkosten. Een directe verkoop kan dan een alternatief zijn.",
-  "shortAnswer": "Ja, een opknapwoning kan soms zonder makelaar worden verkocht. Vooral als u geen open huis, verkoopklaar maken of makelaarskosten wilt, kan een directe verkooproute interessant zijn.",
+  "shortAnswer": "Ja, een opknapwoning kan zonder makelaar worden verkocht. Een directe verkooproute kan interessant zijn als u geen open huis wilt, de woning niet eerst verkoopklaar wilt maken en geen makelaarskosten bij directe aankoop wilt betalen.",
   "benefits": [
     "Geen makelaar nodig",
     "Niet eerst opknappen",
@@ -89,12 +91,12 @@ const page = {
     [
       "Kosten",
       "Mogelijk courtage, styling of herstel",
-      "Geen makelaarskosten voor de aanvraag"
+      "Geen makelaarskosten bij directe aankoop"
     ],
     [
       "Planning",
       "Afhankelijk van koper en markt",
-      "In overleg duidelijk af te spreken"
+      "In overleg vast te leggen"
     ],
     [
       "Beslissing",

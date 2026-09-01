@@ -106,18 +106,18 @@ export default function ProposalActions({
 
   return (
     <>
-      <section ref={actionSectionRef} id="voorstel-actie" className="proposal-actions-v32" aria-label="Akkoord geven of reageren op voorstel">
+      <section ref={actionSectionRef} id="voorstel-actie" className="proposal-actions-v32" aria-label="Reageren op het voorstel">
         <div className="proposal-actions-copy">
           <span className="proposal-actions-kicker">Uw volgende stap</span>
           <h2>Wilt u verder met dit voorstel?</h2>
-          <p>U kunt aangeven dat u verder wilt, het voorstel eerst bespreken of direct een vraag stellen. De definitieve afspraken worden daarna schriftelijk uitgewerkt.</p>
+          <p>Geef aan dat u verder wilt of laat weten dat u het voorstel eerst wilt bespreken. Wij nemen daarna persoonlijk contact met u op en werken de afspraken schriftelijk uit.</p>
           {validityText ? <p className="validity-note">{validityText}</p> : null}
           {previewMode ? <p className="preview-note">Admin-preview: klantacties zijn uitgeschakeld.</p> : null}
         </div>
 
         <div className="proposal-action-buttons-v32">
           <button disabled={state === "sending" || previewMode} onClick={startInterested} className="primary-action">
-            Akkoord met voorstel
+            Ik wil verder
           </button>
           <button disabled={state === "sending" || previewMode} onClick={startDiscuss} className="secondary-action">
             Eerst bespreken
@@ -152,7 +152,7 @@ export default function ProposalActions({
           </div>
         ) : null}
 
-        <p className="legal-note">Met “Akkoord met voorstel” geeft u aan dat u met dit voorstel verder wilt. Een koopovereenkomst komt pas tot stand nadat de definitieve afspraken schriftelijk zijn uitgewerkt en door de betrokken partijen zijn ondertekend.</p>
+        <p className="legal-note">Met “Ik wil verder” geeft u aan dat u het voorstel samen met ons wilt uitwerken. Dit is nog geen koopovereenkomst. Die komt pas tot stand nadat de definitieve afspraken schriftelijk zijn vastgelegd en door koper en verkoper zijn ondertekend.</p>
         {state === "error" ? <p className="action-error">{errorMessage}</p> : null}
       </section>
 
@@ -191,7 +191,7 @@ export default function ProposalActions({
             {amountText ? <strong>{amountText}</strong> : null}
             {validityText ? <span>{validityText}</span> : null}
           </div>
-          <button disabled={previewMode} onClick={startInterested}>Akkoord</button>
+          <button disabled={previewMode} onClick={startInterested}>Verder</button>
           <button disabled={previewMode} onClick={() => startDiscuss({ scrollToAction: true })}>Bespreken</button>
         </div>
       ) : null}

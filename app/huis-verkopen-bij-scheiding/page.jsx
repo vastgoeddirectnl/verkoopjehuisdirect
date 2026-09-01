@@ -12,7 +12,8 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-bij-scheiding",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -103,11 +104,11 @@ const page = {
     },
     {
       "title": "Situatie beoordelen",
-      "text": "We kijken naar eigendom, staat, planning, oplevering en eventuele bijzonderheden."
+      "text": "Wij kijken naar eigendom, staat, planning, oplevering en eventuele bijzonderheden."
     },
     {
       "title": "Vrijblijvend voorstel",
-      "text": "Waar mogelijk ontvangt u een eerste inschatting of verkoopvoorstel met duidelijke uitgangspunten."
+      "text": "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel met duidelijke uitgangspunten."
     },
     {
       "title": "Schriftelijke afspraken",
@@ -118,12 +119,12 @@ const page = {
     [
       "Verkoopklaar maken",
       "Vaak opruimen, herstellen of presenteren",
-      "Huidige situatie kan worden beoordeeld"
+      "De huidige situatie kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
       "Meerdere kijkers of open huis mogelijk",
-      "Niet standaard nodig"
+      "Doorgaans niet nodig"
     ],
     [
       "Planning",
@@ -148,7 +149,7 @@ const page = {
   ],
   "faqs": [
     {
-      "question": "Kunnen wij de woning verkopen als we allebei eigenaar zijn?",
+      "question": "Kunnen wij de woning verkopen als wij allebei eigenaar zijn?",
       "answer": "In de meeste gevallen moeten alle eigenaren instemmen en de koopovereenkomst ondertekenen. Bij twijfel is juridisch advies verstandig."
     },
     {
