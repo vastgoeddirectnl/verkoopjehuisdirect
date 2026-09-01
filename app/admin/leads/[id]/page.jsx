@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { parseLeadSourceDetails, sourceChannelLabel } from "../../../lib/sourceParser";
 import { addDaysAmsterdam, formatDateTimeNL } from "../../../lib/date";
-import { proposalValidationIssues } from "../../../lib/proposalValidation";
+import { proposalReviewWarnings, proposalValidationIssues } from "../../../lib/proposalValidation";
 import LeadTimeline from "../../../components/admin/LeadTimeline";
 
 const STATUSES = ["Nieuwe aanvraag", "In behandeling", "Eerste bod gedaan", "Beoordeling gepland", "Voorstel opgesteld", "Voorstel verzonden", "Voorstel bekeken", "In onderhandeling", "Akkoord", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
@@ -580,7 +580,7 @@ function defaultProposalForLead(lead) {
     deposit_text: "",
     conditions_text: "Dit voorstel is vrijblijvend en bedoeld om duidelijkheid te geven over een mogelijke verkoop. Definitieve afspraken worden pas schriftelijk en notarieel vastgelegd. Als een koopovereenkomst wordt uitgewerkt, geldt als uitgangspunt dat koper koopt zonder financieringsvoorbehoud, bouwkundig voorbehoud, verkoopvoorbehoud of andere ontbindende voorbehouden, tenzij schriftelijk anders overeengekomen.",
     assumptions_text: "Dit voorstel is gebaseerd op de door u verstrekte gegevens, openbare woning- of objectinformatie en de huidige bekende staat van de woning of het object. Eventuele afwijkingen, bijzondere juridische situaties, verborgen gebreken, beperkte toegang tot documenten of aanvullende kosten kunnen invloed hebben op de definitieve afspraken.",
-    included_items: "Heldere communicatie\nGeen makelaarskosten\nGeen openbare bezichtigingen nodig\nVerkoop in huidige staat bespreekbaar\nFlexibele overdrachtsdatum\nNotariële afwikkeling\nMeer zekerheid na akkoord\nVerkoopoplossing op maat\nVrijblijvend voorstel",
+    included_items: "Heldere communicatie\nGeen makelaarskosten\nGeen openbare bezichtigingen nodig\nVerkoop in huidige staat bespreekbaar\nFlexibele overdrachtsdatum\nNotariële afwikkeling\nMeer zekerheid na overeenstemming\nVerkoopoplossing op maat\nVrijblijvend voorstel",
     traditional_price_text: "",
     agent_costs_text: "",
     notary_costs_text: "",
@@ -588,9 +588,9 @@ function defaultProposalForLead(lead) {
     other_costs_text: "",
     traditional_net_text: "",
     direct_net_text: "",
-    short_comparison_text: "De netto-opbrengstvergelijking is indicatief. Bij verhuurde, leeg te leveren of gemengde objecten kan de traditionele vergelijkingswaarde mede worden benaderd vanuit huurwaarde, leegstand, verhuurrisico, verkoopbaarheid en kosten. Een direct voorstel kan lager zijn dan een optimistische marktwaarde, maar geeft meer duidelijkheid over voorwaarden, planning, afwikkeling en zekerheid na akkoord.",
-    reservations_text: "Controle woninggegevens\nControle eigendomssituatie\nControle beschikbare documenten\nControle eventuele huur-, gebruiks- of beslaggegevens\nNotariële toetsing\nAkkoord op voorwaarden\nGeen bijzondere belemmeringen\nDefinitieve schriftelijke vastlegging",
-    next_steps_text: "U beoordeelt het voorstel rustig.\nWij bespreken eventuele vragen, bijzonderheden en voorwaarden.\nIndien gewenst verzamelen wij aanvullende gegevens over de woning of het object.\nBij akkoord worden de afspraken schriftelijk bevestigd.\nDe overdracht en betaling verlopen via de notaris.",
+    short_comparison_text: "De netto-opbrengstvergelijking is indicatief. Bij verhuurde, leeg te leveren of gemengde objecten kan de traditionele vergelijkingswaarde mede worden benaderd vanuit huurwaarde, leegstand, verhuurrisico, verkoopbaarheid en kosten. Een direct voorstel kan lager zijn dan een optimistische marktwaarde, maar geeft meer duidelijkheid over voorwaarden, planning, afwikkeling en zekerheid bij overeenstemming.",
+    reservations_text: "Controle woninggegevens\nControle eigendomssituatie\nControle beschikbare documenten\nControle eventuele huur-, gebruiks- of beslaggegevens\nNotariële toetsing\nOvereenstemming over voorwaarden\nGeen bijzondere belemmeringen\nDefinitieve schriftelijke vastlegging",
+    next_steps_text: "U beoordeelt het voorstel rustig.\nWij bespreken eventuele vragen, bijzonderheden en voorwaarden.\nIndien gewenst verzamelen wij aanvullende gegevens over de woning of het object.\nAls u verder wilt, werken wij de afspraken uit in een koopovereenkomst.\nDe overdracht en betaling verlopen via de notaris.",
     contact_person: "Rob Schiphuis",
     proposal_type: "Standaard aankoop",
     delivery_term_text: "Uiterlijk binnen 6 maanden",
@@ -725,6 +725,7 @@ export default function LeadDetailPage({ params }) {
   const sellerWorkTotal = useMemo(() => calculateSellerWorkTotal(proposal || {}), [proposal]);
   const resaleExample = useMemo(() => calculateResaleExample(proposal || {}), [proposal]);
   const proposalIssues = useMemo(() => proposalValidationIssues(buildCalculatedProposalPayload(proposal || {})), [proposal]);
+  const proposalWarnings = useMemo(() => proposalReviewWarnings(buildCalculatedProposalPayload(proposal || {})), [proposal]);
 
   function setProposalField(field, value) {
     setProposal((current) => {
@@ -897,7 +898,7 @@ export default function LeadDetailPage({ params }) {
   return (
     <main className="detail-page">
       <style>{styles}</style>
-      <style>{`.proposal-validation{border:1px solid #ffd5c4;background:#fff5f1;color:#7c2d20;border-radius:20px;padding:16px 18px}.proposal-validation strong{display:block}.proposal-validation ul{margin:8px 0 0;padding-left:20px}.proposal-validation li{margin-top:4px}.proposal-validation.ready{background:#f0fff6;border-color:#bff3d0;color:#075c2a}`}</style>
+      <style>{`.proposal-validation{border:1px solid #ffd5c4;background:#fff5f1;color:#7c2d20;border-radius:20px;padding:16px 18px}.proposal-validation strong{display:block}.proposal-validation ul{margin:8px 0 0;padding-left:20px}.proposal-validation li{margin-top:4px}.proposal-validation.ready{background:#f0fff6;border-color:#bff3d0;color:#075c2a}.proposal-review{border:1px solid #f2b885;background:#fffaf4;color:#7c4a23;border-radius:20px;padding:16px 18px}.proposal-review strong{display:block}.proposal-review ul{margin:8px 0 0;padding-left:20px}.proposal-review li{margin-top:4px}`}</style>
       <header>
         <a href="/admin">← Dashboard</a>
         <img src="/logo.png" alt="Vastgoed Direct Nederland" />
@@ -1260,6 +1261,13 @@ export default function LeadDetailPage({ params }) {
                 ) : (
                   <div className="proposal-validation ready"><strong>Voorstel is inhoudelijk gereed om aan te maken.</strong></div>
                 )}
+
+                {proposalWarnings.length ? (
+                  <div className="proposal-review">
+                    <strong>Advies voor een overtuigender voorstel</strong>
+                    <ul>{proposalWarnings.map((warning) => <li key={warning}>{warning}</li>)}</ul>
+                  </div>
+                ) : null}
 
                 <div className="proposal-actions">
                   <button disabled={saving || proposalIssues.length > 0} onClick={createProposal}>Voorstel maken en openen</button>

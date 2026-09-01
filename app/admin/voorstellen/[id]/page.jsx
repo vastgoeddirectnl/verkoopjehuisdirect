@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { formatDateTimeNL } from "../../../lib/date";
-import { proposalValidationIssues } from "../../../lib/proposalValidation";
+import { proposalReviewWarnings, proposalValidationIssues } from "../../../lib/proposalValidation";
 
 const EDITABLE_FIELDS = [
   ["lead_naam", "Naam klant", "text"],
@@ -98,7 +98,10 @@ export default function ProposalAdminPage({ params }) {
       return;
     }
     setData(json);
-    setForm(json.proposal);
+    setForm({
+      ...json.proposal,
+      validity_date: json.proposal?.validity_date ? String(json.proposal.validity_date).slice(0, 10) : "",
+    });
   }
 
   useEffect(() => {
@@ -190,6 +193,7 @@ export default function ProposalAdminPage({ params }) {
   const viewCount = useMemo(() => events.filter((event) => event.event_type === "view").length, [events]);
   const whatsappLink = proposalWhatsappUrl(proposal);
   const proposalIssues = useMemo(() => proposalValidationIssues(form || {}, { forSending: true }), [form]);
+  const proposalWarnings = useMemo(() => proposalReviewWarnings(form || {}), [form]);
 
   if (!form) {
     return (
@@ -204,7 +208,7 @@ export default function ProposalAdminPage({ params }) {
   return (
     <main className="proposal-admin">
       <style>{styles}</style>
-      <style>{`.validation-panel{margin:0 0 16px;border:1px solid #ffd5c4;background:#fff5f1;color:#7c2d20;border-radius:18px;padding:14px 16px}.validation-panel strong{display:block}.validation-panel ul{margin:7px 0 0;padding-left:20px}.validation-panel.ready{background:#f0fff6;border-color:#bff3d0;color:#075c2a}`}</style>
+      <style>{`.validation-panel{margin:0 0 16px;border:1px solid #ffd5c4;background:#fff5f1;color:#7c2d20;border-radius:18px;padding:14px 16px}.validation-panel strong{display:block}.validation-panel ul{margin:7px 0 0;padding-left:20px}.validation-panel a{display:inline-block;margin-top:10px;color:inherit;font-weight:900}.validation-panel.ready{background:#f0fff6;border-color:#bff3d0;color:#075c2a}.review-panel{margin:0 0 16px;border:1px solid #f2b885;background:#fffaf4;color:#7c4a23;border-radius:18px;padding:14px 16px}.review-panel strong{display:block}.review-panel ul{margin:7px 0 0;padding-left:20px}`}</style>
 
       <header className="admin-head">
         <div>
@@ -227,10 +231,18 @@ export default function ProposalAdminPage({ params }) {
         <div className="validation-panel" role="alert">
           <strong>Nog controleren vóór verzending</strong>
           <ul>{proposalIssues.map((issue) => <li key={issue}>{issue}</li>)}</ul>
+          {proposal?.lead_id ? <a href={`/admin/leads/${proposal.lead_id}#voorstel-maken`}>Maak via de lead een gecorrigeerde versie</a> : null}
         </div>
       ) : (
         <div className="validation-panel ready"><strong>Voorstel is inhoudelijk gereed voor verzending.</strong></div>
       )}
+
+      {proposalWarnings.length ? (
+        <div className="review-panel">
+          <strong>Advies voor een overtuigender voorstel</strong>
+          <ul>{proposalWarnings.map((warning) => <li key={warning}>{warning}</li>)}</ul>
+        </div>
+      ) : null}
 
       <nav className="actionbar">
         <button disabled={saving} onClick={save}>Opslaan</button>

@@ -52,8 +52,13 @@ export function proposalValidationIssues(proposal = {}, { forSending = false } =
 
   if (!amount) issues.push("Vul een geldig voorgesteld bedrag in.");
   if (forSending && !text(proposal.validity_date)) issues.push("Vul een geldigheidsdatum in.");
-  if (forSending && !text(proposal.property_address) && !(text(proposal.property_postcode) && text(proposal.property_house_number))) {
-    issues.push("Vul het adres van de woning of het object in.");
+  if (forSending) {
+    const address = text(proposal.property_address);
+    if (!address && !(text(proposal.property_postcode) && text(proposal.property_house_number))) {
+      issues.push("Vul het adres van de woning of het object in.");
+    } else if (/^\d{4}\s?[a-z]{2}\s+\d/i.test(address)) {
+      issues.push("Vul het volledige straatadres in; alleen postcode en huisnummer is niet voldoende.");
+    }
   }
 
   if (proposal.seller_work_enabled) {
@@ -82,6 +87,31 @@ export function proposalValidationIssues(proposal = {}, { forSending = false } =
   }
 
   return issues;
+}
+
+export function proposalReviewWarnings(proposal = {}) {
+  const warnings = [];
+  const directNet = parseProposalMoney(proposal.direct_net_text) || parseProposalMoney(proposal.amount_text);
+  const traditionalNet = parseProposalMoney(proposal.traditional_net_text);
+
+  if (directNet && traditionalNet && directNet < traditionalNet * 0.8) {
+    const difference = new Intl.NumberFormat("nl-NL", {
+      style: "currency",
+      currency: "EUR",
+      maximumFractionDigits: 0,
+    }).format(Math.round(traditionalNet - directNet));
+    warnings.push(`De directe netto-opbrengst ligt ${difference} onder de traditionele netto-opbrengst. Controleer of de vergelijking realistisch is en licht het verschil concreet toe.`);
+  }
+
+  if (/^in overleg(?: bespreekbaar)?$/i.test(text(proposal.deposit_text))) {
+    warnings.push("De aanbetaling of het voorschot is niet concreet ingevuld en wordt daarom niet aan de klant getoond.");
+  }
+
+  if (/appartement/i.test(text(proposal.property_type)) && parseProposalMoney(proposal.plot_area_text)) {
+    warnings.push("Controleer of een perceeloppervlakte bij dit appartement werkelijk van toepassing is.");
+  }
+
+  return warnings;
 }
 
 export function isSellerWorkComplete(proposal = {}) {

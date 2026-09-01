@@ -21,13 +21,13 @@ export const dynamic = "force-dynamic";
 const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid. Indien partijen overeenstemming bereiken, wordt de koopovereenkomst opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen.";
 
 
-const NO_BUYER_CONDITIONS_NOTICE_TITLE = "Meer zekerheid bij akkoord";
+const NO_BUYER_CONDITIONS_NOTICE_TITLE = "Meer zekerheid bij overeenstemming";
 const NO_BUYER_CONDITIONS_NOTICE_TEXT = "Bij overeenstemming wordt de koopovereenkomst in beginsel opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen. Daarmee is het traject minder afhankelijk van financiering, keuringen of verkoop van een andere woning.";
-const INCLUDED_ASSURANCE_ITEM = "Meer zekerheid na akkoord";
+const INCLUDED_ASSURANCE_ITEM = "Meer zekerheid na overeenstemming";
 
 function ensureIncludedAssurance(items) {
-  const list = Array.isArray(items) ? items : [];
-  const alreadyIncluded = list.some((item) => /meer\s+zekerheid\s+na\s+akkoord|zonder\s+ontbindende\s+voorbehouden/i.test(String(item || "")));
+  const list = (Array.isArray(items) ? items : []).map((item) => String(item || "").replace(/meer\s+zekerheid\s+na\s+akkoord/gi, INCLUDED_ASSURANCE_ITEM));
+  const alreadyIncluded = list.some((item) => /meer\s+zekerheid\s+na\s+(?:akkoord|overeenstemming)|zonder\s+ontbindende\s+voorbehouden/i.test(String(item || "")));
   return alreadyIncluded ? list : [...list, INCLUDED_ASSURANCE_ITEM];
 }
 
@@ -253,7 +253,10 @@ function objectTerms(proposal) {
 }
 
 function objectAwareText(text, proposal) {
-  const raw = String(text || "");
+  const raw = String(text || "")
+    .replace(/^Bij akkoord worden de afspraken schriftelijk bevestigd\.$/i, "Als u verder wilt, werken wij de afspraken uit in een koopovereenkomst.")
+    .replace(/^Akkoord op voorwaarden$/i, "Overeenstemming over voorwaarden")
+    .replace(/zekerheid na akkoord/gi, "zekerheid bij overeenstemming");
   if (!isObjectProposal(proposal)) return raw;
   return raw
     .replace(/de woning of het object/gi, "het object")
@@ -840,5 +843,5 @@ p,.intro,li{font-size:16.5px;line-height:1.68;color:var(--muted)}
 @media(max-width:900px){.cover,.executive-summary,.two-columns,.signature,.proposal-assurance{grid-template-columns:1fr}.benefits{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3n){border-right:1px solid var(--line)}.facts div:nth-child(2n){border-right:0}.comparison-desktop{display:none}.comparison-mobile{display:grid;gap:12px;margin-top:18px}.mobile-compare-card{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 10px 28px rgba(7,31,58,.045)}.mobile-compare-card h3{margin:0;padding:14px 16px;background:#F7F2EC;border-bottom:1px solid var(--line);font-size:18px;line-height:1.2;letter-spacing:-.02em;color:var(--navy)}.mobile-compare-values{display:grid;grid-template-columns:1fr 1fr}.mobile-compare-values div{padding:14px 16px;min-width:0}.mobile-compare-values div:first-child{border-right:1px solid var(--line)}.mobile-compare-values span{display:block;font-size:11px;line-height:1.25;text-transform:uppercase;letter-spacing:.055em;color:var(--muted);font-weight:900;margin-bottom:7px}.mobile-compare-values strong{display:block;font-size:18px;line-height:1.28;color:var(--navy);overflow-wrap:anywhere}.mobile-compare-values .direct strong{color:var(--orange)}.mobile-compare-card.total{border-color:#ead4c0;background:#fffaf4}.mobile-compare-card.total h3{background:#fff1e6}.mobile-compare-card.total strong{font-size:20px}.checks,.reservations,.construct-grid,.mini-checks{grid-template-columns:1fr}}
 @media(max-width:640px){.proposal-page{padding:12px}.topbar{display:grid}.top-actions{justify-content:stretch}.top-actions span{display:none}.topbar img{width:215px}.topbar button,.top-response-link{width:100%}.cover,.executive-summary,.card,.signature,.disclaimer{border-radius:24px;padding:20px}.cover h1{font-size:39px}.cover p{font-size:16px}.offer-panel strong{font-size:36px}.benefits,.facts{grid-template-columns:1fr}.facts div{border-right:0!important}.timeline-step{grid-template-columns:54px 1fr}.section-kicker{font-size:11px}h2{font-size:28px}.mobile-compare-card h3{font-size:17px;padding:13px 14px}.mobile-compare-values div{padding:12px 13px}.mobile-compare-values strong{font-size:16px}.mobile-compare-card.total strong{font-size:18px}}
 @media(max-width:420px){.mobile-compare-values{grid-template-columns:1fr}.mobile-compare-values div:first-child{border-right:0;border-bottom:1px solid var(--line)}.mobile-compare-values div{padding:12px 14px}.mobile-compare-values span{font-size:10.5px}.mobile-compare-values strong{font-size:17px}.mobile-compare-card.total strong{font-size:19px}}
-@media print{body{background:#fff}.proposal-page{max-width:none;padding:0}.topbar button,.top-actions span{display:none}.topbar img{box-shadow:none}.cover,.executive-summary,.card,.signature,.disclaimer{box-shadow:none;page-break-inside:avoid;border-radius:18px}.cover{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.offer-panel{box-shadow:none}.comparison .head,.timeline-step strong,.contact-block{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.comparison .orange{background:#D96A1C!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media print{body{background:#fff}.proposal-page{max-width:none;padding:0}.topbar button,.top-actions span,.top-response-link{display:none}.topbar img{box-shadow:none}.cover,.executive-summary,.card,.signature,.disclaimer{box-shadow:none;page-break-inside:avoid;border-radius:18px}.cover{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.offer-panel{box-shadow:none}.comparison .head,.timeline-step strong,.contact-block{background:#071f3a!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.comparison .orange{background:#D96A1C!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 `;

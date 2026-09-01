@@ -9,13 +9,13 @@ export const dynamic = "force-dynamic";
 const DEFAULT_NONBINDING_TEXT = "Dit voorstel is vrijblijvend en niet-bindend. Aan dit voorstel kunnen geen rechten worden ontleend. Een koopovereenkomst komt uitsluitend tot stand nadat alle voorwaarden definitief zijn uitgewerkt en de koopovereenkomst door koper en verkoper is ondertekend. Het voorstel is daarnaast onder voorbehoud van juridische, fiscale en notariële uitvoerbaarheid. Indien partijen overeenstemming bereiken, wordt de koopovereenkomst opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen.";
 
 
-const NO_BUYER_CONDITIONS_NOTICE_TITLE = "Meer zekerheid bij akkoord";
+const NO_BUYER_CONDITIONS_NOTICE_TITLE = "Meer zekerheid bij overeenstemming";
 const NO_BUYER_CONDITIONS_NOTICE_TEXT = "Bij overeenstemming wordt de koopovereenkomst in beginsel opgesteld zonder ontbindende voorbehouden aan koperszijde, zoals financieringsvoorbehoud, bouwkundig voorbehoud of verkoopvoorbehoud, tenzij koper en verkoper schriftelijk anders overeenkomen. Daarmee is het traject minder afhankelijk van financiering, keuringen of verkoop van een andere woning.";
-const INCLUDED_ASSURANCE_ITEM = "Meer zekerheid na akkoord";
+const INCLUDED_ASSURANCE_ITEM = "Meer zekerheid na overeenstemming";
 
 function ensureIncludedAssurance(items) {
-  const list = Array.isArray(items) ? items : [];
-  const alreadyIncluded = list.some((item) => /meer\s+zekerheid\s+na\s+akkoord|zonder\s+ontbindende\s+voorbehouden/i.test(String(item || "")));
+  const list = (Array.isArray(items) ? items : []).map((item) => String(item || "").replace(/meer\s+zekerheid\s+na\s+akkoord/gi, INCLUDED_ASSURANCE_ITEM));
+  const alreadyIncluded = list.some((item) => /meer\s+zekerheid\s+na\s+(?:akkoord|overeenstemming)|zonder\s+ontbindende\s+voorbehouden/i.test(String(item || "")));
   return alreadyIncluded ? list : [...list, INCLUDED_ASSURANCE_ITEM];
 }
 
@@ -243,7 +243,10 @@ function objectTerms(proposal) {
 }
 
 function objectAwareText(text, proposal) {
-  const raw = String(text || "");
+  const raw = String(text || "")
+    .replace(/^Bij akkoord worden de afspraken schriftelijk bevestigd\.$/i, "Als u verder wilt, werken wij de afspraken uit in een koopovereenkomst.")
+    .replace(/^Akkoord op voorwaarden$/i, "Overeenstemming over voorwaarden")
+    .replace(/zekerheid na akkoord/gi, "zekerheid bij overeenstemming");
   if (!isObjectProposal(proposal)) return raw;
   return raw
     .replace(/de woning of het object/gi, "het object")
@@ -604,7 +607,7 @@ export default async function ProposalPrintPage({ params }) {
             <div><strong>Snelheid</strong><span>Kan weken/maanden duren</span><em>Snelle duidelijkheid mogelijk</em></div>
             <div><strong>Privacy</strong><span>Openbare presentatie</span><em>Vertrouwelijk traject</em></div>
           </div>
-          {proposal.short_comparison_text ? <p className="notice">{proposal.short_comparison_text}</p> : null}
+          {proposal.short_comparison_text ? <p className="notice">{objectAwareText(proposal.short_comparison_text, proposal)}</p> : null}
         </section>
       </article>
 
