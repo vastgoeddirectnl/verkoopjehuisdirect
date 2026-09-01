@@ -13,6 +13,7 @@ export const metadata = {
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
   },
 };
 
@@ -31,7 +32,7 @@ const page = {
     "Schriftelijke afspraken",
     "Notariële overdracht",
   ],
-  afterRequestText: "Wij bekijken uw woninggegevens en de gewenste planning. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Een verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd.",
+  afterRequestText: "Wij bekijken uw woninggegevens en de gewenste planning. Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel. Wij garanderen vooraf geen verkoop binnen een vaste termijn.",
   shortAnswer: "Direct verkopen betekent dat u eerst rustig duidelijkheid krijgt over bedrag, planning en voorwaarden zonder een volledig makelaarstraject te starten. Pas als het voorstel past, worden afspraken verder uitgewerkt.",
   benefits: [
     "Direct duidelijkheid",
@@ -56,9 +57,9 @@ const page = {
   ],
   solutionTitle: "Wat maakt Vastgoed Direct Nederland eenvoudiger?",
   solutionCards: [
-    "We beoordelen de woning zoals deze nu is, inclusief aandachtspunten.",
-    "We bespreken planning, oplevering en eventuele bijzonderheden vooraf.",
-    "U ontvangt waar mogelijk een voorstel met heldere uitgangspunten.",
+    "Wij beoordelen de woning zoals deze nu is, inclusief aandachtspunten.",
+    "Wij bespreken planning, oplevering en eventuele bijzonderheden vooraf.",
+    "Als directe verkoop passend is, ontvangt u een verkoopvoorstel met heldere uitgangspunten.",
     "Bij akkoord worden afspraken schriftelijk en notarieel vastgelegd.",
   ],
   vdnTasks: [
@@ -79,7 +80,7 @@ const page = {
     region: "Noord-Nederland",
     mainProblem: "De eigenaar twijfelde tussen regulier verkopen en direct duidelijkheid krijgen, omdat de woning nog onderhoud nodig had en niet verkoopklaar was.",
     solution: "Eerst is de huidige staat besproken. Daarna is gekeken welke overdracht en oplevering praktisch haalbaar waren.",
-    delivery: "Oplevering in huidige staat bespreekbaar gemaakt.",
+    delivery: "Oplevering in de huidige staat bespreekbaar gemaakt.",
     transfer: "Afspraken zouden bij akkoord schriftelijk en via de notaris worden vastgelegd.",
     nextStep: "De eigenaar kon het voorstel rustig vergelijken met een regulier verkooptraject.",
   },
@@ -88,7 +89,7 @@ const page = {
       title: "Wat betekent direct verkopen?",
       paragraphs: [
         "Direct verkopen betekent niet dat u meteen vastzit aan verkoop. Het begint met een vrijblijvende beoordeling van uw woning, situatie en gewenste planning.",
-        "Daarna ontvangt u waar mogelijk een voorstel of inschatting. U bepaalt zelf of u verder wilt praten over de voorwaarden.",
+        "Daarna hoort u of directe verkoop passend is. In dat geval ontvangt u een vrijblijvend verkoopvoorstel dat u rustig kunt beoordelen.",
       ],
     },
     {
@@ -102,22 +103,22 @@ const page = {
   processTitle: "Hoe verloopt direct verkopen?",
   processSteps: [
     { title: "Aanvraag indienen", text: "U vult kort de woninggegevens en uw situatie in." },
-    { title: "Persoonlijk contact en beoordeling", text: "We bespreken de woning, de gewenste planning en eventuele bijzonderheden." },
-    { title: "Vrijblijvend voorstel", text: "Waar mogelijk ontvangt u een voorstel met bedrag, uitgangspunten en voorwaarden." },
+    { title: "Persoonlijk contact en beoordeling", text: "Wij bespreken de woning, de gewenste planning en eventuele bijzonderheden." },
+    { title: "Vrijblijvend verkoopvoorstel", text: "Als directe verkoop passend is, ontvangt u een voorstel met bedrag, uitgangspunten en voorwaarden." },
     { title: "Schriftelijke afspraken en notariële overdracht", text: "Alleen bij akkoord worden afspraken uitgewerkt in een koopovereenkomst en via de notaris afgehandeld." },
   ],
   comparisonRows: [
     ["Verkoopklaar maken", "Vaak nodig voor presentatie", "Niet vooraf nodig voor een eerste voorstel"],
     ["Bezichtigingen", "Meerdere kijkers of open huis", "Geen open huis nodig"],
     ["Koperzekerheid", "Afhankelijk van interesse en financiering", "Voorwaarden worden vooraf besproken"],
-    ["Planning", "Afhankelijk van markt en koper", "In overleg duidelijk af te spreken"],
-    ["Kosten", "Mogelijk courtage, styling of herstel", "Geen makelaarskosten voor de aanvraag"],
+    ["Planning", "Afhankelijk van markt en koper", "In overleg vast te leggen"],
+    ["Kosten", "Mogelijk courtage, styling of herstel", "Geen makelaarskosten bij directe aankoop"],
     ["Afwikkeling", "Via afspraken met koper en notaris", "Bij akkoord schriftelijk en notarieel"],
   ],
   faqs: [
     {
       question: "Wat betekent mijn huis direct verkopen?",
-      answer: "U vraagt eerst vrijblijvend een voorstel of inschatting aan zonder direct een regulier verkooptraject te starten. Pas als de voorwaarden passen, worden afspraken verder uitgewerkt.",
+      answer: "U vraagt eerst een vrijblijvende beoordeling aan zonder direct een regulier verkooptraject te starten. Als directe verkoop passend is, ontvangt u een verkoopvoorstel. Pas daarna worden eventuele afspraken verder uitgewerkt.",
     },
     {
       question: "Is direct verkopen hetzelfde als overhaast verkopen?",
@@ -138,8 +139,8 @@ const page = {
   ],
   relatedLinks: [
     ["/huis-snel-verkopen", "Huis snel verkopen"],
-    ["/huis-verkopen-aan-opkoper", "Huis verkopen aan opkoper"],
-    ["/huis-verkopen-in-huidige-staat", "Huis verkopen in huidige staat"],
+    ["/huis-verkopen-aan-opkoper", "Huis verkopen aan een opkoper"],
+    ["/huis-verkopen-in-huidige-staat", "Huis verkopen in de huidige staat"],
     ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen"],
     ["/huis-verkopen-zonder-leeghalen", "Huis verkopen zonder leeghalen"],
     ["/huis-verkopen-zonder-bezichtigingen", "Huis verkopen zonder bezichtigingen"],

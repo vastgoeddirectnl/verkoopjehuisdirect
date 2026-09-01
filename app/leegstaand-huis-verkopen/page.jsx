@@ -12,12 +12,14 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/leegstaand-huis-verkopen",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
 const page = {
   "slug": "/leegstaand-huis-verkopen",
+  "pageType": "situation",
   "breadcrumb": "Leegstaand huis verkopen",
   "eyebrow": "Leegstaand huis verkopen",
   "h1": "Leegstaand huis verkopen zonder gedoe",
@@ -90,12 +92,12 @@ const page = {
     [
       "Kosten",
       "Mogelijk courtage, styling of herstel",
-      "Geen makelaarskosten voor de aanvraag"
+      "Geen makelaarskosten bij directe aankoop"
     ],
     [
       "Planning",
       "Afhankelijk van koper en markt",
-      "In overleg duidelijk af te spreken"
+      "In overleg vast te leggen"
     ],
     [
       "Beslissing",

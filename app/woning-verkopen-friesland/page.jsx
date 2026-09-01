@@ -12,7 +12,8 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/woning-verkopen-friesland",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -22,12 +23,12 @@ const page = {
   "regionName": "Friesland",
   "breadcrumb": "Woning verkopen in Friesland",
   "eyebrow": "Regio Friesland",
-  "h1": "Uw huis verkopen in Friesland zonder verkoopstress",
-  "lead": "Wilt u een woning in Friesland verkopen, maar liever zonder lange bezichtigingsrondes of eerst alles verkoopklaar maken? Wij bekijken de woning, de locatie en uw gewenste planning zodat u rustig kunt bepalen welke verkooproute past.",
+  "h1": "Uw woning in Friesland verkopen, ook wanneer afstand of onderhoud meespeelt",
+  "lead": "Een dorpswoning, woonboerderij of tweede woning in Friesland kan extra organisatie vragen wanneer de eigenaar verder weg woont of de woning niet verkoopklaar is. Wij bespreken eerst wat u praktisch wilt en kunt regelen.",
   "heroNote": "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
   "defaultSituation": "Woning verkopen in Friesland",
-  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Friesland en uw gewenste planning. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Een verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd.",
-  "shortAnswer": "U kunt vrijblijvend een verkoopvoorstel aanvragen voor een woning in Friesland. Ook bij onderhoud, leegstand, erfenis, verhuur of een woning die nog vol staat kijken wij welke route passend kan zijn.",
+  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Friesland en uw gewenste planning. Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel. Wij garanderen vooraf geen verkoop binnen een vaste termijn.",
+  "shortAnswer": "Voor woningen in Friese dorpen, kleinere kernen en buitengebieden kunt u een vrijblijvende beoordeling aanvragen. Afstand, bereikbaarheid, leegstand en onderhoud worden meegenomen in de mogelijke verkooproute.",
   "benefits": [
     "Actief in Friesland",
     "Ook bij onderhoud of leegstand",
@@ -42,24 +43,24 @@ const page = {
     "Geen verkoopdruk",
     "Duidelijke afspraken"
   ],
-  "concernTitle": "Veelvoorkomende verkoopvragen in Friesland",
+  "concernTitle": "Praktische vragen bij verkoop in Friesland",
   "concernCards": [
-    "De woning ligt in Friese dorpen, kleinere kernen of buitengebied en is niet direct verkoopklaar.",
-    "Er is behoefte aan duidelijke planning, oplevering en voorwaarden.",
-    "De eigenaar wil liever geen open huis of reeks bezichtigingen.",
-    "Er speelt een bijzondere situatie zoals erfenis, leegstand, verhuur of dubbele lasten."
+    "De eigenaar woont niet dichtbij en kan niet steeds naar de woning komen.",
+    "De woning staat leeg of wordt als tweede woning gebruikt.",
+    "Onderhoud en opruimen vragen meer tijd dan beschikbaar is.",
+    "Er is behoefte aan duidelijke afspraken over overdracht en oplevering."
   ],
-  "solutionTitle": "Wat beoordelen wij in Friesland?",
+  "solutionTitle": "Een verkooproute met minder losse regelmomenten",
   "solutionCards": [
-    "De woning en staat zoals deze nu is.",
-    "De locatie, het type woning en praktische verkoopmogelijkheden.",
-    "De gewenste termijn en mogelijke opleverafspraken.",
-    "Of directe verkoop of een andere route passend kan zijn."
+    "Wij inventariseren welke informatie op afstand kan worden gedeeld.",
+    "De staat en het huidige gebruik worden in de beoordeling meegenomen.",
+    "Oplevering en achterblijvende zaken worden vooraf bespreekbaar gemaakt.",
+    "Het voorstel maakt duidelijk welke vervolgstappen nog nodig zijn."
   ],
   "vdnTasks": [
     "Woninggegevens en regionale situatie beoordelen.",
     "Meedenken over oplevering, planning en eventuele bijzonderheden.",
-    "Waar mogelijk een eerste inschatting of voorstel uitwerken.",
+    "Als directe verkoop passend is, een vrijblijvend verkoopvoorstel uitwerken.",
     "Bij akkoord zorgen dat afspraken schriftelijk en notarieel worden vastgelegd."
   ],
   "ownerTasks": [
@@ -69,41 +70,37 @@ const page = {
     "Het voorstel rustig beoordelen voordat verdere afspraken worden gemaakt."
   ],
   "practiceExample": {
-    "situation": "Woning in Friesland waarbij eerst duidelijkheid nodig was",
-    "propertyType": "Dorpswoning / woonboerderij",
+    "situation": "Woning in Friesland terwijl de eigenaar elders woonde",
+    "propertyType": "Dorpswoning",
     "region": "Friesland",
-    "mainProblem": "De eigenaar wilde weten welke verkooproute paste bij een woning in Friesland waarbij afstand, onderhoud en de gewenste overdrachtsplanning een rol speelden.",
-    "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
-    "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
-    "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",
-    "nextStep": "De eigenaar kon het voorstel vergelijken met een regulier verkooptraject."
+    "mainProblem": "Beheer, onderhoud en het organiseren van meerdere afspraken waren lastig doordat de eigenaar niet in de buurt woonde.",
+    "solution": "De beschikbare woninginformatie, huidige staat en gewenste overdracht zijn eerst op afstand geïnventariseerd.",
+    "delivery": "Vervolgens zijn afspraken over toegang en oplevering concreet gemaakt.",
+    "transfer": "De definitieve juridische controle en overdracht zouden via de notaris verlopen.",
+    "nextStep": "De eigenaar wist welke stappen op afstand mogelijk waren en wanneer aanwezigheid nodig was."
   },
   "sections": [
     {
-      "title": "Werkgebied in en rond Friesland",
+      "title": "Woningen in Friese dorpen en buitengebieden",
       "paragraphs": [
-        "Wij beoordelen woningen in Friesland, waaronder dorpen, kleinere kernen, buitengebieden en woningen waarbij verkoop zonder traditioneel traject gewenst is.",
-        "Het gaat niet alleen om de plaatsnaam. De staat van de woning, de gewenste termijn, eventuele bewoning en de oplevering bepalen samen welke verkooproute logisch is."
+        "Wij beoordelen aanvragen voor woningen in Friesland, waaronder dorpswoningen, woonboerderijen, woningen in kleinere kernen en objecten buiten de grotere plaatsen.",
+        "Ligging, bereikbaarheid, onderhoud en gebruik kunnen invloed hebben op voorbereiding en planning. Daarom worden die punten al bij de eerste beoordeling besproken."
       ]
     },
     {
-      "title": "Regionale bijzonderheden",
+      "title": "Verkopen wanneer u niet in de buurt woont",
       "paragraphs": [
-        "In Friesland kan afstand, bereikbaarheid, onderhoud, leegstand of tweede woninggebruik invloed hebben op verkoopmogelijkheden en planning.",
-        "Daarom krijgt u geen standaardantwoord, maar eerst een beoordeling van uw woninggegevens en situatie."
+        "Wanneer de eigenaar of erfgenamen verder weg wonen, kunnen beheer, afspraken en bezichtigingen belastend zijn. Een directe route kan het aantal losse stappen beperken, zolang documenten en bevoegdheden goed zijn geregeld."
       ]
     },
     {
-      "title": "Welke woningen kunnen worden aangemeld?",
-      "paragraphs": [
-        "U kunt ook een aanvraag doen wanneer de woning nog niet verkoopklaar is of wanneer er iets speelt waardoor een regulier verkooptraject minder prettig voelt."
-      ],
+      "title": "Passende verkoopsituaties",
       "bullets": [
-        "Leegstaande woning",
-        "Opknapwoning of woning met achterstallig onderhoud",
-        "Erfeniswoning of woning die nog vol staat",
-        "Verhuurde woning of woning met gebruiksafspraken",
-        "Woning waarbij snel duidelijkheid gewenst is"
+        "Dorpswoning of woonboerderij met onderhoud",
+        "Leegstaande of tweede woning",
+        "Erfeniswoning op afstand",
+        "Woning die nog niet leeg of verkoopklaar is",
+        "Verkoop met behoefte aan een overzichtelijke planning"
       ]
     }
   ],
@@ -115,10 +112,10 @@ const page = {
     },
     {
       "title": "Beoordeling van woning en regio",
-      "text": "We kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
+      "text": "Wij kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
     },
     {
-      "title": "Vrijblijvende inschatting of voorstel",
+      "title": "Vrijblijvend verkoopvoorstel",
       "text": "Waar mogelijk ontvangt u duidelijkheid over verkoopmogelijkheden en voorwaarden."
     },
     {
@@ -130,7 +127,7 @@ const page = {
     [
       "Voorbereiding",
       "Vaak verkoopklaar maken voor presentatie",
-      "Huidige staat kan worden beoordeeld"
+      "De huidige staat kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
@@ -145,7 +142,7 @@ const page = {
     [
       "Planning",
       "Afhankelijk van markt en koper",
-      "In overleg duidelijk te bespreken"
+      "In overleg vast te leggen"
     ],
     [
       "Oplevering",
@@ -161,7 +158,7 @@ const page = {
   "faqs": [
     {
       "question": "Kan ik mijn woning in Friesland verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bekijken wij of een directe verkooproute of een andere oplossing passend kan zijn."
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bespreken wij welke verkooproute het beste bij de woning en uw situatie past."
     },
     {
       "question": "Moet mijn woning in Friesland verkoopklaar zijn?",
@@ -169,7 +166,7 @@ const page = {
     },
     {
       "question": "Krijg ik gegarandeerd snel een bod?",
-      "answer": "Nee, een bod of verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
+      "answer": "Nee. Wij garanderen vooraf geen bod of verkoop binnen een vaste termijn. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
     },
     {
       "question": "Hoe worden afspraken vastgelegd?",
@@ -210,8 +207,8 @@ const page = {
       "Woning verkopen in Overijssel"
     ]
   ],
-  "ctaTitle": "Wilt u uw huis in Friesland verkopen?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."
+  "ctaTitle": "Woning in Friesland verkopen met een overzichtelijke planning?",
+  "ctaText": "Leg uw situatie vrijblijvend voor en ontdek welke stappen op afstand mogelijk zijn."
 };
 
 export default function WoningVerkopenFrieslandPage() {

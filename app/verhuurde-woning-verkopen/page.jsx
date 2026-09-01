@@ -12,7 +12,8 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/verhuurde-woning-verkopen",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -51,7 +52,7 @@ const page = {
     "Type huurcontract en beschikbare gegevens.",
     "Huurprijs, looptijd en eventuele afspraken.",
     "Of leeg of verhuurd leveren mogelijk is.",
-    "Welke verkooproute passend kan zijn."
+    "Welke verkooproute bij de woning en situatie past."
   ],
   "vdnTasks": [
     "Huursituatie en woninggegevens beoordelen.",
@@ -98,11 +99,11 @@ const page = {
     },
     {
       "title": "Situatie beoordelen",
-      "text": "We kijken naar eigendom, staat, planning, oplevering en eventuele bijzonderheden."
+      "text": "Wij kijken naar eigendom, staat, planning, oplevering en eventuele bijzonderheden."
     },
     {
       "title": "Vrijblijvend voorstel",
-      "text": "Waar mogelijk ontvangt u een eerste inschatting of verkoopvoorstel met duidelijke uitgangspunten."
+      "text": "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel met duidelijke uitgangspunten."
     },
     {
       "title": "Schriftelijke afspraken",
@@ -113,12 +114,12 @@ const page = {
     [
       "Verkoopklaar maken",
       "Vaak opruimen, herstellen of presenteren",
-      "Huidige situatie kan worden beoordeeld"
+      "De huidige situatie kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
       "Meerdere kijkers of open huis mogelijk",
-      "Niet standaard nodig"
+      "Doorgaans niet nodig"
     ],
     [
       "Planning",
@@ -178,7 +179,7 @@ const page = {
     ],
     [
       "/huis-verkopen-aan-opkoper",
-      "Huis verkopen aan opkoper"
+      "Huis verkopen aan een opkoper"
     ],
     [
       "/huis-verkopen-groningen",

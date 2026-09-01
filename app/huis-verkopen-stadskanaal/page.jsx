@@ -12,7 +12,8 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-stadskanaal",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -22,12 +23,12 @@ const page = {
   "regionName": "Stadskanaal",
   "breadcrumb": "Huis verkopen in Stadskanaal",
   "eyebrow": "Regio Stadskanaal",
-  "h1": "Uw huis verkopen in Stadskanaal zonder verkoopstress",
-  "lead": "Wilt u een woning in Stadskanaal verkopen, maar liever zonder lange bezichtigingsrondes of eerst alles verkoopklaar maken? Wij bekijken de woning, de locatie en uw gewenste planning zodat u rustig kunt bepalen welke verkooproute past.",
+  "h1": "Uw woning in Stadskanaal verkopen zonder eerst alles te herstellen",
+  "lead": "Heeft uw woning in Stadskanaal of de Kanaalstreek onderhoud nodig, staat deze leeg of speelt er een erfenis? U kunt eerst laten beoordelen wat directe verkoop betekent, zonder meteen kosten te maken voor herstel en presentatie.",
   "heroNote": "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
   "defaultSituation": "Huis verkopen in Stadskanaal",
-  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Stadskanaal en uw gewenste planning. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Een verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd.",
-  "shortAnswer": "U kunt vrijblijvend een verkoopvoorstel aanvragen voor een woning in Stadskanaal. Ook bij onderhoud, leegstand, erfenis, verhuur of een woning die nog vol staat kijken wij welke route passend kan zijn.",
+  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Stadskanaal en uw gewenste planning. Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel. Wij garanderen vooraf geen verkoop binnen een vaste termijn.",
+  "shortAnswer": "Voor woningen in Stadskanaal, Musselkanaal, Onstwedde, Alteveer en Vledderveen kunt u rechtstreeks een beoordeling aanvragen. De huidige staat kan vanaf het begin worden meegenomen.",
   "benefits": [
     "Actief in Stadskanaal",
     "Ook bij onderhoud of leegstand",
@@ -42,24 +43,24 @@ const page = {
     "Geen verkoopdruk",
     "Duidelijke afspraken"
   ],
-  "concernTitle": "Veelvoorkomende verkoopvragen in Stadskanaal",
+  "concernTitle": "Veelvoorkomende vragen in de Kanaalstreek",
   "concernCards": [
-    "De woning ligt in Stadskanaal en de Kanaalstreek en is niet direct verkoopklaar.",
-    "Er is behoefte aan duidelijke planning, oplevering en voorwaarden.",
-    "De eigenaar wil liever geen open huis of reeks bezichtigingen.",
-    "Er speelt een bijzondere situatie zoals erfenis, leegstand, verhuur of dubbele lasten."
+    "Is opknappen financieel verstandig voordat de woning wordt verkocht?",
+    "Kan de woning worden beoordeeld terwijl deze leegstaat of nog vol staat?",
+    "Is een open huis nodig om tot verkoop te komen?",
+    "Welke oplevering en overdrachtsdatum zijn praktisch haalbaar?"
   ],
-  "solutionTitle": "Wat beoordelen wij in Stadskanaal?",
+  "solutionTitle": "Eerst rekenen en vergelijken, daarna beslissen",
   "solutionCards": [
-    "De woning en staat zoals deze nu is.",
-    "De locatie, het type woning en praktische verkoopmogelijkheden.",
-    "De gewenste termijn en mogelijke opleverafspraken.",
-    "Of directe verkoop of een andere route passend kan zijn."
+    "Onderhoud en mogelijke herstelkosten worden meegenomen in de beoordeling.",
+    "Wij bespreken wat met spullen of oplevering moet gebeuren.",
+    "Een verkoopvoorstel bevat duidelijke uitgangspunten en voorwaarden.",
+    "U kunt het voorstel vergelijken met eerst opknappen en regulier verkopen."
   ],
   "vdnTasks": [
     "Woninggegevens en regionale situatie beoordelen.",
     "Meedenken over oplevering, planning en eventuele bijzonderheden.",
-    "Waar mogelijk een eerste inschatting of voorstel uitwerken.",
+    "Als directe verkoop passend is, een vrijblijvend verkoopvoorstel uitwerken.",
     "Bij akkoord zorgen dat afspraken schriftelijk en notarieel worden vastgelegd."
   ],
   "ownerTasks": [
@@ -69,41 +70,37 @@ const page = {
     "Het voorstel rustig beoordelen voordat verdere afspraken worden gemaakt."
   ],
   "practiceExample": {
-    "situation": "Woning in Stadskanaal waarbij eerst duidelijkheid nodig was",
-    "propertyType": "Dorpswoning / tussenwoning",
+    "situation": "Jarenwoning in Stadskanaal met onderhoud",
+    "propertyType": "Tussenwoning",
     "region": "Stadskanaal",
-    "mainProblem": "De eigenaar wilde weten wat mogelijk was voor een oudere woning in Stadskanaal en de Kanaalstreek, waarbij onderhoud en verkoop zonder open huis belangrijk waren.",
-    "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
-    "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
-    "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",
-    "nextStep": "De eigenaar kon het voorstel vergelijken met een regulier verkooptraject."
+    "mainProblem": "De eigenaar twijfelde of schilderwerk, opruimen en technisch herstel eerst nodig waren om goed te kunnen verkopen.",
+    "solution": "De directe verkooproute is in de huidige staat beoordeeld en vergeleken met eerst herstellen en regulier aanbieden.",
+    "delivery": "De gewenste staat bij oplevering is vooraf concreet gemaakt.",
+    "transfer": "De passeerdatum kon binnen de notariële mogelijkheden worden afgestemd.",
+    "nextStep": "De eigenaar wist vóór investeringen welke route het beste aansloot."
   },
   "sections": [
     {
-      "title": "Werkgebied in en rond Stadskanaal",
+      "title": "Stadskanaal, Musselkanaal en omliggende dorpen",
       "paragraphs": [
-        "Wij beoordelen woningen in Stadskanaal, Musselkanaal, Onstwedde, Alteveer, Vledderveen en omliggende dorpen.",
-        "Het gaat niet alleen om de plaatsnaam. De staat van de woning, de gewenste termijn, eventuele bewoning en de oplevering bepalen samen welke verkooproute logisch is."
+        "Wij bekijken aanvragen uit Stadskanaal, Musselkanaal, Onstwedde, Alteveer, Vledderveen en de omliggende Kanaalstreek.",
+        "Bij oudere woningen kunnen onderhoud, installaties, leegstand en verkoopklaar maken een belangrijke rol spelen. Die punten worden niet los van de verkoopprijs bekeken."
       ]
     },
     {
-      "title": "Regionale bijzonderheden",
+      "title": "De afweging: eerst opknappen of direct verkopen",
       "paragraphs": [
-        "In Stadskanaal en de Kanaalstreek gaat het vaak om oudere woningen, onderhoud, leegstand, erfenis of de wens om zonder open huis duidelijkheid te krijgen.",
-        "Daarom krijgt u geen standaardantwoord, maar eerst een beoordeling van uw woninggegevens en situatie."
+        "Opknappen kan de presentatie verbeteren, maar kost ook tijd, geld en organisatie. Met een directe beoordeling ziet u eerst wat verkoop in de huidige staat kan betekenen. Daarna kunt u beide routes beter vergelijken."
       ]
     },
     {
-      "title": "Welke woningen kunnen worden aangemeld?",
-      "paragraphs": [
-        "U kunt ook een aanvraag doen wanneer de woning nog niet verkoopklaar is of wanneer er iets speelt waardoor een regulier verkooptraject minder prettig voelt."
-      ],
+      "title": "Ook beoordelen bij",
       "bullets": [
-        "Leegstaande woning",
-        "Opknapwoning of woning met achterstallig onderhoud",
-        "Erfeniswoning of woning die nog vol staat",
-        "Verhuurde woning of woning met gebruiksafspraken",
-        "Woning waarbij snel duidelijkheid gewenst is"
+        "Achterstallig onderhoud of verouderde afwerking",
+        "Leegstand en dubbele lasten",
+        "Nalatenschap en achtergebleven inboedel",
+        "Woning zonder behoefte aan een openbaar kijktraject",
+        "Gewenste verkoop met een duidelijke tijdsplanning"
       ]
     }
   ],
@@ -115,10 +112,10 @@ const page = {
     },
     {
       "title": "Beoordeling van woning en regio",
-      "text": "We kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
+      "text": "Wij kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
     },
     {
-      "title": "Vrijblijvende inschatting of voorstel",
+      "title": "Vrijblijvend verkoopvoorstel",
       "text": "Waar mogelijk ontvangt u duidelijkheid over verkoopmogelijkheden en voorwaarden."
     },
     {
@@ -130,7 +127,7 @@ const page = {
     [
       "Voorbereiding",
       "Vaak verkoopklaar maken voor presentatie",
-      "Huidige staat kan worden beoordeeld"
+      "De huidige staat kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
@@ -145,7 +142,7 @@ const page = {
     [
       "Planning",
       "Afhankelijk van markt en koper",
-      "In overleg duidelijk te bespreken"
+      "In overleg vast te leggen"
     ],
     [
       "Oplevering",
@@ -161,7 +158,7 @@ const page = {
   "faqs": [
     {
       "question": "Kan ik mijn woning in Stadskanaal verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bekijken wij of een directe verkooproute of een andere oplossing passend kan zijn."
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bespreken wij welke verkooproute het beste bij de woning en uw situatie past."
     },
     {
       "question": "Moet mijn woning in Stadskanaal verkoopklaar zijn?",
@@ -169,7 +166,7 @@ const page = {
     },
     {
       "question": "Krijg ik gegarandeerd snel een bod?",
-      "answer": "Nee, een bod of verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
+      "answer": "Nee. Wij garanderen vooraf geen bod of verkoop binnen een vaste termijn. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
     },
     {
       "question": "Hoe worden afspraken vastgelegd?",
@@ -214,8 +211,8 @@ const page = {
       "Huis verkopen in Winschoten"
     ]
   ],
-  "ctaTitle": "Wilt u uw huis in Stadskanaal verkopen?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."
+  "ctaTitle": "Weten wat uw woning in Stadskanaal in de huidige staat kan betekenen?",
+  "ctaText": "Vraag vrijblijvend een beoordeling aan en vergelijk de mogelijkheden."
 };
 
 export default function HuisVerkopenStadskanaalPage() {

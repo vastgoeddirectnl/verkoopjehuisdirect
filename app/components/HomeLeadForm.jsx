@@ -179,7 +179,7 @@ export default function HomeLeadForm() {
           <div className="form-progress" aria-hidden="true"><span style={{ width: `${(step / 3) * 100}%` }} /></div>
           {formError ? <div className="form-inline-error" role="alert">{formError}</div> : null}
           <h2 className="form-title">Vertel kort om welke woning het gaat</h2>
-          <p className="form-sub form-sub-desktop">Vul uw adres en situatie in. Wij bekijken wat er mogelijk is en sturen waar mogelijk een eerste voorstel.</p>
+          <p className="form-sub form-sub-desktop">Vul uw adres en situatie in. Wij beoordelen de mogelijkheden en laten u weten welke vervolgstap past.</p>
           <p className="form-sub form-sub-mobile">Adres en situatie zijn genoeg voor een eerste beoordeling.</p>
 
           {step === 1 ? (
@@ -252,7 +252,7 @@ export default function HomeLeadForm() {
               </label>
               <div className="form-actions">
                 <button type="button" onClick={() => setStep(2)} className="btn btn-light">Terug</button>
-                <button type="submit" className="btn btn-orange" disabled={submitting}>{submitting ? "Aanvraag verzenden…" : "Vraag vrijblijvend voorstel aan"}</button>
+                <button type="submit" className="btn btn-orange" disabled={submitting}>{submitting ? "Aanvraag verzenden…" : "Vraag vrijblijvend een voorstel aan"}</button>
               </div>
               <p className="small-note">Wij gebruiken uw gegevens alleen om uw aanvraag te beoordelen en hierover contact op te nemen.</p>
             </div>
@@ -262,7 +262,7 @@ export default function HomeLeadForm() {
         <div className="success">
           <div className="success-icon">✓</div>
           <h2 className="form-title">Aanvraag ontvangen</h2>
-          <p className="form-sub">Wij bekijken uw aanvraag en sturen waar mogelijk een eerste vrijblijvende inschatting of voorstel.</p>
+          <p className="form-sub">Wij beoordelen uw aanvraag en nemen persoonlijk contact met u op. Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel.</p>
           <a href={whatsappLink} onClick={() => trackGoogleAdsConversion("whatsapp")} target="_blank" rel="noopener noreferrer" className="btn btn-green">Aanvullen via WhatsApp</a>
         </div>
       )}

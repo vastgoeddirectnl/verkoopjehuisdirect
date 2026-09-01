@@ -6,12 +6,12 @@ import { getLeadAttribution } from "../lib/attribution";
 
 const situaties = [
   "Snel duidelijkheid gewenst",
-  "Woning in huidige staat verkopen",
+  "Woning in de huidige staat verkopen",
   "Achterstallig onderhoud",
   "Woning staat leeg",
   "Woning staat nog vol spullen",
   "Zonder makelaar verkopen",
-  "Verkoop aan opkoper overwegen",
+  "Verkoop aan een opkoper overwegen",
   "Erfenis / nalatenschap",
   "Scheiding",
   "Dubbele lasten",
@@ -25,7 +25,7 @@ export default function AdsLeadMiniForm({
   defaultSituation = "",
   submitLabel = "Ontvang een vrijblijvend verkoopvoorstel",
   successTitle = "Bedankt, uw aanvraag is ontvangen.",
-  successText = "Wij bekijken de woninggegevens en nemen doorgaans binnen één werkdag contact met u op. Waar mogelijk ontvangt u daarna een eerste vrijblijvende inschatting of verkoopvoorstel.",
+  successText = "Wij bekijken de woninggegevens en nemen doorgaans binnen één werkdag contact met u op. Als directe verkoop passend is, ontvangt u daarna een vrijblijvend verkoopvoorstel.",
   privacyNote = "Vrijblijvend. Uw gegevens worden alleen gebruikt om uw aanvraag te beoordelen en contact met u op te nemen.",
 }) {
   const [submitted, setSubmitted] = useState(false);
@@ -54,7 +54,11 @@ export default function AdsLeadMiniForm({
   const updateForm = (event) => {
     trackFormStart();
     const { name, value } = event.target;
-    setForm((current) => ({ ...current, [name]: value }));
+    const normalized = name === "postcode"
+      ? value.toUpperCase().replace(/\s+/g, "").slice(0, 6)
+      : value;
+    setForm((current) => ({ ...current, [name]: normalized }));
+    setError("");
   };
 
   const submitLead = async (event) => {
@@ -62,8 +66,20 @@ export default function AdsLeadMiniForm({
     trackFormStart();
     setError("");
 
-    if (!form.naam || !form.telefoon || !form.postcode || !form.huisnummer) {
+    if (!form.naam.trim() || !form.telefoon.trim() || !form.postcode || !form.huisnummer.trim()) {
       setError("Vul de verplichte velden in: naam, telefoonnummer, postcode en huisnummer.");
+      return;
+    }
+    if (!/^\d{4}[A-Z]{2}$/.test(form.postcode)) {
+      setError("Controleer de postcode, bijvoorbeeld 9501 AB.");
+      return;
+    }
+    if (form.telefoon.replace(/\D/g, "").length < 8) {
+      setError("Controleer het telefoonnummer.");
+      return;
+    }
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setError("Controleer het e-mailadres.");
       return;
     }
 

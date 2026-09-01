@@ -141,7 +141,7 @@ function cleanUseRentalNotes(value) {
 
   text = text
     .replace(/Uitgangspunt van dit voorstel is dat het object bij juridische levering[^.]*wordt geleverd, tenzij schriftelijk anders overeengekomen\.\s*/gi, "")
-    .replace(/Gevolg voor het voorstel:\s*Dit voorstel is gebaseerd op de hierboven genoemde wijze van levering\.\s*Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen\.\s*/gi, "")
+    .replace(/Gevolg voor het voorstel:\s*Dit voorstel is gebaseerd op (?:de hierboven genoemde|deze) wijze van levering\.\s*Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen\.\s*/gi, "")
     .replace(/Bij verhuur of gemengd gebruik worden huur, gebruik, ontruiming, bestemming(?:, vergunningen, brandveiligheid en eventuele splitsingsmogelijkheden| en eventuele vergunningen)? vóór definitieve vastlegging gecontroleerd\.\s*/gi, "")
     .replace(/\s+/g, " ")
     .trim();
@@ -461,7 +461,7 @@ export default async function ProposalPrintPage({ params }) {
             </div>
             <p className="notice">Uitgangspunt van dit voorstel is dat het object bij juridische levering {String(value(proposal.delivery_occupancy_status, "vrij van huur en gebruik")).toLowerCase()} wordt geleverd, tenzij schriftelijk anders overeengekomen.</p>
             <p className="notice">Bij verhuur of gemengd gebruik worden huur, gebruik, ontruiming, bestemming, vergunningen, brandveiligheid en eventuele splitsingsmogelijkheden vóór definitieve vastlegging gecontroleerd.</p>
-            <p className="notice"><strong>Gevolg voor het voorstel:</strong> Dit voorstel is gebaseerd op de hierboven genoemde wijze van levering. Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen.</p>
+            <p className="notice"><strong>Gevolg voor het voorstel:</strong> Dit voorstel is gebaseerd op deze wijze van levering. Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen.</p>
             {cleanUseRentalNotes(proposal.use_rental_notes_text) ? <p className="notice">{cleanUseRentalNotes(proposal.use_rental_notes_text)}</p> : null}
           </section>
         ) : null}
@@ -526,7 +526,7 @@ export default async function ProposalPrintPage({ params }) {
         <p className="notice"><strong>Let op:</strong> de traditionele verkoopprijs is een indicatieve vergelijkingswaarde. Bij verhuurde, leeg te leveren of gemengde objecten kan deze waarde mede zijn gebaseerd op huurwaarde, leegstand, verhuurrisico, verkoopbaarheid en kosten.</p>
         <p className="notice"><strong>Huidige staat of na voorbereiding:</strong> De traditionele verkoopprijs kan zijn gebaseerd op verkoop in huidige staat óf op verkoop na noodzakelijke voorbereiding. Herstel-/renovatiekosten worden alleen apart meegenomen als die kosten nodig zijn om de genoemde traditionele verkoopprijs te behalen. Als de traditionele verkoopprijs al uitgaat van verkoop in huidige staat, hoort deze post leeg of op € 0 te staan.</p>
         {showUseRental ? (
-          <p className="notice"><strong>Uitgangspunt vergelijking:</strong> Deze financiële vergelijking is gebaseerd op de hierboven genoemde wijze van levering. Wanneer uitgangspunt is dat het object vrij van huur en gebruik wordt geleverd, is de vergelijking daarop gebaseerd. Als het object toch geheel of gedeeltelijk verhuurd of in gebruik geleverd wordt, kan dit invloed hebben op waarde, voorwaarden en haalbaarheid van het voorstel.</p>
+          <p className="notice"><strong>Uitgangspunt vergelijking:</strong> Deze financiële vergelijking is gebaseerd op de genoemde wijze van levering. Als het object toch geheel of gedeeltelijk verhuurd of in gebruik wordt geleverd, kan dit invloed hebben op waarde, voorwaarden en haalbaarheid van het voorstel.</p>
         ) : null}
         <section className="notice assurance-print">
           <strong>{NO_BUYER_CONDITIONS_NOTICE_TITLE}:</strong> {NO_BUYER_CONDITIONS_NOTICE_TEXT}
@@ -566,7 +566,7 @@ export default async function ProposalPrintPage({ params }) {
             <div className="total">{amount(proposal.traditional_net_text, "-")}</div>
             <div className="total accent">{amount(proposal.direct_net_text || proposal.amount_text)}</div>
           </div>
-          <p className="footnote">Makelaarskosten en overige verkoopkosten worden in deze vergelijking inclusief 21% btw getoond, omdat deze kosten ook zo in de netto-opbrengst zijn verwerkt. Onder afwikkelingskosten verkoper vallen alleen vooraf afgesproken kosten aan verkoperszijde, zoals volmachtskosten, royement/doorhaling van hypotheekinschrijvingen of bijzondere afwikkelingskosten. Kosten die normaal voor koper zijn bij kosten koper worden niet als verkoperskosten meegenomen.</p>
+          <p className="footnote">Makelaarskosten en overige verkoopkosten worden inclusief 21% btw getoond, omdat deze kosten ook zo in de netto-opbrengst zijn verwerkt. Onder afwikkelingskosten verkoper vallen alleen vooraf afgesproken kosten aan verkoperszijde, zoals volmachtskosten, royement/doorhaling van hypotheekinschrijvingen of bijzondere afwikkelingskosten. Kosten die normaal voor koper zijn bij kosten koper worden niet als verkoperskosten meegenomen.</p>
         </section>
 
         <section className="section">

@@ -21,7 +21,7 @@ export default function SeoReviewBand() {
           <div className="seo-review-copy">
             <p className="eyebrow">Ervaringen</p>
             <h2>Rustig en duidelijk contact wordt gewaardeerd.</h2>
-            <p>Bekijk de actuele Google-beoordelingen. We gebruiken alleen controleerbare review-informatie en voegen geen verzonnen klantverhalen toe.</p>
+            <p>Bekijk de actuele Google-beoordelingen. Wij gebruiken alleen controleerbare review-informatie en voegen geen verzonnen klantverhalen toe.</p>
           </div>
           <span className="seo-review-cta">Bekijk op Google →</span>
         </a>

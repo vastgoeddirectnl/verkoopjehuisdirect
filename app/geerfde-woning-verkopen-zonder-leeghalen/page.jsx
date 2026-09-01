@@ -12,12 +12,14 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/geerfde-woning-verkopen-zonder-leeghalen",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
 const page = {
   "slug": "/geerfde-woning-verkopen-zonder-leeghalen",
+  "pageType": "situation",
   "breadcrumb": "Geërfde woning verkopen zonder leeghalen",
   "eyebrow": "Geërfde woning",
   "h1": "Geërfde woning verkopen zonder leeghalen",
@@ -67,9 +69,9 @@ const page = {
       "title": "Hoe werkt het proces?",
       "steps": [
         "U vult kort uw woning en situatie in.",
-        "Op basis van de eerste gegevens ontvangt u een eerste vrijblijvend bod.",
-        "We bespreken uw situatie en bekijken de woning eventueel in de huidige staat.",
-        "Na beoordeling ontvangt u een definitief voorstel met het bod, de planning en duidelijke uitleg over het vervolg.",
+        "Wij beoordelen de woninggegevens en bespreken welke informatie nog nodig is.",
+        "Wij bespreken uw situatie en bekijken de woning eventueel in de huidige staat.",
+        "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel met bedrag, planning en duidelijke vervolgstappen.",
         "Bij akkoord worden de afspraken vastgelegd in een koopovereenkomst en volgt de overdracht via de notaris."
       ]
     }
@@ -93,12 +95,12 @@ const page = {
     [
       "Kosten",
       "Mogelijk courtage, styling of herstel",
-      "Geen makelaarskosten voor de aanvraag"
+      "Geen makelaarskosten bij directe aankoop"
     ],
     [
       "Planning",
       "Afhankelijk van koper en markt",
-      "In overleg duidelijk af te spreken"
+      "In overleg vast te leggen"
     ],
     [
       "Beslissing",

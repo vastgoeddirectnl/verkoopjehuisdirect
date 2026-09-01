@@ -147,7 +147,7 @@ function cleanUseRentalNotes(value) {
 
   text = text
     .replace(/Uitgangspunt van dit voorstel is dat het object bij juridische levering[^.]*wordt geleverd, tenzij schriftelijk anders overeengekomen\.\s*/gi, "")
-    .replace(/Gevolg voor het voorstel:\s*Dit voorstel is gebaseerd op de hierboven genoemde wijze van levering\.\s*Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen\.\s*/gi, "")
+    .replace(/Gevolg voor het voorstel:\s*Dit voorstel is gebaseerd op (?:de hierboven genoemde|deze) wijze van levering\.\s*Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen\.\s*/gi, "")
     .replace(/Bij verhuur of gemengd gebruik worden huur, gebruik, ontruiming, bestemming(?:, vergunningen, brandveiligheid en eventuele splitsingsmogelijkheden| en eventuele vergunningen)? vóór definitieve vastlegging gecontroleerd\.\s*/gi, "")
     .replace(/\s+/g, " ")
     .trim();
@@ -193,7 +193,7 @@ function constructieChecks(proposal) {
   if (proposal.allow_abc_resale) checks.push("ABC-doorverkoop mogelijk");
   if (proposal.seller_cooperates_resale) checks.push("Verkoper werkt mee aan taxatie, bezichtiging en voorbereiding doorverkoop");
   if (proposal.delivery_free_of_claims) checks.push("Levering vrij van huur, gebruik, beslagen en hypotheken");
-  if (proposal.property_same_state) checks.push("Woning blijft tot levering in huidige staat");
+  if (proposal.property_same_state) checks.push("Woning blijft tot levering in de huidige staat");
   return checks;
 }
 
@@ -452,7 +452,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
             <div><strong>Huurachterstand/geschil</strong><span>{value(proposal.rent_arrears_or_dispute, "Onbekend")}</span></div>
           </div>
           <p className="bridge-copy">Uitgangspunt van dit voorstel is dat het object bij juridische levering {String(value(proposal.delivery_occupancy_status, "vrij van huur en gebruik")).toLowerCase()} wordt geleverd, tenzij schriftelijk anders overeengekomen.</p>
-          <p className="bridge-copy"><strong>Gevolg voor het voorstel:</strong> Dit voorstel is gebaseerd op de hierboven genoemde wijze van levering. Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen.</p>
+          <p className="bridge-copy"><strong>Gevolg voor het voorstel:</strong> Dit voorstel is gebaseerd op deze wijze van levering. Indien het object niet overeenkomstig deze uitgangspunten kan worden geleverd, bijvoorbeeld doordat huur of gebruik toch blijft bestaan, kan koper het voorstel herbeoordelen, aanpassen of laten vervallen.</p>
           {(proposal.commercial_area_text || proposal.residential_area_text || proposal.separate_entrance_status || proposal.independent_residence_status) ? (
             <div className="construct-grid compact-grid">
               <div><strong>Winkel-/bedrijfsruimte</strong><span>{areaValue(proposal.commercial_area_text, "Nog te controleren")}</span></div>
@@ -525,9 +525,9 @@ export default async function PublicProposalPage({ params, searchParams }) {
           doorlooptijd en zekerheid. Onderstaand overzicht helpt om het voorstel naast een regulier traject te leggen.
         </p>
         <p className="bridge-copy"><strong>Let op:</strong> de traditionele verkoopprijs is een indicatieve vergelijkingswaarde. Bij verhuurde, leeg te leveren of gemengde objecten kan deze waarde mede zijn gebaseerd op huurwaarde, leegstand, verhuurrisico, verkoopbaarheid en kosten.</p>
-        <p className="bridge-copy"><strong>Huidige staat of na voorbereiding:</strong> De traditionele verkoopprijs kan zijn gebaseerd op verkoop in huidige staat óf op verkoop na noodzakelijke voorbereiding. Vul herstel-/renovatiekosten alleen mee als die kosten nodig zijn om de genoemde traditionele verkoopprijs te behalen. Als de traditionele verkoopprijs al uitgaat van verkoop in huidige staat, hoort deze post leeg of op € 0 te staan.</p>
+        <p className="bridge-copy"><strong>Huidige staat of na voorbereiding:</strong> De traditionele verkoopprijs kan zijn gebaseerd op verkoop in de huidige staat óf op verkoop na noodzakelijke voorbereiding. Neem herstel-/renovatiekosten alleen mee als die kosten nodig zijn om de genoemde traditionele verkoopprijs te behalen. Als de traditionele verkoopprijs al uitgaat van verkoop in de huidige staat, hoort deze post leeg of op € 0 te staan.</p>
         {showUseRental ? (
-          <p className="bridge-copy"><strong>Uitgangspunt vergelijking:</strong> Deze financiële vergelijking is gebaseerd op de hierboven genoemde wijze van levering. Wanneer uitgangspunt is dat het object vrij van huur en gebruik wordt geleverd, is de vergelijking daarop gebaseerd. Als het object toch geheel of gedeeltelijk verhuurd of in gebruik geleverd wordt, kan dit invloed hebben op waarde, voorwaarden en haalbaarheid van het voorstel.</p>
+          <p className="bridge-copy"><strong>Uitgangspunt vergelijking:</strong> Deze financiële vergelijking is gebaseerd op de genoemde wijze van levering. Als het object toch geheel of gedeeltelijk verhuurd of in gebruik wordt geleverd, kan dit invloed hebben op waarde, voorwaarden en haalbaarheid van het voorstel.</p>
         ) : null}
         <div className="assurance-notice">
           <strong>{NO_BUYER_CONDITIONS_NOTICE_TITLE}</strong>
@@ -593,7 +593,7 @@ export default async function PublicProposalPage({ params, searchParams }) {
           ))}
         </div>
         <p className="bridge-copy">
-          Makelaarskosten en overige verkoopkosten worden in deze vergelijking inclusief 21% btw getoond, omdat deze kosten ook zo in de netto-opbrengst zijn verwerkt. Onder afwikkelingskosten verkoper vallen alleen vooraf afgesproken kosten aan verkoperszijde, zoals volmachtskosten, royement/doorhaling van hypotheekinschrijvingen of bijzondere afwikkelingskosten. Kosten die normaal voor koper zijn bij kosten koper worden niet als verkoperskosten meegenomen.
+          Makelaarskosten en overige verkoopkosten worden inclusief 21% btw getoond, omdat deze kosten ook zo in de netto-opbrengst zijn verwerkt. Onder afwikkelingskosten verkoper vallen alleen vooraf afgesproken kosten aan verkoperszijde, zoals volmachtskosten, royement/doorhaling van hypotheekinschrijvingen of bijzondere afwikkelingskosten. Kosten die normaal voor koper zijn bij kosten koper worden niet als verkoperskosten meegenomen.
         </p>
       </section>
 

@@ -1,29 +1,31 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen in huidige staat",
-  description: "Uw huis verkopen in huidige staat zonder eerst opknappen, leeghalen of verkoopklaar maken? Vraag vrijblijvend duidelijkheid aan.",
+  title: "Huis verkopen in de huidige staat",
+  description: "Uw huis verkopen in de huidige staat zonder eerst op te knappen, leeg te halen of verkoopklaar te maken? Vraag vrijblijvend duidelijkheid aan.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-in-huidige-staat",
   },
   openGraph: {
-    title: "Huis verkopen in huidige staat",
-    description: "Uw huis verkopen in huidige staat zonder eerst opknappen, leeghalen of verkoopklaar maken? Vraag vrijblijvend duidelijkheid aan.",
+    title: "Huis verkopen in de huidige staat",
+    description: "Uw huis verkopen in de huidige staat zonder eerst op te knappen, leeg te halen of verkoopklaar te maken? Vraag vrijblijvend duidelijkheid aan.",
     url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-in-huidige-staat",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
   },
 };
 
 const page = {
   slug: "/huis-verkopen-in-huidige-staat",
-  breadcrumb: "Huis verkopen in huidige staat",
+  pageType: "situation",
+  breadcrumb: "Huis verkopen in de huidige staat",
   eyebrow: "Verkopen zoals het is",
-  h1: "Huis verkopen in huidige staat",
+  h1: "Huis verkopen in de huidige staat",
   lead: "Niet eerst opknappen, leeghalen of verkoopklaar maken. Vraag vrijblijvend wat er mogelijk is als u de woning wilt verkopen zoals deze nu is.",
   shortAnswer: "Een woning hoeft niet altijd eerst verkoopklaar te zijn. Ook bij onderhoud, schade, leegstand of spullen in de woning kunt u vrijblijvend laten bekijken welke verkooproute past.",
-  defaultSituation: "Woning in huidige staat verkopen",
+  defaultSituation: "Woning in de huidige staat verkopen",
   benefits: [
     "Verkopen zoals het is",
     "Niet eerst opknappen",
@@ -38,9 +40,9 @@ const page = {
   },
   sections: [
     {
-      title: "Wat betekent verkopen in huidige staat?",
+      title: "Wat betekent verkopen in de huidige staat?",
       paragraphs: [
-        "Verkopen in huidige staat betekent dat u eerst laat bekijken wat mogelijk is zonder de woning vooraf volledig klaar te maken voor verkoop.",
+        "Verkopen in de huidige staat betekent dat u eerst laat bekijken wat mogelijk is zonder de woning vooraf volledig klaar te maken voor verkoop.",
         "Dat kan passen als u geen tijd, geld of energie wilt steken in herstel, styling, schilderwerk, opruimen of bezichtigingen.",
       ],
     },
@@ -83,12 +85,12 @@ const page = {
     ["Leeghalen", "Vaak zelf regelen voor foto's", "Kan worden meegenomen in de afspraken"],
     ["Bezichtigingen", "Meerdere kijkers of open huis", "Geen open huis nodig"],
     ["Kosten vooraf", "Herstel, styling of opruimen", "Eerst vrijblijvend duidelijkheid"],
-    ["Planning", "Afhankelijk van markt en koper", "In overleg duidelijk af te spreken"],
+    ["Planning", "Afhankelijk van markt en koper", "In overleg vast te leggen"],
     ["Beslissing", "Vaak pas later overzicht", "U beslist zelf na het voorstel"],
   ],
   faqs: [
     {
-      question: "Kan ik mijn huis verkopen in huidige staat?",
+      question: "Kan ik mijn huis verkopen in de huidige staat?",
       answer: "Ja, dat kan in veel situaties. Ook als de woning onderhoud nodig heeft, nog vol spullen staat of niet verkoopklaar is, kunt u vrijblijvend laten bekijken wat mogelijk is.",
     },
     {
@@ -116,7 +118,7 @@ const page = {
     ["/huis-verkopen-met-achterstallig-onderhoud", "Huis verkopen met achterstallig onderhoud"],
     ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen"],
   ],
-  ctaTitle: "Wilt u verkopen in huidige staat?",
+  ctaTitle: "Wilt u verkopen in de huidige staat?",
   ctaText: "Vraag vrijblijvend een voorstel aan zonder de woning eerst op te knappen, leeg te halen of verkoopklaar te maken.",
 };
 

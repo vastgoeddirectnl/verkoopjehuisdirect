@@ -12,7 +12,8 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-winschoten",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -22,12 +23,12 @@ const page = {
   "regionName": "Winschoten",
   "breadcrumb": "Huis verkopen in Winschoten",
   "eyebrow": "Regio Winschoten",
-  "h1": "Uw huis verkopen in Winschoten zonder verkoopstress",
-  "lead": "Wilt u een woning in Winschoten verkopen, maar liever zonder lange bezichtigingsrondes of eerst alles verkoopklaar maken? Wij bekijken de woning, de locatie en uw gewenste planning zodat u rustig kunt bepalen welke verkooproute past.",
+  "h1": "Uw woning in Winschoten of Oldambt rechtstreeks laten beoordelen",
+  "lead": "Bij een oudere woning, leegstand of verandering in de persoonlijke situatie kan een voorspelbare verkooproute belangrijk zijn. Wij bekijken wat directe verkoop in Winschoten en Oldambt praktisch en financieel betekent.",
   "heroNote": "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
   "defaultSituation": "Huis verkopen in Winschoten",
-  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Winschoten en uw gewenste planning. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Een verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd.",
-  "shortAnswer": "U kunt vrijblijvend een verkoopvoorstel aanvragen voor een woning in Winschoten. Ook bij onderhoud, leegstand, erfenis, verhuur of een woning die nog vol staat kijken wij welke route passend kan zijn.",
+  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Winschoten en uw gewenste planning. Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel. Wij garanderen vooraf geen verkoop binnen een vaste termijn.",
+  "shortAnswer": "U kunt voor een woning in Winschoten, Beerta, Scheemda of Heiligerlee vrijblijvend duidelijkheid aanvragen. Onderhoud, leegstand en gewenste oplevering worden vanaf het begin meegenomen.",
   "benefits": [
     "Actief in Winschoten",
     "Ook bij onderhoud of leegstand",
@@ -42,24 +43,24 @@ const page = {
     "Geen verkoopdruk",
     "Duidelijke afspraken"
   ],
-  "concernTitle": "Veelvoorkomende verkoopvragen in Winschoten",
+  "concernTitle": "Wat speelt vaak bij verkoop in Winschoten en Oldambt?",
   "concernCards": [
-    "De woning ligt in Winschoten en Oldambt en is niet direct verkoopklaar.",
-    "Er is behoefte aan duidelijke planning, oplevering en voorwaarden.",
-    "De eigenaar wil liever geen open huis of reeks bezichtigingen.",
-    "Er speelt een bijzondere situatie zoals erfenis, leegstand, verhuur of dubbele lasten."
+    "De woning is ouder en vraagt onderhoud of modernisering.",
+    "Leegstand zorgt voor extra beheer en doorlopende lasten.",
+    "Een persoonlijke verandering maakt een duidelijke planning belangrijk.",
+    "De eigenaar wil geen reeks openbare bezichtigingen organiseren."
   ],
-  "solutionTitle": "Wat beoordelen wij in Winschoten?",
+  "solutionTitle": "Een voorstel met aandacht voor staat en planning",
   "solutionCards": [
-    "De woning en staat zoals deze nu is.",
-    "De locatie, het type woning en praktische verkoopmogelijkheden.",
-    "De gewenste termijn en mogelijke opleverafspraken.",
-    "Of directe verkoop of een andere route passend kan zijn."
+    "De woning wordt beoordeeld op basis van de werkelijke huidige situatie.",
+    "Onderhoud en leegstand worden niet doorgeschoven naar een later moment.",
+    "U ontvangt bij een passende route duidelijke afspraken over oplevering.",
+    "De notariële overdracht volgt alleen na uw akkoord."
   ],
   "vdnTasks": [
     "Woninggegevens en regionale situatie beoordelen.",
     "Meedenken over oplevering, planning en eventuele bijzonderheden.",
-    "Waar mogelijk een eerste inschatting of voorstel uitwerken.",
+    "Als directe verkoop passend is, een vrijblijvend verkoopvoorstel uitwerken.",
     "Bij akkoord zorgen dat afspraken schriftelijk en notarieel worden vastgelegd."
   ],
   "ownerTasks": [
@@ -69,41 +70,37 @@ const page = {
     "Het voorstel rustig beoordelen voordat verdere afspraken worden gemaakt."
   ],
   "practiceExample": {
-    "situation": "Woning in Winschoten waarbij eerst duidelijkheid nodig was",
-    "propertyType": "Dorpswoning / oudere woning",
-    "region": "Winschoten",
-    "mainProblem": "De eigenaar wilde duidelijkheid over een oudere woning in Winschoten en Oldambt, waarbij onderhoud en leegstand meespeelden en meerdere bezichtigingen niet wenselijk waren.",
-    "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
-    "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
-    "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",
-    "nextStep": "De eigenaar kon het voorstel vergelijken met een regulier verkooptraject."
+    "situation": "Leegstaande woning in Oldambt",
+    "propertyType": "Oudere bestaande woning",
+    "region": "Winschoten en Oldambt",
+    "mainProblem": "De woning stond leeg, had onderhoud nodig en vroeg steeds meer beheer van een eigenaar die niet dichtbij woonde.",
+    "solution": "De directe verkooproute is beoordeeld met aandacht voor onderhoud, maandlasten en de gewenste opleverdatum.",
+    "delivery": "Oplevering in de huidige staat kon in het voorstel worden vastgelegd.",
+    "transfer": "De juridische levering bleef onderdeel van het normale notariële proces.",
+    "nextStep": "De eigenaar kon tijd, kosten en verwachte opbrengst naast elkaar zetten."
   },
   "sections": [
     {
-      "title": "Werkgebied in en rond Winschoten",
+      "title": "Winschoten, Oldambt en omliggende plaatsen",
       "paragraphs": [
-        "Wij beoordelen woningen in Winschoten, Oldambt, Beerta, Scheemda, Heiligerlee en omliggende dorpen.",
-        "Het gaat niet alleen om de plaatsnaam. De staat van de woning, de gewenste termijn, eventuele bewoning en de oplevering bepalen samen welke verkooproute logisch is."
+        "Wij beoordelen woningen in Winschoten, Beerta, Scheemda, Heiligerlee en andere plaatsen in Oldambt.",
+        "Bij oudere woningtypen kunnen onderhoud en energiegebruik invloed hebben op presentatie, verwachte opbrengst en benodigde voorbereiding. Een beoordeling in de huidige staat geeft een extra vergelijkingspunt."
       ]
     },
     {
-      "title": "Regionale bijzonderheden",
+      "title": "Bij leegstand telt ook de tijd",
       "paragraphs": [
-        "In Winschoten en Oldambt spelen vaak oudere woningvoorraad, onderhoud, leegstand of verkoop na verandering in persoonlijke situatie mee.",
-        "Daarom krijgt u geen standaardantwoord, maar eerst een beoordeling van uw woninggegevens en situatie."
+        "Wanneer een woning leegstaat, lopen verzekeringen, energie, gemeentelijke lasten en onderhoud door. Een directe verkoop is niet automatisch de hoogste prijs, maar kan wel waarde bieden door een duidelijker tijdpad en minder voorbereiding."
       ]
     },
     {
-      "title": "Welke woningen kunnen worden aangemeld?",
-      "paragraphs": [
-        "U kunt ook een aanvraag doen wanneer de woning nog niet verkoopklaar is of wanneer er iets speelt waardoor een regulier verkooptraject minder prettig voelt."
-      ],
+      "title": "U kunt onder meer aanvragen voor",
       "bullets": [
-        "Leegstaande woning",
-        "Opknapwoning of woning met achterstallig onderhoud",
-        "Erfeniswoning of woning die nog vol staat",
-        "Verhuurde woning of woning met gebruiksafspraken",
-        "Woning waarbij snel duidelijkheid gewenst is"
+        "Oudere woning met moderniseringsbehoefte",
+        "Leegstaande woning in Winschoten of Oldambt",
+        "Woning na scheiding, verhuizing of overlijden",
+        "Woning waarvoor beperkte bezichtigingen gewenst zijn",
+        "Woning met specifieke opleverafspraken"
       ]
     }
   ],
@@ -115,10 +112,10 @@ const page = {
     },
     {
       "title": "Beoordeling van woning en regio",
-      "text": "We kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
+      "text": "Wij kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
     },
     {
-      "title": "Vrijblijvende inschatting of voorstel",
+      "title": "Vrijblijvend verkoopvoorstel",
       "text": "Waar mogelijk ontvangt u duidelijkheid over verkoopmogelijkheden en voorwaarden."
     },
     {
@@ -130,7 +127,7 @@ const page = {
     [
       "Voorbereiding",
       "Vaak verkoopklaar maken voor presentatie",
-      "Huidige staat kan worden beoordeeld"
+      "De huidige staat kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
@@ -145,7 +142,7 @@ const page = {
     [
       "Planning",
       "Afhankelijk van markt en koper",
-      "In overleg duidelijk te bespreken"
+      "In overleg vast te leggen"
     ],
     [
       "Oplevering",
@@ -161,7 +158,7 @@ const page = {
   "faqs": [
     {
       "question": "Kan ik mijn woning in Winschoten verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bekijken wij of een directe verkooproute of een andere oplossing passend kan zijn."
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bespreken wij welke verkooproute het beste bij de woning en uw situatie past."
     },
     {
       "question": "Moet mijn woning in Winschoten verkoopklaar zijn?",
@@ -169,7 +166,7 @@ const page = {
     },
     {
       "question": "Krijg ik gegarandeerd snel een bod?",
-      "answer": "Nee, een bod of verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
+      "answer": "Nee. Wij garanderen vooraf geen bod of verkoop binnen een vaste termijn. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
     },
     {
       "question": "Hoe worden afspraken vastgelegd?",
@@ -210,8 +207,8 @@ const page = {
       "Huis verkopen in Veendam"
     ]
   ],
-  "ctaTitle": "Wilt u uw huis in Winschoten verkopen?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."
+  "ctaTitle": "Woning in Winschoten of Oldambt laten beoordelen?",
+  "ctaText": "Vraag vrijblijvend duidelijkheid aan over prijs, planning en oplevering."
 };
 
 export default function HuisVerkopenWinschotenPage() {

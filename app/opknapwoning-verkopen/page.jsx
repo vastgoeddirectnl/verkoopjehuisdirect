@@ -10,14 +10,16 @@ export const metadata = {
   openGraph: {
     title: "Opknapwoning verkopen zonder eerst te renoveren",
     description:
-      "Vraag vrijblijvend duidelijkheid aan voor verkoop van een opknapwoning in huidige staat. Niet eerst opknappen, leeghalen of verkoopklaar maken.",
+      "Vraag vrijblijvend duidelijkheid aan voor verkoop van een opknapwoning in de huidige staat. Niet eerst opknappen, leeghalen of verkoopklaar maken.",
     url: "https://www.vastgoeddirectnederland.nl/opknapwoning-verkopen",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/og.png"],
     title: "Opknapwoning verkopen zonder eerst te renoveren",
     description:
       "Ook bij achterstallig onderhoud, schade of een woning die nog vol staat kunt u vrijblijvend een verkoopvoorstel aanvragen.",
@@ -34,7 +36,7 @@ const page = {
   lead:
     "Heeft uw woning achterstallig onderhoud, een verouderde inrichting of schade? U hoeft niet eerst te schilderen, verbouwen of leeghalen. Wij bekijken de woning zoals deze nu is en bespreken vrijblijvend welke verkoopafspraken mogelijk zijn.",
   shortAnswer:
-    "Een opknapwoning kan ook in huidige staat worden beoordeeld. U hoeft niet vooraf te renoveren om duidelijkheid te krijgen over een mogelijke verkooproute, koopprijs, oplevering en overdracht.",
+    "Een opknapwoning kan ook in de huidige staat worden beoordeeld. U hoeft niet vooraf te renoveren om duidelijkheid te krijgen over een mogelijke verkooproute, koopprijs, oplevering en overdracht.",
   heroBenefits: [
     "Geen renovatie vooraf",
     "Ook mogelijk met gebreken",
@@ -58,16 +60,16 @@ const page = {
   ],
   solutionTitle: "Welke afspraken kunnen helpen?",
   solutionCards: [
-    "Beoordeling van de woning in huidige staat.",
+    "Beoordeling van de woning in de huidige staat.",
     "Afspraken over spullen, oplevering en eventuele werkzaamheden.",
     "Duidelijkheid over welke gebreken bekend zijn en hoe die worden meegenomen.",
     "Een voorstel waarbij verbouwen vooraf niet het uitgangspunt is.",
   ],
   valueTitle: "Bij een opknapwoning draait verkoop niet alleen om de vraagprijs.",
   valueText:
-    "De staat van de woning, bekende gebreken, oplevering en mogelijke kosten voor herstel zijn minstens zo belangrijk. Daarom leggen we afspraken over de woning zoals deze is zo duidelijk mogelijk vast.",
+    "De staat van de woning, bekende gebreken, oplevering en mogelijke kosten voor herstel zijn minstens zo belangrijk. Daarom leggen wij afspraken over de woning zoals deze is zo duidelijk mogelijk vast.",
   vdnTasks: [
-    "Meekijken naar verkoop in huidige staat zonder renovatie vooraf.",
+    "Meekijken naar verkoop in de huidige staat zonder renovatie vooraf.",
     "Bespreken hoe onderhoud, schade of spullen in de woning worden meegenomen.",
     "Duidelijke afspraken maken over oplevering en juridische levering.",
     "Een voorstel uitwerken dat u rustig kunt beoordelen.",
@@ -85,7 +87,7 @@ const page = {
     mainProblem:
       "De eigenaar wilde niet meer investeren in schilderwerk, installaties en verkoopstyling voordat duidelijk was wat verkoop kon opleveren.",
     solution:
-      "De woning werd beoordeeld in huidige staat. Onderhoud en mogelijke herstelkosten werden meegenomen in het voorstel.",
+      "De woning werd beoordeeld in de huidige staat. Onderhoud en mogelijke herstelkosten werden meegenomen in het voorstel.",
     delivery:
       "Oplevering kon worden besproken zonder dat eerst alles volledig werd opgeknapt.",
     transfer:
@@ -97,7 +99,7 @@ const page = {
     {
       title: "Moet u eerst opknappen voordat u verkoopt?",
       paragraphs: [
-        "Dat hoeft niet altijd. Bij een reguliere verkoop kan opknappen helpen bij presentatie of opbrengst, maar het kost ook geld, tijd en energie. Bij een directe verkoopoplossing kan de woning juist in huidige staat worden beoordeeld.",
+        "Dat hoeft niet altijd. Bij een reguliere verkoop kan opknappen helpen bij presentatie of opbrengst, maar het kost ook geld, tijd en energie. Bij een directe verkoopoplossing kan de woning juist in de huidige staat worden beoordeeld.",
         "Dat is vooral relevant wanneer de woning verouderd is, herstel nodig heeft, schade heeft of nog niet leeg is.",
       ],
     },
@@ -107,7 +109,7 @@ const page = {
         "Eerst renoveren en daarna regulier verkopen.",
         "Via een makelaar aanbieden als kluswoning of opknapwoning.",
         "Zelf een koper zoeken en alle afspraken zelf regelen.",
-        "Vrijblijvend laten beoordelen of directe verkoop in huidige staat past.",
+        "Vrijblijvend laten beoordelen of directe verkoop in de huidige staat past.",
       ],
     },
     {
@@ -129,7 +131,7 @@ const page = {
       steps: [
         "U vult de woninggegevens en de staat van de woning in.",
         "Wij bekijken onderhoud, locatie, type woning en gewenste planning.",
-        "Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of voorstel.",
+        "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel.",
         "Eventuele gebreken, spullen en opleverafspraken worden besproken.",
         "Bij akkoord volgen schriftelijke afspraken en notariële overdracht.",
       ],
@@ -138,7 +140,7 @@ const page = {
   processSteps: [
     "Woninggegevens en onderhoudssituatie invullen.",
     "Bekende gebreken, spullen en gewenste oplevering benoemen.",
-    "Vrijblijvende inschatting of voorstel ontvangen.",
+    "Vrijblijvend verkoopvoorstel ontvangen.",
     "Afspraken over staat, oplevering en levering controleren.",
     "Bij akkoord vastleggen en via de notaris afronden.",
   ],
@@ -156,7 +158,7 @@ const page = {
     {
       question: "Moet ik de woning eerst opknappen?",
       answer:
-        "Nee, dat hoeft niet altijd. U kunt vrijblijvend laten bekijken wat verkoop in huidige staat betekent, zonder eerst te schilderen, herstellen of verbouwen.",
+        "Nee, dat hoeft niet altijd. U kunt vrijblijvend laten bekijken wat verkoop in de huidige staat betekent, zonder eerst te schilderen, herstellen of verbouwen.",
     },
     {
       question: "Kan ik verkopen met achterstallig onderhoud?",
@@ -182,12 +184,12 @@ const page = {
   relatedLinks: [
     ["/huis-verkopen-met-achterstallig-onderhoud", "Huis verkopen met achterstallig onderhoud", "Als herstel niet wenselijk of haalbaar is."],
     ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen", "Bekijk verkoopmogelijkheden zonder verbouwing vooraf."],
-    ["/huis-verkopen-in-huidige-staat", "Huis verkopen in huidige staat", "Niet eerst verkoopklaar maken."],
+    ["/huis-verkopen-in-huidige-staat", "Huis verkopen in de huidige staat", "Niet eerst verkoopklaar maken."],
     ["/woning-verkopen-die-nog-vol-staat", "Woning verkopen die nog vol staat", "Voor woningen met spullen of inboedel."],
     ["/woning-verkopen-met-schade", "Woning verkopen met schade", "Schade of gebreken vooraf duidelijk meenemen."],
     ["/huis-verkopen-zonder-bezichtigingen", "Huis verkopen zonder bezichtigingen", "Geen open huis of reeks kijkers nodig."],
   ],
-  ctaTitle: "Wilt u weten wat uw opknapwoning in huidige staat kan betekenen?",
+  ctaTitle: "Wilt u weten wat uw opknapwoning in de huidige staat kan betekenen?",
   ctaText:
     "Vraag vrijblijvend een verkoopvoorstel aan. U hoeft niet eerst te renoveren, herstellen of leeghalen om duidelijkheid te krijgen.",
 };

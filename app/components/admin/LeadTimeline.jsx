@@ -8,14 +8,30 @@ const EVENT_LABELS = {
   whatsapp: "WhatsApp vanuit voorstel geopend",
   admin_whatsapp_prepared: "WhatsApp voorstelbericht voorbereid",
   admin_whatsapp_sent: "WhatsApp voorstelbericht verzonden gemarkeerd",
+  admin_customer_action_resolved: "Klantactie afgehandeld",
   print: "Voorstel geprint / PDF geopend",
   pdf: "Voorstel als PDF geopend",
   legacy_interest: "Historische voorstelreactie",
 };
 
-function eventDescription(event) {
+function timeMs(value) {
+  const time = value ? new Date(value).getTime() : NaN;
+  return Number.isFinite(time) ? time : null;
+}
+
+function isCustomerAction(event) {
+  return ["interested", "discuss", "question"].includes(event?.event_type);
+}
+
+function isHandledCustomerAction(event, lead) {
+  const actionAt = timeMs(event?.created_at);
+  const contactAt = timeMs(lead?.last_contact_at);
+  return Boolean(actionAt && contactAt && contactAt >= actionAt);
+}
+
+function eventDescription(event, lead) {
   const label = EVENT_LABELS[event.event_type] || event.event_type || "Voorstelactiviteit";
-  const prefix = ["interested", "discuss", "question"].includes(event.event_type) ? "Actie nodig: " : "";
+  const prefix = isCustomerAction(event) ? (isHandledCustomerAction(event, lead) ? "Afgehandeld: " : "Actie nodig: ") : "";
   const suffix = event.message ? ` — ${event.message}` : "";
   return `${prefix}${label}${suffix}`;
 }
@@ -63,11 +79,12 @@ function buildItems({ lead, tasks = [], proposals = [], mailLogs = [], proposalE
   }
 
   for (const event of proposalEvents) {
+    const handledCustomerAction = isCustomerAction(event) && isHandledCustomerAction(event, lead);
     items.push({
       id: `event-${event.id}`,
       at: event.created_at,
-      kind: ["interested", "discuss", "question"].includes(event.event_type) ? "hot" : "event",
-      title: eventDescription(event),
+      kind: handledCustomerAction || event.event_type === "admin_customer_action_resolved" ? "done" : isCustomerAction(event) ? "hot" : "event",
+      title: eventDescription(event, lead),
       detail: [event.amount_text, event.property_address].filter(Boolean).join(" · "),
     });
   }

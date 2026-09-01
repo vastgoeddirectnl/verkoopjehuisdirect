@@ -15,11 +15,13 @@ export const metadata = {
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
   },
 };
 
 const page = {
   slug: "/woning-verkopen-zonder-open-huis",
+  pageType: "situation",
   breadcrumb: "Woning verkopen zonder open huis",
   eyebrow: "Woning verkopen zonder open huis",
   h1: "Woning verkopen zonder open huis of kijkdagen",
@@ -95,7 +97,7 @@ const page = {
     [
       "Kosten",
       "Vaak makelaarskosten of courtage",
-      "Geen makelaarskosten voor de aanvraag",
+      "Geen makelaarskosten bij directe aankoop",
     ],
     [
       "Afwikkeling",
@@ -122,7 +124,7 @@ const page = {
     {
       question: "Zit ik ergens aan vast na mijn aanvraag?",
       answer:
-        "Nee, de aanvraag is gratis en vrijblijvend. U beslist zelf of het voorstel en de route bij uw situatie passen.",
+        "Nee, de aanvraag is vrijblijvend. U beslist zelf of het voorstel en de route bij uw situatie passen.",
     },
   ],
   relatedLinks: [
@@ -131,7 +133,7 @@ const page = {
     ["/woning-verkopen-zonder-makelaar", "Woning verkopen zonder makelaar"],
     ["/huis-direct-verkopen", "Huis direct verkopen"],
     ["/huis-snel-verkopen", "Huis snel verkopen"],
-    ["/huis-verkopen-zonder-verkoopklaar-maken", "Huis verkopen zonder verkoopklaar maken"],
+    ["/huis-verkopen-zonder-verkoopklaar-maken", "Huis verkopen zonder het verkoopklaar te maken"],
     ["/opknapwoning-verkopen", "Opknapwoning verkopen"],
     ["/leegstaand-huis-verkopen", "Leegstaand huis verkopen"],
     ["/woning-verkopen-met-schade", "Woning verkopen met schade"],

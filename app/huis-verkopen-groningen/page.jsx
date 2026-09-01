@@ -12,7 +12,8 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/huis-verkopen-groningen",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
@@ -22,12 +23,12 @@ const page = {
   "regionName": "Groningen",
   "breadcrumb": "Huis verkopen in Groningen",
   "eyebrow": "Regio Groningen",
-  "h1": "Uw huis verkopen in Groningen zonder verkoopstress",
-  "lead": "Wilt u een woning in Groningen verkopen, maar liever zonder lange bezichtigingsrondes of eerst alles verkoopklaar maken? Wij bekijken de woning, de locatie en uw gewenste planning zodat u rustig kunt bepalen welke verkooproute past.",
+  "h1": "Uw woning in Groningen verkopen via een duidelijke, directe route",
+  "lead": "Van de stad Groningen tot de Kanaalstreek, Westerwolde en Oldambt: woningtype en verkoopsituatie verschillen sterk. Wij beoordelen daarom de woning, ligging, staat en gewenste planning voordat een verkoopvoorstel wordt uitgewerkt.",
   "heroNote": "Vrijblijvend. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt.",
   "defaultSituation": "Huis verkopen in Groningen",
-  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Groningen en uw gewenste planning. Waar mogelijk ontvangt u een eerste vrijblijvende inschatting of verkoopvoorstel. Een verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd.",
-  "shortAnswer": "U kunt vrijblijvend een verkoopvoorstel aanvragen voor een woning in Groningen. Ook bij onderhoud, leegstand, erfenis, verhuur of een woning die nog vol staat kijken wij welke route passend kan zijn.",
+  "afterRequestText": "Wij bekijken uw woninggegevens, de locatie in Groningen en uw gewenste planning. Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel. Wij garanderen vooraf geen verkoop binnen een vaste termijn.",
+  "shortAnswer": "U kunt in de provincie Groningen rechtstreeks een vrijblijvende beoordeling aanvragen. Dat kan voor een stadswoning, dorpswoning, leegstaande woning, verhuurd object of woning met onderhoud.",
   "benefits": [
     "Actief in Groningen",
     "Ook bij onderhoud of leegstand",
@@ -42,24 +43,24 @@ const page = {
     "Geen verkoopdruk",
     "Duidelijke afspraken"
   ],
-  "concernTitle": "Veelvoorkomende verkoopvragen in Groningen",
+  "concernTitle": "Waarom één standaardantwoord niet past bij Groningen",
   "concernCards": [
-    "De woning ligt in Groningse dorpen, de Kanaalstreek of de stad Groningen en is niet direct verkoopklaar.",
-    "Er is behoefte aan duidelijke planning, oplevering en voorwaarden.",
-    "De eigenaar wil liever geen open huis of reeks bezichtigingen.",
-    "Er speelt een bijzondere situatie zoals erfenis, leegstand, verhuur of dubbele lasten."
+    "Een stadswoning, dorpswoning en woning in het buitengebied vragen een andere beoordeling.",
+    "Onderhoud, verhuur of leegstand beïnvloeden de praktische verkooproute.",
+    "De eigenaar wil eerst weten wat directe verkoop netto en praktisch betekent.",
+    "Oplevering en planning moeten duidelijk zijn voordat een besluit wordt genomen."
   ],
-  "solutionTitle": "Wat beoordelen wij in Groningen?",
+  "solutionTitle": "Beoordeling op woning, ligging en omstandigheden",
   "solutionCards": [
-    "De woning en staat zoals deze nu is.",
-    "De locatie, het type woning en praktische verkoopmogelijkheden.",
-    "De gewenste termijn en mogelijke opleverafspraken.",
-    "Of directe verkoop of een andere route passend kan zijn."
+    "Wij bekijken de specifieke woning in plaats van alleen de postcode.",
+    "De huidige staat en bekende bijzonderheden worden meteen meegenomen.",
+    "U krijgt een voorstel met concrete uitgangspunten als directe verkoop past.",
+    "Reguliere verkoop blijft onderdeel van een eerlijke vergelijking."
   ],
   "vdnTasks": [
     "Woninggegevens en regionale situatie beoordelen.",
     "Meedenken over oplevering, planning en eventuele bijzonderheden.",
-    "Waar mogelijk een eerste inschatting of voorstel uitwerken.",
+    "Als directe verkoop passend is, een vrijblijvend verkoopvoorstel uitwerken.",
     "Bij akkoord zorgen dat afspraken schriftelijk en notarieel worden vastgelegd."
   ],
   "ownerTasks": [
@@ -69,41 +70,37 @@ const page = {
     "Het voorstel rustig beoordelen voordat verdere afspraken worden gemaakt."
   ],
   "practiceExample": {
-    "situation": "Woning in Groningen waarbij eerst duidelijkheid nodig was",
-    "propertyType": "Dorpswoning / bestaande bouw",
-    "region": "Groningen",
-    "mainProblem": "De eigenaar wilde eerst weten welke verkooproute passend was voor een oudere woning in Groningen, zonder vooraf kosten te maken voor herstel, presentatie of meerdere bezichtigingen.",
-    "solution": "De woning, staat en gewenste planning zijn eerst beoordeeld. Daarna kon worden bekeken welke afspraken over oplevering en overdracht logisch waren.",
-    "delivery": "Oplevering in huidige staat of met specifieke opleverafspraken kon worden besproken.",
-    "transfer": "Bij akkoord worden afspraken via koopovereenkomst en notaris vastgelegd.",
-    "nextStep": "De eigenaar kon het voorstel vergelijken met een regulier verkooptraject."
+    "situation": "Oudere woning in de provincie Groningen",
+    "propertyType": "Bestaande dorpswoning",
+    "region": "Provincie Groningen",
+    "mainProblem": "De eigenaar wilde geen kosten maken voor herstel en presentatie voordat duidelijk was of directe verkoop voldoende voordeel bood.",
+    "solution": "De huidige woningstaat, ligging en gewenste planning zijn eerst beoordeeld en naast een reguliere verkooproute gelegd.",
+    "delivery": "Verkoop in de huidige staat is als mogelijkheid uitgewerkt.",
+    "transfer": "Bij akkoord zouden de definitieve afspraken schriftelijk en notarieel worden vastgelegd.",
+    "nextStep": "De eigenaar kon een onderbouwde keuze maken zonder voorafgaande verkoopcampagne."
   },
   "sections": [
     {
-      "title": "Werkgebied in en rond Groningen",
+      "title": "Werkgebied door de provincie Groningen",
       "paragraphs": [
-        "Wij beoordelen woningen in Groningen, Stadskanaal, Veendam, Winschoten, Westerwolde, Pekela, Oldambt en omliggende dorpen.",
-        "Het gaat niet alleen om de plaatsnaam. De staat van de woning, de gewenste termijn, eventuele bewoning en de oplevering bepalen samen welke verkooproute logisch is."
+        "Wij beoordelen woningen in onder meer Groningen, Stadskanaal, Veendam, Winschoten, Westerwolde, Pekela, Oldambt en omliggende dorpen.",
+        "De ligging in stad, dorp of buitengebied kan invloed hebben op de verkooproute. Hetzelfde geldt voor woningtype, onderhoud, bewoning en gewenste oplevering."
       ]
     },
     {
-      "title": "Regionale bijzonderheden",
+      "title": "Direct verkopen is meer dan snelheid",
       "paragraphs": [
-        "In Groningen spelen vaak dorpswoningen, oudere woningen, leegstand, erfenis, verhuur en onderhoud tegelijk mee. Ook de ligging in stad, dorp of buitengebied kan invloed hebben op de verkooproute.",
-        "Daarom krijgt u geen standaardantwoord, maar eerst een beoordeling van uw woninggegevens en situatie."
+        "Voor veel eigenaren gaat het niet alleen om snel verkopen. Minder voorbereiding, geen openbaar kijktraject en vooraf heldere afspraken kunnen minstens zo belangrijk zijn. Daarom vergelijken wij ook de praktische gevolgen van beide verkooproutes."
       ]
     },
     {
-      "title": "Welke woningen kunnen worden aangemeld?",
-      "paragraphs": [
-        "U kunt ook een aanvraag doen wanneer de woning nog niet verkoopklaar is of wanneer er iets speelt waardoor een regulier verkooptraject minder prettig voelt."
-      ],
+      "title": "Voorbeelden van passende aanvragen",
       "bullets": [
-        "Leegstaande woning",
-        "Opknapwoning of woning met achterstallig onderhoud",
-        "Erfeniswoning of woning die nog vol staat",
+        "Oudere dorpswoning met onderhoud",
+        "Stadswoning waarvoor privacy belangrijk is",
+        "Leegstaande woning met doorlopende lasten",
         "Verhuurde woning of woning met gebruiksafspraken",
-        "Woning waarbij snel duidelijkheid gewenst is"
+        "Erfeniswoning die nog niet leeg is"
       ]
     }
   ],
@@ -115,10 +112,10 @@ const page = {
     },
     {
       "title": "Beoordeling van woning en regio",
-      "text": "We kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
+      "text": "Wij kijken naar type woning, staat, ligging, planning en eventuele bijzonderheden."
     },
     {
-      "title": "Vrijblijvende inschatting of voorstel",
+      "title": "Vrijblijvend verkoopvoorstel",
       "text": "Waar mogelijk ontvangt u duidelijkheid over verkoopmogelijkheden en voorwaarden."
     },
     {
@@ -130,7 +127,7 @@ const page = {
     [
       "Voorbereiding",
       "Vaak verkoopklaar maken voor presentatie",
-      "Huidige staat kan worden beoordeeld"
+      "De huidige staat kan worden beoordeeld"
     ],
     [
       "Bezichtigingen",
@@ -145,7 +142,7 @@ const page = {
     [
       "Planning",
       "Afhankelijk van markt en koper",
-      "In overleg duidelijk te bespreken"
+      "In overleg vast te leggen"
     ],
     [
       "Oplevering",
@@ -161,7 +158,7 @@ const page = {
   "faqs": [
     {
       "question": "Kan ik mijn woning in Groningen verkopen zonder makelaar?",
-      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bekijken wij of een directe verkooproute of een andere oplossing passend kan zijn."
+      "answer": "Ja, u kunt rechtstreeks een vrijblijvende aanvraag doen. Daarna bespreken wij welke verkooproute het beste bij de woning en uw situatie past."
     },
     {
       "question": "Moet mijn woning in Groningen verkoopklaar zijn?",
@@ -169,7 +166,7 @@ const page = {
     },
     {
       "question": "Krijg ik gegarandeerd snel een bod?",
-      "answer": "Nee, een bod of verkoop binnen een vaste termijn wordt niet vooraf gegarandeerd. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
+      "answer": "Nee. Wij garanderen vooraf geen bod of verkoop binnen een vaste termijn. De haalbaarheid hangt af van de woning, gegevens, afspraken en notariële mogelijkheden."
     },
     {
       "question": "Hoe worden afspraken vastgelegd?",
@@ -214,8 +211,8 @@ const page = {
       "Huis verkopen in Veendam"
     ]
   ],
-  "ctaTitle": "Wilt u uw huis in Groningen verkopen?",
-  "ctaText": "Vraag vrijblijvend een verkoopvoorstel aan. U ontvangt eerst duidelijkheid en beslist daarna zelf of u verder wilt."
+  "ctaTitle": "Woning in Groningen laten beoordelen?",
+  "ctaText": "Ontvang eerst duidelijkheid over de directe verkooproute en beslis daarna rustig."
 };
 
 export default function HuisVerkopenGroningenPage() {

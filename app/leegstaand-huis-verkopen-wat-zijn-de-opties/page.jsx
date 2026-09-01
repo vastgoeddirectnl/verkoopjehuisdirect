@@ -12,12 +12,14 @@ export const metadata = {
     "url": "https://www.vastgoeddirectnederland.nl/leegstaand-huis-verkopen-wat-zijn-de-opties",
     "siteName": "Vastgoed Direct Nederland",
     "locale": "nl_NL",
-    "type": "website"
+    "type": "website",
+    "images": [{ "url": "/og.png", "width": 1200, "height": 630, "alt": "Vastgoed Direct Nederland" }]
   }
 };
 
 const page = {
   "slug": "/leegstaand-huis-verkopen-wat-zijn-de-opties",
+  "pageType": "situation",
   "breadcrumb": "Leegstaand huis verkopen: wat zijn de opties?",
   "eyebrow": "Leegstand",
   "h1": "Leegstaand huis verkopen: wat zijn de opties?",
@@ -90,12 +92,12 @@ const page = {
     [
       "Kosten",
       "Mogelijk courtage, styling of herstel",
-      "Geen makelaarskosten voor de aanvraag"
+      "Geen makelaarskosten bij directe aankoop"
     ],
     [
       "Planning",
       "Afhankelijk van koper en markt",
-      "In overleg duidelijk af te spreken"
+      "In overleg vast te leggen"
     ],
     [
       "Beslissing",

@@ -1,18 +1,19 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen binnen 24 uur? Vraag eerst snel duidelijkheid aan",
-  description: "Binnen 24 uur verkopen kan niet vooraf worden gegarandeerd. Wel kunt u snel een vrijblijvende beoordeling aanvragen en bespreken we welke termijn haalbaar ",
+  title: "Huis verkopen binnen 24 uur? Bekijk wat haalbaar is",
+  description: "Binnen 24 uur verkopen kan niet vooraf worden gegarandeerd. Wel kunt u snel een beoordeling aanvragen en bespreken wij welke termijn haalbaar is.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-binnen-24-uur",
   },
   openGraph: {
-    title: "Huis verkopen binnen 24 uur? Vraag eerst snel duidelijkheid aan",
-    description: "Binnen 24 uur verkopen kan niet vooraf worden gegarandeerd. Wel kunt u snel een vrijblijvende beoordeling aanvragen en bespreken we welke termijn haalbaar ",
+    title: "Huis verkopen binnen 24 uur? Bekijk wat haalbaar is",
+    description: "Binnen 24 uur verkopen kan niet vooraf worden gegarandeerd. Wel kunt u snel een beoordeling aanvragen en bespreken wij welke termijn haalbaar is.",
     url: "https://www.vastgoeddirectnederland.nl/huis-verkopen-binnen-24-uur",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
   },
 };
 
@@ -21,7 +22,7 @@ const page = {
   "breadcrumb": "Huis verkopen binnen 24 uur",
   "eyebrow": "Snel duidelijkheid",
   "h1": "Huis verkopen binnen 24 uur? Vraag eerst snel duidelijkheid aan",
-  "lead": "Wilt u heel snel weten wat er mogelijk is met uw woning? Wij beoordelen uw aanvraag zorgvuldig en bespreken welke verkooptermijn realistisch is. Een verkoop of bod binnen een vaste termijn wordt niet vooraf gegarandeerd.",
+  "lead": "Wilt u heel snel weten wat er mogelijk is met uw woning? Wij beoordelen uw aanvraag zorgvuldig en bespreken welke verkooptermijn realistisch is. Wij garanderen vooraf geen verkoop of bod binnen een vaste termijn.",
   "heroNote": "Snel duidelijkheid krijgen betekent niet dat u overhaast hoeft te beslissen. U ontvangt eerst een vrijblijvende beoordeling.",
   "heroBenefits": [
     "Doorgaans snel persoonlijk contact",
@@ -35,7 +36,7 @@ const page = {
     "Ook bij onderhoud of leegstand",
     "Schriftelijke afspraken bij akkoord"
   ],
-  "shortAnswer": "Binnen 24 uur verkopen kan niet vooraf worden gegarandeerd. Wel kunt u snel een vrijblijvende beoordeling aanvragen en bespreken we welke termijn haalbaar is.",
+  "shortAnswer": "Binnen 24 uur verkopen kan niet vooraf worden gegarandeerd. Wel kunt u snel een vrijblijvende beoordeling aanvragen en bespreken wij welke termijn haalbaar is.",
   "pageType": "high-intent",
   "concernCards": [
     "Ik wil snel weten waar ik aan toe ben",
@@ -63,7 +64,7 @@ const page = {
   ],
   "sections": [
     {
-      "title": "Wat betekent verkopen binnen 24 uur realistisch?",
+      "title": "Wat betekent ‘binnen 24 uur verkopen’ in de praktijk?",
       "paragraphs": [
         "Veel zoekers bedoelen met binnen 24 uur vooral: snel duidelijkheid. Daarom maken wij onderscheid tussen snelle beoordeling en definitieve verkoop.",
         "Een definitieve verkoop vraagt altijd om goede afspraken, controle van gegevens en notariële uitvoerbaarheid."
@@ -83,7 +84,7 @@ const page = {
   "processSteps": [
     "U dient de aanvraag in met de belangrijkste woninggegevens.",
     "Wij nemen de situatie door en beoordelen wat haalbaar is.",
-    "U ontvangt waar mogelijk een vrijblijvende inschatting of voorstel.",
+    "Als directe verkoop passend is, ontvangt u een vrijblijvend verkoopvoorstel.",
     "Bij akkoord worden afspraken schriftelijk en notarieel vastgelegd."
   ],
   "practiceExample": {
@@ -91,7 +92,7 @@ const page = {
     "propertyType": "Eengezinswoning",
     "region": "Noord-Nederland",
     "mainProblem": "De eigenaar wilde snel weten of verkoop zonder regulier traject mogelijk was vanwege dubbele lasten.",
-    "solution": "Na beoordeling van de woninggegevens is eerst een vrijblijvende inschatting besproken.",
+    "solution": "Na beoordeling van de woninggegevens is besproken of een directe verkooproute passend en haalbaar was.",
     "delivery": "Overdracht en planning zijn pas later definitief gemaakt.",
     "result": "De eigenaar kon rustig vergelijken zonder direct vast te zitten."
   },
@@ -99,7 +100,7 @@ const page = {
     [
       "Snelheid",
       "Afhankelijk van bezichtigingen, biedingen en financiering",
-      "Snel duidelijkheid mogelijk, zonder termijn-garantie"
+      "Snel duidelijkheid, zonder garantie op een vaste termijn"
     ],
     [
       "Beslissen",
@@ -136,7 +137,7 @@ const page = {
     }
   ],
   "ctaTitle": "Wilt u snel weten wat er mogelijk is?",
-  "ctaText": "Vraag vrijblijvend een beoordeling aan. U zit nergens aan vast."
+  "ctaText": "Vraag vrijblijvend een beoordeling aan. U beslist zelf of u verder wilt."
 };
 
 export default function HuisVerkopenBinnen24UurPage() {
