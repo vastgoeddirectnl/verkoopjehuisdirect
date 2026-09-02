@@ -1,3 +1,5 @@
+import { hasGoogleAdsConsent } from "./adsConsent";
+
 const DEFAULT_GOOGLE_ADS_ID = "AW-18145688218";
 const DEFAULT_LEAD_LABEL = "dgG6COuixMwcEJr1xMxD";
 
@@ -15,6 +17,13 @@ function getGoogleAdsLabel(type) {
   return labels[type];
 }
 
+function isExcludedTrackingPath() {
+  if (typeof window === "undefined") return true;
+
+  const pathname = window.location?.pathname || "";
+  return pathname.startsWith("/admin") || pathname.startsWith("/voorstel");
+}
+
 function recentlyTracked(type) {
   if (typeof window === "undefined") return false;
 
@@ -30,8 +39,35 @@ function recentlyTracked(type) {
   return false;
 }
 
+function normalizeEmail(value) {
+  const email = String(value || "").trim().toLowerCase();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : "";
+}
+
+function normalizeDutchPhone(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+
+  let phone = raw.replace(/[^\d+]/g, "");
+  if (phone.startsWith("00")) phone = `+${phone.slice(2)}`;
+  if (phone.startsWith("0")) phone = `+31${phone.slice(1)}`;
+  if (phone.startsWith("31")) phone = `+${phone}`;
+
+  return /^\+\d{10,14}$/.test(phone) ? phone : "";
+}
+
+function getEnhancedConversionData(userData = {}) {
+  const email = normalizeEmail(userData.email);
+  if (!email) return null;
+
+  const phone = normalizeDutchPhone(userData.phone);
+  return phone ? { email, phone_number: phone } : { email };
+}
+
 export function trackGoogleAdsConversion(type, options = {}) {
   if (typeof window === "undefined") return false;
+  if (isExcludedTrackingPath()) return false;
+  if (!hasGoogleAdsConsent()) return false;
 
   const googleAdsId = getGoogleAdsId();
   const label = getGoogleAdsLabel(type);
@@ -39,6 +75,11 @@ export function trackGoogleAdsConversion(type, options = {}) {
   if (!googleAdsId || !label) return false;
   if (typeof window.gtag !== "function") return false;
   if (recentlyTracked(type)) return false;
+
+  const enhancedConversionData = type === "lead" ? getEnhancedConversionData(options.userData) : null;
+  if (enhancedConversionData) {
+    window.gtag("set", "user_data", enhancedConversionData);
+  }
 
   const eventData = {
     send_to: `${googleAdsId}/${label}`,
@@ -59,6 +100,8 @@ export function trackGoogleAdsConversion(type, options = {}) {
 
 export function trackAnalyticsEvent(eventName, params = {}) {
   if (typeof window === "undefined") return false;
+  if (isExcludedTrackingPath()) return false;
+  if (!hasGoogleAdsConsent()) return false;
   if (!eventName || typeof window.gtag !== "function") return false;
 
   const safeParams = {
