@@ -583,7 +583,7 @@ textarea.field { min-height: 82px; resize: vertical; }
   .hero-form-wrap, .faq-intro { position: static; }
   .hero-image-card { min-height: 250px; }
   .form-context { margin-inline: 12px; }
-  .positioning-grid, .proposal-grid, .region-grid, .faq-layout, .split-heading, .seo-intro-grid { grid-template-columns: 1fr; gap: 30px; }
+  .positioning-grid, .proposal-grid, .region-grid, .faq-layout, .seo-faq .faq-layout, .split-heading, .seo-intro-grid { grid-template-columns: 1fr; gap: 30px; }
   .section-shell { padding: 66px 0; }
   .situation-grid { grid-template-columns: 1fr; }
   .situation-card { min-height: 250px; }
