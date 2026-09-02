@@ -125,6 +125,10 @@ export default function AdsLeadMiniForm({
         value: 1,
         currency: "EUR",
         transactionId: result?.reference ? `lead-${result.reference}` : undefined,
+        userData: {
+          email: form.email,
+          phone: form.telefoon,
+        },
       });
 
       setSubmitted(true);

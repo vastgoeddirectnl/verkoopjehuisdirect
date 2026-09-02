@@ -1,4 +1,5 @@
 import "./globals.css";
+import CookieConsent from "./components/CookieConsent";
 import GoogleAdsTag from "./components/GoogleAdsTag";
 import GoogleAdsClickTracker from "./components/GoogleAdsClickTracker";
 
@@ -49,6 +50,7 @@ export default function RootLayout({ children }) {
         <GoogleAdsTag />
         <GoogleAdsClickTracker />
         {children}
+        <CookieConsent />
       </body>
     </html>
   );

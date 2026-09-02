@@ -28,7 +28,7 @@ export default function Privacyverklaring() {
         </h1>
 
         <p style={{ color: "#647386", fontSize: "16px" }}>
-          Laatst bijgewerkt: 5 mei 2026
+          Laatst bijgewerkt: 2 september 2026
         </p>
 
         <p style={{ fontSize: "18px", lineHeight: "1.8", color: "#536273" }}>
@@ -86,6 +86,14 @@ export default function Privacyverklaring() {
           bijvoorbeeld met notarissen, adviseurs, technische dienstverleners of betrokken partijen bij
           een mogelijke verkoopoplossing. Wij verkopen uw persoonsgegevens niet aan derden.
         </p>
+        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
+          Alleen wanneer u toestemming geeft voor advertentiemeting gebruiken wij Google Ads. Na een
+          geslaagde aanvraag kan de Google-tag het door u ingevulde e-mailadres en, wanneer beschikbaar,
+          telefoonnummer verwerken. De tag normaliseert en hasht deze gegevens vóór verzending aan Google.
+          Google gebruikt de gehashte waarden om te beoordelen of een aanvraag aan een advertentie kan
+          worden toegeschreven. Voor deze verwerking gelden de voorwaarden voor gegevensverwerking van
+          Google Ads.
+        </p>
 
         <h2>6. Bewaartermijn</h2>
         <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
@@ -101,8 +109,11 @@ export default function Privacyverklaring() {
 
         <h2>8. Cookies</h2>
         <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
-          Onze website kan gebruikmaken van functionele en analytische cookies om de website goed
-          te laten werken en inzicht te krijgen in het gebruik ervan.
+          Functionele opslag wordt alleen gebruikt om de website goed te laten werken en uw privacykeuze
+          te onthouden. Google Ads en de bijbehorende advertentiemeting worden pas geladen nadat u hiervoor
+          toestemming heeft gegeven. U kunt toestemming weigeren zonder dat dit gevolgen heeft voor het
+          gebruik van de website of het indienen van een aanvraag. Via de knop ‘Cookievoorkeuren’ kunt u uw
+          keuze op ieder moment wijzigen of intrekken.
         </p>
 
         <h2>9. Uw rechten</h2>
