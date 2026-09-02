@@ -530,6 +530,16 @@ textarea.field { min-height: 82px; resize: vertical; }
 .seo-related-card:hover { border-color: #e7a170; }
 .seo-faq .faq-layout { grid-template-columns: 0.62fr 1.38fr; }
 
+/* Privacy-first Google Ads consent */
+.cookie-consent { position: fixed; left: 22px; right: 22px; bottom: 22px; z-index: 220; width: min(860px, calc(100% - 44px)); margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; border: 1px solid #d8d2c9; border-radius: 22px; color: var(--navy-900); background: rgba(255, 253, 249, 0.98); box-shadow: 0 22px 70px rgba(8, 35, 61, 0.22); backdrop-filter: blur(14px); }
+.cookie-consent-copy strong { display: block; margin-bottom: 6px; font-family: Georgia, serif; font-size: 21px; }
+.cookie-consent-copy p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.cookie-consent-copy a { display: inline-block; margin-top: 7px; color: var(--orange-600); font-size: 12px; font-weight: 900; }
+.cookie-consent-actions { display: flex; gap: 8px; }
+.cookie-consent-actions .button { min-width: 118px; }
+.cookie-preferences-button { position: fixed; left: 14px; bottom: 14px; z-index: 95; padding: 8px 11px; border: 1px solid var(--line); border-radius: 999px; color: #506174; background: rgba(255, 253, 249, 0.94); box-shadow: 0 8px 24px rgba(8, 35, 61, 0.09); font: inherit; font-size: 10px; font-weight: 800; cursor: pointer; }
+.cookie-preferences-button:hover { color: var(--navy-900); border-color: #c9bfb2; }
+
 /* Overview pages */
 .overview-page { min-height: 100vh; color: var(--ink); background: var(--cream-100); }
 .overview-container { width: min(1120px, calc(100% - 44px)); margin: 0 auto; }
@@ -583,7 +593,7 @@ textarea.field { min-height: 82px; resize: vertical; }
   .hero-form-wrap, .faq-intro { position: static; }
   .hero-image-card { min-height: 250px; }
   .form-context { margin-inline: 12px; }
-  .positioning-grid, .proposal-grid, .region-grid, .faq-layout, .split-heading, .seo-intro-grid { grid-template-columns: 1fr; gap: 30px; }
+  .positioning-grid, .proposal-grid, .region-grid, .faq-layout, .seo-faq .faq-layout, .split-heading, .seo-intro-grid { grid-template-columns: 1fr; gap: 30px; }
   .section-shell { padding: 66px 0; }
   .situation-grid { grid-template-columns: 1fr; }
   .situation-card { min-height: 250px; }
@@ -650,6 +660,11 @@ textarea.field { min-height: 82px; resize: vertical; }
   .compare-item { grid-template-columns: 1fr; gap: 4px; }
   .overview-page-grid { grid-template-columns: 1fr; }
   .overview-container { width: min(100% - 28px, 1120px); }
+  .cookie-consent { left: 10px; right: 10px; bottom: 80px; width: auto; padding: 17px; grid-template-columns: 1fr; gap: 15px; border-radius: 18px; }
+  .cookie-consent-copy strong { font-size: 19px; }
+  .cookie-consent-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .cookie-consent-actions .button { width: 100%; min-width: 0; padding-inline: 12px; }
+  .cookie-preferences-button { bottom: 78px; }
 }
 
 @media print {
