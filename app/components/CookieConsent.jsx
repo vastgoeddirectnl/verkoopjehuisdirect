@@ -38,9 +38,10 @@ export default function CookieConsent() {
           <div className="cookie-consent-copy">
             <strong id="cookie-consent-title">Uw privacykeuze</strong>
             <p>
-              Met uw toestemming gebruiken wij Google Ads om aanvragen te meten. Na een geslaagde
-              aanvraag kan de Google-tag uw e-mailadres en telefoonnummer gehasht verwerken. Weigeren
-              heeft geen gevolgen voor het gebruik van de website of uw aanvraag.
+              Met uw toestemming gebruiken wij Google Ads en Meta om websitebezoek en aanvragen te
+              meten. Alleen Google kan na een geslaagde aanvraag uw e-mailadres en telefoonnummer
+              gehasht verwerken. Meta ontvangt van ons geen contact- of woninggegevens. Weigeren heeft
+              geen gevolgen voor het gebruik van de website of uw aanvraag.
             </p>
             <a href="/privacyverklaring">Lees de privacyverklaring</a>
           </div>
