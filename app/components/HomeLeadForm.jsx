@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getLeadAttribution } from "../lib/attribution";
 import { trackAnalyticsEvent, trackGoogleAdsConversion } from "../lib/googleAds";
+import { trackMetaLead } from "../lib/metaAds";
 
 const whatsappLink =
   "https://wa.me/31612238051?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20direct%20verkopen.%20Kunt%20u%20contact%20met%20mij%20opnemen%3F";
@@ -149,15 +150,17 @@ export default function HomeLeadForm() {
 
       trackAnalyticsEvent("lead_form_step_3_complete", { form_name: "homepage_main_form" });
       trackAnalyticsEvent("lead_form_submit", { form_name: "homepage_main_form" });
+      const transactionId = result?.reference ? `lead-${result.reference}` : undefined;
       trackGoogleAdsConversion("lead", {
         value: 1,
         currency: "EUR",
-        transactionId: result?.reference ? `lead-${result.reference}` : undefined,
+        transactionId,
         userData: {
           email: form.email,
           phone: form.telefoon,
         },
       });
+      trackMetaLead({ value: 1, currency: "EUR", transactionId });
       setSubmitted(true);
     } catch (error) {
       setFormError("Er ging iets mis. Probeer opnieuw of neem contact op via WhatsApp.");
