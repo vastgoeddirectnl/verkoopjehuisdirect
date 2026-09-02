@@ -94,6 +94,12 @@ export default function Privacyverklaring() {
           worden toegeschreven. Voor deze verwerking gelden de voorwaarden voor gegevensverwerking van
           Google Ads.
         </p>
+        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
+          Met dezelfde toestemming gebruiken wij de Meta-pixel om paginaweergaven en een geslaagde
+          aanvraag als gebeurtenis te meten voor advertenties op Facebook en Instagram. Wij sturen
+          daarbij geen naam, e-mailadres, telefoonnummer, adres of informatie over uw woning naar Meta.
+          Voor deze verwerking gelden de voorwaarden voor Meta Business-tools.
+        </p>
 
         <h2>6. Bewaartermijn</h2>
         <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
@@ -110,10 +116,10 @@ export default function Privacyverklaring() {
         <h2>8. Cookies</h2>
         <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
           Functionele opslag wordt alleen gebruikt om de website goed te laten werken en uw privacykeuze
-          te onthouden. Google Ads en de bijbehorende advertentiemeting worden pas geladen nadat u hiervoor
-          toestemming heeft gegeven. U kunt toestemming weigeren zonder dat dit gevolgen heeft voor het
-          gebruik van de website of het indienen van een aanvraag. Via de knop ‘Cookievoorkeuren’ kunt u uw
-          keuze op ieder moment wijzigen of intrekken.
+          te onthouden. Google Ads, de Meta-pixel en de bijbehorende advertentiemeting worden pas geladen
+          nadat u hiervoor toestemming heeft gegeven. U kunt toestemming weigeren zonder dat dit gevolgen
+          heeft voor het gebruik van de website of het indienen van een aanvraag. Via de knop
+          ‘Cookievoorkeuren’ kunt u uw keuze op ieder moment wijzigen of intrekken.
         </p>
 
         <h2>9. Uw rechten</h2>
