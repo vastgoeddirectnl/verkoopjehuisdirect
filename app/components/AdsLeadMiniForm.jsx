@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { trackAnalyticsEvent, trackGoogleAdsConversion } from "../lib/googleAds";
 import { getLeadAttribution } from "../lib/attribution";
+import { trackMetaLead } from "../lib/metaAds";
 
 const situaties = [
   "Snel duidelijkheid gewenst",
@@ -121,15 +122,17 @@ export default function AdsLeadMiniForm({
         component: pageSlug,
       });
 
+      const transactionId = result?.reference ? `lead-${result.reference}` : undefined;
       trackGoogleAdsConversion("lead", {
         value: 1,
         currency: "EUR",
-        transactionId: result?.reference ? `lead-${result.reference}` : undefined,
+        transactionId,
         userData: {
           email: form.email,
           phone: form.telefoon,
         },
       });
+      trackMetaLead({ value: 1, currency: "EUR", transactionId });
 
       setSubmitted(true);
     } catch (err) {
