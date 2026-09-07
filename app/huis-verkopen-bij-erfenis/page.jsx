@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen bij erfenis of nalatenschap",
+  title: "Huis verkopen bij erfenis",
   description:
     "Geërfde woning verkopen? Vraag vrijblijvend duidelijkheid aan over verkoop, oplevering, erfgenamen, spullen in de woning en notariële afwikkeling.",
   alternates: {

@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Woning verkopen met schade | vrijblijvend voorstel",
+  "title": "Woning verkopen met schade",
   "description": "Woning verkopen met schade? Vraag vrijblijvend duidelijkheid aan over verkoop in de huidige staat, voorwaarden en notariële afwikkeling.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/woning-verkopen-met-schade"

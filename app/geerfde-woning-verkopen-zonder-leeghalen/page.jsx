@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Geërfde woning verkopen zonder leeghalen",
+  "title": "Geërfde woning zonder leeghalen",
   "description": "Een geërfde woning verkopen die nog niet leeg is? Lees welke opties er zijn en hoe u vrijblijvend duidelijkheid krijgt.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/geerfde-woning-verkopen-zonder-leeghalen"

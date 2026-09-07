@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen zonder uitgebreide bezichtigingsrondes",
+  title: "Verkopen zonder bezichtigingen",
   description: "Wilt u verkopen zonder uitgebreide bezichtigingsrondes? Laat vrijblijvend beoordelen of een directe verkooproute bij uw woning en situatie past.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-bezichtigingen",

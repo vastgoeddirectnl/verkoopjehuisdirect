@@ -1,8 +1,10 @@
 # Codereview-backlog
 
 Alle zeventien bevindingen uit de codereview van 5.1.1 zijn opgelost: elf in
-5.2.0, drie in 5.2.3 en de laatste drie structurele in 5.3.0 en 5.3.1. Wat
-hieronder staat zijn de punten die daarna zijn opgekomen.
+5.2.0, drie in 5.2.3 en de laatste drie structurele in 5.3.0 en 5.3.1.
+LINT-01, MON-01 en TEST-01 zijn in 5.5.0 opgelost (zie CHANGELOG.md); dat
+gold ook voor het gedeelde `ADMIN_PASSWORD` zonder tweede factor, met TOTP
+erbovenop. Wat hieronder staat zijn de punten die daarna zijn opgekomen.
 
 ## Werkafspraken
 
@@ -46,48 +48,19 @@ hieronder staat zijn de punten die daarna zijn opgekomen.
 - `app/lib/leadsQuery.js` bouwt de overzichtsquery met LATERAL op een vooraf
   begrensde set leads. Zet de limiet niet buiten de CTE — dan rekent Postgres
   weer voor alle leads.
+- `app/lib/totp.js` is een eigen RFC 6238/4226-implementatie, bewust zonder
+  dependency. Timing-safe vergelijking via `crypto.timingSafeEqual`, ±1
+  tijdstap speling voor kloktikverschil. De testvector in `test/totp.test.js`
+  komt uit RFC 4226 bijlage D — raak die niet aan zonder een andere vector.
+- `app/lib/reportError.js` importeert `@sentry/nextjs` alleen dynamisch, en
+  alleen als `SENTRY_DSN` is gezet. Daardoor blijft dit bestand onder gewone
+  `node --test` net zo licht als vóór 5.5.0. Geen top-level import hiervan.
 
 ---
 
-## LINT-01 · ESLint naar flat config
-
-`.eslintrc.json` is het oudere eslintrc-formaat en `"lint": "next lint"` is in
-Next 15.5 afgeschreven (weg in 16). Linten draait daarom als informatieve,
-niet-blokkerende stap in de CI en zit niet in `npm run check`.
-
-Wat de overstap vraagt:
-
-1. `@eslint/eslintrc` als **gedeclareerde** devDependency toevoegen. Die zit nu
-   alleen als transitieve dependency van eslint in de lockfile; eruit importeren
-   zonder declaratie is fragiel, en toevoegen aan `package.json` zonder de
-   lockfile te regenereren breekt `npm ci`. Draai dus `npm install` en commit de
-   nieuwe lockfile mee.
-2. `eslint.config.mjs` schrijven met `FlatCompat` rond `eslint-config-next`.
-3. `.eslintrc.json` verwijderen en `"lint"` op `eslint .` zetten.
-4. Pas als dat lokaal groen draait: `continue-on-error` uit de CI-stap halen en
-   lint terugzetten in `npm run check`.
-
-## TEST-01 · Geen tests op de rekenfuncties in leadDetail
-
-`calculateNetComparison`, `calculateSellerWorkTotal` en `calculateResaleExample`
-hebben sinds 5.3.1 dekking in `test/proposalBerekening.test.js`, maar
-`buildCalculatedProposalPayload`, `normalizeProposalForForm` en
-`applyAdditionalAgreementDefaults` nog niet. Dat is de logica die bepaalt wat er
-bij het opslaan van een voorstel in de database belandt.
-
 ## Ook opgemerkt, jouw keuze
 
-- Eén gedeeld `ADMIN_PASSWORD` zonder accounts of tweestapsverificatie is de
-  zwakste schakel in de adminomgeving. Werkbaar bij één gebruiker; zodra er een
-  tweede bij komt, zijn echte accounts nodig. Dit is een productbeslissing,
-  geen refactor — niet zelf inbouwen.
 - De CSP in `next.config.mjs` staat in report-only. Zet hem om naar
   `Content-Security-Policy` zodra er enkele weken geen meldingen meer
   binnenkomen, en pas de hostlijst aan op wat je in die periode daadwerkelijk
   hebt zien blokkeren.
-
-- `app/lib/admin/leadDetail.js` importeert `../date.js` en `../money.js` mét
-  extensie en is daarmee los te testen onder `node --test`. Er staan nog geen
-  tests op de rekenfuncties (`calculateNetComparison`,
-  `calculateSellerWorkTotal`, `calculateResaleExample`) — dat is de logica
-  achter de bedragen die de klant in het voorstel ziet.

@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Huis verkopen zonder verkoopklaar te maken",
+  "title": "Zonder verkoopklaar maken",
   "description": "Huis verkopen zonder het eerst verkoopklaar te maken, op te ruimen of te stylen? Vraag vrijblijvend een voorstel aan voor verkoop in de huidige staat.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-verkoopklaar-maken"

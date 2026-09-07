@@ -23,12 +23,9 @@ jobs:
       - name: Tests draaien
         run: npm test
 
-      # Informatief, niet blokkerend. `next lint` is in Next 15.5 afgeschreven en
-      # .eslintrc.json is het oudere formaat; tot de overstap naar flat config
-      # is gemaakt mag een lintmelding de build niet tegenhouden.
-      - name: Linten (informatief)
+      # Sinds 5.5.0 (LINT-01) op flat config; blokkeert de build nu wel.
+      - name: Linten
         run: npm run lint
-        continue-on-error: true
 
       - name: Productiebuild controleren
         run: npm run build
@@ -38,4 +35,5 @@ jobs:
           DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
           ADMIN_SESSION_SECRET: ci-secret-alleen-voor-de-build
           ADMIN_PASSWORD: ci-wachtwoord
+          ADMIN_TOTP_SECRET: ci-totp-secret-alleen-voor-de-build
           NEXT_PUBLIC_SITE_URL: https://www.vastgoeddirectnederland.nl

@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis direct verkopen met duidelijke afspraken",
+  title: "Huis direct verkopen",
   description: "Huis direct verkopen zonder open huis, verkoopdruk of eerst verkoopklaar maken? Vraag vrijblijvend een helder voorstel aan.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-direct-verkopen",

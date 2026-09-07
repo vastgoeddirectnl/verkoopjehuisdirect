@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen binnen 24 uur? Bekijk wat haalbaar is",
+  title: "Huis verkopen binnen 24 uur",
   description: "Binnen 24 uur verkopen kan niet vooraf worden gegarandeerd. Wel kunt u snel een beoordeling aanvragen en bespreken wij welke termijn haalbaar is.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-binnen-24-uur",

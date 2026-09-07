@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis snel verkopen met duidelijke afspraken",
+  title: "Huis snel verkopen",
   description:
     "Wilt u snel duidelijkheid over verkoop van uw woning? Vraag vrijblijvend een verkoopvoorstel aan zonder open huis, verkoopdruk of eerst opknappen.",
   alternates: {

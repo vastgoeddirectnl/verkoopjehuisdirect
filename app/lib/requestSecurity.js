@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import { query, queryOne } from "./neonDb";
+import { reportError } from "./reportError.js";
 
 const fallbackBuckets = new Map();
 
@@ -52,7 +53,8 @@ export async function enforceRateLimit(request, {
   try {
     identity = hashIdentity(clientIp(request));
   } catch (error) {
-    console.error("Rate limiting uitgeschakeld:", error.message);
+    // Zonder rate limiting staat het formulier open voor misbruik.
+    reportError({ scope: "rate-limiting/uitgeschakeld", error, severity: "critical" });
     return { allowed: true, remaining: limit };
   }
 

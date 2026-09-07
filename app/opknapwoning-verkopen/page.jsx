@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Opknapwoning verkopen zonder eerst te renoveren",
+  title: "Opknapwoning verkopen",
   description:
     "Opknapwoning verkopen met onderhoud, schade of volle woning? Vraag vrijblijvend een voorstel aan zonder eerst te verbouwen, schilderen of leeghalen.",
   alternates: {

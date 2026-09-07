@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Huis verkopen bij scheiding | rustige verkoopafspraken",
+  "title": "Huis verkopen bij scheiding",
   "description": "Huis verkopen bij scheiding? Vraag vrijblijvend een voorstel aan met duidelijke afspraken over prijs, planning, eigendom en overdracht.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/huis-verkopen-bij-scheiding"

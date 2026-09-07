@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen binnen één week? Bekijk wat haalbaar is",
+  title: "Huis verkopen binnen één week",
   description: "Binnen één week verkopen is afhankelijk van woning, gegevens en notariële planning. U kunt wel snel een vrijblijvende beoordeling aanvragen.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-binnen-1-week",

@@ -8,6 +8,7 @@ import { markProposalSentAutomation, refreshLeadAutomation, refreshAllLeadAutoma
 import { isValidEmail } from "../../../lib/admin/validators";
 import { formatDateNL } from "../../../lib/date";
 import { proposalValidationIssues } from "../../../lib/proposalValidation";
+import { reportError } from "../../../lib/reportError.js";
 import { parseMoney, parsePercent } from "../../../lib/money.js";
 import { LEAD_STATUSES, ARCHIVE_LEAD_STATUSES, LEGACY_STATUS_LABELS } from "../../../lib/leadStatus.js";
 
@@ -391,7 +392,7 @@ export async function GET(request) {
 
     return NextResponse.json({ error: "Onbekende actie." }, { status: 400 });
   } catch (error) {
-    console.error(`admin/v2 GET ${action} mislukt:`, error);
+    await reportError({ scope: `admin/v2 GET ${action}`, error, severity: "critical" });
     return NextResponse.json({ error: "Interne serverfout." }, { status: 500 });
   }
 }
@@ -906,7 +907,7 @@ export async function POST(request) {
 
     return NextResponse.json({ error: "Onbekende actie." }, { status: 400 });
   } catch (error) {
-    console.error("admin/v2 POST mislukt:", error);
+    await reportError({ scope: "admin/v2 POST", error, severity: "critical" });
     return NextResponse.json({ error: "Interne serverfout." }, { status: 500 });
   }
 }

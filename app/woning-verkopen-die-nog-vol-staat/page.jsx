@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Woning verkopen die nog vol staat",
+  "title": "Woning verkopen die vol staat",
   "description": "Een woning verkopen die nog vol meubels of spullen staat? Lees wat mogelijk is en hoe u zonder verkoopdruk duidelijkheid krijgt.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/woning-verkopen-die-nog-vol-staat"

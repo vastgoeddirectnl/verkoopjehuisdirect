@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Verhuurde woning verkopen | met huurder of afspraken",
+  "title": "Verhuurde woning verkopen",
   "description": "Verhuurde woning verkopen? Vraag vrijblijvend duidelijkheid over verkoop met huurder, huurafspraken, voorwaarden en overdracht.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/verhuurde-woning-verkopen"

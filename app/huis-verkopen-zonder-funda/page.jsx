@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen zonder Funda-campagne of open huis",
+  title: "Huis verkopen zonder Funda",
   description: "Laat uw woning zonder Funda-campagne beoordelen. Directe verkoop kan rust en privacy bieden, met schriftelijke afspraken en notariële overdracht.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-zonder-funda",

@@ -111,6 +111,7 @@ export default function AdminDashboard() {
   const [checking, setChecking] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
   const [password, setPassword] = useState("");
+  const [totpCode, setTotpCode] = useState("");
   const [error, setError] = useState("");
   const [view, setView] = useState("dashboard");
   const [leads, setLeads] = useState([]);
@@ -248,11 +249,12 @@ export default function AdminDashboard() {
     const response = await fetch("/api/admin/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ password, code: totpCode }),
     });
     const json = await response.json().catch(() => ({}));
     if (!response.ok) return setError(json.error || "Inloggen mislukt.");
     setPassword("");
+    setTotpCode("");
     setLoggedIn(true);
     await loadAll();
   }
@@ -459,7 +461,18 @@ export default function AdminDashboard() {
           <h1>Vastgoed Direct Nederland</h1>
           <p>Log in voor leads, opvolging, verkoopvoorstellen en rapportage.</p>
           <form onSubmit={login}>
-            <input type="password" placeholder="Admin wachtwoord" value={password} onChange={(event) => setPassword(event.target.value)} required />
+            <input type="password" placeholder="Admin wachtwoord" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" required />
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]{6}"
+              maxLength={6}
+              placeholder="Verificatiecode (6 cijfers)"
+              value={totpCode}
+              onChange={(event) => setTotpCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
+              autoComplete="one-time-code"
+              required
+            />
             <button>Inloggen</button>
           </form>
           {error ? <div className="error">{error}</div> : null}

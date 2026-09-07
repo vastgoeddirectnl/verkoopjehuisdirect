@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Woning verkopen in Friesland | vrijblijvend verkoopvoorstel",
+  "title": "Woning verkopen in Friesland",
   "description": "Woning verkopen in Friesland? Vraag vrijblijvend duidelijkheid over directe verkoop, voorwaarden, oplevering en notariële afwikkeling.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/woning-verkopen-friesland"

@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Woning verkopen in Drenthe | vrijblijvend verkoopvoorstel",
+  "title": "Woning verkopen in Drenthe",
   "description": "Woning verkopen in Drenthe? Vraag vrijblijvend duidelijkheid over directe verkoop, voorwaarden, oplevering en notariële afwikkeling.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/woning-verkopen-drenthe"

@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Opknapwoning verkopen zonder makelaar",
+  "title": "Opknapwoning zonder makelaar",
   "description": "Een opknapwoning verkopen zonder makelaar? Lees wanneer directe verkoop een alternatief kan zijn en waar u op moet letten.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/opknapwoning-verkopen-zonder-makelaar"

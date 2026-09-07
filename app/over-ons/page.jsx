@@ -1,8 +1,11 @@
-import Link from "next/link";
 import { MarketingFooter, MarketingHeader, ProofBar } from "../components/MarketingChrome";
 
 export const metadata = {
-  title: "Over Vastgoed Direct Nederland",
+  // De root-layout plakt er " | Vastgoed Direct Nederland" achter. De merknaam
+  // hier herhalen leverde "Over Vastgoed Direct Nederland | Vastgoed Direct
+  // Nederland" op. De openGraph-titel hieronder valt buiten die template en
+  // mag de merknaam dus wel voluit noemen.
+  title: "Over ons",
   description:
     "Wie er achter Vastgoed Direct Nederland zit, hoe wij werken en voor welke situaties directe verkoop wel en niet passend is.",
   alternates: { canonical: "/over-ons" },
@@ -66,7 +69,7 @@ const passendWel = [
   "Leegstand, dubbele lasten of een woning die nog vol staat",
   "Verkoop na een erfenis, scheiding of overlijden",
   "Verhuurde woningen, woon-winkelpanden en gemengde objecten",
-  "Situaties waarin privacy of een voorspelbare planning zwaarder weegt dan de hoogste vraagprijs",
+  "Privacy of voorspelbare planning weegt zwaarder dan de hoogste prijs",
 ];
 
 const passendNiet = [
@@ -83,7 +86,7 @@ export default function OverOnsPage() {
       <section className="seo-hero" id="hoofdinhoud">
         <div className="site-container">
           <nav className="seo-breadcrumbs" aria-label="Kruimelpad">
-            <Link href="/">Home</Link><span>›</span><span>Over ons</span>
+            <a href="/">Home</a><span>›</span><span>Over ons</span>
           </nav>
 
           <div className="seo-hero-grid">
@@ -96,7 +99,7 @@ export default function OverOnsPage() {
                 iets hoeft te beslissen.
               </p>
               <div className="seo-hero-actions">
-                <Link href="/#aanvraag" className="button button-primary">Vraag vrijblijvend een voorstel aan</Link>
+                <a href="/#aanvraag" className="button button-primary">Vraag vrijblijvend een voorstel aan</a>
                 <a href="tel:0612238051" className="button button-secondary">06 12 23 80 51</a>
               </div>
             </div>
@@ -168,7 +171,7 @@ export default function OverOnsPage() {
             </p>
           </div>
           <div className="final-cta-actions">
-            <Link href="/#aanvraag" className="button button-primary">Vraag een voorstel aan</Link>
+            <a href="/#aanvraag" className="button button-primary">Vraag een voorstel aan</a>
             <a
               href="https://wa.me/31612238051?text=Hallo%2C%20ik%20wil%20graag%20mijn%20situatie%20bespreken."
               target="_blank"

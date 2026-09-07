@@ -4,6 +4,155 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.5.0
+
+De rest van de codereview-backlog (LINT-01, MON-01, TEST-01) plus 2FA op
+`/admin`. Geen migratie. Twee nieuwe dependencies: `@sentry/nextjs` en
+`@eslint/eslintrc` (dev), beide met geregenereerde lockfile.
+
+### Tweestapsverificatie op /admin
+
+`ADMIN_PASSWORD` zonder tweede factor was de zwakste schakel in de
+adminomgeving (zie de vorige versie van deze backlog). `/admin` vraagt nu ook
+een 6-cijferige TOTP-code, naast het wachtwoord, in dezelfde inlogstap.
+
+Nieuw: `app/lib/totp.js`, een eigen RFC 6238/4226-implementatie op
+`node:crypto` — geen dependency, en rechtstreeks testbaar onder `node --test`
+net als `app/lib/adminAuth.js`. `npm run totp:generate` genereert een nieuw
+secret plus de otpauth-URL voor een authenticator-app. Zelfde model als
+`ADMIN_PASSWORD`: één gedeeld secret via een env-variabele, geen aparte
+accounts. `ADMIN_TOTP_SECRET` is nu verplicht — zonder die variabele geeft
+`/api/admin/login` een 503, precies zoals nu al gebeurt zonder
+`ADMIN_PASSWORD` of `ADMIN_SESSION_SECRET`. **Zet dit secret dus vóór het
+deployen van deze versie**, anders is `/admin` niet meer bereikbaar.
+
+### MON-01: Sentry naast de eigen foutmelding
+
+`reportError()` blijft ongewijzigd de enige plek waar fouten worden gemeld;
+met `SENTRY_DSN` gezet gaat elke melding er nu ook naartoe
+(`Sentry.captureException`, met scope en context als tags/extra). Zonder DSN
+wordt `@sentry/nextjs` niet eens geïmporteerd — lokaal en in de CI-tests
+verandert er dus niets.
+
+Voor de App Router (Next 15) is dat meer dan de oorspronkelijke aantekening
+in de backlog beschreef: sinds `@sentry/nextjs` 8 is de auto-geladen
+`sentry.client.config.js` vervangen door `instrumentation.js` (server/edge)
+en `instrumentation-client.js` (browser, `NEXT_PUBLIC_SENTRY_DSN`), en is
+`app/global-error.jsx` de aanbevolen vangnet voor React-renderfouten.
+`next.config.mjs` is gewrapt in `withSentryConfig`; zonder
+`SENTRY_ORG`/`SENTRY_PROJECT`/`SENTRY_AUTH_TOKEN` slaat de build het
+uploaden van source maps stilletjes over. De bestaande storingsmail bij
+`severity: "critical"` blijft daarnaast bestaan.
+
+### LINT-01: ESLint op flat config
+
+`eslint.config.mjs` vervangt `.eslintrc.json`, via `FlatCompat` rond
+`next/core-web-vitals` (`eslint-config-next` levert in deze versie nog geen
+eigen flat config). `@eslint/eslintrc` is als devDependency toegevoegd.
+`npm run lint` draait weer mee in `npm run check`, en de CI-stap blokkeert
+nu net als de rest.
+
+### TEST-01: dekking op wat er in het voorstel belandt
+
+`buildCalculatedProposalPayload`, `normalizeProposalForForm` en
+`applyAdditionalAgreementDefaults` (`app/lib/admin/leadDetail.js`) bepalen
+wat er bij het opslaan van een voorstel echt in de database komt, en hadden
+nog geen tests. Twintig tests in `test/proposalPayload.test.js` dekken onder
+meer: een onherkenbaar bedrag wordt niet stilletjes leeggemaakt, een lang
+ISO-tijdstip uit de database wordt afgekapt tot een formulierdatum, en het
+meegegeven lead-object wint altijd van een `lead_id` dat al in een opgeslagen
+voorstel stond.
+
+## 5.4.0
+
+De drie punten die na de live-controle overbleven. Geen migratie, geen nieuwe
+dependency.
+
+### Je merkt het nu als er iets stukgaat
+
+Alle catch-blokken schreven naar `console.error` of `console.warn`. Dat landt in
+de Vercel-logs waar in de praktijk niemand naar kijkt, dus je hoorde van een
+klant dát er iets mis was.
+
+Nieuw: `app/lib/reportError.js`. Elke melding gaat als JSON naar de logs met de
+tag `[vdn-error]`, zodat je erop kunt filteren. Bij `severity: "critical"` gaat
+er ook een e-mail naar `LEAD_TO_EMAIL`, met throttling van één melding per half
+uur per soort fout — anders vult één kapotte query je inbox.
+
+Als kritiek aangemerkt: een aanvraag die niet is opgeslagen (`api/leads`, alleen
+bij 5xx — een 4xx is een invoerfout van de bezoeker), beide mails in de
+leadketen, de adminroute, en uitgeschakelde rate limiting.
+
+Bewust **geen Sentry**: dat vraagt `@sentry/nextjs` als dependency en dus een
+geregenereerde lockfile. `reportError()` is het enige aanroeppunt, dus die
+overstap raakt later alleen dat ene bestand. Zie MON-01 in de backlog.
+
+### Het kritieke pad heeft eindelijk een test
+
+De validatie was getest, de query was getest, de bedragen waren getest — maar
+niet de kéten van formulier naar database naar mail. Precies het stuk waar een
+fout je een aanvraag kost.
+
+De volgorde staat nu in `app/lib/leadFlow.js`, los van database en mail: alles
+wat naar buiten praat komt als functie binnen. `app/lib/leads.js` levert de
+echte implementaties. Daarmee is de bedrijfsregel in één blok leesbaar én
+testbaar zonder database. Twaalf tests dekken onder meer: een dubbele aanvraag
+levert geen tweede mail op, een falende automatisering kost de lead niet, en een
+mislukte interne melding houdt de bevestiging aan de klant niet tegen.
+
+### Paginatitels (SEO-01)
+
+33 van de 43 publieke pagina's kwamen boven de 60 tekens uit, tot 88 aan toe,
+omdat de landingspagina's zelf al een titel als `"Huis verkopen in Groningen |
+vrijblijvend verkoopvoorstel"` zetten waar de template nóg eens de merknaam
+achter plakte. Google kapt rond de 60 af, dus juist de merknaam viel weg.
+
+De generieke staart is eraf; de zoekwoorden staan vooraan. En de homepage — die
+als enige géén merknaam had, omdat `title.template` niet geldt voor het segment
+waarin de layout zelf staat — zet zijn titel nu met `absolute`.
+
+`test/paginaTitels.test.js` bewaakt dit: elke publieke pagina heeft een titel,
+geen enkele boven 60 tekens, de merknaam staat er precies één keer in, en geen
+twee pagina's delen een titel.
+
+### Tests
+
+Van 124 naar 149, allemaal groen met `npm test`. Nieuw: `leadFlow` (12),
+`reportError` (8), `paginaTitels` (5), plus de bestaande suites.
+
+Eén bevinding uit het schrijven van die tests: `reportError` viel zelf om als het
+foutobject een kapotte `toString` had. Foutafhandeling die zelf de fout wordt is
+erger dan de oorspronkelijke fout, dus dat is afgeschermd.
+
+
+## 5.3.2
+
+Twee correcties op `/over-ons`, gevonden bij een controle van die pagina op de
+live site. Alleen die ene pagina wijzigt; geen migratie, geen gedragswijziging
+elders.
+
+- **De paginatitel noemde het merk twee keer.** `app/layout.jsx` plakt
+  `" | Vastgoed Direct Nederland"` achter elke titel, en de pagina zette daar
+  zelf al "Over Vastgoed Direct Nederland" neer. In de browsertab stond
+  "Over Vastgoed Direct Nederland | Vastgoed Direct Nederland" (58 tekens). De
+  titel is nu "Over ons", wat via de template "Over ons | Vastgoed Direct
+  Nederland" oplevert. De openGraph-titel valt buiten die template en noemt het
+  merk wel voluit.
+
+- **Eén opsommingsregel liep over twee regels en paste maar net.** De kaarten
+  onder "Wanneer directe verkoop past" hebben `overflow: hidden`; gemeten op de
+  live pagina was de inhoud 229px in een kaart van 231px. Twee pixels speling,
+  dus bij een afwijkend lettertype of grotere standaardtekengrootte was die
+  laatste regel stil weggevallen. De regel is ingekort tot één regel.
+
+Verder is bij die controle vastgesteld dat de rest van 5.3.1 live doet wat het
+moet: de middleware stuurt `/admin/nieuwe-lead` uitgelogd door naar het
+inlogscherm, er laadt geen enkel Google- of Meta-script vóór toestemming, de
+sitemap bevat 43 pagina's inclusief `/over-ons`, en de skip-link werkt met een
+bestaand doel. Zie ook SEO-01 in `docs/codereview-backlog.md`: de titels van de
+landingspagina's zijn structureel te lang.
+
+
 ## 5.3.1
 
 Onderhoudsrelease: performance, tekstuele rust en consistentie. Geen nieuwe

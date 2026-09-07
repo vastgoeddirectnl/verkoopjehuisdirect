@@ -1,7 +1,11 @@
 import HomeClient from "./components/HomeClient";
 
 export const metadata = {
-  title: "Woning verkopen zonder opknappen of verkoopdruk",
+  // title.template uit app/layout.jsx geldt alleen voor ONDERLIGGENDE
+  // segmenten. app/page.jsx zit in hetzelfde segment als die layout, dus de
+  // merknaam werd hier niet toegevoegd — uitgerekend op de belangrijkste
+  // pagina. Met `absolute` zetten we de volledige titel zelf.
+  title: { absolute: "Woning verkopen zonder opknappen | Vastgoed Direct Nederland" },
   description:
     "Uw woning verkopen zonder opknappen, bezichtigingen of verkoopdruk? Ontvang eerst een persoonlijk en vrijblijvend verkoopvoorstel.",
   alternates: {

@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen in de huidige staat",
+  title: "Huis verkopen in huidige staat",
   description: "Uw huis verkopen in de huidige staat zonder eerst op te knappen, leeg te halen of verkoopklaar te maken? Vraag vrijblijvend duidelijkheid aan.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-in-huidige-staat",

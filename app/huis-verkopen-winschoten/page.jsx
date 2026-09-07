@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Huis verkopen in Winschoten | vrijblijvend verkoopvoorstel",
+  "title": "Huis verkopen in Winschoten",
   "description": "Wilt u uw huis in Winschoten verkopen zonder open huis of verkoopstress? Vraag vrijblijvend een verkoopvoorstel aan bij Vastgoed Direct Nederland.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/huis-verkopen-winschoten"

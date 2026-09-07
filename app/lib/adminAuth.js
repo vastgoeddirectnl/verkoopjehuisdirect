@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { verifyTotpCode } from "./totp.js";
 
 const COOKIE = "vdn_admin_session";
 const SESSION_MAX_AGE_MS = 1000 * 60 * 60 * 12;
@@ -9,6 +10,19 @@ function secret() {
 
 export function hasAdminSessionSecret() {
   return Boolean(secret());
+}
+
+export function hasAdminTotpSecret() {
+  return Boolean(process.env.ADMIN_TOTP_SECRET);
+}
+
+/**
+ * Tweede factor bovenop ADMIN_PASSWORD. Eén gedeeld secret, geen aparte
+ * accounts — zelfde model als het wachtwoord zelf. Zie ADMIN_TOTP_SECRET in
+ * het README en scripts/generate-totp-secret.js voor de inrichting.
+ */
+export function verifyAdminTotpCode(code) {
+  return verifyTotpCode(process.env.ADMIN_TOTP_SECRET, code);
 }
 
 /**

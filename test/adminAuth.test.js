@@ -2,7 +2,14 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
 
-import { createAdminToken, verifyAdminToken, safeEqualText } from "../app/lib/adminAuth.js";
+import {
+  createAdminToken,
+  verifyAdminToken,
+  safeEqualText,
+  hasAdminTotpSecret,
+  verifyAdminTotpCode,
+} from "../app/lib/adminAuth.js";
+import { generateTotpSecret, generateTotpCode } from "../app/lib/totp.js";
 
 const SECRET = "test-secret-voor-de-unit-tests-lang-genoeg";
 
@@ -99,6 +106,32 @@ test("createAdminToken weigert te werken zonder secret", () => {
   metOmgeving({ secret: "" }, () => {
     assert.throws(() => createAdminToken(), /ADMIN_SESSION_SECRET/);
   });
+});
+
+test("hasAdminTotpSecret volgt ADMIN_TOTP_SECRET", () => {
+  const vorige = process.env.ADMIN_TOTP_SECRET;
+  try {
+    delete process.env.ADMIN_TOTP_SECRET;
+    assert.equal(hasAdminTotpSecret(), false);
+    process.env.ADMIN_TOTP_SECRET = generateTotpSecret();
+    assert.equal(hasAdminTotpSecret(), true);
+  } finally {
+    if (vorige === undefined) delete process.env.ADMIN_TOTP_SECRET;
+    else process.env.ADMIN_TOTP_SECRET = vorige;
+  }
+});
+
+test("verifyAdminTotpCode leest ADMIN_TOTP_SECRET en verifieert daarmee", () => {
+  const vorige = process.env.ADMIN_TOTP_SECRET;
+  const geheim = generateTotpSecret();
+  process.env.ADMIN_TOTP_SECRET = geheim;
+  try {
+    assert.equal(verifyAdminTotpCode(generateTotpCode(geheim)), true);
+    assert.equal(verifyAdminTotpCode("000000"), false);
+  } finally {
+    if (vorige === undefined) delete process.env.ADMIN_TOTP_SECRET;
+    else process.env.ADMIN_TOTP_SECRET = vorige;
+  }
 });
 
 test("safeEqualText vergelijkt zonder te struikelen over lengteverschil", () => {

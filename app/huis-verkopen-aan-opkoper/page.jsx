@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen aan een opkoper | rustig vergelijken",
+  title: "Huis verkopen aan een opkoper",
   description: "Overweegt u verkoop aan een opkoper? Vraag vrijblijvend een voorstel aan en vergelijk rustig bedrag, voorwaarden en overdracht.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-aan-opkoper",

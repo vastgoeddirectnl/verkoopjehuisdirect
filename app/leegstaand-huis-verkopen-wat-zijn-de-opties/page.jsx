@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Leegstaand huis verkopen: wat zijn de opties?",
+  "title": "Leegstaand huis verkopen: opties",
   "description": "Een leegstaand huis verkopen? Lees welke verkoopmogelijkheden er zijn, wanneer directe verkoop logisch is en waar u op moet letten.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/leegstaand-huis-verkopen-wat-zijn-de-opties"

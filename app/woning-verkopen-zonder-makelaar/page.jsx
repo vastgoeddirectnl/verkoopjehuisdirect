@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Woning verkopen zonder makelaar | Vrijblijvend voorstel",
+  title: "Woning verkopen zonder makelaar",
   description:
     "Wilt u uw woning verkopen zonder makelaar, open huis of Funda-traject? Vraag vrijblijvend een verkoopvoorstel aan. Niet zelf alles regelen en geen verkoopdruk.",
   alternates: {

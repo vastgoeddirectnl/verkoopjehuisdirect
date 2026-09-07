@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Huis met achterstallig onderhoud verkopen",
+  "title": "Huis met achterstallig onderhoud",
   "description": "Woning verkopen met achterstallig onderhoud? Vraag vrijblijvend een voorstel aan zonder eerst te renoveren of verkoopklaar te maken.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/huis-verkopen-met-achterstallig-onderhoud"

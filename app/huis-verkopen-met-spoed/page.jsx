@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  title: "Huis verkopen met spoed zonder overhaaste beslissing",
+  title: "Huis verkopen met spoed",
   description: "Bij spoed kunt u snel een vrijblijvende beoordeling aanvragen. De haalbare verkooptermijn hangt af van woning, gegevens en juridische uitvoerbaarheid.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/huis-verkopen-met-spoed",

@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Woning verkopen in Overijssel | vrijblijvend verkoopvoorstel",
+  "title": "Woning verkopen in Overijssel",
   "description": "Woning verkopen in Overijssel? Vraag vrijblijvend duidelijkheid over directe verkoop, voorwaarden, oplevering en notariële afwikkeling.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/woning-verkopen-overijssel"

@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Huis verkopen in Stadskanaal | vrijblijvend verkoopvoorstel",
+  "title": "Huis verkopen in Stadskanaal",
   "description": "Wilt u uw huis in Stadskanaal verkopen zonder open huis of verkoopstress? Vraag vrijblijvend een verkoopvoorstel aan bij Vastgoed Direct Nederland.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/huis-verkopen-stadskanaal"

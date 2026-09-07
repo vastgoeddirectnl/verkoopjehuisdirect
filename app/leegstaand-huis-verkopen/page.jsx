@@ -1,7 +1,7 @@
 import SeoLandingPage from "../components/SeoLandingPage";
 
 export const metadata = {
-  "title": "Leegstaand huis verkopen zonder gedoe",
+  "title": "Leegstaand huis verkopen",
   "description": "Leegstaand huis verkopen zonder open huis of eerst opknappen? Vraag vrijblijvend duidelijkheid aan.",
   "alternates": {
     "canonical": "https://www.vastgoeddirectnederland.nl/leegstaand-huis-verkopen"

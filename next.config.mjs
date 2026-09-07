@@ -3,6 +3,8 @@
  * Oude domeinen worden permanent doorgestuurd naar het nieuwe hoofddomein.
  */
 
+import { withSentryConfig } from "@sentry/nextjs/config";
+
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -84,4 +86,12 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  // Zonder SENTRY_ORG/SENTRY_PROJECT/SENTRY_AUTH_TOKEN (env vars, door de
+  // Sentry-plugin zelf gelezen) slaat de build het uploaden van source maps
+  // stilletjes over — de rest van de build blijft ongewijzigd werken.
+  silent: !process.env.CI,
+  webpack: {
+    treeshake: { removeDebugLogging: true },
+  },
+});

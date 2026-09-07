@@ -3,6 +3,8 @@ import {
   createAdminToken,
   adminCookieName,
   hasAdminSessionSecret,
+  hasAdminTotpSecret,
+  verifyAdminTotpCode,
   safeEqualText,
 } from "../../../lib/adminAuth";
 import { enforceRateLimit } from "../../../lib/requestSecurity";
@@ -11,8 +13,8 @@ export const runtime = "nodejs";
 
 export async function POST(request) {
   try {
-    if (!process.env.ADMIN_PASSWORD || !hasAdminSessionSecret()) {
-      console.error("ADMIN_PASSWORD en/of ADMIN_SESSION_SECRET ontbreekt.");
+    if (!process.env.ADMIN_PASSWORD || !hasAdminSessionSecret() || !hasAdminTotpSecret()) {
+      console.error("ADMIN_PASSWORD, ADMIN_SESSION_SECRET en/of ADMIN_TOTP_SECRET ontbreekt.");
       return NextResponse.json(
         { error: "Adminomgeving is niet volledig geconfigureerd." },
         { status: 503 }
@@ -32,9 +34,18 @@ export async function POST(request) {
       );
     }
 
-    const { password } = await request.json();
+    const { password, code } = await request.json();
     if (!safeEqualText(password, process.env.ADMIN_PASSWORD)) {
       return NextResponse.json({ error: "Onjuist wachtwoord." }, { status: 401 });
+    }
+
+    // Pas de verificatiecode controleren ná het wachtwoord: bij een onjuist
+    // wachtwoord hoeft niemand te weten of er verder ook nog een code nodig is.
+    if (!verifyAdminTotpCode(code)) {
+      return NextResponse.json(
+        { error: "Onjuiste of ontbrekende verificatiecode." },
+        { status: 401 }
+      );
     }
 
     const res = NextResponse.json({ ok: true });
