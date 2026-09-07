@@ -8,28 +8,16 @@ import { markProposalSentAutomation, refreshLeadAutomation, refreshAllLeadAutoma
 import { isValidEmail } from "../../../lib/admin/validators";
 import { formatDateNL } from "../../../lib/date";
 import { proposalValidationIssues } from "../../../lib/proposalValidation";
+import { parseMoney, parsePercent } from "../../../lib/money.js";
+import { LEAD_STATUSES, ARCHIVE_LEAD_STATUSES, LEGACY_STATUS_LABELS } from "../../../lib/leadStatus.js";
 
 export const runtime = "nodejs";
+// De bulk-automatisering verwerkt leads in blokken; geef die ruimte.
+export const maxDuration = 60;
 
-const STATUSES = [
-  "Nieuw",
-  "Nieuwe aanvraag",
-  "Contact opgenomen",
-  "In behandeling",
-  "In beoordeling",
-  "Eerste bod gedaan",
-  "Beoordeling gepland",
-  "Voorstel opgesteld",
-  "Voorstel verzonden",
-  "Voorstel bekeken",
-  "In onderhandeling",
-  "Akkoord",
-  "Afgewezen",
-  "Afgewezen / vervallen",
-  "Afgerond",
-  "Gearchiveerd",
-];
-const ARCHIVE_LEAD_STATUSES = ["Akkoord", "Afgewezen", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
+// De admin-UI toont en zet alleen LEAD_STATUSES, maar accepteert bij het
+// updaten ook nog binnenkomende legacy-waarden (bv. uit oude e-mails/links).
+const ACCEPTED_LEAD_STATUSES = [...LEAD_STATUSES, ...Object.keys(LEGACY_STATUS_LABELS)];
 const ARCHIVE_PROPOSAL_STATUSES = ["Akkoord", "Gearchiveerd", "Afgewezen", "Verlopen"];
 const PROPOSAL_STATUSES = ["Concept", "Verzonden", "Bekeken", "Akkoord", "Afgewezen", "Verlopen", "Gearchiveerd"];
 
@@ -120,41 +108,17 @@ function clean(value, max = 1500) {
 }
 
 
-function parseNonNegativeNumber(value) {
-  const raw = String(value || "").trim();
-  if (!raw) return 0;
-  const cleaned = raw
-    .replace(/€/g, "")
-    .replace(/%/g, "")
-    .replace(/\s/g, "")
-    .replace(/[^0-9,.-]/g, "");
-  if (!cleaned) return 0;
-  let normalized = cleaned;
-  const hasComma = normalized.includes(",");
-  const hasDot = normalized.includes(".");
-  if (hasComma && hasDot) {
-    normalized = normalized.replace(/\./g, "").replace(",", ".");
-  } else if (hasComma) {
-    normalized = normalized.replace(",", ".");
-  } else if (hasDot) {
-    const dotParts = normalized.split(".");
-    const lastPart = dotParts[dotParts.length - 1];
-    if (lastPart.length === 3 && dotParts.length > 1) {
-      normalized = normalized.replace(/\./g, "");
-    }
-  }
-  const number = Number.parseFloat(normalized);
-  return Number.isFinite(number) ? Math.abs(number) : 0;
-}
-
 function euroText(value) {
-  const number = parseNonNegativeNumber(value);
+  const number = parseMoney(value);
   if (!number) return null;
+  // Bewust dezelfde "€ 1.234"-opmaak (spatie, geen valuta-stijl) als amount()
+  // in app/components/proposal/proposalFormat.js — niet formatEuro(), die
+  // gebruikt Intl's currency-stijl voor de netto-opbrengstvergelijking.
   return `€ ${new Intl.NumberFormat("nl-NL", { maximumFractionDigits: 0 }).format(Math.round(number))}`;
 }
 
 function percentText(value) {
-  const number = Math.min(100, Math.max(0, parseNonNegativeNumber(value)));
+  const number = Math.min(100, Math.max(0, parsePercent(value)));
   if (!number) return null;
   return String(number).replace(".", ",");
 }
@@ -199,7 +163,7 @@ function cleanForField(field, value) {
   }
   if (field === "resale_percentage_text") return percentText(value);
   if (field === "resale_period_months") {
-    const months = Math.round(parseNonNegativeNumber(value));
+    const months = Math.round(parseMoney(value));
     return months > 0 ? months : null;
   }
   return clean(value, 300) || null;
@@ -208,15 +172,6 @@ function cleanForField(field, value) {
 
 function siteUrl() {
   return (process.env.NEXT_PUBLIC_SITE_URL || "https://www.vastgoeddirectnederland.nl").replace(/\/$/, "");
-}
-
-function formatMoney(value) {
-  const raw = String(value || "").trim();
-  if (!raw) return "";
-  if (raw.includes("€")) return raw;
-  const digits = raw.replace(/[^\d]/g, "");
-  if (!digits) return raw;
-  return `€ ${new Intl.NumberFormat("nl-NL", { maximumFractionDigits: 0 }).format(Number(digits))}`;
 }
 
 function formatAddress(proposal) {
@@ -436,6 +391,7 @@ export async function GET(request) {
 
     return NextResponse.json({ error: "Onbekende actie." }, { status: 400 });
   } catch (error) {
+    console.error(`admin/v2 GET ${action} mislukt:`, error);
     return NextResponse.json({ error: "Interne serverfout." }, { status: 500 });
   }
 }
@@ -459,7 +415,7 @@ export async function POST(request) {
       for (const field of allowed) {
         if (Object.prototype.hasOwnProperty.call(body, field)) {
           let value = body[field];
-          if (field === "status" && value && !STATUSES.includes(value)) value = "Nieuwe aanvraag";
+          if (field === "status" && value && !ACCEPTED_LEAD_STATUSES.includes(value)) value = "Nieuwe aanvraag";
           params.push(value || null);
           if (field === "next_follow_up_at") {
             updates.push(`manual_follow_up_at = $${params.length}`);
@@ -524,8 +480,8 @@ export async function POST(request) {
       const columns = PROPOSAL_FIELDS;
       const proposalBody = { ...body };
       if (proposalBody.seller_work_enabled) {
-        const base = parseNonNegativeNumber(proposalBody.seller_work_base_price_text);
-        const work = parseNonNegativeNumber(proposalBody.seller_work_amount_text);
+        const base = parseMoney(proposalBody.seller_work_base_price_text);
+        const work = parseMoney(proposalBody.seller_work_amount_text);
         proposalBody.seller_work_total_price_text = base || work ? euroText(base + work) : null;
       }
       const proposalIssues = proposalValidationIssues(proposalBody);
@@ -543,8 +499,8 @@ export async function POST(request) {
 
     if (action === "updateProposal") {
       if (body.seller_work_enabled) {
-        const base = parseNonNegativeNumber(body.seller_work_base_price_text);
-        const work = parseNonNegativeNumber(body.seller_work_amount_text);
+        const base = parseMoney(body.seller_work_base_price_text);
+        const work = parseMoney(body.seller_work_amount_text);
         body.seller_work_total_price_text = base || work ? euroText(base + work) : null;
       }
       const updates = [];
@@ -944,12 +900,13 @@ export async function POST(request) {
     }
 
     if (action === "runAutomation") {
-      const result = await refreshAllLeadAutomation(body.limit || 300);
+      const result = await refreshAllLeadAutomation(body.limit || 200);
       return NextResponse.json({ ok: true, ...result });
     }
 
     return NextResponse.json({ error: "Onbekende actie." }, { status: 400 });
   } catch (error) {
+    console.error("admin/v2 POST mislukt:", error);
     return NextResponse.json({ error: "Interne serverfout." }, { status: 500 });
   }
 }

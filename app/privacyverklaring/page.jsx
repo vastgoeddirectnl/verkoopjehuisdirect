@@ -1,3 +1,6 @@
+import Link from "next/link";
+import Image from "next/image";
+
 export const metadata = {
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/privacyverklaring",
@@ -11,13 +14,15 @@ export default function Privacyverklaring() {
   return (
     <main style={{ fontFamily: "Arial, sans-serif", background: "#f7f5f0", color: "#0a2540" }}>
       <section style={{ maxWidth: "920px", margin: "0 auto", padding: "70px 20px" }}>
-        <a href="/">
-          <img
+        <Link href="/">
+          <Image
             src="/logo.png"
             alt="Vastgoed Direct Nederland"
-            style={{ width: "240px", maxWidth: "100%", marginBottom: "40px" }}
+            width={1774}
+            height={887}
+            style={{ width: "240px", maxWidth: "100%", height: "auto", marginBottom: "40px" }}
           />
-        </a>
+        </Link>
 
         <p style={{ color: "#D96A1C", fontWeight: "900", textTransform: "uppercase" }}>
           Privacy
@@ -87,6 +92,15 @@ export default function Privacyverklaring() {
           een mogelijke verkoopoplossing. Wij verkopen uw persoonsgegevens niet aan derden.
         </p>
         <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
+          Voor het technisch mogelijk maken van onze website en administratie schakelen wij de
+          volgende verwerkers in. Zij verwerken gegevens uitsluitend in onze opdracht en op grond
+          van een verwerkersovereenkomst: <strong>Vercel</strong> (hosting van de website),
+          <strong> Neon</strong> (opslag van de database met aanvragen) en <strong>Resend</strong>
+          (verzending van e-mail, zoals de ontvangstbevestiging van uw aanvraag). Verwerking vindt
+          in beginsel plaats binnen de Europese Economische Ruimte; waar gegevens daarbuiten worden
+          verwerkt, gebeurt dat op basis van de standaardcontractbepalingen van de Europese Commissie.
+        </p>
+        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
           Alleen wanneer u toestemming geeft voor advertentiemeting gebruiken wij Google Ads. Na een
           geslaagde aanvraag kan de Google-tag het door u ingevulde e-mailadres en, wanneer beschikbaar,
           telefoonnummer verwerken. De tag normaliseert en hasht deze gegevens vóór verzending aan Google.
@@ -150,7 +164,7 @@ export default function Privacyverklaring() {
           <p>Website: www.vastgoeddirectnederland.nl</p>
         </div>
 
-        <a
+        <Link
           href="/"
           style={{
             display: "inline-block",
@@ -164,7 +178,7 @@ export default function Privacyverklaring() {
           }}
         >
           Terug naar homepage
-        </a>
+        </Link>
       </section>
     </main>
   );

@@ -45,7 +45,17 @@ export async function enforceRateLimit(request, {
   limit = 8,
   windowSeconds = 600,
 } = {}) {
-  const identity = hashIdentity(clientIp(request));
+  // Een falende rate limiter mag nooit een aanvraag kosten. Zonder deze
+  // vangnet-catch gooit hashIdentity in productie als beide secrets ontbreken,
+  // en dan geeft /api/leads een 500 terwijl de bezoeker denkt te hebben verzonden.
+  let identity;
+  try {
+    identity = hashIdentity(clientIp(request));
+  } catch (error) {
+    console.error("Rate limiting uitgeschakeld:", error.message);
+    return { allowed: true, remaining: limit };
+  }
+
   const bucket = Math.floor(Date.now() / (windowSeconds * 1000));
   const key = `${scope || "public"}:${identity}:${bucket}`;
 
@@ -70,7 +80,9 @@ export async function enforceRateLimit(request, {
 
     return { allowed: count <= limit, remaining: Math.max(0, limit - count) };
   } catch (error) {
-    console.warn("Database rate limiting niet beschikbaar; tijdelijke fallback actief:", error.message);
+    // console.error zodat dit opvalt in de Vercel-logs: de in-memory fallback is
+    // per lambda-instance en dus in de praktijk nauwelijks een limiet.
+    console.error("Database rate limiting niet beschikbaar; in-memory fallback actief:", error.message);
     return fallbackRateLimit(key, limit, windowSeconds);
   }
 }

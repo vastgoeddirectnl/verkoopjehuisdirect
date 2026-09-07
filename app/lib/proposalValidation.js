@@ -1,31 +1,14 @@
+import { parseMoney } from "./money.js";
+
 function text(value) {
   return String(value || "").replace(/\s+/g, " ").trim();
 }
 
+// Dunne naamswrapper: het parsen zelf staat nu centraal in app/lib/money.js
+// (ARCH-02), zodat validatie hier en de weergave in het voorstel nooit een
+// ander getal uit dezelfde tekst kunnen halen.
 export function parseProposalMoney(value) {
-  const raw = text(value);
-  if (!raw) return 0;
-
-  let normalized = raw
-    .replace(/€/g, "")
-    .replace(/\s/g, "")
-    .replace(/[^0-9,.-]/g, "");
-
-  if (!normalized) return 0;
-
-  if (normalized.includes(",") && normalized.includes(".")) {
-    normalized = normalized.replace(/\./g, "").replace(",", ".");
-  } else if (normalized.includes(",")) {
-    normalized = normalized.replace(",", ".");
-  } else if (normalized.includes(".")) {
-    const parts = normalized.split(".");
-    if (parts.length > 1 && parts[parts.length - 1].length === 3) {
-      normalized = normalized.replace(/\./g, "");
-    }
-  }
-
-  const number = Number.parseFloat(normalized);
-  return Number.isFinite(number) ? Math.abs(number) : 0;
+  return parseMoney(value);
 }
 
 export function sellerWorkDetails(proposal = {}) {

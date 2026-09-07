@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  test-en-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Dependencies installeren
+        run: npm ci
+
+      - name: Tests draaien
+        run: npm test
+
+      # Informatief, niet blokkerend. `next lint` is in Next 15.5 afgeschreven en
+      # .eslintrc.json is het oudere formaat; tot de overstap naar flat config
+      # is gemaakt mag een lintmelding de build niet tegenhouden.
+      - name: Linten (informatief)
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Productiebuild controleren
+        run: npm run build
+        env:
+          # De build hoeft niet naar de echte database; deze waarden zijn alleen
+          # nodig omdat sommige modules ze bij het laden verwachten.
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+          ADMIN_SESSION_SECRET: ci-secret-alleen-voor-de-build
+          ADMIN_PASSWORD: ci-wachtwoord
+          NEXT_PUBLIC_SITE_URL: https://www.vastgoeddirectnederland.nl

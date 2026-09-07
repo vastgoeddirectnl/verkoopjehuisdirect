@@ -52,6 +52,8 @@ const pages = [
   { path: "/huis-verkopen-veendam", priority: 0.7, changeFrequency: "monthly" },
   { path: "/huis-verkopen-winschoten", priority: 0.7, changeFrequency: "monthly" },
 
+  { path: "/over-ons", priority: 0.6, changeFrequency: "yearly" },
+
   // Juridisch
   { path: "/privacyverklaring", priority: 0.3, changeFrequency: "yearly" },
 ];

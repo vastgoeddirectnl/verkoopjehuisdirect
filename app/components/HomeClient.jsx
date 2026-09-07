@@ -129,7 +129,7 @@ export default function HomeClient() {
 
       <MarketingHeader />
 
-      <section className="home-hero">
+      <section className="home-hero" id="hoofdinhoud">
         <div className="site-container home-hero-grid">
           <div className="home-hero-copy">
             <span className="eyebrow-pill">Directe verkoop · persoonlijk geregeld</span>
@@ -270,7 +270,7 @@ export default function HomeClient() {
 
           <div className="proposal-preview" aria-label="Voorbeeld van de opbouw van een verkoopvoorstel">
             <div className="proposal-preview-top">
-              <img src="/logo.png" alt="" aria-hidden="true" />
+              <Image src="/logo.png" alt="" aria-hidden="true" width={1774} height={887} />
               <span>Persoonlijk verkoopvoorstel</span>
             </div>
             <div className="proposal-address">

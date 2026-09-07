@@ -1,4 +1,5 @@
-import { formatDateTimeNL } from "../../lib/date";
+import { formatDateTimeNL } from "../../lib/date.js";
+import { timelinePrefix } from "../../lib/admin/customerActions.js";
 
 const EVENT_LABELS = {
   view: "Voorstel bekeken",
@@ -14,26 +15,11 @@ const EVENT_LABELS = {
   legacy_interest: "Historische voorstelreactie",
 };
 
-function timeMs(value) {
-  const time = value ? new Date(value).getTime() : NaN;
-  return Number.isFinite(time) ? time : null;
-}
-
-function isCustomerAction(event) {
-  return ["interested", "discuss", "question"].includes(event?.event_type);
-}
-
-function isHandledCustomerAction(event, lead) {
-  const actionAt = timeMs(event?.created_at);
-  const contactAt = timeMs(lead?.last_contact_at);
-  return Boolean(actionAt && contactAt && contactAt >= actionAt);
-}
-
 function eventDescription(event, lead) {
   const label = EVENT_LABELS[event.event_type] || event.event_type || "Voorstelactiviteit";
-  const prefix = isCustomerAction(event) ? (isHandledCustomerAction(event, lead) ? "Afgehandeld: " : "Actie nodig: ") : "";
   const suffix = event.message ? ` — ${event.message}` : "";
-  return `${prefix}${label}${suffix}`;
+  // De tijdlijn blijft historisch compleet; alleen de aanduiding verschilt.
+  return `${timelinePrefix(event, lead)}${label}${suffix}`;
 }
 
 function buildItems({ lead, tasks = [], proposals = [], mailLogs = [], proposalEvents = [] }) {

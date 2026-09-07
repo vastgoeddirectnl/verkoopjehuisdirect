@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const regionLinks = [
   ["/huis-verkopen-groningen", "Groningen", "Voor woningen in Groningen en omliggende plaatsen."],
   ["/woning-verkopen-drenthe", "Drenthe", "Voor woningen in Drenthe, waaronder Assen, Emmen, Borger en Gieten."],
@@ -16,6 +18,15 @@ export const metadata = {
   title: "Verkoopinformatie per regio",
   description: "Bekijk verkoopmogelijkheden per regio, waaronder Groningen, Drenthe, Friesland, Overijssel en verschillende plaatsen in Noord- en Oost-Nederland.",
   alternates: { canonical: "/regios" },
+  openGraph: {
+    title: "Verkoopinformatie per regio",
+    description: "Bekijk verkoopmogelijkheden per regio, waaronder Groningen, Drenthe, Friesland en Overijssel.",
+    url: "https://www.vastgoeddirectnederland.nl/regios",
+    siteName: "Vastgoed Direct Nederland",
+    locale: "nl_NL",
+    type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
+  },
 };
 
 export default function RegiosPage() {
@@ -23,7 +34,7 @@ export default function RegiosPage() {
     <main className="overview-page">
       <section className="overview-hero">
         <div className="overview-container">
-          <a href="/" className="back-link">← Terug naar Vastgoed Direct Nederland</a>
+          <Link href="/" className="back-link">← Terug naar Vastgoed Direct Nederland</Link>
           <p className="eyebrow">Regio’s</p>
           <h1>Verkoopmogelijkheden per regio</h1>
           <p>

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import AdsLeadMiniForm from "./AdsLeadMiniForm";
 import { MarketingFooter, MarketingHeader, ProofBar } from "./MarketingChrome";
 
@@ -187,10 +188,10 @@ export default function SeoLandingPage({ page }) {
 
       <MarketingHeader />
 
-      <section className="seo-hero">
+      <section className="seo-hero" id="hoofdinhoud">
         <div className="site-container">
           <nav className="seo-breadcrumbs" aria-label="Kruimelpad">
-            <a href="/">Home</a><span>›</span><span>{page.breadcrumb}</span>
+            <Link href="/">Home</Link><span>›</span><span>{page.breadcrumb}</span>
           </nav>
 
           <div className="seo-hero-grid">

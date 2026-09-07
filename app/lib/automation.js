@@ -1,8 +1,8 @@
 import { query, queryOne } from "./neonDb";
 import { addDaysAmsterdam } from "./date";
+import { ARCHIVE_LEAD_STATUSES as INACTIVE_LEAD_STATUSES } from "./leadStatus.js";
 
 const HIGH_VALUE_REGIONS = ["groningen", "drenthe", "friesland", "overijssel", "borger", "stadskanaal", "assen", "emmen", "veendam", "winschoten", "musselkanaal"];
-const INACTIVE_LEAD_STATUSES = ["Akkoord", "Afgewezen", "Afgewezen / vervallen", "Afgerond", "Gearchiveerd"];
 
 function clean(value) {
   return String(value || "").trim();
@@ -281,22 +281,38 @@ export async function markProposalViewed(proposal) {
   }
 }
 
-export async function refreshAllLeadAutomation(limit = 300) {
+/**
+ * Herberekent de automatisering voor een blok leads.
+ *
+ * Elke lead kost een handvol queries, dus een onbegrensde loop tikt op Vercel
+ * de functielimiet af en je weet dan niet welk deel wel is verwerkt. Daarom:
+ * - alleen actieve leads (gearchiveerde hoeven niet opnieuw berekend te worden);
+ * - oudste `last_automation_at` eerst, zodat elke volgende run vanzelf de rest
+ *   oppakt en het geheel zelf-vervolgend is;
+ * - een tijdsbudget dat ruim onder de functielimiet blijft.
+ */
+export async function refreshAllLeadAutomation(limit = 200, budgetMs = 20000) {
+  const started = Date.now();
+
   try {
     const { rows } = await query(
-      "select id from leads order by created_at desc limit $1",
-      [Math.min(Number(limit) || 300, 1000)]
+      `select id from leads
+        where coalesce(status, 'Nieuw') <> all($1)
+        order by last_automation_at asc nulls first
+        limit $2`,
+      [INACTIVE_LEAD_STATUSES, Math.min(Number(limit) || 200, 200)]
     );
 
     let processed = 0;
     for (const row of rows) {
+      if (Date.now() - started > budgetMs) break;
       await refreshLeadAutomation(row);
       processed += 1;
     }
 
-    return { processed };
+    return { processed, remaining: rows.length - processed };
   } catch (error) {
-    console.warn("Bulk-automatisering overgeslagen:", error.message);
-    return { processed: 0, error: error.message };
+    console.error("Bulk-automatisering overgeslagen:", error.message);
+    return { processed: 0, remaining: 0, error: error.message };
   }
 }

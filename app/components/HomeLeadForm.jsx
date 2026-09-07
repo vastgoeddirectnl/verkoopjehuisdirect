@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { getLeadAttribution } from "../lib/attribution";
 import { trackAnalyticsEvent, trackGoogleAdsConversion } from "../lib/googleAds";
 import { trackMetaLead } from "../lib/metaAds";
@@ -174,7 +175,7 @@ export default function HomeLeadForm() {
   return (
     <section id="aanvraag" className="form-card">
       <div className="form-logo-wrap">
-        <img src="/logo.png" alt="Vastgoed Direct Nederland" className="form-logo" />
+        <Image src="/logo.png" alt="Vastgoed Direct Nederland" className="form-logo" width={1774} height={887} />
       </div>
 
       {!submitted ? (

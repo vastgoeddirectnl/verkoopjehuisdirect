@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { createLead } from "../../lib/leads";
+import { NextResponse, after } from "next/server";
+import { createLead, sendLeadMails } from "../../lib/leads";
 import { enforceRateLimit, isLikelyBotSubmission, publicError } from "../../lib/requestSecurity";
 
 export const runtime = "nodejs";
@@ -26,7 +26,14 @@ export async function POST(request) {
       return NextResponse.json({ ok: true });
     }
 
-    const result = await createLead(body);
+    const result = await createLead(body, { sendMail: false });
+
+    // Duplicaten (dubbelklik/retry) kregen ook vóór deze wijziging nooit mail.
+    if (!result.mail?.duplicate) {
+      after(async () => {
+        await sendLeadMails(result.lead);
+      });
+    }
 
     // Stuur geen CRM- of mailgegevens terug naar de publieke browser.
     return NextResponse.json({ ok: true, reference: result.lead?.id || null });

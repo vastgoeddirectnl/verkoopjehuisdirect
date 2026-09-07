@@ -82,8 +82,14 @@ export async function POST(request, { params }) {
         [proposal.lead_id, automationKey]
       );
       if (existingTask?.id) {
+        // created_at wordt bewust meegezet. Het overzicht bepaalt of een
+        // klantactie is afgehandeld door last_contact_at met de aanmaakdatum
+        // van de taak te vergelijken. Bij een tweede klantactie op hetzelfde
+        // voorstel wordt deze taak hergebruikt; zonder verse created_at zou
+        // een ouder contactmoment de nieuwe actie meteen als afgehandeld
+        // laten tellen en verdween hij uit de takenteller.
         await query(
-          "update tasks set title = $2, due_date = current_date, status = 'Open', note = $3, updated_at = now() where id = $1",
+          "update tasks set title = $2, due_date = current_date, status = 'Open', note = $3, created_at = now(), updated_at = now() where id = $1",
           [existingTask.id, taskTitle, taskNote]
         );
       } else {

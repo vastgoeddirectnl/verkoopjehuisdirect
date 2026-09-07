@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { formatDateTimeNL } from "../../../lib/date";
 import { proposalReviewWarnings, proposalValidationIssues } from "../../../lib/proposalValidation";
+import { WHATSAPP_NOTICES, WHATSAPP_PREPARED, WHATSAPP_SENT, prepareWhatsapp } from "../../../lib/admin/whatsapp.js";
 
 const EDITABLE_FIELDS = [
   ["lead_naam", "Naam klant", "text"],
@@ -104,8 +105,13 @@ export default function ProposalAdminPage({ params }) {
     });
   }
 
+  // load() is een gewone functie die bij elke render opnieuw wordt aangemaakt;
+  // in de deps opnemen zou dit effect bij elke render laten herhalen (load()
+  // ververst data, wat weer een render triggert, enzovoort). Alleen bij een
+  // echte wijziging van id opnieuw laden is hier bewust zo.
   useEffect(() => {
     if (id) load(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   async function post(body) {
@@ -165,9 +171,19 @@ export default function ProposalAdminPage({ params }) {
       public_url: absolutePublicUrl(proposal),
     });
     if (result?.ok) {
-      setNotice(mode === "sent" ? "WhatsApp-bericht is handmatig als verzonden gemarkeerd." : "WhatsApp-bericht is voorbereid/geopend.");
+      setNotice(WHATSAPP_NOTICES[mode] || WHATSAPP_NOTICES[WHATSAPP_PREPARED]);
       await load();
     }
+    return result;
+  }
+
+  // Eerst vastleggen, dan pas WhatsApp openen. Zie app/lib/admin/whatsapp.js.
+  async function openWhatsApp(event) {
+    event.preventDefault();
+    await prepareWhatsapp({
+      url: whatsappLink,
+      log: () => recordProposalWhatsApp(WHATSAPP_PREPARED),
+    });
   }
 
   async function cloneVersion() {
@@ -188,7 +204,10 @@ export default function ProposalAdminPage({ params }) {
   }
 
   const proposal = data?.proposal;
-  const events = data?.proposalEvents || [];
+  // Zonder deze eigen useMemo is `data?.proposalEvents || []` bij elke render
+  // een nieuwe array-referentie wanneer proposalEvents ontbreekt, waardoor de
+  // useMemo hieronder zijn geheugen niet vasthoudt.
+  const events = useMemo(() => data?.proposalEvents || [], [data?.proposalEvents]);
   const versions = data?.versions || [];
   const viewCount = useMemo(() => events.filter((event) => event.event_type === "view").length, [events]);
   const whatsappLink = proposalWhatsappUrl(proposal);
@@ -198,7 +217,6 @@ export default function ProposalAdminPage({ params }) {
   if (!form) {
     return (
       <main className="proposal-admin">
-        <style>{styles}</style>
         <a href="/admin">← Dashboard</a>
         <section className="panel"><p>{error || "Voorstel laden..."}</p></section>
       </main>
@@ -207,9 +225,6 @@ export default function ProposalAdminPage({ params }) {
 
   return (
     <main className="proposal-admin">
-      <style>{styles}</style>
-      <style>{`.validation-panel{margin:0 0 16px;border:1px solid #ffd5c4;background:#fff5f1;color:#7c2d20;border-radius:18px;padding:14px 16px}.validation-panel strong{display:block}.validation-panel ul{margin:7px 0 0;padding-left:20px}.validation-panel a{display:inline-block;margin-top:10px;color:inherit;font-weight:900}.validation-panel.ready{background:#f0fff6;border-color:#bff3d0;color:#075c2a}.review-panel{margin:0 0 16px;border:1px solid #f2b885;background:#fffaf4;color:#7c4a23;border-radius:18px;padding:14px 16px}.review-panel strong{display:block}.review-panel ul{margin:7px 0 0;padding-left:20px}`}</style>
-
       <header className="admin-head">
         <div>
           <a href={proposal?.lead_id ? `/admin/leads/${proposal.lead_id}` : "/admin"}>← Terug naar lead</a>
@@ -247,8 +262,8 @@ export default function ProposalAdminPage({ params }) {
       <nav className="actionbar">
         <button disabled={saving} onClick={save}>Opslaan</button>
         <button disabled={saving || proposalIssues.length > 0} onClick={send}>Opslaan en mailen</button>
-        {whatsappLink ? <a className="green" href={whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => recordProposalWhatsApp("prepared")}>WhatsApp klant</a> : null}
-        {whatsappLink ? <button className="secondary" disabled={saving} onClick={() => recordProposalWhatsApp("sent")}>Markeer WhatsApp verzonden</button> : null}
+        {whatsappLink ? <a className="green" href={whatsappLink} target="_blank" rel="noopener noreferrer" onClick={openWhatsApp}>WhatsApp klant</a> : null}
+        {whatsappLink ? <button className="secondary" disabled={saving} onClick={() => recordProposalWhatsApp(WHATSAPP_SENT)}>Markeer als handmatig verzonden</button> : null}
         {publicUrl(proposal) ? <a href={`${publicUrl(proposal)}?admin_preview=1`} target="_blank" rel="noopener noreferrer">Preview klant</a> : null}
         <a href={`/admin/voorstellen/${id}/print`} target="_blank" rel="noopener noreferrer">Print/PDF</a>
         <button className="secondary" disabled={saving} onClick={cloneVersion}>Nieuwe versie</button>
@@ -343,29 +358,9 @@ export default function ProposalAdminPage({ params }) {
       <div className="mobile-actions">
         <button onClick={save} disabled={saving}>Opslaan</button>
         <button onClick={send} disabled={saving || proposalIssues.length > 0}>Opslaan en mailen</button>
-        {whatsappLink ? <a href={whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => recordProposalWhatsApp("prepared")}>WhatsApp</a> : null}
+        {whatsappLink ? <a href={whatsappLink} target="_blank" rel="noopener noreferrer" onClick={openWhatsApp}>WhatsApp</a> : null}
         {publicUrl(proposal) ? <a href={`${publicUrl(proposal)}?admin_preview=1`} target="_blank" rel="noopener noreferrer">Preview</a> : null}
       </div>
     </main>
   );
 }
-
-const styles = `
-:root{--navy:#071f3a;--orange:#D96A1C;--muted:#617184;--line:#e8e3db;--bg:#f5f2ec;--card:#fffdf9}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Arial,Helvetica,sans-serif;color:var(--navy)}
-a{color:inherit}.proposal-admin{width:min(1240px,calc(100% - 36px));margin:0 auto;padding:30px 0 80px}
-.admin-head{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:20px}.admin-head a{display:inline-block;margin-bottom:18px;color:var(--orange);font-weight:900;text-decoration:none}.admin-head h1{font-size:42px;margin:8px 0 6px;letter-spacing:-.04em}.admin-head p{margin:0;color:var(--muted)}
-.eyebrow{display:inline-flex;background:#fff1e6;border:1px solid #f2b885;color:#b85216;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
-.status-box{background:var(--navy);color:#fff;border-radius:22px;padding:18px;min-width:180px;display:grid;gap:5px}.status-box span,.status-box small{color:#c7d5e5}.status-box strong{font-size:22px}
-.actionbar{position:sticky;top:10px;z-index:20;background:rgba(255,253,249,.94);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:22px;padding:10px;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;box-shadow:0 12px 36px rgba(7,31,58,.08)}
-.actionbar button,.actionbar a,.mobile-actions button,.mobile-actions a{border:0;border-radius:999px;background:var(--orange);color:#fff;padding:12px 16px;font:inherit;font-weight:900;text-decoration:none;cursor:pointer}.actionbar .secondary{background:var(--navy)}.actionbar .green{background:#3e8f5e;color:#fff}.actionbar .muted{background:#e9e4dc;color:var(--navy)}
-.notice,.error{border-radius:16px;padding:12px 14px;margin-bottom:14px;font-weight:800}.notice{background:#eaf7ef;color:#23643f;border:1px solid #c8e7d4}.error{background:#f8eeee;color:#8a2d2d;border:1px solid #eccaca}
-.overview-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.65fr);gap:18px}.side-stack{display:grid;gap:18px;align-content:start}.panel{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:22px;box-shadow:0 12px 42px rgba(7,31,58,.07)}.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}.panel-head h2{margin:7px 0 0}.panel-head>span{font-size:12px;color:var(--muted)}
-.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.form-grid label,.wide-field{display:grid;gap:7px;font-weight:900;font-size:13px}.form-grid input,.wide-field textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px 13px;font:inherit}.wide-field{margin-top:14px}.wide-field textarea{min-height:110px;resize:vertical}
-.signal-panel{display:grid;gap:13px}.metric{display:flex;align-items:baseline;gap:10px;background:#fff1e6;border-radius:18px;padding:14px}.metric strong{font-size:36px;color:#b85216}.metric span{color:#617184}.signal-row{display:grid;gap:4px;border-bottom:1px solid var(--line);padding-bottom:10px}.signal-row:last-child{border-bottom:0}.signal-row span{font-size:12px;color:var(--muted)}.signal-row strong{font-size:14px}
-.version-list{display:grid;gap:8px;margin-top:14px}.version-list a{display:grid;gap:3px;padding:11px;border:1px solid var(--line);background:#fff;border-radius:14px;text-decoration:none}.version-list a.active{border-color:#D96A1C;background:#fff8f2}.version-list span,.version-list small{font-size:12px;color:var(--muted)}
-.events-panel{margin-top:18px}.event-list{display:grid}.event-list article{display:grid;grid-template-columns:16px 1fr;gap:11px;padding:0 0 18px;position:relative}.event-list article:not(:last-child):before{content:"";position:absolute;left:6px;top:14px;bottom:0;width:2px;background:var(--line)}.dot{width:14px;height:14px;border-radius:50%;background:#8ca1b8;border:3px solid #edf2f7;margin-top:4px;z-index:1}.event-interested{background:#D96A1C;border-color:#fff1e6}.event-view{background:#3E8F5E;border-color:#eaf7ef}.event-list time{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}.event-list strong{display:block}.event-list p{margin:4px 0 0;color:var(--muted)}
-.mobile-actions{display:none}
-@media(max-width:850px){.overview-grid{grid-template-columns:1fr}.admin-head{display:grid}.status-box{justify-self:start}.form-grid{grid-template-columns:1fr}.actionbar{position:relative;top:auto}}
-@media(max-width:650px){.proposal-admin{width:min(100% - 24px,1240px);padding-bottom:100px}.admin-head h1{font-size:34px}.actionbar{display:none}.mobile-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;position:fixed;left:10px;right:10px;bottom:10px;z-index:50;background:rgba(7,31,58,.96);padding:10px;border-radius:18px;box-shadow:0 16px 42px rgba(7,31,58,.25)}.mobile-actions button,.mobile-actions a{padding:11px 8px;text-align:center;font-size:12px}.mobile-actions a{background:#fff;color:var(--navy)}}
-`;

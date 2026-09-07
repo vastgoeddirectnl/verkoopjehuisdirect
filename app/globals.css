@@ -671,3 +671,46 @@ textarea.field { min-height: 82px; resize: vertical; }
   body { background: #fff; color: #000; padding-bottom: 0; }
   .marketing-header, .trust-strip, .whatsapp-pill, .mobile-action-bar, .final-cta-section { display: none !important; }
 }
+
+/* ============================================================
+   Toegankelijkheid
+   ============================================================ */
+
+/* Toetsenbordgebruikers slaan de navigatie over en landen direct op de H1. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-link:focus {
+  position: fixed;
+  left: 12px;
+  top: 12px;
+  z-index: 999;
+  width: auto;
+  height: auto;
+  padding: 12px 18px;
+  background: #ffffff;
+  color: #071f3a;
+  border: 2px solid #071f3a;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* Respecteer de systeeminstelling voor verminderde beweging. Vangt onder meer
+   de scrollIntoView({ behavior: "smooth" }) in ProposalActions af. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

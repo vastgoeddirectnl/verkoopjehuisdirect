@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const situationLinks = [
   ["/huis-verkopen-met-achterstallig-onderhoud", "Achterstallig onderhoud", "Voor woningen waar onderhoud of herstel een rol speelt."],
   ["/opknapwoning-verkopen", "Opknapwoning verkopen", "Als de woning niet verkoopklaar is of verbouwing nodig heeft."],
@@ -25,6 +27,15 @@ export const metadata = {
   title: "Verkoopinformatie per situatie",
   description: "Bekijk verkoopmogelijkheden per situatie, zoals achterstallig onderhoud, leegstand, erfenis, scheiding, verhuur of verkoop zonder leeghalen.",
   alternates: { canonical: "/situaties" },
+  openGraph: {
+    title: "Verkoopinformatie per situatie",
+    description: "Bekijk verkoopmogelijkheden per situatie, zoals achterstallig onderhoud, leegstand, erfenis, scheiding of verhuur.",
+    url: "https://www.vastgoeddirectnederland.nl/situaties",
+    siteName: "Vastgoed Direct Nederland",
+    locale: "nl_NL",
+    type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Vastgoed Direct Nederland" }],
+  },
 };
 
 export default function SituatiesPage() {
@@ -32,7 +43,7 @@ export default function SituatiesPage() {
     <main className="overview-page">
       <section className="overview-hero">
         <div className="overview-container">
-          <a href="/" className="back-link">← Terug naar Vastgoed Direct Nederland</a>
+          <Link href="/" className="back-link">← Terug naar Vastgoed Direct Nederland</Link>
           <p className="eyebrow">Situaties</p>
           <h1>Verkoopmogelijkheden per situatie</h1>
           <p>

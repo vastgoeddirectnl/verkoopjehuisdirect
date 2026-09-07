@@ -1,4 +1,6 @@
-import { reviewData, reviewDisplayText } from "../lib/reviewData";
+import Link from "next/link";
+import Image from "next/image";
+import { hasReviewData, reviewData, reviewDisplayText } from "../lib/reviewData.js";
 
 const whatsappLink =
   "https://wa.me/31612238051?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20verkopen.%20Kunt%20u%20met%20mij%20meedenken%3F";
@@ -6,6 +8,8 @@ const whatsappLink =
 export function MarketingHeader() {
   return (
     <>
+      <a href="#hoofdinhoud" className="skip-link">Naar de hoofdinhoud</a>
+
       <div className="trust-strip" aria-label="Belangrijkste kenmerken">
         <div className="site-container trust-strip-inner">
           <span>Vrijblijvend voorstel</span>
@@ -17,15 +21,15 @@ export function MarketingHeader() {
 
       <header className="marketing-header">
         <div className="site-container marketing-header-inner">
-          <a href="/" className="brand-link" aria-label="Vastgoed Direct Nederland – home">
-            <img src="/logo.png" alt="Vastgoed Direct Nederland" className="brand-logo" />
-          </a>
+          <Link href="/" className="brand-link" aria-label="Vastgoed Direct Nederland – home">
+            <Image src="/logo.png" alt="Vastgoed Direct Nederland" className="brand-logo" width={1774} height={887} priority />
+          </Link>
 
           <nav className="desktop-nav" aria-label="Hoofdnavigatie">
-            <a href="/#mogelijkheden">Mogelijkheden</a>
-            <a href="/#werkwijze">Werkwijze</a>
-            <a href="/#vergelijking">Vergelijken</a>
-            <a href="/#faq">Veelgestelde vragen</a>
+            <Link href="/#mogelijkheden">Mogelijkheden</Link>
+            <Link href="/#werkwijze">Werkwijze</Link>
+            <Link href="/#vergelijking">Vergelijken</Link>
+            <Link href="/#faq">Veelgestelde vragen</Link>
           </nav>
 
           <div className="header-cta-group">
@@ -50,10 +54,10 @@ export function MarketingHeader() {
           <details className="mobile-menu">
             <summary aria-label="Menu openen">Menu</summary>
             <nav aria-label="Mobiele navigatie">
-              <a href="/#mogelijkheden">Mogelijkheden</a>
-              <a href="/#werkwijze">Werkwijze</a>
-              <a href="/#vergelijking">Vergelijken</a>
-              <a href="/#faq">Veelgestelde vragen</a>
+              <Link href="/#mogelijkheden">Mogelijkheden</Link>
+              <Link href="/#werkwijze">Werkwijze</Link>
+              <Link href="/#vergelijking">Vergelijken</Link>
+              <Link href="/#faq">Veelgestelde vragen</Link>
               <a href="tel:0612238051">Bel 06 12 23 80 51</a>
             </nav>
           </details>
@@ -67,16 +71,20 @@ export function ProofBar() {
   return (
     <section className="proof-bar" aria-label="Zekerheden en beoordeling">
       <div className="site-container proof-bar-grid">
-        <a
-          href={reviewData.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="proof-item proof-review"
-          aria-label="Bekijk de Google-beoordelingen"
-        >
-          <span className="proof-icon proof-stars">★★★★★</span>
-          <span><strong>{reviewData.rating} op Google</strong><small>{reviewDisplayText(reviewData)}</small></span>
-        </a>
+        {/* Alleen tonen als de reviewgegevens zijn ingevuld en gecontroleerd;
+            zie app/lib/reviewData.js. Liever geen blok dan een claim die niet klopt. */}
+        {hasReviewData() ? (
+          <a
+            href={reviewData.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="proof-item proof-review"
+            aria-label="Bekijk de Google-beoordelingen"
+          >
+            <span className="proof-icon proof-stars">★★★★★</span>
+            <span><strong>{reviewData.rating} op Google</strong><small>{reviewDisplayText(reviewData)}</small></span>
+          </a>
+        ) : null}
         <div className="proof-item">
           <span className="proof-icon">1</span>
           <span><strong>Doorgaans binnen één werkdag</strong><small>Persoonlijke eerste reactie</small></span>
@@ -100,7 +108,7 @@ export function MarketingFooter() {
       <footer className="marketing-footer">
         <div className="site-container footer-grid">
           <div className="footer-brand">
-            <img src="/logo.png" alt="Vastgoed Direct Nederland" className="footer-logo" />
+            <Image src="/logo.png" alt="Vastgoed Direct Nederland" className="footer-logo" width={1774} height={887} />
             <p>
               Persoonlijke verkoopoplossingen voor woningeigenaren die eerst duidelijkheid willen over prijs,
               planning en voorwaarden.
@@ -142,6 +150,7 @@ export function MarketingFooter() {
         <div className="site-container footer-bottom">
           <span>© 2026 Vastgoed Direct Nederland</span>
           <span>VerkoopJeHuisDirect.nl verwijst naar dit hoofddomein.</span>
+          <a href="/over-ons">Over ons</a>
           <a href="/privacyverklaring">Privacyverklaring</a>
         </div>
       </footer>
