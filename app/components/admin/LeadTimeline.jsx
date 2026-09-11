@@ -1,5 +1,5 @@
 import { formatDateTimeNL } from "../../lib/date.js";
-import { timelinePrefix } from "../../lib/admin/customerActions.js";
+import { timelinePrefix, isCustomerAction, isCustomerActionHandled } from "../../lib/admin/customerActions.js";
 
 const EVENT_LABELS = {
   view: "Voorstel bekeken",
@@ -65,7 +65,7 @@ function buildItems({ lead, tasks = [], proposals = [], mailLogs = [], proposalE
   }
 
   for (const event of proposalEvents) {
-    const handledCustomerAction = isCustomerAction(event) && isHandledCustomerAction(event, lead);
+    const handledCustomerAction = isCustomerAction(event) && isCustomerActionHandled(event, lead);
     items.push({
       id: `event-${event.id}`,
       at: event.created_at,
