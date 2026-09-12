@@ -345,8 +345,15 @@ export default function LeadDetailPage({ params }) {
 
       return {
         ...base,
+        // Passeertermijn (juridische levering) staat los van de feitelijke
+        // oplevering: de 6 maanden hier is de wettelijke geldigheidsduur van
+        // de inschrijving van de koopovereenkomst (Vormerkung, art. 7:3 BW),
+        // niet een streefdatum voor de oplevering zelf.
         delivery_term_text: base.delivery_term_text || "Uiterlijk binnen 6 maanden",
-        transfer_date_text: base.transfer_date_text && base.transfer_date_text !== "In overleg" ? base.transfer_date_text : "Uiterlijk binnen 6 maanden",
+        // Bij deze voorsteltypes kan de verkoper na de juridische levering nog
+        // in de woning blijven wonen — de oplevering hoort daarom niet aan
+        // dezelfde 6 maanden vast te zitten als de passeertermijn hierboven.
+        transfer_date_text: base.transfer_date_text && base.transfer_date_text !== "In overleg" ? base.transfer_date_text : "In overleg, na de juridische levering",
         buyer_text: base.buyer_text || "Vastgoed Direct Nederland of nader te noemen meester",
         // Juridisch relevante keuzes niet automatisch aanvinken.
         // Alleen ABC wordt logisch gekoppeld aan het voorsteltype; overige punten moeten bewust worden aangevinkt.
