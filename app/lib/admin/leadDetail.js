@@ -231,8 +231,30 @@ export function applyAdditionalAgreementDefaults(current = {}) {
   };
 }
 
+/**
+ * Adresveld zoals het eruitziet vóórdat de PDOK-adrescontrole is teruggekomen:
+ * alleen postcode + huisnummer. Ook de waarde waarmee wordt vergeleken om te
+ * bepalen of de gebruiker het veld al handmatig heeft aangepast — zie
+ * addressSuggestionFromLookup() en de aanroep ervan op de leaddetailpagina.
+ */
+export function defaultPropertyAddress(lead) {
+  return [lead?.postcode, lead?.huisnummer].filter(Boolean).join(" ").toUpperCase();
+}
+
+/**
+ * Zet een /api/address-resultaat (dezelfde PDOK-lookup als op het publieke
+ * formulier) om naar de weergavetekst voor "Adres / woning of object":
+ * straatnaam + huisnummer, plaats. Puur, zodat het netwerkverkeer zelf in de
+ * pagina blijft en dit apart testbaar is.
+ */
+export function addressSuggestionFromLookup(address) {
+  if (!address) return "";
+  const streetLine = [address.street, address.houseNumber].filter(Boolean).join(" ");
+  return [streetLine, address.city].filter(Boolean).join(", ");
+}
+
 export function defaultProposalForLead(lead) {
-  const propertyAddress = [lead?.postcode, lead?.huisnummer].filter(Boolean).join(" ").toUpperCase();
+  const propertyAddress = defaultPropertyAddress(lead);
   return {
     proposal_variant: "Uitgebreid",
     lead_id: lead?.id || "",

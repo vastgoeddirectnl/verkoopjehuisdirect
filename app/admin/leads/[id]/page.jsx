@@ -26,6 +26,8 @@ import {
   calculateNetComparison,
   buildCalculatedProposalPayload,
   defaultProposalForLead,
+  defaultPropertyAddress,
+  addressSuggestionFromLookup,
   formatPercent,
 } from "../../../lib/admin/leadDetail";
 import { WHATSAPP_NOTICES, WHATSAPP_SENT, prepareWhatsapp } from "../../../lib/admin/whatsapp.js";
@@ -185,6 +187,35 @@ export default function LeadDetailPage({ params }) {
     Promise.resolve(params).then((resolved) => setLeadId(resolved.id));
   }, [params]);
 
+  // Vult "Adres / woning of object" aan met de echte straatnaam en plaats via
+  // dezelfde PDOK-adrescontrole als het publieke formulier (/api/address).
+  // Overschrijft nooit een al aangepast adres: zolang het veld nog op de
+  // automatische postcode+huisnummer-waarde staat mag dit bijwerken, zodra de
+  // gebruiker zelf iets heeft ingevuld blijft dat staan.
+  async function suggestPropertyAddress(targetLead) {
+    const postcode = String(targetLead?.postcode || "").toUpperCase().replace(/\s+/g, "");
+    const huisnummer = String(targetLead?.huisnummer || "").trim();
+    if (!/^\d{4}[A-Z]{2}$/.test(postcode) || !huisnummer) return;
+
+    try {
+      const params = new URLSearchParams({ postcode, huisnummer });
+      const response = await fetch(`/api/address?${params.toString()}`);
+      const json = await response.json().catch(() => ({}));
+      if (!response.ok || !json?.found) return;
+
+      const suggestion = addressSuggestionFromLookup(json.address);
+      if (!suggestion) return;
+
+      const fallback = defaultPropertyAddress(targetLead);
+      setProposal((current) => {
+        if (!current || (current.property_address && current.property_address !== fallback)) return current;
+        return { ...current, property_address: suggestion };
+      });
+    } catch {
+      // Stille val: het adresveld blijft dan gewoon op postcode + huisnummer staan.
+    }
+  }
+
   async function load(id = leadId) {
     if (!id) return;
     const res = await fetch(`/api/admin/v2?action=lead&id=${id}`, { cache: "no-store" });
@@ -194,7 +225,10 @@ export default function LeadDetailPage({ params }) {
       return;
     }
     setData(json);
-    if (json.lead) setProposal(applyAdditionalAgreementDefaults(defaultProposalForLead(json.lead)));
+    if (json.lead) {
+      setProposal(applyAdditionalAgreementDefaults(defaultProposalForLead(json.lead)));
+      suggestPropertyAddress(json.lead);
+    }
   }
 
   async function post(body) {
@@ -513,7 +547,10 @@ export default function LeadDetailPage({ params }) {
             specialProposalType={specialProposalType}
             onProposalTypeChange={handleProposalTypeChange}
             onCreateProposal={createProposal}
-            onResetProposal={() => setProposal(applyAdditionalAgreementDefaults(defaultProposalForLead(lead)))}
+            onResetProposal={() => {
+              setProposal(applyAdditionalAgreementDefaults(defaultProposalForLead(lead)));
+              suggestPropertyAddress(lead);
+            }}
           />
 
           <section className="grid three">
