@@ -22,9 +22,9 @@ export const metadata = {
 };
 
 // Bewust zonder teamfoto's, namen of stockbeelden die een team suggereren dat
-// er niet is. Zodra er echte foto's zijn, kunnen die in de sectie "Wat u van
-// ons mag verwachten" worden opgenomen. Deze pagina gebruikt uitsluitend
-// bestaande klassen uit app/globals.css, dus er is geen nieuwe styling nodig.
+// er niet is. Zodra er echte foto's, een naam en een KvK-nummer zijn, horen die
+// in de sectie "Achtergrond" (zie docs/codereview-backlog.md, CONTENT-01). Deze
+// pagina gebruikt uitsluitend bestaande klassen uit app/globals.css.
 
 const werkwijze = [
   {
@@ -81,7 +81,7 @@ const passendNiet = [
 export default function OverOnsPage() {
   return (
     <main className="seo-page">
-      <MarketingHeader />
+      <MarketingHeader requestHref="/#aanvraag" />
 
       <section className="seo-hero" id="hoofdinhoud">
         <div className="site-container">
@@ -108,6 +108,48 @@ export default function OverOnsPage() {
       </section>
 
       <ProofBar />
+
+      {/* Achtergrond. Naam, foto en KvK-nummer volgen zodra die er zijn; tot
+          die tijd beschrijft deze sectie alleen wat aantoonbaar klopt. */}
+      <section className="section-shell positioning-section">
+        <div className="site-container positioning-grid">
+          <div>
+            <p className="section-eyebrow">Achtergrond</p>
+            <h2>Ervaring in vastgoed en vastgoedfinancieringen.</h2>
+          </div>
+          <div className="positioning-copy">
+            <p>
+              Achter Vastgoed Direct Nederland staat ervaring in de vastgoedsector en met financieringen. Wij kennen
+              beide kanten van een woningtransactie: de waarde, staat en het gebruik van een pand, en wat er financieel
+              en juridisch nodig is om een aankoop daadwerkelijk rond te krijgen.
+            </p>
+            <div className="principle-list">
+              <div>
+                <strong>Haalbaar voorstel</strong>
+                <span>
+                  Wij rekenen een aankoop door voordat wij een voorstel doen. Het bedrag is gebaseerd op wat wij ook
+                  echt kunnen waarmaken. Blijkt bij de controles vóór de koopovereenkomst iets nieuws, dan bespreken wij
+                  dat eerst met u.
+                </span>
+              </div>
+              <div>
+                <strong>Zonder financieringsvoorbehoud</strong>
+                <span>
+                  Wij kopen in principe zonder financieringsvoorbehoud aan onze kant. U bent dus niet afhankelijk van de
+                  hypotheekgoedkeuring van een koper.
+                </span>
+              </div>
+              <div>
+                <strong>Ook complexere objecten</strong>
+                <span>
+                  Verhuurde woningen, woon-winkelpanden en gemengde objecten vragen kennis van huur, gebruik en
+                  waardering. Daar zijn wij op ingericht.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section className="section-shell">
         <div className="site-container">
@@ -184,7 +226,7 @@ export default function OverOnsPage() {
         </div>
       </section>
 
-      <MarketingFooter />
+      <MarketingFooter requestHref="/#aanvraag" />
     </main>
   );
 }

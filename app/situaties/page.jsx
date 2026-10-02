@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { MarketingHeader, MarketingFooter } from "../components/MarketingChrome";
 
 const situationLinks = [
   ["/huis-verkopen-met-achterstallig-onderhoud", "Achterstallig onderhoud", "Voor woningen waar onderhoud of herstel een rol speelt."],
@@ -41,9 +41,9 @@ export const metadata = {
 export default function SituatiesPage() {
   return (
     <main className="overview-page">
-      <section className="overview-hero">
+      <MarketingHeader requestHref="/#aanvraag" />
+      <section className="overview-hero" id="hoofdinhoud">
         <div className="overview-container">
-          <Link href="/" className="back-link">← Terug naar Vastgoed Direct Nederland</Link>
           <p className="eyebrow">Situaties</p>
           <h1>Verkoopmogelijkheden per situatie</h1>
           <p>
@@ -63,6 +63,7 @@ export default function SituatiesPage() {
           ))}
         </div>
       </section>
+      <MarketingFooter requestHref="/#aanvraag" />
     </main>
   );
 }

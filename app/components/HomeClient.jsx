@@ -2,19 +2,22 @@ import Image from "next/image";
 import HomeLeadForm from "./HomeLeadForm";
 import { MarketingFooter, MarketingHeader, ProofBar, whatsappLink } from "./MarketingChrome";
 
+// SEO-02: LocalBusiness in plaats van RealEstateAgent (VDN koopt zelf aan en
+// bemiddelt niet), en zonder "priceRange: Vrijblijvend…": dat veld is bedoeld
+// voor een prijsindicatie en werd door Google als ongeldige waarde gezien.
+// Adres en KvK-nummer volgen zodra die er zijn (zie docs/codereview-backlog.md).
 const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": "RealEstateAgent",
+  "@type": "LocalBusiness",
   name: "Vastgoed Direct Nederland",
   url: "https://www.vastgoeddirectnederland.nl",
-  logo: "https://www.vastgoeddirectnederland.nl/logo.png",
+  logo: "https://www.vastgoeddirectnederland.nl/brand/logo.png",
   image: "https://www.vastgoeddirectnederland.nl/og.png",
   telephone: "+31612238051",
   email: "info@vastgoeddirectnederland.nl",
   description:
-    "Vastgoed Direct Nederland biedt woningeigenaren een persoonlijke route naar directe verkoop met een vrijblijvend voorstel, schriftelijke afspraken en notariële afwikkeling.",
-  areaServed: ["Groningen", "Drenthe", "Friesland", "Overijssel"],
-  priceRange: "Vrijblijvend verkoopvoorstel",
+    "Vastgoed Direct Nederland koopt woningen en objecten rechtstreeks aan, met een vrijblijvend schriftelijk voorstel en notariële afwikkeling.",
+  areaServed: ["Groningen", "Drenthe", "Friesland", "Overijssel"].map((name) => ({ "@type": "AdministrativeArea", name })),
 };
 
 const faqItems = [
@@ -270,7 +273,7 @@ export default function HomeClient() {
 
           <div className="proposal-preview" aria-label="Voorbeeld van de opbouw van een verkoopvoorstel">
             <div className="proposal-preview-top">
-              <Image src="/logo.png" alt="" aria-hidden="true" width={1774} height={887} />
+              <Image src="/brand/logo.png" alt="" aria-hidden="true" width={900} height={179} sizes="190px" />
               <span>Persoonlijk verkoopvoorstel</span>
             </div>
             <div className="proposal-address">

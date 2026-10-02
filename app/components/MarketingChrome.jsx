@@ -1,11 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { hasReviewData, reviewData, reviewDisplayText } from "../lib/reviewData.js";
+import CookiePreferencesLink from "./CookiePreferencesLink";
 
 const whatsappLink =
   "https://wa.me/31612238051?text=Hallo%2C%20ik%20wil%20graag%20mijn%20woning%20verkopen.%20Kunt%20u%20met%20mij%20meedenken%3F";
 
-export function MarketingHeader() {
+// requestHref: op pagina's zonder eigen aanvraagformulier (overzichten,
+// kennisbank, privacy) verwijst de knop naar het formulier op de homepage.
+export function MarketingHeader({ requestHref = "#aanvraag" } = {}) {
   return (
     <>
       <a href="#hoofdinhoud" className="skip-link">Naar de hoofdinhoud</a>
@@ -22,7 +25,7 @@ export function MarketingHeader() {
       <header className="marketing-header">
         <div className="site-container marketing-header-inner">
           <Link href="/" className="brand-link" aria-label="Vastgoed Direct Nederland – home">
-            <Image src="/logo.png" alt="Vastgoed Direct Nederland" className="brand-logo" width={1774} height={887} priority />
+            <Image src="/brand/logo.png" alt="Vastgoed Direct Nederland" className="brand-logo" width={900} height={179} sizes="(max-width: 700px) 170px, 220px" priority />
           </Link>
 
           <nav className="desktop-nav" aria-label="Hoofdnavigatie">
@@ -42,7 +45,7 @@ export function MarketingHeader() {
               06 12 23 80 51
             </a>
             <a
-              href="#aanvraag"
+              href={requestHref}
               className="button button-primary button-compact"
               data-analytics-event="primary_cta_click"
               data-analytics-component="header"
@@ -102,13 +105,13 @@ export function ProofBar() {
   );
 }
 
-export function MarketingFooter() {
+export function MarketingFooter({ requestHref = "#aanvraag" } = {}) {
   return (
     <>
       <footer className="marketing-footer">
         <div className="site-container footer-grid">
           <div className="footer-brand">
-            <Image src="/logo.png" alt="Vastgoed Direct Nederland" className="footer-logo" width={1774} height={887} />
+            <Image src="/brand/logo-light.png" alt="Vastgoed Direct Nederland" className="footer-logo" width={900} height={179} sizes="230px" />
             <p>
               Persoonlijke verkoopoplossingen voor woningeigenaren die eerst duidelijkheid willen over prijs,
               planning en voorwaarden.
@@ -151,7 +154,9 @@ export function MarketingFooter() {
           <span>© 2026 Vastgoed Direct Nederland</span>
           <span>VerkoopJeHuisDirect.nl verwijst naar dit hoofddomein.</span>
           <a href="/over-ons">Over ons</a>
+          <a href="/kennisbank">Kennisbank</a>
           <a href="/privacyverklaring">Privacyverklaring</a>
+          <CookiePreferencesLink />
         </div>
       </footer>
 
@@ -168,7 +173,7 @@ export function MarketingFooter() {
 
       <div className="mobile-action-bar">
         <a href="tel:0612238051" className="button button-secondary">Bel direct</a>
-        <a href="#aanvraag" className="button button-primary">Voorstel aanvragen</a>
+        <a href={requestHref} className="button button-primary">Voorstel aanvragen</a>
       </div>
     </>
   );

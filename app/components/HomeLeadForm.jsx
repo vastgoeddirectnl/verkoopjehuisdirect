@@ -175,7 +175,7 @@ export default function HomeLeadForm() {
   return (
     <section id="aanvraag" className="form-card">
       <div className="form-logo-wrap">
-        <Image src="/logo.png" alt="Vastgoed Direct Nederland" className="form-logo" width={1774} height={887} />
+        <Image src="/brand/logo.png" alt="Vastgoed Direct Nederland" className="form-logo" width={900} height={179} sizes="180px" />
       </div>
 
       {!submitted ? (

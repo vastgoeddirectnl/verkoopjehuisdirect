@@ -1,5 +1,5 @@
-import Link from "next/link";
-import Image from "next/image";
+import { MarketingHeader, MarketingFooter } from "../components/MarketingChrome";
+import CookiePreferencesLink from "../components/CookiePreferencesLink";
 
 export const metadata = {
   alternates: {
@@ -12,19 +12,10 @@ export const metadata = {
 
 export default function Privacyverklaring() {
   return (
-    <main style={{ fontFamily: "Arial, sans-serif", background: "#f7f5f0", color: "#0a2540" }}>
-      <section style={{ maxWidth: "920px", margin: "0 auto", padding: "70px 20px" }}>
-        <Link href="/">
-          <Image
-            src="/logo.png"
-            alt="Vastgoed Direct Nederland"
-            width={1774}
-            height={887}
-            style={{ width: "240px", maxWidth: "100%", height: "auto", marginBottom: "40px" }}
-          />
-        </Link>
-
-        <p style={{ color: "#D96A1C", fontWeight: "900", textTransform: "uppercase" }}>
+    <main className="overview-page legal-page">
+      <MarketingHeader requestHref="/#aanvraag" />
+      <section id="hoofdinhoud" style={{ maxWidth: "920px", margin: "0 auto", padding: "56px 20px 70px" }}>
+        <p style={{ color: "#B24E15", fontWeight: "900", textTransform: "uppercase" }}>
           Privacy
         </p>
 
@@ -33,7 +24,7 @@ export default function Privacyverklaring() {
         </h1>
 
         <p style={{ color: "#647386", fontSize: "16px" }}>
-          Laatst bijgewerkt: 2 september 2026
+          Laatst bijgewerkt: 2 oktober 2026
         </p>
 
         <p style={{ fontSize: "18px", lineHeight: "1.8", color: "#536273" }}>
@@ -96,7 +87,10 @@ export default function Privacyverklaring() {
           volgende verwerkers in. Zij verwerken gegevens uitsluitend in onze opdracht en op grond
           van een verwerkersovereenkomst: <strong>Vercel</strong> (hosting van de website),
           <strong> Neon</strong> (opslag van de database met aanvragen) en <strong>Resend</strong>
-          (verzending van e-mail, zoals de ontvangstbevestiging van uw aanvraag). Verwerking vindt
+          (verzending van e-mail, zoals de ontvangstbevestiging van uw aanvraag). Voor het opsporen
+          van technische fouten gebruiken wij <strong>Sentry</strong>, met opslag in de EU; daarbij
+          worden technische gegevens verwerkt zoals de pagina, de browser en de foutmelding, maar
+          geen contact- of woninggegevens uit uw aanvraag. Verwerking vindt
           in beginsel plaats binnen de Europese Economische Ruimte; waar gegevens daarbuiten worden
           verwerkt, gebeurt dat op basis van de standaardcontractbepalingen van de Europese Commissie.
         </p>
@@ -132,8 +126,11 @@ export default function Privacyverklaring() {
           Functionele opslag wordt alleen gebruikt om de website goed te laten werken en uw privacykeuze
           te onthouden. Google Ads, de Meta-pixel en de bijbehorende advertentiemeting worden pas geladen
           nadat u hiervoor toestemming heeft gegeven. U kunt toestemming weigeren zonder dat dit gevolgen
-          heeft voor het gebruik van de website of het indienen van een aanvraag. Via de knop
-          ‘Cookievoorkeuren’ kunt u uw keuze op ieder moment wijzigen of intrekken.
+          heeft voor het gebruik van de website of het indienen van een aanvraag. Via de link
+          ‘Cookievoorkeuren’ onderaan elke pagina kunt u uw keuze op ieder moment wijzigen of intrekken.
+        </p>
+        <p style={{ lineHeight: "1.8", fontSize: "18px" }}>
+          <CookiePreferencesLink className="legal-cookie-button">Cookievoorkeuren nu wijzigen</CookiePreferencesLink>
         </p>
 
         <h2>9. Uw rechten</h2>
@@ -164,22 +161,8 @@ export default function Privacyverklaring() {
           <p>Website: www.vastgoeddirectnederland.nl</p>
         </div>
 
-        <Link
-          href="/"
-          style={{
-            display: "inline-block",
-            marginTop: "35px",
-            background: "#0a2540",
-            color: "white",
-            padding: "16px 28px",
-            borderRadius: "999px",
-            fontWeight: "900",
-            textDecoration: "none",
-          }}
-        >
-          Terug naar homepage
-        </Link>
       </section>
+      <MarketingFooter requestHref="/#aanvraag" />
     </main>
   );
 }

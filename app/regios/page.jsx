@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { MarketingHeader, MarketingFooter } from "../components/MarketingChrome";
 
 const regionLinks = [
   ["/huis-verkopen-groningen", "Groningen", "Voor woningen in Groningen en omliggende plaatsen."],
@@ -32,9 +32,9 @@ export const metadata = {
 export default function RegiosPage() {
   return (
     <main className="overview-page">
-      <section className="overview-hero">
+      <MarketingHeader requestHref="/#aanvraag" />
+      <section className="overview-hero" id="hoofdinhoud">
         <div className="overview-container">
-          <Link href="/" className="back-link">← Terug naar Vastgoed Direct Nederland</Link>
           <p className="eyebrow">Regio’s</p>
           <h1>Verkoopmogelijkheden per regio</h1>
           <p>
@@ -54,6 +54,7 @@ export default function RegiosPage() {
           ))}
         </div>
       </section>
+      <MarketingFooter requestHref="/#aanvraag" />
     </main>
   );
 }
