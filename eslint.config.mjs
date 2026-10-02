@@ -18,6 +18,14 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals"),
   {
+    // Een aanroep van een functie die niet geïmporteerd is, faalt pas tijdens
+    // het renderen. Zo crashte in 5.5.0 de lead-detailpagina op een vergeten
+    // import in LeadTimeline.jsx. Deze regel vangt dat al bij `npm run lint`.
+    rules: {
+      "no-undef": "error",
+    },
+  },
+  {
     ignores: ["node_modules/**", ".next/**", "public/**"],
   },
 ];

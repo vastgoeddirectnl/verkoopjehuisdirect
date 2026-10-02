@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { queryOne, query } from "../../../../lib/neonDb";
+import { queryOne, query, SQL_TODAY_NL } from "../../../../lib/neonDb";
 import { isUuid, enforceRateLimit } from "../../../../lib/requestSecurity";
 import { isExpiredAmsterdam } from "../../../../lib/date";
 
@@ -67,8 +67,8 @@ export async function POST(request, { params }) {
                when $2 in ('Bespreken','Vraag') and status in ('Nieuw','Nieuwe aanvraag','In behandeling','Eerste bod gedaan','Voorstel opgesteld','Voorstel verzonden') then 'Voorstel bekeken'
                else status
              end,
-             automation_follow_up_at = current_date,
-             next_follow_up_at = coalesce(manual_follow_up_at, current_date),
+             automation_follow_up_at = ${SQL_TODAY_NL},
+             next_follow_up_at = coalesce(manual_follow_up_at, ${SQL_TODAY_NL}),
              updated_at = now()
          where id = $1`,
         [proposal.lead_id, label]
@@ -89,13 +89,13 @@ export async function POST(request, { params }) {
         // een ouder contactmoment de nieuwe actie meteen als afgehandeld
         // laten tellen en verdween hij uit de takenteller.
         await query(
-          "update tasks set title = $2, due_date = current_date, status = 'Open', note = $3, created_at = now(), updated_at = now() where id = $1",
+          `update tasks set title = $2, due_date = ${SQL_TODAY_NL}, status = 'Open', note = $3, created_at = now(), updated_at = now() where id = $1`,
           [existingTask.id, taskTitle, taskNote]
         );
       } else {
         await query(
           `insert into tasks (lead_id, lead_naam, title, due_date, status, note, automation_key)
-           values ($1, $2, $3, current_date, 'Open', $4, $5)`,
+           values ($1, $2, $3, ${SQL_TODAY_NL}, 'Open', $4, $5)`,
           [proposal.lead_id, proposal.lead_naam, taskTitle, taskNote, automationKey]
         );
       }

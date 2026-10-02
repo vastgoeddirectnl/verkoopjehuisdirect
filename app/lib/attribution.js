@@ -7,6 +7,12 @@ const TRACKING_PARAMS = [
   "gclid",
   "gbraid",
   "wbraid",
+  // Google Ads zet bij auto-tagging ook gad_source/gad_campaignid; Meta en
+  // Microsoft hun eigen klik-ID. Ze horen in het bronveld, niet in de pagina.
+  "gad_source",
+  "gad_campaignid",
+  "fbclid",
+  "msclkid",
 ];
 
 function compactParts(parts, maxLength = 300) {
@@ -31,7 +37,9 @@ export function getLeadAttribution({ pageTitle = "", fallbackPath = "/" } = {}) 
   }
 
   const params = new URLSearchParams(window.location.search || "");
-  const pagePath = `${window.location.pathname || fallbackPath}${window.location.search || ""}`;
+  // Alleen het pad: de trackingparameters staan al in sourceLabel, en met de
+  // volledige querystring werd elke advertentieklik een eigen "pagina".
+  const pagePath = window.location.pathname || fallbackPath;
   const trackingParts = TRACKING_PARAMS.map((key) => {
     const value = params.get(key);
     return value ? `${key}=${value}` : "";

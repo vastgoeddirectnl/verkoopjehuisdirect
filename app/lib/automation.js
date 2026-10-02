@@ -1,5 +1,5 @@
-import { query, queryOne } from "./neonDb";
-import { addDaysAmsterdam } from "./date";
+import { query, queryOne, SQL_TODAY_NL } from "./neonDb.js";
+import { addDaysAmsterdam } from "./date.js";
 import { ARCHIVE_LEAD_STATUSES as INACTIVE_LEAD_STATUSES } from "./leadStatus.js";
 
 const HIGH_VALUE_REGIONS = ["groningen", "drenthe", "friesland", "overijssel", "borger", "stadskanaal", "assen", "emmen", "veendam", "winschoten", "musselkanaal"];
@@ -153,6 +153,91 @@ async function upsertAutomationTask({ lead, key, title, dueDate, note }) {
   }
 }
 
+/**
+ * TASK-01. Wanneer een automatische taak vanzelf af hoort te zijn.
+ *
+ * In 5.5.0 stonden er 147 open taken, waarvan 146 over tijd en 65 op leads
+ * die al gearchiveerd waren: automatische taken werden aangemaakt maar nooit
+ * gesloten. De lijst was daardoor ruis. Dezelfde regel als bij klantacties
+ * (app/lib/admin/customerActions.js) geldt nu voor alle automatische taken:
+ * een vastgelegd contactmoment ná het aanmaken van de taak handelt hem af.
+ *
+ * Handmatige taken (zonder automation_key) blijven altijd met rust.
+ */
+export const AUTOMATION_TASK_CLOSE_RULES = [
+  {
+    key: "gearchiveerd",
+    reason: "de lead is gearchiveerd of afgerond",
+    where: (p) => `coalesce(l.status, 'Nieuw') = any($${p.push(INACTIVE_LEAD_STATUSES)})`,
+  },
+  {
+    key: "contact",
+    reason: "er is contact geweest na het aanmaken van deze taak",
+    where: () => "l.last_contact_at is not null and l.last_contact_at >= t.created_at",
+  },
+  {
+    key: "vervallen-type",
+    reason: "taaktype vervallen, samengevoegd met 'Nieuwe aanvraag opvolgen'",
+    where: () => "t.automation_key = 'auto-high-priority'",
+  },
+  {
+    key: "niet-meer-nieuw",
+    reason: "de aanvraag is niet meer nieuw",
+    where: () => "t.automation_key = 'auto-new-lead' and coalesce(l.status, 'Nieuw') not in ('Nieuw','Nieuwe aanvraag')",
+  },
+  {
+    key: "voorstel-bekeken",
+    reason: "de klant heeft het voorstel inmiddels bekeken",
+    where: () => `t.automation_key like 'auto-proposal-sent-%'
+      and exists (
+        select 1 from tasks t2
+        where t2.lead_id = t.lead_id
+          and t2.automation_key = 'auto-proposal-viewed-' || substr(t.automation_key, ${"auto-proposal-sent-".length + 1})
+      )`,
+  },
+];
+
+/** Bouwt per regel de update-query. Apart, zodat de parameternummering te testen is. */
+export function buildCloseTaskQueries({ leadId = null } = {}) {
+  return AUTOMATION_TASK_CLOSE_RULES.map((rule) => {
+    const params = [];
+    const condition = rule.where(params);
+    const reasonIndex = params.push(`Automatisch afgesloten: ${rule.reason}.`);
+    const leadFilter = leadId ? `and t.lead_id = $${params.push(leadId)}` : "";
+    const sql = `update tasks t
+       set status = 'Afgerond',
+           note = trim(both from coalesce(t.note, '') || E'\\n\\n' || $${reasonIndex}),
+           updated_at = now()
+       from leads l
+       where l.id = t.lead_id
+         and t.automation_key is not null
+         and t.status <> 'Afgerond'
+         and (${condition})
+         ${leadFilter}
+       returning t.id`;
+    return { key: rule.key, sql, params };
+  });
+}
+
+/**
+ * Sluit automatische taken die volgens de regels hierboven af zijn. Met
+ * leadId alleen voor die lead (na elke wijziging), zonder leadId voor alles
+ * (bij de dagelijkse run). Gooit nooit: een mislukte opschoning mag een
+ * leadwijziging niet tegenhouden.
+ */
+export async function closeResolvedAutomationTasks({ leadId = null } = {}) {
+  const closed = {};
+  for (const { key, sql, params } of buildCloseTaskQueries({ leadId })) {
+    try {
+      const { rows } = await query(sql, params);
+      if (rows.length) closed[key] = rows.length;
+    } catch (error) {
+      console.warn(`Taken opschonen (${key}) overgeslagen:`, error.message);
+    }
+  }
+  return closed;
+}
+
 export async function refreshLeadAutomation(inputLead) {
   if (!inputLead?.id) return inputLead;
 
@@ -184,25 +269,21 @@ export async function refreshLeadAutomation(inputLead) {
 
     const status = lead.status || "Nieuw";
 
+    // Eén taak per nieuwe aanvraag. Voorheen kwam er bij een hoge leadscore
+    // een tweede taak "Kansrijke lead snel bellen" naast, met dezelfde
+    // betekenis — en die bleef ook na het eerste contact open staan.
     if (status === "Nieuw" || status === "Nieuwe aanvraag") {
+      const kansrijk = automation.priority === "Hoog";
       await upsertAutomationTask({
         lead,
         key: "auto-new-lead",
-        title: "Nieuwe aanvraag opvolgen",
+        title: kansrijk ? "Kansrijke nieuwe aanvraag: vandaag bellen" : "Nieuwe aanvraag opvolgen",
         dueDate: todayPlus(0),
         note: `Automatisch aangemaakt. Leadscore ${automation.score}/12. ${automation.note}`,
       });
     }
 
-    if (automation.priority === "Hoog" && !INACTIVE_LEAD_STATUSES.includes(status)) {
-      await upsertAutomationTask({
-        lead,
-        key: "auto-high-priority",
-        title: "Kansrijke lead snel bellen",
-        dueDate: todayPlus(0),
-        note: `Hoge leadscore ${automation.score}/12. ${automation.note}`,
-      });
-    }
+    await closeResolvedAutomationTasks({ leadId: lead.id });
 
     return lead;
   } catch (error) {
@@ -258,8 +339,8 @@ export async function markProposalViewed(proposal) {
         `update leads
          set status = case when status in ('Voorstel verzonden','Voorstel opgesteld') then 'Voorstel bekeken' else status end,
              proposal_viewed_at = coalesce(proposal_viewed_at, now()),
-             automation_follow_up_at = current_date,
-             next_follow_up_at = coalesce(manual_follow_up_at, current_date),
+             automation_follow_up_at = ${SQL_TODAY_NL},
+             next_follow_up_at = coalesce(manual_follow_up_at, ${SQL_TODAY_NL}),
              updated_at = now()
          where id = $1`,
         [lead.id]
@@ -294,6 +375,10 @@ export async function markProposalViewed(proposal) {
 export async function refreshAllLeadAutomation(limit = 200, budgetMs = 20000) {
   const started = Date.now();
 
+  // Eerst set-gewijs opschonen over alle leads, ook de gearchiveerde: die
+  // worden hieronder niet meer herberekend, maar hun open taken moeten wel weg.
+  const closedTasks = await closeResolvedAutomationTasks();
+
   try {
     const { rows } = await query(
       `select id from leads
@@ -310,9 +395,9 @@ export async function refreshAllLeadAutomation(limit = 200, budgetMs = 20000) {
       processed += 1;
     }
 
-    return { processed, remaining: rows.length - processed };
+    return { processed, remaining: rows.length - processed, closedTasks };
   } catch (error) {
     console.error("Bulk-automatisering overgeslagen:", error.message);
-    return { processed: 0, remaining: 0, error: error.message };
+    return { processed: 0, remaining: 0, closedTasks, error: error.message };
   }
 }

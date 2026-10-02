@@ -45,10 +45,12 @@ test("parseLeadSourceDetails komt om met een leeg of onbekend bronveld", () => {
 
 test("sourceChannelLabel herkent het advertentiekanaal", () => {
   assert.equal(sourceChannelLabel({ clickId: "abc123" }), "Google Ads");
-  assert.equal(sourceChannelLabel({ source: "google", medium: "organic" }), "Google Ads");
+  // Organisch verkeer van Google is geen advertentieklik (dat telde vroeger
+  // ten onrechte mee als Google Ads).
+  assert.equal(sourceChannelLabel({ source: "google", medium: "organic" }), "Google (organisch)");
   assert.equal(sourceChannelLabel({ medium: "cpc" }), "Google Ads");
   assert.equal(sourceChannelLabel({ source: "direct" }), "Direct");
   assert.equal(sourceChannelLabel({ referrer: "https://www.funda.nl" }), "Verwijzende website");
-  assert.equal(sourceChannelLabel({ pagePath: "/huis-verkopen-emmen" }), "Website / SEO");
+  assert.equal(sourceChannelLabel({ pagePath: "/huis-verkopen-emmen" }), "Direct");
   assert.equal(sourceChannelLabel({}), "Onbekend");
 });
