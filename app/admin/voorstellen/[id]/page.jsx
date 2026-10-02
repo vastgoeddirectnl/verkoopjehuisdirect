@@ -259,15 +259,21 @@ export default function ProposalAdminPage({ params }) {
         </div>
       ) : null}
 
+      {/* ADM-01: één hoofdactie (verzenden), de rest rustiger. Voorheen
+          stonden negen knoppen naast elkaar, zes in hetzelfde oranje. */}
       <nav className="actionbar">
-        <button disabled={saving} onClick={save}>Opslaan</button>
-        <button disabled={saving || proposalIssues.length > 0} onClick={send}>Opslaan en mailen</button>
-        {whatsappLink ? <a className="green" href={whatsappLink} target="_blank" rel="noopener noreferrer" onClick={openWhatsApp}>WhatsApp klant</a> : null}
-        {whatsappLink ? <button className="secondary" disabled={saving} onClick={() => recordProposalWhatsApp(WHATSAPP_SENT)}>Markeer als handmatig verzonden</button> : null}
-        {publicUrl(proposal) ? <a href={`${publicUrl(proposal)}?admin_preview=1`} target="_blank" rel="noopener noreferrer">Preview klant</a> : null}
-        <a href={`/admin/voorstellen/${id}/print`} target="_blank" rel="noopener noreferrer">Print/PDF</a>
-        <button className="secondary" disabled={saving} onClick={cloneVersion}>Nieuwe versie</button>
-        <button className="muted" disabled={saving} onClick={archive}>Archiveren</button>
+        <div className="actionbar-main">
+          <button className="primary" disabled={saving || proposalIssues.length > 0} onClick={send}>Opslaan en mailen</button>
+          <button className="outline" disabled={saving} onClick={save}>Opslaan</button>
+          {whatsappLink ? <a className="green" href={whatsappLink} target="_blank" rel="noopener noreferrer" onClick={openWhatsApp}>WhatsApp klant</a> : null}
+        </div>
+        <div className="actionbar-more">
+          {publicUrl(proposal) ? <a className="link" href={`${publicUrl(proposal)}?admin_preview=1`} target="_blank" rel="noopener noreferrer">Preview klant</a> : null}
+          <a className="link" href={`/admin/voorstellen/${id}/print`} target="_blank" rel="noopener noreferrer">Print/PDF</a>
+          {whatsappLink ? <button className="link" disabled={saving} onClick={() => recordProposalWhatsApp(WHATSAPP_SENT)}>Markeer als handmatig verzonden</button> : null}
+          <button className="link" disabled={saving} onClick={cloneVersion}>Nieuwe versie</button>
+          <button className="link danger" disabled={saving} onClick={archive}>Archiveren</button>
+        </div>
       </nav>
 
       <section className="overview-grid">

@@ -65,7 +65,7 @@ export default function NieuweLeadPage() {
     <main className="manual-page">
       <header className="topbar">
         <a href="/admin">← Terug naar dashboard</a>
-        <Image src="/logo.png" alt="Vastgoed Direct Nederland" width={1774} height={887} />
+        <Image src="/brand/logo.png" alt="Vastgoed Direct Nederland" width={900} height={179} sizes="220px" />
       </header>
 
       <section className="hero">

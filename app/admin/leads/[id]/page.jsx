@@ -484,7 +484,7 @@ export default function LeadDetailPage({ params }) {
     <main className="detail-page">
       <header>
         <a href="/admin">← Dashboard</a>
-        <Image src="/logo.png" alt="Vastgoed Direct Nederland" width={1774} height={887} />
+        <Image src="/brand/logo.png" alt="Vastgoed Direct Nederland" width={900} height={179} sizes="220px" />
       </header>
 
       {error ? <div className="error">{error}</div> : null}
@@ -508,6 +508,19 @@ export default function LeadDetailPage({ params }) {
               : post({ action: "updateLead", id: lead.id, last_contact_at: new Date().toISOString(), status: ["Nieuw", "Nieuwe aanvraag"].includes(lead.status) ? "In behandeling" : lead.status })}
             onResolveCustomerAction={resolveCustomerAction}
           />
+
+          {(data?.relatedLeads || []).length ? (
+            <section className="related-leads" aria-label="Andere aanvragen op dit adres">
+              <strong>
+                {data.relatedLeads.length === 1
+                  ? "Er is nog een aanvraag op dit adres"
+                  : `Er zijn nog ${data.relatedLeads.length} aanvragen op dit adres`}
+              </strong>
+              {data.relatedLeads.map((item) => (
+                <a key={item.id} href={`/admin/leads/${item.id}`}>{item.naam || "Naam onbekend"} · {item.status || "Nieuw"} · {fmt(item.created_at)}</a>
+              ))}
+            </section>
+          ) : null}
 
           <section className="grid">
             <LeadContactForm

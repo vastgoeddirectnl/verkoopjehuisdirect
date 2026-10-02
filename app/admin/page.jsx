@@ -2,110 +2,49 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { addDaysAmsterdam, formatDateTimeNL, todayAmsterdam } from "../lib/date";
+import { addDaysAmsterdam, normalizeDateOnly, todayAmsterdam } from "../lib/date";
 import { LEAD_STATUSES, ARCHIVE_LEAD_STATUSES, displayStatus, selectStatusValue } from "../lib/leadStatus.js";
 import { isLeadCustomerActionHandled, leadCustomerActionPriority } from "../lib/admin/customerActions.js";
-import { parseLeadSourceDetails } from "../lib/sourceParser.js";
-
-const TASK_STATUSES = ["Open", "In behandeling", "Afgerond"];
+import { cleanPhone, whatsappPhone, TASK_STATUSES } from "../lib/admin/leadDetail";
+import {
+  fmt,
+  fmtDay,
+  statusClass,
+  Kpi,
+  Info,
+  Bar,
+  PipelineButtons,
+  ChannelPill,
+  SourceDetails,
+  addressKey,
+} from "../components/admin/dashboard/DashboardParts";
 
 function todayPlus(days) { return addDaysAmsterdam(days); }
 
-function fmt(value) { return formatDateTimeNL(value); }
-
-function statusClass(status) {
-  return `status-${displayStatus(status).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
-}
-
-function PipelineButtons({ value, onChange }) {
-  const active = displayStatus(value);
-  return (
-    <div className="pipeline-buttons" aria-label="Pipeline status">
-      {LEAD_STATUSES.filter((status) => !["Afgerond", "Gearchiveerd"].includes(status)).map((status) => (
-        <button key={status} type="button" className={active === status ? "active" : ""} onClick={() => onChange(status)}>
-          {status}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function cleanPhone(value) {
-  return String(value || "").replace(/[^\d+]/g, "");
-}
-
 function whatsappUrl(phone, name) {
-  const cleaned = cleanPhone(phone).replace(/^0/, "31");
   const text = `Hallo ${name || ""}, bedankt voor uw aanvraag bij Vastgoed Direct Nederland. Ik neem graag contact met u op over uw woning.`;
-  return `https://wa.me/${cleaned}?text=${encodeURIComponent(text)}`;
+  return `https://wa.me/${whatsappPhone(phone)}?text=${encodeURIComponent(text)}`;
 }
 
-function SourceDetails({ lead }) {
-  const details = parseLeadSourceDetails(lead);
-  const hasDetails = [details.pagePath, details.pageTitle, details.source, details.medium, details.campaign, details.term, details.content, details.clickId, details.referrer].some(Boolean);
-  if (!hasDetails) return null;
+const VIEWS = [
+  ["dashboard", "Overzicht"],
+  ["leads", "Leads"],
+  ["tasks", "Taken"],
+  ["proposals", "Voorstellen"],
+  ["archive", "Archief"],
+  ["reports", "Rapportage"],
+];
 
-  return (
-    <div className="source-detail-box">
-      <h3>Meetgegevens</h3>
-      <div className="info-grid">
-        <Info label="Landingspagina" value={details.pagePath} />
-        <Info label="Paginatitel" value={details.pageTitle} />
-        <Info label="UTM source" value={details.source} />
-        <Info label="UTM medium" value={details.medium} />
-        <Info label="Campagne" value={details.campaign} />
-        <Info label="Zoekterm / keyword" value={details.term} />
-        <Info label="Advertentie-inhoud" value={details.content} />
-        <Info label="Click ID" value={details.clickId} />
-        <Info label="Referrer" value={details.referrer} />
-      </div>
-    </div>
-  );
-}
+const VIEW_TITLES = {
+  dashboard: "Vandaag",
+  leads: "Leads",
+  tasks: "Taken & reminders",
+  proposals: "Verkoopvoorstellen",
+  archive: "Archief",
+  reports: "Rapportage",
+};
 
-function emptyProposal(days = 14) {
-  return {
-    amount_text: "",
-    validity_date: todayPlus(days),
-    transfer_date_text: "In overleg",
-    deposit_text: "In overleg bespreekbaar",
-    conditions_text:
-      "Vrijblijvend voorstel onder voorbehoud van definitieve controle, akkoord van betrokken partijen en notariële vastlegging.",
-    notes: "",
-  };
-}
-
-function Kpi({ label, value, hint }) {
-  return (
-    <article className="kpi-card">
-      <span>{label}</span>
-      <strong>{value ?? 0}</strong>
-      {hint ? <small>{hint}</small> : null}
-    </article>
-  );
-}
-
-function Info({ label, value }) {
-  return (
-    <div className="info-card">
-      <span>{label}</span>
-      <strong>{value || "-"}</strong>
-    </div>
-  );
-}
-
-function Bar({ label, value, max }) {
-  const width = max ? Math.max(8, Math.round((Number(value) / max) * 100)) : 0;
-  return (
-    <div className="bar-row">
-      <div>
-        <strong>{label || "Onbekend"}</strong>
-        <span>{value} lead{Number(value) === 1 ? "" : "s"}</span>
-      </div>
-      <em><i style={{ width: `${width}%` }} /></em>
-    </div>
-  );
-}
+const EMPTY_REPORT = { kpis: {}, byChannel: [], byPage: [], byStatus: [], byMonth: [], recentTasks: [], testLeads: 0, marketingTotal: 0 };
 
 export default function AdminDashboard() {
   const [checking, setChecking] = useState(true);
@@ -121,17 +60,31 @@ export default function AdminDashboard() {
   const [proposals, setProposals] = useState([]);
   const [archivedLeads, setArchivedLeads] = useState([]);
   const [archivedProposals, setArchivedProposals] = useState([]);
-  const [report, setReport] = useState({ kpis: {}, byPage: [], bySource: [], byStatus: [], byMonth: [], recentTasks: [] });
+  const [report, setReport] = useState(EMPTY_REPORT);
   const [statusFilter, setStatusFilter] = useState("Alle");
-  const [taskFilter, setTaskFilter] = useState("Alle");
+  // Standaard alleen open taken: afgeronde taken zijn historie, die staan op
+  // de leaddetailpagina en in de tijdlijn.
+  const [taskFilter, setTaskFilter] = useState("Open");
   const [search, setSearch] = useState("");
   const [globalSearch, setGlobalSearch] = useState("");
   const [saving, setSaving] = useState(false);
-  const [proposalForm, setProposalForm] = useState(emptyProposal());
   const [taskForm, setTaskForm] = useState({ title: "", due_date: todayPlus(1), note: "" });
 
   const maxPage = useMemo(() => Math.max(1, ...((report.byPage || []).map((r) => Number(r.total) || 0))), [report]);
-  const maxSource = useMemo(() => Math.max(1, ...((report.bySource || []).map((r) => Number(r.total) || 0))), [report]);
+  const maxChannel = useMemo(() => Math.max(1, ...((report.byChannel || []).map((r) => Number(r.total) || 0))), [report]);
+
+  // Adressen die bij meer dan één actieve lead voorkomen.
+  const duplicateAddresses = useMemo(() => {
+    const counts = new Map();
+    for (const lead of leads) {
+      const key = addressKey(lead);
+      if (key) counts.set(key, (counts.get(key) || 0) + 1);
+    }
+    return new Set([...counts.entries()].filter(([, count]) => count > 1).map(([key]) => key));
+  }, [leads]);
+
+  const isDuplicate = (lead) => duplicateAddresses.has(addressKey(lead));
+
   const actionLeads = useMemo(() => {
     const now = Date.now();
     const today = todayAmsterdam();
@@ -147,6 +100,7 @@ export default function AdminDashboard() {
         const viewAgeHours = hoursSince(lead.last_proposal_viewed_at);
         const interestAgeHours = hoursSince(lead.last_interest_at);
         const createdAgeHours = hoursSince(lead.created_at);
+        const followUp = normalizeDateOnly(lead.next_follow_up_at);
         const lastActivityAgeHours = Math.min(
           hoursSince(lead.last_contact_at),
           viewAgeHours,
@@ -163,9 +117,12 @@ export default function AdminDashboard() {
         } else if (lead.last_proposal_viewed_at && viewAgeHours <= 24 && !customerActionHandled) {
           priority = 80 + Math.min(Number(lead.proposal_view_count || 0), 10);
           reason = `Voorstel vandaag/recent bekeken · ${lead.proposal_view_count || 1} sessie(s)`;
-        } else if (lead.next_follow_up_at && lead.next_follow_up_at <= today) {
+        } else if (followUp && followUp <= today) {
+          // Datums komen sinds DATA-01 als "YYYY-MM-DD" binnen; voorheen als
+          // tijdstempel, waardoor een opvolging van vandaag hier werd gemist.
           priority = 70;
-          reason = lead.manual_follow_up_at ? "Handmatige opvolging is vandaag of over tijd" : "Opvolging is vandaag of over tijd";
+          const label = followUp === today ? "vandaag" : `over tijd sinds ${fmtDay(followUp)}`;
+          reason = lead.manual_follow_up_at ? `Handmatige opvolging ${label}` : `Opvolging ${label}`;
         } else if (["Nieuwe aanvraag", "Nieuw"].includes(lead.status) && createdAgeHours <= 4) {
           priority = 60;
           reason = "Nieuwe aanvraag van minder dan 4 uur geleden";
@@ -184,7 +141,7 @@ export default function AdminDashboard() {
       })
       .filter((lead) => lead._priority > 0)
       .sort((a, b) => b._priority - a._priority)
-      .slice(0, 10);
+      .slice(0, 12);
   }, [leads]);
 
   const kanbanColumns = useMemo(() => [
@@ -297,7 +254,7 @@ export default function AdminDashboard() {
 
   async function loadReport() {
     const data = await apiGet("report");
-    if (data) setReport(data);
+    if (data) setReport({ ...EMPTY_REPORT, ...data });
   }
 
   async function loadLeadDetail(id) {
@@ -305,21 +262,20 @@ export default function AdminDashboard() {
     if (!data) return;
     setSelected(data.lead);
     setDetail(data);
-    setProposalForm(emptyProposal());
     setTaskForm({ title: "", due_date: todayPlus(1), note: "" });
   }
 
   async function loadAll() {
     const [leadData, taskData, proposalData, reportData] = await Promise.all([
       apiGet("leads", { limit: 300 }),
-      apiGet("tasks"),
+      apiGet("tasks", { status: taskFilter }),
       apiGet("proposals"),
       apiGet("report"),
     ]);
     if (leadData?.leads) setLeads(leadData.leads);
     if (taskData?.tasks) setTasks(taskData.tasks);
     if (proposalData?.proposals) setProposals(proposalData.proposals);
-    if (reportData) setReport(reportData);
+    if (reportData) setReport({ ...EMPTY_REPORT, ...reportData });
   }
 
   async function updateLead(id, updates) {
@@ -333,14 +289,14 @@ export default function AdminDashboard() {
 
   async function moveLeadToArchive(id, status = "Gearchiveerd") {
     const label = status === "Afgerond" ? "afgerond archiveren" : "naar het archief verplaatsen";
-    if (!window.confirm(`Lead ${label}?`)) return;
+    if (!window.confirm(`Lead ${label}? Open automatische taken voor deze lead worden daarbij gesloten.`)) return;
     const data = await apiPost({ action: "updateLead", id, status });
     if (!data?.lead) return;
     if (selected?.id === id) {
       setSelected(data.lead);
       if (detail) setDetail((old) => ({ ...old, lead: data.lead }));
     }
-    await Promise.all([loadLeads(), loadArchive(), loadReport()]);
+    await Promise.all([loadLeads(), loadArchive(), loadReport(), loadTasks()]);
     setView("archive");
   }
 
@@ -375,26 +331,6 @@ export default function AdminDashboard() {
     await Promise.all([loadTasks(), selected?.id ? loadLeadDetail(selected.id) : null, loadReport()]);
   }
 
-  async function createProposal() {
-    if (!selected) return setError("Selecteer eerst een lead.");
-    const property_address = `${selected.postcode || ""} ${selected.huisnummer || ""}`.trim();
-    const data = await apiPost({
-      action: "createProposal",
-      lead_id: selected.id,
-      lead_naam: selected.naam,
-      lead_email: selected.email,
-      lead_telefoon: selected.telefoon,
-      property_address,
-      ...proposalForm,
-    });
-    if (!data?.proposal) return;
-    await updateLead(selected.id, { status: "Voorstel opgesteld" });
-    await Promise.all([loadProposals(), loadLeadDetail(selected.id), loadReport()]);
-    setProposalForm(emptyProposal());
-    setView("proposals");
-  }
-
-
   async function runAutomation() {
     setSaving(true);
     setError("");
@@ -402,7 +338,8 @@ export default function AdminDashboard() {
     setSaving(false);
     if (result?.ok) {
       await Promise.all([loadLeads(), loadReport(), loadTasks({ status: taskFilter })]);
-      alert(`Automatisering uitgevoerd voor ${result.processed || 0} lead(s).`);
+      const closed = Object.values(result.closedTasks || {}).reduce((sum, count) => sum + count, 0);
+      alert(`Automatisering uitgevoerd voor ${result.processed || 0} lead(s).${closed ? ` ${closed} afgehandelde taak/taken gesloten.` : ""}`);
     }
   }
 
@@ -416,6 +353,11 @@ export default function AdminDashboard() {
     await Promise.all([loadProposals(), selected?.id ? loadLeadDetail(selected.id) : null, loadReport()]);
   }
 
+  function openLead(id) {
+    setView("leads");
+    loadLeadDetail(id);
+  }
+
   // Bewust alleen bij mount: loadAll() is een gewone functie die bij elke
   // render opnieuw wordt aangemaakt en zou dit effect anders bij elke render
   // laten herhalen.
@@ -424,7 +366,7 @@ export default function AdminDashboard() {
       const data = await apiGet("report");
       if (data) {
         setLoggedIn(true);
-        setReport(data);
+        setReport({ ...EMPTY_REPORT, ...data });
         await loadAll();
       }
       setChecking(false);
@@ -449,14 +391,14 @@ export default function AdminDashboard() {
   }, [view, loggedIn]);
 
   if (checking) {
-    return <main className="admin-shell"><section className="login-card"><Image src="/logo.png" alt="Vastgoed Direct Nederland" width={1774} height={887} priority /><p>Dashboard laden...</p></section></main>;
+    return <main className="admin-shell login-bg"><section className="login-card"><Image src="/brand/logo.png" alt="Vastgoed Direct Nederland" width={900} height={179} sizes="220px" priority /><p>Dashboard laden...</p></section></main>;
   }
 
   if (!loggedIn) {
     return (
       <main className="admin-shell login-bg">
         <section className="login-card">
-          <Image src="/logo.png" alt="Vastgoed Direct Nederland" width={1774} height={887} priority />
+          <Image src="/brand/logo.png" alt="Vastgoed Direct Nederland" width={900} height={179} sizes="220px" priority />
           <span className="eyebrow">Intern platform</span>
           <h1>Vastgoed Direct Nederland</h1>
           <p>Log in voor leads, opvolging, verkoopvoorstellen en rapportage.</p>
@@ -481,20 +423,19 @@ export default function AdminDashboard() {
     );
   }
 
+  const kpis = report.kpis || {};
+  const selectedRelated = (detail?.relatedLeads || []).filter((item) => item.id !== selected?.id);
+
   return (
     <main className="admin-shell">
       <aside className="sidebar">
-        <Image src="/logo.png" alt="Vastgoed Direct Nederland" width={1774} height={887} />
+        <Image src="/brand/logo-light.png" alt="Vastgoed Direct Nederland" width={900} height={179} sizes="190px" />
         <nav>
-          {[
-            ["dashboard", "Overzicht"],
-            ["leads", "Leads"],
-            ["tasks", "Taken"],
-            ["proposals", "Voorstellen"],
-            ["archive", "Archief"],
-            ["reports", "Rapportage"],
-          ].map(([key, label]) => (
-            <button key={key} className={view === key ? "active" : ""} onClick={() => setView(key)}>{label}</button>
+          {VIEWS.map(([key, label]) => (
+            <button key={key} className={view === key ? "active" : ""} onClick={() => setView(key)}>
+              {label}
+              {key === "dashboard" && actionLeads.length ? <span className="nav-count">{actionLeads.length}</span> : null}
+            </button>
           ))}
         </nav>
         <button className="logout" onClick={logout}>Uitloggen</button>
@@ -504,7 +445,7 @@ export default function AdminDashboard() {
         <header className="topbar">
           <div>
             <span className="eyebrow">Lead management</span>
-            <h1>{view === "dashboard" ? "Dashboard" : view === "leads" ? "Leads" : view === "tasks" ? "Taken & reminders" : view === "proposals" ? "Verkoopvoorstellen" : view === "archive" ? "Archief" : "Rapportage"}</h1>
+            <h1>{VIEW_TITLES[view] || "Dashboard"}</h1>
           </div>
           <div className="topbar-actions">
             <input
@@ -521,33 +462,23 @@ export default function AdminDashboard() {
               aria-label="Globaal zoeken in leads"
             />
             <a className="add-lead" href="/admin/nieuwe-lead">+ Klant toevoegen</a>
-            <button className="automation-btn" disabled={saving} onClick={runAutomation}>Automatisering uitvoeren</button>
+            <button className="automation-btn" disabled={saving} onClick={runAutomation} title="Herberekent opvolgdatums en sluit afgehandelde taken. Draait ook elke ochtend automatisch.">Automatisering nu draaien</button>
             <a className="export" href={`/api/admin/export?status=${encodeURIComponent(statusFilter)}&search=${encodeURIComponent(search)}`}>CSV export</a>
           </div>
         </header>
 
         {error ? <div className="error floating">{error}<button onClick={() => setError("")}>×</button></div> : null}
 
-        <section className="kpi-grid">
-          <Kpi label="Actieve leads" value={report.kpis?.total_leads} hint="Niet gearchiveerd" />
-          <Kpi label="Laatste 30 dagen" value={report.kpis?.leads_30d} hint="Nieuwe aanvragen" />
-          <Kpi label="Nieuwe aanvragen" value={report.kpis?.new_leads} hint="Nog opvolgen" />
-          <Kpi label="Kansrijke leads" value={report.kpis?.high_priority_leads} hint="Automatische score hoog" />
-          <Kpi label="Vandaag opvolgen" value={report.kpis?.followups_due} hint="Volgens opvolgdatum" />
-          <Kpi label="Voorstellen bekeken" value={report.kpis?.proposal_viewed_leads} hint="Warme opvolging" />
-          <Kpi label="Open taken" value={report.kpis?.open_tasks} hint="Actieve reminders" />
-          <Kpi label="Archief leads" value={report.kpis?.archived_leads} hint="Afgerond of afgewezen" />
-          <Kpi label="Archief voorstellen" value={report.kpis?.archived_proposals} hint="Niet actief" />
-        </section>
-
         {view === "dashboard" ? (
-          <section className="dashboard-grid">
-            <article className="panel action-center wide">
-              <div className="panel-head"><div><span className="eyebrow">Vandaag</span><h2>Actiecentrum</h2></div><button onClick={() => setView("tasks")}>Alle taken</button></div>
-              <p className="panel-intro">De warmste leads en acties die nu aandacht vragen, automatisch op prioriteit gesorteerd.</p>
+          <>
+            <section className="panel action-center">
+              <div className="panel-head">
+                <div><h2>Actiecentrum</h2><p className="panel-intro">De leads die nu aandacht vragen, op prioriteit gesorteerd.</p></div>
+                <button onClick={() => setView("tasks")}>Alle taken</button>
+              </div>
               <div className="action-list">
                 {actionLeads.map((lead) => (
-                  <button key={lead.id} onClick={() => { setView("leads"); loadLeadDetail(lead.id); }}>
+                  <button key={lead.id} onClick={() => openLead(lead.id)}>
                     <div><strong>{lead.naam || "Naam onbekend"}</strong><span>{lead.postcode || "-"} {lead.huisnummer || ""} · {displayStatus(lead.status)}</span></div>
                     <em>{lead._reason}</em>
                     <b>Open →</b>
@@ -555,35 +486,51 @@ export default function AdminDashboard() {
                 ))}
                 {!actionLeads.length ? <p className="empty-state">Geen urgente acties. Alles is bijgewerkt.</p> : null}
               </div>
-            </article>
-            <article className="panel wide">
-              <div className="panel-head"><h2>Nieuwste leads</h2><button onClick={() => setView("leads")}>Alle leads</button></div>
-              <div className="lead-table compact">
-                {leads.slice(0, 8).map((lead) => (
-                  <button key={lead.id} onClick={() => { setView("leads"); loadLeadDetail(lead.id); }}>
-                    <strong>{lead.naam || "Naam onbekend"}</strong>
-                    <span>{lead.postcode || "-"} {lead.huisnummer || ""}</span>
-                    <em className={statusClass(lead.status)}>{displayStatus(lead.status)}</em>
-                    <small>{fmt(lead.created_at)}</small>
-                  </button>
-                ))}
-              </div>
-            </article>
+            </section>
 
-            <article className="panel">
-              <h2>Pipeline</h2>
-              <div className="pipeline-summary">
-                {(report.byStatus || []).map((row) => (
-                  <div key={row.label}>
-                    <span>{displayStatus(row.label)}</span>
-                    <strong>{row.total}</strong>
-                  </div>
-                ))}
-              </div>
-            </article>
-            <article className="panel"><h2>Leads per pagina</h2>{(report.byPage || []).slice(0, 8).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={maxPage} />)}</article>
-            <article className="panel"><h2>Open taken</h2>{(report.recentTasks || []).map((task) => <div className="task-mini" key={task.id}><strong>{task.title}</strong><span>{task.lead_naam || "Algemeen"} · {task.due_date || "geen datum"}</span></div>)}</article>
-          </section>
+            <section className="kpi-grid">
+              <Kpi label="Vandaag opvolgen" value={kpis.followups_due} hint="Opvolgdatum vandaag of eerder" tone="accent" />
+              <Kpi label="Voorstel bekeken" value={kpis.proposal_viewed_leads} hint="Warm: nabellen" />
+              <Kpi label="Nieuwe aanvragen" value={kpis.new_leads} hint="Nog geen contact" />
+              <Kpi label="Open taken" value={kpis.open_tasks} hint="Automatisch + handmatig" />
+            </section>
+            <p className="stat-line">
+              {kpis.total_leads ?? 0} actieve leads · {kpis.leads_30d ?? 0} nieuw in 30 dagen · {kpis.high_priority_leads ?? 0} kansrijk · archief: {kpis.archived_leads ?? 0} leads, {kpis.archived_proposals ?? 0} voorstellen
+            </p>
+
+            <section className="dashboard-grid">
+              <article className="panel wide">
+                <div className="panel-head"><h2>Nieuwste leads</h2><button onClick={() => setView("leads")}>Alle leads</button></div>
+                <div className="lead-table compact">
+                  {leads.slice(0, 8).map((lead) => (
+                    <button key={lead.id} onClick={() => openLead(lead.id)}>
+                      <strong>{lead.naam || "Naam onbekend"}</strong>
+                      <span>{lead.postcode || "-"} {lead.huisnummer || ""}{isDuplicate(lead) ? <i className="dup-badge" title="Er is nog een actieve aanvraag op dit adres">dubbel</i> : null}</span>
+                      <em className={statusClass(lead.status)}>{displayStatus(lead.status)}</em>
+                      <small>{fmt(lead.created_at)}</small>
+                    </button>
+                  ))}
+                </div>
+              </article>
+
+              <article className="panel">
+                <h2>Pipeline</h2>
+                <div className="pipeline-summary">
+                  {(report.byStatus || []).map((row) => (
+                    <div key={row.label}>
+                      <span>{displayStatus(row.label)}</span>
+                      <strong>{row.total}</strong>
+                    </div>
+                  ))}
+                </div>
+              </article>
+              <article className="panel">
+                <h2>Leads per kanaal</h2>
+                {(report.byChannel || []).slice(0, 6).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={maxChannel} suffix={row.won ? `${row.won} deal${row.won === 1 ? "" : "s"}` : ""} />)}
+                <small className="panel-note">Laatste 12 maanden{report.testLeads ? `, ${report.testLeads} testaanvraag/-aanvragen niet meegeteld` : ""}.</small>
+              </article>
+            </section>
+          </>
         ) : null}
 
         {view === "leads" ? (
@@ -619,7 +566,7 @@ export default function AdminDashboard() {
                         <strong>{lead.naam || "Naam onbekend"}</strong>
                         <small>{lead.postcode || "-"} {lead.huisnummer || ""}</small>
                         {lead.last_proposal_viewed_at ? <em>🔥 {lead.proposal_view_count || 1}× bekeken</em> : null}
-                        {lead.next_follow_up_at ? <small>Opvolging: {lead.next_follow_up_at}</small> : null}
+                        {lead.next_follow_up_at ? <small>Opvolging: {fmtDay(lead.next_follow_up_at)}</small> : null}
                       </button>
                     ))}
                   </div>
@@ -642,7 +589,7 @@ export default function AdminDashboard() {
                   <button key={lead.id} className={selected?.id === lead.id ? "selected" : ""} onClick={() => loadLeadDetail(lead.id)}>
                     <strong>{lead.naam || "Naam onbekend"}</strong>
                     <span>{lead.telefoon || "-"}</span>
-                    <span>{lead.postcode || "-"} {lead.huisnummer || ""}</span>
+                    <span>{lead.postcode || "-"} {lead.huisnummer || ""}{isDuplicate(lead) ? <i className="dup-badge" title="Er is nog een actieve aanvraag op dit adres">dubbel</i> : null}</span>
                     <em className={statusClass(lead.status)}>{displayStatus(lead.status)}</em>
                     <small>{fmt(lead.created_at)}</small>
                   </button>
@@ -654,44 +601,51 @@ export default function AdminDashboard() {
               {!selected ? <p>Selecteer een lead voor de detailweergave.</p> : (
                 <>
                   <div className="detail-title">
-                    <div><span className="eyebrow">Lead detail</span><h2>{selected.naam || "Naam onbekend"}</h2><p>{selected.postcode || "-"} {selected.huisnummer || ""}</p></div>
+                    <div><span className="eyebrow">Lead detail</span><h2>{selected.naam || "Naam onbekend"}</h2><p>{selected.postcode || "-"} {selected.huisnummer || ""} · <ChannelPill lead={selected} /></p></div>
                     <a href={`/admin/leads/${selected.id}`}>Open detailpagina</a>
                   </div>
+
+                  {selectedRelated.length ? (
+                    <div className="related-leads">
+                      <strong>Er {selectedRelated.length === 1 ? "is nog een aanvraag" : `zijn nog ${selectedRelated.length} aanvragen`} op dit adres</strong>
+                      {selectedRelated.map((item) => (
+                        <button key={item.id} type="button" onClick={() => loadLeadDetail(item.id)}>{item.naam || "Naam onbekend"} · {displayStatus(item.status)} · {fmt(item.created_at)}</button>
+                      ))}
+                    </div>
+                  ) : null}
 
                   <div className="info-grid">
                     <Info label="Telefoon" value={selected.telefoon} />
                     <Info label="E-mail" value={selected.email} />
-                    <Info label="Pagina" value={selected.pagina} />
-                    <Info label="Bron" value={selected.bron} />
                     <Info label="Kansrijkheid" value={selected.lead_priority ? `${selected.lead_priority} (${selected.lead_score || 0}/12)` : "-"} />
-                    <Info label="Volgende opvolging" value={selected.next_follow_up_at || "-"} />
+                    <Info label="Volgende opvolging" value={selected.next_follow_up_at ? fmtDay(selected.next_follow_up_at) : "-"} />
                     <Info label="Woningtype" value={selected.woningtype} />
                     <Info label="Reden" value={selected.reden} />
-                    <Info label="Automatisering" value={selected.automation_note} />
                   </div>
                   <SourceDetails lead={selected} />
 
                   <div className="quick-actions">
                     {selected.telefoon ? <a href={`tel:${cleanPhone(selected.telefoon)}`}>Bellen</a> : null}
-                    {selected.telefoon ? <a className="green" href={whatsappUrl(selected.telefoon, selected.naam)} target="_blank">WhatsApp</a> : null}
+                    {selected.telefoon ? <a className="green" href={whatsappUrl(selected.telefoon, selected.naam)} target="_blank" rel="noopener noreferrer">WhatsApp</a> : null}
                     {selected.email ? <a href={`mailto:${selected.email}`}>Mailen</a> : null}
                     <button onClick={() => updateLead(selected.id, { last_contact_at: new Date().toISOString(), status: ["Nieuw", "Nieuwe aanvraag"].includes(selected.status) ? "In behandeling" : selected.status })}>Contact gehad</button>
+                    <a className="primary" href={`/admin/leads/${selected.id}#voorstel-maken`}>Voorstel maken</a>
                     <button className="secondary" onClick={() => moveLeadToArchive(selected.id, "Afgerond")}>Afgerond archiveren</button>
                     <button className="muted-btn" onClick={() => moveLeadToArchive(selected.id, "Gearchiveerd")}>Naar archief</button>
                   </div>
 
                   <label className="field">Status<select value={selectStatusValue(selected.status)} onChange={(event) => updateLead(selected.id, { status: event.target.value })}>{LEAD_STATUSES.map((status) => <option key={status}>{status}</option>)}</select></label>
                   <div className="pipeline-panel"><strong>Pipeline</strong><PipelineButtons value={selected.status} onChange={(status) => updateLead(selected.id, { status })} /></div>
-                  <label className="field">Handmatige opvolging<input type="date" value={selected.manual_follow_up_at || ""} onChange={(event) => updateLead(selected.id, { next_follow_up_at: event.target.value })} /><small>Handmatig ingesteld krijgt voorrang op de automatische datum.</small></label>
+                  <label className="field">Handmatige opvolging<input type="date" value={normalizeDateOnly(selected.manual_follow_up_at) || ""} onChange={(event) => updateLead(selected.id, { next_follow_up_at: event.target.value })} /><small>Handmatig ingesteld krijgt voorrang op de automatische datum.</small></label>
                   <label className="field">Notitie<textarea value={selected.notitie || ""} onChange={(event) => setSelected({ ...selected, notitie: event.target.value })} onBlur={(event) => updateLead(selected.id, { notitie: event.target.value })} placeholder="Interne notitie, bijzonderheden, afspraken..." /></label>
 
                   <div className="split">
                     <article className="sub-panel"><h3>Nieuwe taak</h3><input value={taskForm.title} onChange={(event) => setTaskForm({ ...taskForm, title: event.target.value })} placeholder="Bijv. klant nabellen" /><input type="date" value={taskForm.due_date} onChange={(event) => setTaskForm({ ...taskForm, due_date: event.target.value })} /><textarea value={taskForm.note} onChange={(event) => setTaskForm({ ...taskForm, note: event.target.value })} placeholder="Toelichting" /><button disabled={saving} onClick={createTask}>Taak opslaan</button></article>
-                    <article className="sub-panel"><h3>Voorstel maken</h3><input value={proposalForm.amount_text} onChange={(event) => setProposalForm({ ...proposalForm, amount_text: event.target.value })} placeholder="Voorgesteld bedrag" /><input type="date" value={proposalForm.validity_date} onChange={(event) => setProposalForm({ ...proposalForm, validity_date: event.target.value })} /><input value={proposalForm.transfer_date_text} onChange={(event) => setProposalForm({ ...proposalForm, transfer_date_text: event.target.value })} placeholder="Oplevering" /><textarea value={proposalForm.conditions_text} onChange={(event) => setProposalForm({ ...proposalForm, conditions_text: event.target.value })} /><button disabled={saving} onClick={createProposal}>Voorstel genereren</button></article>
+                    <article className="sub-panel"><h3>Voorstel</h3><p className="panel-intro">Voorstellen maakt u op de detailpagina, met het volledige formulier, de netto-vergelijking en de controles vóór verzending.</p><a className="sub-link" href={`/admin/leads/${selected.id}#voorstel-maken`}>Voorstel maken →</a></article>
                   </div>
 
                   <div className="history-grid">
-                    <article><h3>Taken</h3>{(detail?.tasks || []).map((task) => <div className="history-item" key={task.id}><strong>{task.title}</strong><span>{task.status} · {task.due_date || "geen datum"}</span></div>)}</article>
+                    <article><h3>Taken</h3>{(detail?.tasks || []).filter((task) => task.status !== "Afgerond").map((task) => <div className="history-item" key={task.id}><strong>{task.title}</strong><span>{task.status} · {fmtDay(task.due_date)}</span></div>)}{!(detail?.tasks || []).some((task) => task.status !== "Afgerond") ? <small>Geen open taken.</small> : null}</article>
                     <article><h3>Mailhistorie</h3>{(detail?.mailLogs || []).map((mail) => <div className="history-item" key={mail.id}><strong>{mail.type}</strong><span>{mail.status} · {mail.recipient}</span><small>{fmt(mail.created_at)}</small></div>)}</article>
                   </div>
                 </>
@@ -704,13 +658,23 @@ export default function AdminDashboard() {
         {view === "tasks" ? (
           <section className="panel">
             <div className="panel-head"><h2>Taken & reminders</h2><select value={taskFilter} onChange={(event) => setTaskFilter(event.target.value)}><option>Alle</option>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select></div>
+            <p className="panel-intro">Automatische taken sluiten vanzelf zodra er contact is vastgelegd of de lead is gearchiveerd.</p>
             <div className="task-list">
-              {tasks.map((task) => (
-                <article key={task.id} className={task.status === "Afgerond" ? "done" : ""}>
-                  <div><strong>{task.title}</strong><span>{task.lead_naam || "Algemeen"} · deadline: {task.due_date || "geen datum"}</span>{task.note ? <p>{task.note}</p> : null}</div>
-                  <select value={task.status || "Open"} onChange={(event) => updateTask(task.id, { status: event.target.value })}>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select>
-                </article>
-              ))}
+              {tasks.map((task) => {
+                const due = normalizeDateOnly(task.due_date);
+                const overdue = task.status !== "Afgerond" && due && due < todayAmsterdam();
+                return (
+                  <article key={task.id} className={`${task.status === "Afgerond" ? "done" : ""} ${overdue ? "overdue" : ""}`}>
+                    <div>
+                      <strong>{task.title}</strong>
+                      <span>{task.lead_id ? <a href={`/admin/leads/${task.lead_id}`}>{task.lead_naam || "Lead"}</a> : (task.lead_naam || "Algemeen")} · {overdue ? `over tijd sinds ${fmtDay(due)}` : `deadline ${fmtDay(due)}`}{task.automation_key ? " · automatisch" : ""}</span>
+                      {task.note ? <p>{task.note}</p> : null}
+                    </div>
+                    <select value={task.status || "Open"} onChange={(event) => updateTask(task.id, { status: event.target.value })}>{TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}</select>
+                  </article>
+                );
+              })}
+              {!tasks.length ? <p className="empty-state">Geen taken in deze selectie.</p> : null}
             </div>
           </section>
         ) : null}
@@ -722,13 +686,12 @@ export default function AdminDashboard() {
               {proposals.map((proposal) => (
                 <article key={proposal.id}>
                   <div><strong>{proposal.lead_naam || "Naam onbekend"}</strong><span>{proposal.property_address || "Geen adres"} · {proposal.amount_text || "Geen bedrag"}</span><small>{proposal.status} · aangemaakt {fmt(proposal.created_at)}{proposal.public_view_count ? ` · ${proposal.public_view_count}× bekeken` : ""}{proposal.interest_status ? ` · reactie: ${proposal.interest_status}` : ""}</small></div>
-                  <div className="row-actions"><a href={`/admin/voorstellen/${proposal.id}`}>Beheren</a><a href={`/admin/voorstellen/${proposal.id}/print`} target="_blank">Print/PDF</a>{proposal.lead_email ? <button onClick={() => sendProposalEmail(proposal.id)}>Mail voorstel</button> : null}<button className="secondary" onClick={() => updateProposalStatus(proposal.id, "Gearchiveerd")}>Archiveren</button></div>
+                  <div className="row-actions"><a href={`/admin/voorstellen/${proposal.id}`}>Beheren</a><a className="ghost" href={`/admin/voorstellen/${proposal.id}/print`} target="_blank" rel="noopener noreferrer">Print/PDF</a>{proposal.lead_email ? <button onClick={() => sendProposalEmail(proposal.id)}>Mail voorstel</button> : null}<button className="secondary" onClick={() => updateProposalStatus(proposal.id, "Gearchiveerd")}>Archiveren</button></div>
                 </article>
               ))}
             </div>
           </section>
         ) : null}
-
 
         {view === "archive" ? (
           <section className="archive-grid">
@@ -741,10 +704,10 @@ export default function AdminDashboard() {
                     <div>
                       <strong>{lead.naam || "Naam onbekend"}</strong>
                       <span>{lead.postcode || "-"} {lead.huisnummer || ""} · {lead.telefoon || "geen telefoon"}</span>
-                      <small>{lead.status || "Gearchiveerd"} · aanvraag {fmt(lead.created_at)}</small>
+                      <small>{lead.status || "Gearchiveerd"} · aanvraag {fmt(lead.created_at)} · <ChannelPill lead={lead} /></small>
                     </div>
                     <div className="row-actions">
-                      <button onClick={() => { setView("leads"); loadLeadDetail(lead.id); }}>Openen</button>
+                      <button onClick={() => openLead(lead.id)}>Openen</button>
                       <button className="secondary" onClick={() => restoreLeadFromArchive(lead.id)}>Terug actief</button>
                     </div>
                   </article>
@@ -765,7 +728,7 @@ export default function AdminDashboard() {
                       <small>{proposal.status || "Gearchiveerd"} · aangemaakt {fmt(proposal.created_at)}</small>
                     </div>
                     <div className="row-actions">
-                      <a href={`/admin/voorstellen/${proposal.id}`}>Beheren</a><a href={`/admin/voorstellen/${proposal.id}/print`} target="_blank">Print/PDF</a>
+                      <a href={`/admin/voorstellen/${proposal.id}`}>Beheren</a><a className="ghost" href={`/admin/voorstellen/${proposal.id}/print`} target="_blank" rel="noopener noreferrer">Print/PDF</a>
                       <button className="secondary" onClick={() => updateProposalStatus(proposal.id, "Concept")}>Terug actief</button>
                     </div>
                   </article>
@@ -777,10 +740,19 @@ export default function AdminDashboard() {
         ) : null}
 
         {view === "reports" ? (
+          <>
+          <p className="stat-line">
+            Kanalen, pagina&apos;s en maanden: alle aanvragen van de laatste 12 maanden ({report.marketingTotal || 0}), ook afgehandelde.
+            {report.testLeads ? ` ${report.testLeads} testaanvraag/-aanvragen (Tag Assistant, previews) niet meegeteld.` : ""}
+          </p>
           <section className="dashboard-grid">
-
             <article className="panel">
-              <h2>Pipeline</h2>
+              <h2>Leads per kanaal</h2>
+              {(report.byChannel || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={maxChannel} suffix={row.won ? `${row.won} deal${row.won === 1 ? "" : "s"}` : ""} />)}
+            </article>
+            <article className="panel"><h2>Leads per landingspagina</h2>{(report.byPage || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={maxPage} suffix={row.won ? `${row.won} deal${row.won === 1 ? "" : "s"}` : ""} />)}</article>
+            <article className="panel">
+              <h2>Pipeline (actief)</h2>
               <div className="pipeline-summary">
                 {(report.byStatus || []).map((row) => (
                   <div key={row.label}>
@@ -790,11 +762,9 @@ export default function AdminDashboard() {
                 ))}
               </div>
             </article>
-            <article className="panel"><h2>Leads per pagina</h2>{(report.byPage || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={maxPage} />)}</article>
-            <article className="panel"><h2>Leads per bron</h2>{(report.bySource || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={maxSource} />)}</article>
-            <article className="panel"><h2>Statusverdeling</h2>{(report.byStatus || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={Math.max(1, report.kpis?.total_leads || 1)} />)}</article>
-            <article className="panel"><h2>Per maand</h2>{(report.byMonth || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={Math.max(1, ...(report.byMonth || []).map((r) => Number(r.total) || 0))} />)}</article>
+            <article className="panel"><h2>Per maand</h2>{(report.byMonth || []).map((row) => <Bar key={row.label} label={row.label} value={row.total} max={Math.max(1, ...(report.byMonth || []).map((r) => Number(r.total) || 0))} suffix={row.won ? `${row.won} deal${row.won === 1 ? "" : "s"}` : ""} />)}</article>
           </section>
+          </>
         ) : null}
       </section>
     </main>

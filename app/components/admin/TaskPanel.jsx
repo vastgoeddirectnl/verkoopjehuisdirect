@@ -9,6 +9,7 @@
 
 import { useState } from "react";
 import { TASK_STATUSES, todayPlus } from "../../lib/admin/leadDetail";
+import { formatDateNL } from "../../lib/date.js";
 
 const CUSTOMER_ACTION_TASK_PATTERN = /voorstel bespreken|klant wil voorstel bespreken|akkoord op voorstel|klant geeft akkoord|klant heeft vraag/i;
 
@@ -40,7 +41,7 @@ export default function TaskPanel({ tasks, post }) {
         return (
           <div className={`item ${isCustomerActionTask && item.status !== "Afgerond" ? "customer-action-task" : ""}`} key={item.id}>
             <strong>{item.title}</strong>
-            <span>{item.status} · {item.due_date || "geen datum"}</span>
+            <span>{item.status} · {item.due_date ? formatDateNL(item.due_date, { day: "numeric", month: "short" }) : "geen datum"}{item.automation_key ? " · automatisch" : ""}</span>
             {item.note ? <small>{item.note}</small> : null}
             <select value={item.status || "Open"} onChange={(e) => post({ action: "updateTask", id: item.id, status: e.target.value })}>
               {TASK_STATUSES.map((status) => <option key={status}>{status}</option>)}

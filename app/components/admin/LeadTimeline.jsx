@@ -1,4 +1,4 @@
-import { formatDateTimeNL } from "../../lib/date.js";
+import { formatDateTimeNL, formatDateNL } from "../../lib/date.js";
 import { timelinePrefix, isCustomerAction, isCustomerActionHandled } from "../../lib/admin/customerActions.js";
 
 const EVENT_LABELS = {
@@ -76,12 +76,15 @@ function buildItems({ lead, tasks = [], proposals = [], mailLogs = [], proposalE
   }
 
   for (const task of tasks) {
+    // Automatisch gesloten automatiseringstaken (TASK-01) zijn geen gebeurtenis
+    // voor de klantgeschiedenis; het contactmoment dat ze afsloot staat er al.
+    if (task.automation_key && task.status === "Afgerond" && /Automatisch afgesloten/.test(task.note || "")) continue;
     items.push({
       id: `task-${task.id}`,
       at: task.updated_at || task.created_at,
       kind: task.status === "Afgerond" ? "done" : "task",
       title: task.status === "Afgerond" ? `Taak afgerond: ${task.title}` : `Taak: ${task.title}`,
-      detail: [task.due_date ? `Datum ${task.due_date}` : "", task.note].filter(Boolean).join(" · "),
+      detail: [task.due_date ? `Datum ${formatDateNL(task.due_date, { day: "numeric", month: "short" })}` : "", task.note].filter(Boolean).join(" · "),
     });
   }
 
@@ -131,14 +134,14 @@ export default function LeadTimeline(props) {
       <style jsx>{`
         .lead-timeline{background:#fffdf9;border:1px solid #e8e3db;border-radius:26px;padding:22px;box-shadow:0 12px 42px rgba(7,31,58,.07)}
         .timeline-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:18px}
-        .timeline-head span{display:block;color:#b85216;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+        .timeline-head span{display:block;color:#A94612;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
         .timeline-head h2{margin:5px 0 0;font-size:26px;color:#071f3a}
         .timeline-head>strong{font-size:12px;color:#617184;background:#f7f4ee;border-radius:999px;padding:8px 10px}
         .timeline-list{display:grid}
         .timeline-item{position:relative;display:grid;grid-template-columns:18px 1fr;gap:12px;padding:0 0 18px}
         .timeline-item:not(:last-child):before{content:"";position:absolute;left:6px;top:14px;bottom:0;width:2px;background:#e8e3db}
         .timeline-dot{width:14px;height:14px;border-radius:999px;background:#8ca1b8;border:3px solid #edf2f7;margin-top:4px;z-index:1}
-        .kind-hot{background:#fff7ef;border-radius:18px;padding:12px 12px 18px}.kind-hot .timeline-dot{background:#d96a1c;border-color:#fff1e6}
+        .kind-hot{background:#fff7ef;border-radius:18px;padding:12px 12px 18px}.kind-hot .timeline-dot{background:#B24E15;border-color:#fff1e6}
         .kind-contact .timeline-dot{background:#3e8f5e;border-color:#eaf7ef}
         .kind-mail .timeline-dot{background:#326aa5;border-color:#edf4fb}
         .kind-done .timeline-dot{background:#789181;border-color:#edf5ef}
