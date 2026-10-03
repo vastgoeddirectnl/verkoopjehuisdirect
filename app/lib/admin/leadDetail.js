@@ -89,6 +89,34 @@ export function proposalWhatsappUrl({ phone, name, publicUrl }) {
   return `https://wa.me/${targetPhone}?text=${encodeURIComponent(buildProposalWhatsappText({ name, publicUrl: targetUrl }))}`;
 }
 
+/**
+ * Reviewverzoek na een afgeronde verkoop. Met twee Google-reviews is de
+ * sociale bewijskracht op de site mager; vragen op het moment dat de klant
+ * tevreden is, is de manier om dat te veranderen.
+ */
+export function buildReviewRequestText({ name, reviewUrl }) {
+  const customerName = String(name || "").trim();
+  return [
+    customerName ? `Goedemiddag ${customerName},` : "Goedemiddag,",
+    "",
+    "Nogmaals dank voor het vertrouwen bij de verkoop van uw woning.",
+    "",
+    "Zou u een korte review willen achterlaten op Google? Dat helpt andere woningeigenaren die twijfelen over een directe verkoop.",
+    reviewUrl,
+    "",
+    "Met vriendelijke groet,",
+    "Rob",
+    "Vastgoed Direct Nederland",
+  ].join("\n");
+}
+
+export function reviewRequestWhatsappUrl({ phone, name, reviewUrl }) {
+  const targetPhone = whatsappPhone(phone);
+  const targetUrl = String(reviewUrl || "").trim();
+  if (!targetPhone || !targetUrl) return "";
+  return `https://wa.me/${targetPhone}?text=${encodeURIComponent(buildReviewRequestText({ name, reviewUrl: targetUrl }))}`;
+}
+
 export function sameEmail(a, b) {
   return String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
 }

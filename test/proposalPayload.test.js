@@ -6,6 +6,8 @@ import {
   normalizeProposalForForm,
   applyAdditionalAgreementDefaults,
   defaultProposalForLead,
+  defaultPropertyAddress,
+  addressSuggestionFromLookup,
   DEFAULT_NONBINDING_TEXT,
 } from "../app/lib/admin/leadDetail.js";
 
@@ -208,4 +210,31 @@ test("zonder ingevulde vervaldatums blijven de datumvelden leeg in plaats van 'I
   assert.equal(result.seller_work_deadline, "");
   assert.equal(result.lease_end_date, "");
   assert.equal(result.tenant_vacate_deadline, "");
+});
+
+// ---------- defaultPropertyAddress / addressSuggestionFromLookup ----------
+
+test("defaultPropertyAddress is de kale postcode + huisnummer, in hoofdletters", () => {
+  assert.equal(defaultPropertyAddress({ postcode: "9711ab", huisnummer: "12" }), "9711AB 12");
+  assert.equal(defaultPropertyAddress({ postcode: "9711AB" }), "9711AB");
+  assert.equal(defaultPropertyAddress({}), "");
+});
+
+test("addressSuggestionFromLookup bouwt 'straat huisnummer, plaats' uit een PDOK-resultaat", () => {
+  assert.equal(
+    addressSuggestionFromLookup({ street: "Hoofdstraat", houseNumber: "12A", city: "Groningen" }),
+    "Hoofdstraat 12A, Groningen"
+  );
+});
+
+test("addressSuggestionFromLookup laat ontbrekende onderdelen gewoon weg", () => {
+  assert.equal(addressSuggestionFromLookup({ street: "Hoofdstraat", houseNumber: "12" }), "Hoofdstraat 12");
+  assert.equal(addressSuggestionFromLookup({ city: "Groningen" }), "Groningen");
+  assert.equal(addressSuggestionFromLookup(null), "");
+  assert.equal(addressSuggestionFromLookup({}), "");
+});
+
+test("defaultProposalForLead gebruikt defaultPropertyAddress voor property_address", () => {
+  const result = defaultProposalForLead(LEAD);
+  assert.equal(result.property_address, defaultPropertyAddress(LEAD));
 });

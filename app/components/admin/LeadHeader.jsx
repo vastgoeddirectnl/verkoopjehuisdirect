@@ -5,7 +5,11 @@
 // en de buitenste <header>/foutmelding/notice blijven in de paginashell
 // staan, want die renderen ook al vóórdat de lead binnen is).
 
-import { cleanPhone, whatsappPhone, fmt, customerActionCopy, isCustomerActionHandled } from "../../lib/admin/leadDetail";
+import { cleanPhone, whatsappPhone, fmt, customerActionCopy, isCustomerActionHandled, reviewRequestWhatsappUrl } from "../../lib/admin/leadDetail";
+import { reviewRequestUrl } from "../../lib/reviewData.js";
+
+// Na een deal: vraag om een Google-review (zie reviewRequestWhatsappUrl).
+const REVIEW_STATUSES = ["Akkoord", "Afgerond"];
 
 function CustomerProposalActionAlert({ event, lead, saving, onContactDone }) {
   const copy = customerActionCopy(event);
@@ -67,6 +71,16 @@ export default function LeadHeader({
           {lead.telefoon ? <a href={`tel:${cleanPhone(lead.telefoon)}`}>Bellen</a> : null}
           {lead.telefoon ? <a href={`https://wa.me/${whatsappPhone(lead.telefoon)}`} target="_blank" rel="noopener noreferrer">WhatsApp</a> : null}
           {lead.email ? <a href={`mailto:${lead.email}`}>Mailen</a> : null}
+          {REVIEW_STATUSES.includes(lead.status) && lead.telefoon ? (
+            <a
+              href={reviewRequestWhatsappUrl({ phone: lead.telefoon, name: lead.naam, reviewUrl: reviewRequestUrl() })}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Opent WhatsApp met een kant-en-klaar verzoek om een Google-review"
+            >
+              Review vragen
+            </a>
+          ) : null}
           <button disabled={saving} onClick={onContactGehad}>Contact gehad</button>
         </div>
       </section>

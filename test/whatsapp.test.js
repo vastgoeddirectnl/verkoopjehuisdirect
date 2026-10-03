@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { reviewRequestWhatsappUrl, buildReviewRequestText } from "../app/lib/admin/leadDetail.js";
 
 import {
   WHATSAPP_NOTICES,
@@ -83,4 +84,18 @@ test("voorbereiden en verzenden hebben eigen, niet uitwisselbare teksten", () =>
   );
   assert.match(WHATSAPP_NOTICES[WHATSAPP_SENT], /handmatig/i);
   assert.match(WHATSAPP_NOTICES[WHATSAPP_SENT], /verzonden/i);
+});
+
+// Reviewverzoek na een deal (staat in leadDetail.js, naast de voorstel-WhatsApp).
+
+test("het reviewverzoek gaat naar het internationale nummer en bevat de reviewlink", () => {
+  const url = reviewRequestWhatsappUrl({ phone: "06 12 34 56 78", name: "Jan", reviewUrl: "https://g.page/r/abc/review" });
+  assert.match(url, /^https:\/\/wa\.me\/31612345678\?text=/);
+  assert.match(decodeURIComponent(url), /https:\/\/g\.page\/r\/abc\/review/);
+  assert.match(buildReviewRequestText({ name: "Jan", reviewUrl: "x" }), /^Goedemiddag Jan,/);
+});
+
+test("zonder telefoonnummer of reviewlink geen reviewverzoek", () => {
+  assert.equal(reviewRequestWhatsappUrl({ phone: "", reviewUrl: "https://x" }), "");
+  assert.equal(reviewRequestWhatsappUrl({ phone: "0612345678", reviewUrl: "" }), "");
 });

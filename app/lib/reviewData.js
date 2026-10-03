@@ -8,16 +8,23 @@
 // een lege waarde laat het blok netjes weg in plaats van "0 reviews" of een
 // lege sterrenbalk te tonen.
 //
-// Laatst gecontroleerd: nog niet vastgelegd — vul dit in bij de eerste controle.
+// Laatst gecontroleerd: 3 oktober 2026 (Google-bedrijfsprofiel: 5,0 uit 2 reviews).
 
 export const reviewData = {
   rating: "5,0",
   count: "2 reviews",
   source: "Google",
-  url: "https://www.google.com/search?q=reviews+voor+Vastgoed+Direct+Nederland",
+  // Het Google-bedrijfsprofiel zelf (via de CID), niet langer een algemene
+  // zoekopdracht waarin ook andere bedrijven opdoken.
+  url: "https://maps.google.com/?cid=8485707078036114537",
+  // Directe "Review schrijven"-link uit het Google-bedrijfsprofiel
+  // (Bedrijfsprofiel → "Om reviews vragen" → link kopiëren, vorm
+  // https://g.page/r/.../review). Leeg = de knop in de admin gebruikt de
+  // profiellink hierboven, waar de klant zelf op "Een review schrijven" klikt.
+  writeReviewUrl: "",
   // Datum van de laatste handmatige controle, als "2026-09-07". Leeg = nooit
   // gecontroleerd sinds deze regel bestaat.
-  checkedOn: "",
+  checkedOn: "2026-10-03",
 };
 
 /**
@@ -31,4 +38,9 @@ export function hasReviewData(data = reviewData) {
 export function reviewDisplayText(data = reviewData) {
   if (!hasReviewData(data)) return "";
   return `${data.source} · ${data.count}`;
+}
+
+/** Link die een klant krijgt bij het verzoek om een review (zie writeReviewUrl). */
+export function reviewRequestUrl(data = reviewData) {
+  return String(data?.writeReviewUrl || "").trim() || data?.url || "";
 }
