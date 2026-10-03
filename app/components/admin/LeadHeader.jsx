@@ -9,7 +9,8 @@ import { cleanPhone, whatsappPhone, fmt, customerActionCopy, isCustomerActionHan
 import { reviewRequestUrl } from "../../lib/reviewData.js";
 
 // Na een deal: vraag om een Google-review (zie reviewRequestWhatsappUrl).
-const REVIEW_STATUSES = ["Akkoord", "Afgerond"];
+// Niet bij "Afgerond": dat is ook "opgeruimd zonder deal" (zie leadReport.js).
+const REVIEW_STATUSES = ["Akkoord"];
 
 function CustomerProposalActionAlert({ event, lead, saving, onContactDone }) {
   const copy = customerActionCopy(event);

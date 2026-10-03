@@ -4,6 +4,16 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.6.1
+
+"Afgerond" telt niet meer als deal. De rapportage gaf na de livegang van 5.6.0
+"Direct: 27 leads · 23 deals", omdat leads die met "Afgerond archiveren" zijn
+opgeruimd meetelden; van de 32 leads met die status hadden er 24 nooit een
+voorstel gehad. Alleen "Akkoord" is nu een deal, in de rapportage per kanaal,
+pagina en maand. De knop "Review vragen" staat daarom ook alleen nog bij
+Akkoord.
+
+
 ## 5.6.0
 
 De review van oktober 2026 (code, website, admin, voorstel, SEO) in één

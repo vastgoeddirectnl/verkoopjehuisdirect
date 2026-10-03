@@ -9,8 +9,10 @@
 
 import { leadChannel, cleanLandingPath, LEAD_CHANNELS } from "../sourceParser.js";
 
-// Een lead met deze status heeft tot een deal geleid.
-const WON_STATUSES = ["Akkoord", "Afgerond"];
+// Een lead met deze status heeft tot een deal geleid. Bewust zonder
+// "Afgerond": de knop "Afgerond archiveren" wordt gebruikt om afgehandelde
+// leads op te ruimen, ook zonder voorstel of contact.
+const WON_STATUSES = ["Akkoord"];
 
 function monthKey(value) {
   const date = value instanceof Date ? value : new Date(value);

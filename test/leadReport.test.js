@@ -34,7 +34,13 @@ test("landingspagina's worden zonder trackingparameters gegroepeerd", () => {
 test("maanden staan nieuwste eerst en tellen deals mee", () => {
   const { byMonth } = aggregateLeadMarketing(leads);
   assert.deepEqual(byMonth.map((row) => row.label), ["2026-10", "2026-09", "2026-08"]);
-  assert.equal(byMonth[0].won, 1);
+  assert.equal(byMonth[1].won, 1);
+});
+
+test("Afgerond telt niet als deal, alleen Akkoord", () => {
+  const { byChannel, byMonth } = aggregateLeadMarketing(leads);
+  assert.equal(byChannel.find((row) => row.label.startsWith("AI-assistent")).won, 0);
+  assert.equal(byMonth[0].won, 0);
 });
 
 test("een lege lijst levert een lege rapportage op", () => {
