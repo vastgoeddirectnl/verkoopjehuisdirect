@@ -28,6 +28,10 @@ export default function ProposalActions({
   const [errorMessage, setErrorMessage] = useState("");
   const [confirming, setConfirming] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
+  // VST-01: bij "Eerst bespreken" kan de klant aangeven wanneer hij het liefst
+  // gebeld wordt. Dat gaat als eerste regel mee in het bericht, zodat het in
+  // de admin direct bij de klantactie staat (geen nieuw databaseveld nodig).
+  const [callMoment, setCallMoment] = useState("");
   const actionSectionRef = useRef(null);
   const discussTextareaRef = useRef(null);
 
@@ -40,7 +44,12 @@ export default function ProposalActions({
       const response = await fetch(`/api/proposal/${token}/action`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, message }),
+        body: JSON.stringify({
+          action,
+          message: action === "discuss" && callMoment
+            ? [`Liefst gebeld: ${callMoment.toLowerCase()}.`, message].filter(Boolean).join(" ")
+            : message,
+        }),
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
@@ -134,6 +143,22 @@ export default function ProposalActions({
 
         {showMessage ? (
           <div className="message-box">
+            <fieldset className="call-moment">
+              <legend>Wanneer kunnen wij u het beste bellen? <span>(optioneel)</span></legend>
+              <div>
+                {["Ochtend", "Middag", "Avond"].map((moment) => (
+                  <button
+                    key={moment}
+                    type="button"
+                    className={callMoment === moment ? "is-selected" : ""}
+                    aria-pressed={callMoment === moment}
+                    onClick={() => setCallMoment(callMoment === moment ? "" : moment)}
+                  >
+                    {moment}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
             <label htmlFor="proposal-message">Wat wilt u bespreken? <span>(optioneel)</span></label>
             <textarea
               ref={discussTextareaRef}
@@ -219,7 +244,7 @@ export default function ProposalActions({
         .proposal-action-buttons-v32 button, .proposal-action-buttons-v32 a, .confirm-buttons button, .message-box button {
           border:0; border-radius:999px; padding:13px 18px; font:inherit; font-weight:900; cursor:pointer; text-decoration:none;
         }
-        .primary-action { background:#D96A1C; color:#fff; box-shadow:0 10px 26px rgba(217,106,28,.22); }
+        .primary-action { background:#B24E15; color:#fff; box-shadow:0 10px 26px rgba(217,106,28,.22); }
         .secondary-action { background:#fff; color:#071f3a; }
         .proposal-action-buttons-v32 a { background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.22); }
         button:disabled { opacity:.55; cursor:not-allowed; }
@@ -231,13 +256,19 @@ export default function ProposalActions({
         textarea { width:100%; min-height:96px; resize:vertical; border:1px solid #d9dfe6; border-radius:14px; padding:12px 14px; font:inherit; }
         .message-box textarea { border-color:rgba(255,255,255,.28); }
         .message-box>div { display:flex; gap:10px; flex-wrap:wrap; }
+        .call-moment { border:0; margin:0; padding:0; display:grid; gap:8px; }
+        .call-moment legend { font-weight:900; padding:0; margin-bottom:8px; }
+        .call-moment legend span { font-weight:500; opacity:.7; }
+        .call-moment div { display:flex; gap:8px; flex-wrap:wrap; }
+        .call-moment button { border:1px solid rgba(255,255,255,.35); background:transparent; color:#fff; border-radius:999px; padding:9px 14px; font:inherit; font-weight:800; cursor:pointer; }
+        .call-moment button.is-selected { background:#fff; color:#071f3a; border-color:#fff; }
         .text-button { background:transparent!important; color:#fff!important; border:1px solid rgba(255,255,255,.24)!important; }
         .confirm-backdrop { position:fixed; inset:0; z-index:1000; background:rgba(2,13,26,.68); padding:20px; display:grid; place-items:center; }
         .confirm-dialog { width:min(560px,100%); background:#fffdf9; color:#071f3a; border-radius:28px; padding:28px; box-shadow:0 28px 90px rgba(0,0,0,.28); display:grid; gap:14px; }
         .confirm-dialog h2 { margin:0; font-size:30px; }
         .confirm-dialog p { margin:0; line-height:1.65; color:#4e6073; }
-        .confirm-dialog .proposal-actions-kicker { color:#B85216; }
-        .confirm-amount { font-size:28px; color:#D96A1C; }
+        .confirm-dialog .proposal-actions-kicker { color:#A94612; }
+        .confirm-amount { font-size:28px; color:#B24E15; }
         .confirm-buttons { display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
         .confirm-buttons .secondary-action { border:1px solid #d9dfe6; }
         .proposal-mobile-bar { display:none; }
@@ -255,7 +286,7 @@ export default function ProposalActions({
           .proposal-mobile-bar strong { font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
           .proposal-mobile-bar span { font-size:11px; color:#d9e6f5; }
           .proposal-mobile-bar button { border:0; border-radius:999px; padding:11px 12px; font-weight:900; cursor:pointer; }
-          .proposal-mobile-bar button:first-of-type { background:#D96A1C; color:#fff; }
+          .proposal-mobile-bar button:first-of-type { background:#B24E15; color:#fff; }
           .proposal-mobile-bar button:last-of-type { background:#fff; color:#071f3a; }
         }
       `}</style>
