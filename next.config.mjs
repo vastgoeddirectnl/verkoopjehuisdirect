@@ -5,6 +5,13 @@
 
 import { withSentryConfig } from "@sentry/nextjs/config";
 import { MERGED_PAGES } from "./app/lib/sitePages.js";
+import { sentryCspReportUrl, sentryIngestOrigin } from "./app/lib/cspReport.js";
+
+// SEC-01: meldadres voor CSP-overtredingen en de Sentry-ingest-host, beide uit
+// de publieke DSN (die staat toch al in de browserbundel).
+const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN || process.env.SENTRY_DSN || "";
+const cspReportUrl = sentryCspReportUrl(sentryDsn);
+const sentryOrigin = sentryIngestOrigin(sentryDsn);
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -25,8 +32,9 @@ const securityHeaders = [
  *
  * Google Ads (gtag) en de Meta Pixel injecteren inline scripts. Een harde
  * policy breekt daarmee de conversiemeting. Laat dit een aantal weken
- * meelopen, bekijk de meldingen in de browserconsole, en zet hem daarna pas
- * om naar "Content-Security-Policy" als er niets meer wordt geblokkeerd.
+ * meelopen, bekijk de meldingen in Sentry (Issues, filter op "csp"), en zet
+ * hem daarna pas om naar "Content-Security-Policy" als er niets meer wordt
+ * geblokkeerd. Zonder Sentry-DSN is er geen meldadres en blijft report-uri weg.
  */
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -36,7 +44,7 @@ const contentSecurityPolicy = [
   "img-src 'self' data: https://www.googletagmanager.com https://www.google.com https://www.google.nl https://www.facebook.com",
   // api.pdok.nl staat hier bewust NIET: de adrescontrole loopt via /api/address,
   // dus de browser praat alleen met onze eigen server.
-  "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://www.google.com https://www.facebook.com",
+  `connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://www.google.com https://www.facebook.com${sentryOrigin ? ` ${sentryOrigin}` : ""}`,
   // default-src geldt ook als frame-src; de Meta-pixel en conversion linking
   // gebruiken een iframe, dus die hosts staan hier expliciet.
   "frame-src https://www.facebook.com https://td.doubleclick.net",
@@ -44,6 +52,7 @@ const contentSecurityPolicy = [
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
+  ...(cspReportUrl ? [`report-uri ${cspReportUrl}`, "report-to csp"] : []),
 ].join("; ");
 
 const nextConfig = {
@@ -59,6 +68,7 @@ const nextConfig = {
             key: "Content-Security-Policy-Report-Only",
             value: contentSecurityPolicy,
           },
+          ...(cspReportUrl ? [{ key: "Reporting-Endpoints", value: `csp="${cspReportUrl}"` }] : []),
         ],
       },
     ];
