@@ -540,6 +540,9 @@ textarea.field { min-height: 82px; resize: vertical; }
 .cookie-consent-copy strong { display: block; margin-bottom: 6px; font-family: Georgia, serif; font-size: 21px; }
 .cookie-consent-copy p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
 .cookie-consent-copy a { display: inline-block; margin-top: 7px; color: var(--orange-600); font-size: 12px; font-weight: 900; }
+.cookie-consent-short, .cookie-consent-more { display: none; }
+.cookie-consent-links { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; }
+.cookie-consent-more { margin-top: 7px; padding: 0; border: 0; color: var(--navy-900); background: none; font: inherit; font-size: 12px; font-weight: 900; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .cookie-consent-actions { display: flex; gap: 8px; }
 .cookie-consent-actions .button { min-width: 118px; }
 /* Link "Cookievoorkeuren" in de footer (vervangt de zwevende knop, UI-01). */
@@ -725,10 +728,14 @@ textarea.field { min-height: 82px; resize: vertical; }
   .compare-item { grid-template-columns: 1fr; gap: 4px; }
   .overview-page-grid { grid-template-columns: 1fr; }
   .overview-container { width: min(100% - 28px, 1120px); }
-  .cookie-consent { left: 10px; right: 10px; bottom: 80px; width: auto; padding: 17px; grid-template-columns: 1fr; gap: 15px; border-radius: 18px; }
-  .cookie-consent-copy strong { font-size: 19px; }
+  .cookie-consent { left: 10px; right: 10px; bottom: 80px; width: auto; padding: 14px 15px; grid-template-columns: 1fr; gap: 10px; border-radius: 16px; }
+  .cookie-consent-copy strong { margin-bottom: 3px; font-size: 16px; }
+  .cookie-consent-short { display: block; }
+  .cookie-consent-long { display: none; }
+  .cookie-consent.is-expanded .cookie-consent-long { display: block; margin-top: 6px; }
+  .cookie-consent-more { display: inline-block; }
   .cookie-consent-actions { display: grid; grid-template-columns: 1fr 1fr; }
-  .cookie-consent-actions .button { width: 100%; min-width: 0; padding-inline: 12px; }
+  .cookie-consent-actions .button { width: 100%; min-width: 0; min-height: 44px; padding-inline: 12px; }
 }
 
 @media print {

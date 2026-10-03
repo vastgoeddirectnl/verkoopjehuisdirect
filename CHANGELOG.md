@@ -4,6 +4,14 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.6.4
+
+De cookiemelding bedekte op telefoons de halve pagina, ook voor elke bezoeker
+via een advertentie. Op schermen tot 580px staat nu een korte zin met de twee
+even grote knoppen; de volledige uitleg zit achter "Meer uitleg". Op grotere
+schermen is niets veranderd. Zelfde keuzes, zelfde opslag.
+
+
 ## 5.6.3
 
 `/woning-verkopen-zonder-makelaar` zegt bovenaan meteen dat wij de koper zijn,
