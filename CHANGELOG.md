@@ -4,6 +4,19 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.6.2
+
+Naar aanleiding van de eerste Sentry-meldingen na 5.6.0:
+
+- CSP: `www.googleadservices.com` en `ad.doubleclick.net` staan in
+  `connect-src`. De Google Ads-meting praat met beide; dat gaf vier
+  CSP-meldingen van echte bezoekers. Zonder deze hosts zou een harde CSP de
+  advertentiemeting breken.
+- Sentry negeert "Error invoking postMessage: Java object is gone". Die fout
+  komt uit de ingebouwde browser van de Facebook-app op Android, niet uit
+  onze code.
+
+
 ## 5.6.1
 
 "Afgerond" telt niet meer als deal. De rapportage gaf na de livegang van 5.6.0

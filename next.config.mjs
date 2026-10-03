@@ -44,7 +44,9 @@ const contentSecurityPolicy = [
   "img-src 'self' data: https://www.googletagmanager.com https://www.google.com https://www.google.nl https://www.facebook.com",
   // api.pdok.nl staat hier bewust NIET: de adrescontrole loopt via /api/address,
   // dus de browser praat alleen met onze eigen server.
-  `connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://www.google.com https://www.facebook.com${sentryOrigin ? ` ${sentryOrigin}` : ""}`,
+  // googleadservices.com en ad.doubleclick.net: de Google Ads-meting
+  // (set_partitioned_cookie, ccm/collect), gezien in de CSP-meldingen in Sentry.
+  `connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://www.google.com https://www.googleadservices.com https://ad.doubleclick.net https://www.facebook.com${sentryOrigin ? ` ${sentryOrigin}` : ""}`,
   // default-src geldt ook als frame-src; de Meta-pixel en conversion linking
   // gebruiken een iframe, dus die hosts staan hier expliciet.
   "frame-src https://www.facebook.com https://td.doubleclick.net",

@@ -8,6 +8,9 @@ import * as Sentry from "@sentry/nextjs";
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   tracesSampleRate: 0,
+  // De ingebouwde browser van de Facebook-app op Android injecteert een eigen
+  // brug; als die wegvalt gooit hij deze fout. Niet onze code, niet op te lossen.
+  ignoreErrors: [/Java object is gone/],
 });
 
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
