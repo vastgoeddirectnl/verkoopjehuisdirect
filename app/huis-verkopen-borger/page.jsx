@@ -21,6 +21,7 @@ const page = {
   "slug": "/huis-verkopen-borger",
   "pageType": "region",
   "regionName": "Borger",
+  "localAreas": ["Borger","Odoorn","Exloo","Valthermond","Nieuw-Buinen","Buinen","Tweede Exloërmond","Klijndijk","Valthe","Drouwen"],
   "breadcrumb": "Huis verkopen in Borger",
   "eyebrow": "Regio Borger",
   "h1": "Uw woning in Borger verkopen, ook met onderhoud of een groter perceel",

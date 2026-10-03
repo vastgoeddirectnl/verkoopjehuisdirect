@@ -4,6 +4,7 @@
  */
 
 import { withSentryConfig } from "@sentry/nextjs/config";
+import { MERGED_PAGES } from "./app/lib/sitePages.js";
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -65,6 +66,8 @@ const nextConfig = {
 
   async redirects() {
     return [
+      // SEO-02: samengevoegde pagina's (zie app/lib/sitePages.js).
+      ...Object.entries(MERGED_PAGES).map(([source, destination]) => ({ source, destination, permanent: true })),
       {
         source: "/huis-verkopen-zonder-bezichtigingen-uitleg",
         destination: "/huis-verkopen-zonder-bezichtigingen",

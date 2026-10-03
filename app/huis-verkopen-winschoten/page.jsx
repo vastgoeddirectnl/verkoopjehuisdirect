@@ -21,6 +21,7 @@ const page = {
   "slug": "/huis-verkopen-winschoten",
   "pageType": "region",
   "regionName": "Winschoten",
+  "localAreas": ["Winschoten","Scheemda","Midwolda","Oostwold","Finsterwolde","Beerta","Nieuw-Beerta","Bad Nieuweschans","Heiligerlee","Blauwestad"],
   "breadcrumb": "Huis verkopen in Winschoten",
   "eyebrow": "Regio Winschoten",
   "h1": "Uw woning in Winschoten of Oldambt rechtstreeks laten beoordelen",

@@ -25,6 +25,8 @@ export const LEAD_CHANNELS = {
 
 const OWN_DOMAINS = ["vastgoeddirectnederland.nl", "verkoopjehuisdirect.nl"];
 
+const PAGE_SEPARATOR = / [·|] /;
+
 // Verkeer dat geen echte bezoeker is: Google Tag Assistant bij het testen van
 // conversies, Vercel-previews en lokale ontwikkeling.
 const TEST_MARKERS = ["tagassistant", "vercel.com", "vercel.app", "localhost", "127.0.0.1"];
@@ -61,7 +63,9 @@ export function parseLeadSourceDetails(lead) {
     }
   });
 
-  const pageParts = pagina.split(" · ");
+  // Pad en paginatitel zijn in de loop van de tijd met " · " en met " | "
+  // gescheiden opgeslagen (attribution.js gebruikt " | ").
+  const pageParts = pagina.split(PAGE_SEPARATOR);
   const rawPagePath = pageParts[0] || pagina;
   const pageTitle = pageParts.slice(1).join(" · ");
 
@@ -161,6 +165,6 @@ export function sourceChannelLabel(details) {
 
 /** Landingspad zonder querystring en zonder paginatitel, voor groeperen. */
 export function cleanLandingPath(pagina) {
-  const path = String(pagina || "").split(" · ")[0].split("?")[0].trim();
+  const path = String(pagina || "").split(PAGE_SEPARATOR)[0].split("?")[0].trim();
   return path || "/";
 }

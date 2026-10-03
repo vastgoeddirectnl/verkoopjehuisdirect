@@ -21,6 +21,7 @@ const page = {
   "slug": "/huis-verkopen-assen",
   "pageType": "region",
   "regionName": "Assen",
+  "localAreas": ["Assen-Oost","Kloosterveen","Marsdijk","Peelo","Pittelo","Lariks","Baggelhuizen","Loon","Rolde","Vries","Smilde","Beilen"],
   "breadcrumb": "Huis verkopen in Assen",
   "eyebrow": "Regio Assen",
   "h1": "Uw woning in Assen verkopen zonder lange verkoopcampagne",

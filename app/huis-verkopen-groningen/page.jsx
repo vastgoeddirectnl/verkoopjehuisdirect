@@ -21,6 +21,7 @@ const page = {
   "slug": "/huis-verkopen-groningen",
   "pageType": "region",
   "regionName": "Groningen",
+  "localAreas": ["Groningen (stad)","Hoogezand","Veendam","Stadskanaal","Winschoten","Delfzijl","Appingedam","Leek","Zuidhorn","Ter Apel"],
   "breadcrumb": "Huis verkopen in Groningen",
   "eyebrow": "Regio Groningen",
   "h1": "Uw woning in Groningen verkopen via een duidelijke, directe route",

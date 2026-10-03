@@ -21,6 +21,7 @@ const page = {
   "slug": "/huis-verkopen-emmen",
   "pageType": "region",
   "regionName": "Emmen",
+  "localAreas": ["Emmen","Klazienaveen","Nieuw-Amsterdam","Erica","Schoonebeek","Emmer-Compascuum","Barger-Compascuum","Nieuw-Weerdinge","Zwartemeer","Roswinkel","Veenoord","Nieuw-Dordrecht"],
   "breadcrumb": "Huis verkopen in Emmen",
   "eyebrow": "Regio Emmen",
   "h1": "Uw woning in Emmen verkopen met duidelijkheid over planning en oplevering",

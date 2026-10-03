@@ -21,6 +21,7 @@ const page = {
   "slug": "/huis-verkopen-veendam",
   "pageType": "region",
   "regionName": "Veendam",
+  "localAreas": ["Veendam","Wildervank","Ommelanderwijk","Bareveld","Zuidwending","Muntendam","Meeden"],
   "breadcrumb": "Huis verkopen in Veendam",
   "eyebrow": "Regio Veendam",
   "h1": "Uw woning in Veendam verkopen met minder voorbereiding en bezichtigingen",

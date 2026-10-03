@@ -21,6 +21,7 @@ const page = {
   "slug": "/woning-verkopen-drenthe",
   "pageType": "region",
   "regionName": "Drenthe",
+  "localAreas": ["Assen","Emmen","Hoogeveen","Meppel","Coevorden","Borger","Beilen","Roden","Gieten","Zuidlaren"],
   "breadcrumb": "Woning verkopen in Drenthe",
   "eyebrow": "Regio Drenthe",
   "h1": "Uw woning in Drenthe verkopen met aandacht voor perceel, staat en ligging",

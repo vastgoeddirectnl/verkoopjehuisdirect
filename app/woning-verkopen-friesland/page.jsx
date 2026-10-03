@@ -21,6 +21,7 @@ const page = {
   "slug": "/woning-verkopen-friesland",
   "pageType": "region",
   "regionName": "Friesland",
+  "localAreas": ["Leeuwarden","Sneek","Heerenveen","Drachten","Harlingen","Franeker","Dokkum","Bolsward","Joure","Wolvega"],
   "breadcrumb": "Woning verkopen in Friesland",
   "eyebrow": "Regio Friesland",
   "h1": "Uw woning in Friesland verkopen, ook wanneer afstand of onderhoud meespeelt",

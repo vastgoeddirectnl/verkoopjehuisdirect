@@ -21,6 +21,7 @@ const page = {
   "slug": "/huis-verkopen-gieten",
   "pageType": "region",
   "regionName": "Gieten",
+  "localAreas": ["Gieten","Annen","Rolde","Gasselte","Gasselternijveen","Eext","Gieterveen","Anloo","Grolloo","Schoonloo"],
   "breadcrumb": "Huis verkopen in Gieten",
   "eyebrow": "Regio Gieten",
   "h1": "Uw woning in Gieten verkopen zonder onnodige verkoopdruk",

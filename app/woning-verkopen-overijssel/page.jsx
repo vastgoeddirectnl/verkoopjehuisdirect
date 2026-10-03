@@ -21,6 +21,7 @@ const page = {
   "slug": "/woning-verkopen-overijssel",
   "pageType": "region",
   "regionName": "Overijssel",
+  "localAreas": ["Zwolle","Enschede","Hengelo","Almelo","Deventer","Kampen","Hardenberg","Oldenzaal","Rijssen","Steenwijk"],
   "breadcrumb": "Woning verkopen in Overijssel",
   "eyebrow": "Regio Overijssel",
   "h1": "Uw woning in Overijssel verkopen zonder standaard verkooptraject",

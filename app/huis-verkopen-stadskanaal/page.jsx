@@ -21,6 +21,7 @@ const page = {
   "slug": "/huis-verkopen-stadskanaal",
   "pageType": "region",
   "regionName": "Stadskanaal",
+  "localAreas": ["Stadskanaal","Musselkanaal","Onstwedde","Mussel","Alteveer","Ter Apel","Vlagtwedde"],
   "breadcrumb": "Huis verkopen in Stadskanaal",
   "eyebrow": "Regio Stadskanaal",
   "h1": "Uw woning in Stadskanaal verkopen zonder eerst alles te herstellen",

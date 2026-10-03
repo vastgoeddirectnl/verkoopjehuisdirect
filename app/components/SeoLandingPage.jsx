@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AdsLeadMiniForm from "./AdsLeadMiniForm";
 import { MarketingFooter, MarketingHeader, ProofBar } from "./MarketingChrome";
+import { canonicalPath } from "../lib/sitePages.js";
 
 const whatsappBase = "https://wa.me/31612238051";
 const primaryCta = "Vraag een vrijblijvend verkoopvoorstel aan";
@@ -14,7 +15,6 @@ const internalLinks = [
   ["/huis-verkopen-zonder-leeghalen", "Huis verkopen zonder leeghalen"],
   ["/huis-verkopen-zonder-opknappen", "Huis verkopen zonder opknappen"],
   ["/huis-verkopen-in-huidige-staat", "Huis verkopen in de huidige staat"],
-  ["/woning-verkopen-die-nog-vol-staat", "Woning verkopen die nog vol staat"],
   ["/huis-verkopen-bij-erfenis", "Huis verkopen bij erfenis"],
   ["/verhuurde-woning-verkopen", "Verhuurde woning verkopen"],
   ["/huis-verkopen-met-achterstallig-onderhoud", "Huis met achterstallig onderhoud verkopen"],
@@ -63,12 +63,20 @@ function relatedCardsFor(page) {
     ? page.relatedLinks
     : internalLinks;
 
+  // Links naar samengevoegde pagina's wijzen naar de doelpagina (SEO-02);
+  // daardoor kunnen dubbelingen ontstaan, die vallen hier weg.
+  const seen = new Set([page.slug]);
   return source
-    .filter(([href]) => href !== page.slug)
+    .map(([href, label, text]) => [canonicalPath(href), label, text, href])
+    .filter(([href]) => {
+      if (seen.has(href)) return false;
+      seen.add(href);
+      return true;
+    })
     .slice(0, 6)
-    .map(([href, label, text]) => ({
+    .map(([href, label, text, original]) => ({
       href,
-      label,
+      label: href === original ? label : (internalLinks.find(([h]) => h === href)?.[1] || label),
       text: text || linkDescriptions[href] || "Bekijk welke verkooproute hierbij past.",
     }));
 }
@@ -247,6 +255,29 @@ export default function SeoLandingPage({ page }) {
           <p>{page.shortAnswer}</p>
         </div>
       </section>
+
+      {/* SEO-02: regiopagina's leken voor ±45% op elkaar. De kernen en
+          wijken maken elke pagina herkenbaar lokaal, zonder te verzinnen
+          wat er niet is. */}
+      {Array.isArray(page.localAreas) && page.localAreas.length ? (
+        <section className="section-shell local-areas-section">
+          <div className="site-container">
+            <div className="section-heading split-heading">
+              <div>
+                <p className="section-eyebrow">Werkgebied</p>
+                <h2>{page.localAreasTitle || `In en rond ${page.regionName || page.breadcrumb}`}</h2>
+              </div>
+              <p>
+                {page.localAreasText ||
+                  "Wij beoordelen woningen in onder meer deze plaatsen en wijken. Woont u net daarbuiten? Vraag gerust een beoordeling aan: de ligging is één van de factoren, geen reden om af te haken."}
+              </p>
+            </div>
+            <ul className="local-area-list">
+              {page.localAreas.map((area) => <li key={area}>{area}</li>)}
+            </ul>
+          </div>
+        </section>
+      ) : null}
 
       {contentSections.length > 0 ? (
         <section className="section-shell">

@@ -67,6 +67,9 @@ test("het landingspad wordt zonder querystring en paginatitel gegroepeerd", () =
   assert.equal(cleanLandingPath("/huis-verkopen-aan-opkoper?gad_source=1&gclid=abc · Huis verkopen aan een opkoper"), "/huis-verkopen-aan-opkoper");
   assert.equal(cleanLandingPath("/ · Home"), "/");
   assert.equal(cleanLandingPath(""), "/");
+  // attribution.js scheidt pad en titel met " | ", oudere records met " · ".
+  assert.equal(cleanLandingPath("/huis-direct-verkopen | Huis direct verkopen"), "/huis-direct-verkopen");
+  assert.equal(cleanLandingPath("/ | Homepage"), "/");
 });
 
 test("parseLeadSourceDetails haalt de klik-ID ook uit een oude pagina-URL", () => {
