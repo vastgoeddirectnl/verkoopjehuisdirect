@@ -3,7 +3,7 @@ import SeoLandingPage from "../components/SeoLandingPage";
 export const metadata = {
   title: "Woning verkopen zonder makelaar",
   description:
-    "Wilt u uw woning verkopen zonder makelaar, open huis of Funda-traject? Vraag vrijblijvend een verkoopvoorstel aan. Niet zelf alles regelen en geen verkoopdruk.",
+    "Woning verkopen zonder makelaar? Wij kopen uw woning zelf: geen Funda, open huis of bezichtigingen. Vraag vrijblijvend een verkoopvoorstel met prijs aan.",
   alternates: {
     canonical: "https://www.vastgoeddirectnederland.nl/woning-verkopen-zonder-makelaar",
   },
@@ -30,17 +30,22 @@ const page = {
   slug: "/woning-verkopen-zonder-makelaar",
   breadcrumb: "Woning verkopen zonder makelaar",
   pageType: "high-intent",
-  eyebrow: "Zonder traditioneel makelaarstraject",
+  // Bezoekers via Google Ads zoeken vaak "zonder makelaar" omdat ze zelf willen
+  // verkopen. Daarom staat bovenaan meteen dat wij de koper zijn, geen
+  // makelaar of verkoopplatform.
+  eyebrow: "Wij kopen uw woning zelf",
   defaultSituation: "Woning verkopen zonder makelaar",
-  h1: "Woning verkopen zonder makelaar, maar niet alles zelf hoeven regelen",
+  h1: "Woning verkopen zonder makelaar: u verkoopt rechtstreeks aan ons",
   lead:
-    "Wilt u geen regulier makelaarstraject met Funda, fotografie, open huis en bezichtigingen? Dan kunt u eerst vrijblijvend laten beoordelen of directe verkoop past. Als dat zo is, ontvangt u een verkoopvoorstel zonder verkoopdruk.",
+    "Vastgoed Direct Nederland is geen makelaar en geen verkoopplatform. Wij kopen woningen zelf. U krijgt een vrijblijvend verkoopvoorstel met een concrete prijs, zonder Funda, fotografie, open huis of bezichtigingen.",
+  heroNote:
+    "Wilt u zelf adverteren en de hoogste marktprijs afwachten? Dan past een makelaar of zelf verkopen vaak beter. Wilt u rust, zekerheid en geen kijkers? Dan is dit de route.",
   shortAnswer:
-    "U bent niet verplicht om via een makelaar te verkopen. Bij directe verkoop vraagt u eerst vrijblijvend duidelijkheid aan. U hoeft niet zelf een verkoopcampagne te organiseren en afspraken over prijs, oplevering en overdracht worden schriftelijk vastgelegd.",
+    "U bent niet verplicht om via een makelaar te verkopen. Bij ons verkoopt u rechtstreeks aan de koper: wij doen een vrijblijvend voorstel met prijs, planning en voorwaarden. U hoeft geen verkoopcampagne te organiseren en afspraken over oplevering en overdracht worden schriftelijk vastgelegd.",
   heroBenefits: [
-    "Geen Funda-traject nodig",
-    "Geen open huis of kijkersronde",
-    "Niet zelf alles regelen",
+    "Wij zijn de koper, geen tussenpersoon",
+    "Geen Funda, open huis of kijkers",
+    "Voorstel met concrete prijs",
     "U beslist zelf na het voorstel",
   ],
   benefits: [
@@ -156,6 +161,11 @@ const page = {
     ["Afwikkeling", "Via koopovereenkomst en notaris", "Ook via koopovereenkomst en notaris"],
   ],
   faqs: [
+    {
+      question: "Zijn jullie een makelaar of een verkoopplatform?",
+      answer:
+        "Nee. Vastgoed Direct Nederland koopt woningen zelf. U verkoopt rechtstreeks aan ons en uw woning komt niet op Funda.",
+    },
     {
       question: "Kan ik mijn woning verkopen zonder makelaar?",
       answer:

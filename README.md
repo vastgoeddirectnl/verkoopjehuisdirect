@@ -1,6 +1,6 @@
 # vastgoeddirectnederland.nl
 
-Versie: 5.6.2
+Versie: 5.6.3
 
 Next.js 15 (App Router) met Neon Postgres en Resend, gedeployd via GitHub naar
 Vercel. De publieke site vangt aanvragen op; de adminomgeving op `/admin` bevat

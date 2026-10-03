@@ -4,6 +4,18 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.6.3
+
+`/woning-verkopen-zonder-makelaar` zegt bovenaan meteen dat wij de koper zijn,
+geen makelaar of verkoopplatform. In Google Ads komt 60% van de kosten van
+"zonder makelaar"-zoekwoorden, en een groot deel van die zoekers wil zelf
+verkopen. Nieuwe kop, intro, voordelen en een korte noot voor wie liever zelf
+de hoogste marktprijs afwacht, plus een FAQ "Zijn jullie een makelaar of een
+verkoopplatform?". In Google Ads zelf zijn op 4 oktober 2026 tien
+uitsluitingen en elf opkoper-zoekwoorden toegevoegd en is
+[woning verkopen zonder makelaar] gepauzeerd (€421, 0 leads).
+
+
 ## 5.6.2
 
 Naar aanleiding van de eerste Sentry-meldingen na 5.6.0:
