@@ -1,6 +1,6 @@
 # vastgoeddirectnederland.nl
 
-Versie: 5.5.0
+Versie: 5.6.0
 
 Next.js 15 (App Router) met Neon Postgres en Resend, gedeployd via GitHub naar
 Vercel. De publieke site vangt aanvragen op; de adminomgeving op `/admin` bevat
@@ -20,6 +20,7 @@ DATABASE_URL=postgresql://...
 ADMIN_PASSWORD=zelf-kiezen
 ADMIN_SESSION_SECRET=lange-willekeurige-tekst
 ADMIN_TOTP_SECRET=via-npm-run-totp-generate
+CRON_SECRET=lange-willekeurige-tekst
 NEXT_PUBLIC_SITE_URL=https://www.vastgoeddirectnederland.nl
 ```
 
@@ -36,6 +37,10 @@ NEXT_PUBLIC_META_PIXEL_ID=...
 SENTRY_DSN=https://...@...ingest.sentry.io/...
 NEXT_PUBLIC_SENTRY_DSN=https://...@...ingest.sentry.io/...
 ```
+
+`CRON_SECRET` beveiligt de dagelijkse run (`/api/cron/daily`, ingesteld in
+`vercel.json`): Vercel stuurt hem als Bearer-token mee. Zonder deze variabele
+draait de ochtendautomatisering niet en volgt een storingsmelding.
 
 `RATE_LIMIT_SECRET` valt terug op `ADMIN_SESSION_SECRET` als hij niet is gezet.
 Zonder één van de twee draait de site door, maar zonder rate limiting; dat wordt
@@ -117,8 +122,23 @@ daarnaast bestaan.
   tweede gebruiker zijn nog steeds echte accounts nodig (zie
   `docs/codereview-backlog.md`, historisch).
 - De Content Security Policy in `next.config.mjs` staat bewust in **report-only**,
-  omdat Google Ads en de Meta Pixel inline scripts injecteren. Zet hem pas om
-  naar de harde variant als er enkele weken geen meldingen meer komen.
+  omdat Google Ads en de Meta Pixel inline scripts injecteren. Meldingen komen
+  sinds 5.6.0 in Sentry binnen. Zet hem pas om naar de harde variant als daar
+  enkele weken geen meldingen meer verschijnen.
+
+## Pagina's
+
+Alle publieke pagina's staan in `app/lib/sitePages.js`. De sitemap, de
+doorverwijzingen van samengevoegde pagina's en de interne links lezen daaruit;
+`test/sitePages.test.js` controleert dat die lijst en de mappen in `app/`
+kloppen. Een nieuwe pagina: map met `page.jsx` aanmaken én in die lijst zetten.
+
+## Dagelijkse run
+
+Elke ochtend (05:00 UTC) draait `/api/cron/daily`: opvolgdatums herberekenen,
+afgehandelde automatische taken sluiten en een ochtendmail naar
+`LEAD_TO_EMAIL`. Handmatig draaien kan met de knop "Automatisering nu draaien"
+in de admin (zonder mail).
 
 ## Documentatie
 

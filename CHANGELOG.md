@@ -4,6 +4,106 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.6.0
+
+De review van oktober 2026 (code, website, admin, voorstel, SEO) in één
+release. Geen migratie en geen nieuwe dependency. **Eén nieuwe
+env-variabele: `CRON_SECRET`** (zie "Dagelijkse automatisering").
+
+### DATA-01: datums zijn weer datums
+
+Postgres `date`-kolommen kwamen als `"2026-10-02T00:00:00.000Z"` in de admin.
+Drie gevolgen: het actiecentrum zag een opvolging van vandaag niet als
+"vandaag" (tekstvergelijking met `"2026-10-02"`), het datumveld "Handmatige
+opvolging" bleef na opslaan leeg, en overal stonden tijdstempels.
+`app/lib/neonDb.js` geeft een `date` nu terug als `"YYYY-MM-DD"`, en "vandaag"
+in SQL is de Nederlandse datum (`SQL_TODAY_NL`) in plaats van `current_date`
+(UTC bij Neon).
+
+### TASK-01: een takenlijst die weer klopt
+
+Er stonden 147 open taken, 146 over tijd, 65 op gearchiveerde leads; er waren
+er in totaal 3 afgerond. Automatische taken werden aangemaakt maar nooit
+gesloten. Nu sluiten ze vanzelf bij archiveren, na een vastgelegd
+contactmoment, als de aanvraag niet meer nieuw is, of als een "voorstel
+nabellen"-taak is ingehaald doordat de klant het voorstel bekeek. Een nieuwe
+lead krijgt één taak in plaats van twee ("Nieuwe aanvraag opvolgen" én
+"Kansrijke lead snel bellen"). De eerste dagelijkse run schoont de bestaande
+lijst op; handmatige taken blijven met rust.
+
+### SRC-01: leads per kanaal
+
+De rapportage telde per ruw bronveld, en elke advertentieklik heeft een eigen
+gclid: vrijwel elke lead stond op een eigen regel, testaanvragen van Google Tag
+Assistant telden mee, en "Chatgtp" was een eigen bron. `leadChannel()` vertaalt
+naar één kanaal (Google Ads, Google organisch, Facebook/Instagram, AI-assistent,
+telefonisch, ...). De rapportage telt per kanaal en schoon landingspad over de
+laatste 12 maanden, met het aantal deals, en zonder testverkeer. Nieuwe
+aanvragen bewaren het landingspad zonder querystring.
+
+### ADM-01: admin
+
+- Actiecentrum bovenaan, vier kerncijfers in plaats van negen kaarten.
+- Kanaal in plaats van ruwe bron; klik-ID's en URL's ingeklapt.
+- "Dubbel"-label en een lijst van andere aanvragen op hetzelfde adres.
+- Takenlijst standaard alleen open, met "over tijd" en een link naar de lead.
+- Het snelle voorstelformulier op het dashboard is weg (het maakte voorstellen
+  met andere standaardteksten); "Voorstel maken" gaat naar de detailpagina.
+- Voorstelbeheer: één hoofdknop in plaats van negen gelijke knoppen.
+- Onder 1100px een compacte balk bovenaan in plaats van een zijbalk die het
+  hele scherm vulde; het inlogscherm staat weer gecentreerd.
+- Na een deal (Akkoord/Afgerond): knop "Review vragen" via WhatsApp.
+
+### Dagelijkse automatisering (CRON-01)
+
+Een Vercel-cron roept elke ochtend `/api/cron/daily` aan: automatisering draaien,
+afgehandelde taken sluiten, en een ochtendmail naar `LEAD_TO_EMAIL` met
+klantreacties, bekeken voorstellen, opvolgingen en nieuwe aanvragen. **Zet
+`CRON_SECRET` in Vercel** (een lange willekeurige tekst); zonder die variabele
+weigert de route en volgt een storingsmelding.
+
+### UI-01: publieke site
+
+- Oranje donkerder: witte tekst op knoppen haalt nu 4,6–5,3:1 contrast (was
+  3,1–4,0), oranje tekst op crème 4,8:1.
+- Nieuw logo in `public/brand/` (bijgesneden, transparant, plus lichte variant);
+  geen witte blokken meer in footer en admin. `apple-touch-icon` 804 → 15 KB,
+  `logo.png` 694 → 83 KB.
+- Mobiel: het aanvraagformulier staat direct onder de introtekst.
+- "Cookievoorkeuren" is een link in de footer in plaats van een zwevende knop.
+- Regio's, situaties en privacyverklaring hebben de gewone header en footer.
+- Over ons: sectie "Achtergrond" (ervaring in vastgoed en financieringen).
+- Privacyverklaring noemt Sentry.
+
+### VST-01: voorstel
+
+Contactpersoon met telefoon en WhatsApp in de opening, koppen in de huisstijl
+van de site, op mobiel het bedrag bovenaan, minder algemene marketingblokken,
+een terugbelmoment bij "Eerst bespreken", en `?admin_preview=1` werkt alleen
+nog voor een ingelogde admin.
+
+### SEO-02
+
+- Zeven overlappende pagina's samengevoegd met een 301 (geen van alle leverde
+  een aanvraag op); zie `MERGED_PAGES` in `app/lib/sitePages.js`.
+- `app/lib/sitePages.js` is de enige lijst van publieke pagina's; sitemap,
+  redirects en interne links lezen eruit, met een test die lijst en mappen
+  vergelijkt.
+- Regiopagina's tonen kernen en wijken.
+- Kennisbank met drie artikelen (`/kennisbank`).
+- LocalBusiness-data gecorrigeerd; reviewlink wijst naar het eigen
+  Google-bedrijfsprofiel.
+
+### SEC-01 en code
+
+- CSP-meldingen gaan naar Sentry (er was geen meldadres, dus het moment om de
+  CSP af te dwingen kon nooit worden vastgesteld).
+- `app/api/admin/v2/route.js` (913 regels) opgesplitst in
+  `app/lib/admin/api/`; de route doet alleen nog toegangscontrole.
+- ESLint `no-undef` staat aan; die had de crash van 5.5.0 in LeadTimeline
+  afgevangen.
+- Tests: 185 → 215.
+
 ## 5.5.0
 
 De rest van de codereview-backlog (LINT-01, MON-01, TEST-01) plus 2FA op

@@ -4,7 +4,9 @@ Alle zeventien bevindingen uit de codereview van 5.1.1 zijn opgelost: elf in
 5.2.0, drie in 5.2.3 en de laatste drie structurele in 5.3.0 en 5.3.1.
 LINT-01, MON-01 en TEST-01 zijn in 5.5.0 opgelost (zie CHANGELOG.md); dat
 gold ook voor het gedeelde `ADMIN_PASSWORD` zonder tweede factor, met TOTP
-erbovenop. Wat hieronder staat zijn de punten die daarna zijn opgekomen.
+erbovenop. De review van oktober 2026 is in 5.6.0 verwerkt (DATA-01, TASK-01,
+SRC-01, ARCH-07, ADM-01, UI-01, VST-01, SEO-02, SEC-01, CRON-01). Wat hieronder
+staat zijn de punten die daarna nog openstaan.
 
 ## Werkafspraken
 
@@ -55,12 +57,56 @@ erbovenop. Wat hieronder staat zijn de punten die daarna zijn opgekomen.
 - `app/lib/reportError.js` importeert `@sentry/nextjs` alleen dynamisch, en
   alleen als `SENTRY_DSN` is gezet. Daardoor blijft dit bestand onder gewone
   `node --test` net zo licht als vóór 5.5.0. Geen top-level import hiervan.
+- `app/lib/neonDb.js` geeft `date`-kolommen terug als "YYYY-MM-DD" (DATA-01).
+  Vergelijk datums als zodanig; maak er geen `new Date()` van om te vergelijken.
+  "Vandaag" in SQL is `SQL_TODAY_NL`, niet `current_date` (dat is UTC).
+- Automatische taken sluiten via `AUTOMATION_TASK_CLOSE_RULES` in
+  `app/lib/automation.js` (TASK-01). Handmatige taken (zonder
+  `automation_key`) blijven altijd met rust. Een nieuw soort automatische taak
+  hoort daar een sluitregel bij te krijgen.
+- `leadChannel()` in `app/lib/sourceParser.js` is de enige vertaling van het
+  ruwe bronveld naar een kanaal (SRC-01). Testverkeer (Tag Assistant,
+  previews) telt bewust niet mee in de rapportage.
+- `app/lib/sitePages.js` is de enige lijst van publieke pagina's (SEO-02).
+  Een nieuwe pagina hoort daar ook in; `test/sitePages.test.js` faalt anders.
+- `/api/cron/daily` weigert zonder `CRON_SECRET` (CRON-01). Niet "tijdelijk"
+  openzetten: dan kan iedereen de ochtendmail laten versturen.
 
 ---
 
+## CONTENT-01 · Naam, foto en KvK-nummer
+
+Wacht op materiaal. Zodra er een KvK-nummer is:
+
+- in de footer (`app/components/MarketingChrome.jsx`), de privacyverklaring
+  (sectie "Wie zijn wij?") en de LocalBusiness-data in
+  `app/components/HomeClient.jsx` (`identifier`, en `address` als er een
+  vestigingsadres is). Volgens de KvK hoort het nummer op de website te staan.
+- Op `/over-ons` de sectie "Achtergrond" aanvullen met naam en foto; de site
+  belooft "één vast contactpersoon" maar noemt die nergens.
+
+## CONTENT-02 · Eigen foto's
+
+De landingspagina's hebben geen enkele afbeelding en de homepage gebruikt een
+stockfoto. Eigen foto's (van aangekochte woningen, met toestemming, of van de
+regio) maken vooral de regiopagina's herkenbaarder.
+
+## SEO-03 · Verder samenvoegen na Search Console
+
+In 5.6.0 zijn alleen de zeven pagina's samengevoegd die geen aanvragen
+opleverden en dezelfde zoekintentie hadden. Of bijvoorbeeld
+"binnen-24-uur"/"binnen-1-week" en "bij-erfenis"/"na-overlijden" ook samen
+moeten, hangt af van wat er per pagina in Google Search Console binnenkomt.
+Een nieuwe samenvoeging is één regel in `MERGED_PAGES`.
+
 ## Ook opgemerkt, jouw keuze
 
-- De CSP in `next.config.mjs` staat in report-only. Zet hem om naar
-  `Content-Security-Policy` zodra er enkele weken geen meldingen meer
-  binnenkomen, en pas de hostlijst aan op wat je in die periode daadwerkelijk
-  hebt zien blokkeren.
+- De CSP in `next.config.mjs` staat in report-only. Sinds 5.6.0 komen de
+  meldingen in Sentry binnen. Zet hem om naar `Content-Security-Policy`
+  zodra daar enkele weken geen meldingen meer verschijnen, en pas de hostlijst
+  aan op wat je in die periode daadwerkelijk hebt zien blokkeren.
+- Het Google-bedrijfsprofiel noemt als website nog verkoopjehuisdirect.nl. Dat
+  stuurt door, maar zet het in het profiel op www.vastgoeddirectnederland.nl.
+- Vul `reviewData.writeReviewUrl` (`app/lib/reviewData.js`) met de directe
+  "review schrijven"-link uit het bedrijfsprofiel; dan komt een klant met de
+  knop "Review vragen" meteen in het reviewvenster.
