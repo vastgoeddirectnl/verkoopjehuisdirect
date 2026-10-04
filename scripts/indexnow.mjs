@@ -26,6 +26,15 @@ async function sitemapUrls() {
 const paths = process.argv.slice(2);
 const urlList = paths.length ? paths.map((p) => new URL(p, ORIGIN).href) : await sitemapUrls();
 
+// Git Bash op Windows maakt van "/pad" een Windows-pad ("C:/Program Files/Git/pad").
+// Draai dan met MSYS_NO_PATHCONV=1 of laat de eerste slash weg.
+const vreemd = urlList.filter((url) => !url.startsWith(`${ORIGIN}/`));
+if (vreemd.length) {
+  console.error(`Geen URL van ${HOST}: ${vreemd.join(", ")}`);
+  console.error('Git Bash? Gebruik MSYS_NO_PATHCONV=1 of een pad zonder eerste slash ("huis-snel-verkopen").');
+  process.exit(1);
+}
+
 const response = await fetch("https://api.indexnow.org/indexnow", {
   method: "POST",
   headers: { "Content-Type": "application/json; charset=utf-8" },
