@@ -14,6 +14,10 @@ export const metadata = {
   },
   description:
     "Uw woning verkopen zonder opknappen, bezichtigingen of verkoopdruk? Ontvang eerst een persoonlijk en vrijblijvend verkoopvoorstel.",
+  // Eigendomsverificatie voor Bing Webmaster Tools.
+  verification: {
+    other: { "msvalidate.01": "09533D6AE43DB57A8118E614E40C05F1" },
+  },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",

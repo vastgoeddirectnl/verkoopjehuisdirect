@@ -1,6 +1,6 @@
 # vastgoeddirectnederland.nl
 
-Versie: 5.6.7
+Versie: 5.6.8
 
 Next.js 15 (App Router) met Neon Postgres en Resend, gedeployd via GitHub naar
 Vercel. De publieke site vangt aanvragen op; de adminomgeving op `/admin` bevat
@@ -62,6 +62,7 @@ npm run lint           # ESLint (flat config)
 npm run build          # productiebuild
 npm run check          # test + lint + build achter elkaar
 npm run totp:generate  # nieuw ADMIN_TOTP_SECRET genereren
+npm run indexnow       # pagina's direct aanmelden bij Bing (IndexNow)
 ```
 
 ESLint draait sinds 5.5.0 (LINT-01) op flat config (`eslint.config.mjs`,

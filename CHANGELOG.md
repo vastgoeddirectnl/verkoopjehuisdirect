@@ -4,6 +4,17 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.6.8
+
+- Bing Webmaster Tools: verificatie-metatag (`msvalidate.01`) in
+  `app/layout.jsx`. De site stond in Bing als "niet geverifieerd"; alleen het
+  oude domein verkoopjehuisdirect.nl was gekoppeld.
+- `npm run indexnow` (`scripts/indexnow.mjs`) meldt de URL's uit de live
+  sitemap, of losse paden, direct aan bij IndexNow (Bing, Yandex, Seznam). De
+  sleutel stond al in `public/`, maar werd nergens gebruikt. Draaien na een
+  release met nieuwe of flink gewijzigde pagina's.
+
+
 ## 5.6.7
 
 Mobiele weergave nagelopen op 375 en 320 pixels breed.
