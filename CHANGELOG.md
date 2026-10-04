@@ -4,6 +4,14 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.6.6
+
+`reviewData.writeReviewUrl` is gevuld met de directe reviewlink uit het
+Google-bedrijfsprofiel (`https://g.page/r/CWlMXNagScN1EAE/review`). De knop
+"Review vragen" in de admin stuurt een klant nu meteen naar het
+reviewvenster in plaats van naar het profiel.
+
+
 ## 5.6.5
 
 - `public/og.png` (het deelbeeld op Facebook, WhatsApp en LinkedIn) was een

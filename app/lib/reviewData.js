@@ -21,7 +21,7 @@ export const reviewData = {
   // (Bedrijfsprofiel → "Om reviews vragen" → link kopiëren, vorm
   // https://g.page/r/.../review). Leeg = de knop in de admin gebruikt de
   // profiellink hierboven, waar de klant zelf op "Een review schrijven" klikt.
-  writeReviewUrl: "",
+  writeReviewUrl: "https://g.page/r/CWlMXNagScN1EAE/review",
   // Datum van de laatste handmatige controle, als "2026-09-07". Leeg = nooit
   // gecontroleerd sinds deze regel bestaat.
   checkedOn: "2026-10-03",

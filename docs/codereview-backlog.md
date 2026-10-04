@@ -105,8 +105,5 @@ Een nieuwe samenvoeging is één regel in `MERGED_PAGES`.
   meldingen in Sentry binnen. Zet hem om naar `Content-Security-Policy`
   zodra daar enkele weken geen meldingen meer verschijnen, en pas de hostlijst
   aan op wat je in die periode daadwerkelijk hebt zien blokkeren.
-- Het Google-bedrijfsprofiel noemt als website nog verkoopjehuisdirect.nl. Dat
-  stuurt door, maar zet het in het profiel op www.vastgoeddirectnederland.nl.
-- Vul `reviewData.writeReviewUrl` (`app/lib/reviewData.js`) met de directe
-  "review schrijven"-link uit het bedrijfsprofiel; dan komt een klant met de
-  knop "Review vragen" meteen in het reviewvenster.
+- Krijgt de Facebookpagina een gebruikersnaam, pas dan de `sameAs`-URL in
+  `app/components/HomeClient.jsx` aan (nu `profile.php?id=61590760926991`).
