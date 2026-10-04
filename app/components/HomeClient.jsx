@@ -18,6 +18,12 @@ const localBusinessSchema = {
   description:
     "Vastgoed Direct Nederland koopt woningen en objecten rechtstreeks aan, met een vrijblijvend schriftelijk voorstel en notariële afwikkeling.",
   areaServed: ["Groningen", "Drenthe", "Friesland", "Overijssel"].map((name) => ({ "@type": "AdministrativeArea", name })),
+  // Koppelt de site aan het Google-bedrijfsprofiel en de Facebookpagina.
+  // Krijgt de Facebookpagina een eigen gebruikersnaam, pas deze URL dan aan.
+  sameAs: [
+    "https://maps.google.com/?cid=8485707078036114537",
+    "https://www.facebook.com/profile.php?id=61590760926991",
+  ],
 };
 
 const faqItems = [

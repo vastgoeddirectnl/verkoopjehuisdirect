@@ -10,6 +10,7 @@
 export const LEAD_CHANNELS = {
   googleAds: "Google Ads",
   googleOrganic: "Google (organisch)",
+  googleBusinessProfile: "Google-bedrijfsprofiel",
   otherSearch: "Andere zoekmachine",
   social: "Facebook / Instagram",
   ai: "AI-assistent (ChatGPT e.d.)",
@@ -121,6 +122,11 @@ export function leadChannel(lead) {
   }
 
   if (includesAny(`${source} ${referrer} ${bron}`, AI_MARKERS)) return LEAD_CHANNELS.ai;
+
+  // De websitelink in het Google-bedrijfsprofiel draagt utm_medium=gbp; zonder
+  // die markering is een klik vanuit Maps niet van gewoon zoekverkeer te
+  // onderscheiden.
+  if (medium === "gbp" || source === "gbp") return LEAD_CHANNELS.googleBusinessProfile;
 
   if (source === "google" || /(^|\.)google\.[a-z.]+$/.test(referrerHost)) return LEAD_CHANNELS.googleOrganic;
   if (includesAny(`${source} ${referrerHost}`, OTHER_SEARCH_MARKERS)) return LEAD_CHANNELS.otherSearch;

@@ -24,6 +24,11 @@ test("Google zonder klik-ID is organisch zoekverkeer", () => {
   assert.equal(leadChannel({ bron: "referrer=https://www.google.nl/" }), K.googleOrganic);
 });
 
+test("de websitelink uit het Google-bedrijfsprofiel is een eigen kanaal", () => {
+  assert.equal(leadChannel({ bron: "utm_source=google | utm_medium=gbp | referrer=https://www.google.com/" }), K.googleBusinessProfile);
+  assert.equal(leadChannel({ bron: "utm_source=google | utm_medium=organic" }), K.googleOrganic);
+});
+
 test("ChatGPT en andere AI-assistenten worden herkend, ook met tikfout bij handmatige invoer", () => {
   assert.equal(leadChannel({ bron: "utm_source=chatgpt.com" }), K.ai);
   assert.equal(leadChannel({ bron: "Chatgtp" }), K.ai);

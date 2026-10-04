@@ -4,6 +4,17 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.6.5
+
+- `public/og.png` (het deelbeeld op Facebook, WhatsApp en LinkedIn) was een
+  AI-villa. Nu een typografisch ontwerp in de huisstijl met een lijntekening
+  van huizen.
+- Nieuw kanaal "Google-bedrijfsprofiel" in de rapportage: de websitelink in
+  het profiel krijgt `?utm_source=google&utm_medium=gbp`.
+- LocalBusiness-data verwijst met `sameAs` naar het Google-bedrijfsprofiel en
+  de Facebookpagina.
+
+
 ## 5.6.4
 
 De cookiemelding bedekte op telefoons de halve pagina, ook voor elke bezoeker
