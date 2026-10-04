@@ -4,6 +4,17 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.6.9
+
+- `/huis-verkopen-zonder-opknappen` herschreven als keuzehulp: loont opknappen
+  voor de verkoop, wat wel en niet, een (fictief) rekenvoorbeeld, de drie
+  routes zonder opknappen, hoe een prijs tot stand komt en de mededelingsplicht.
+  De zoekterm stond rond positie 11-14; de oude tekst was dun en algemeen.
+- Nieuwe description gericht op de vraag "loont opknappen?".
+- Gerelateerde links wezen naar drie samengevoegde pagina's; nu naar de
+  zusterpagina's en het kennisbankartikel over netto-opbrengst.
+
+
 ## 5.6.8
 
 - Bing Webmaster Tools: verificatie-metatag (`msvalidate.01`) in
