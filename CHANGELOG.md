@@ -4,6 +4,22 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.6.7
+
+Mobiele weergave nagelopen op 375 en 320 pixels breed.
+
+- `/regios`, `/situaties` en `/privacyverklaring` waren breder dan het
+  scherm: lange woorden in de kop ("Verkoopmogelijkheden",
+  "Privacyverklaring") pasten niet, waardoor de pagina zijwaarts schoof en
+  de vaste knoppenbalk onderaan meerekte. Kleinere koppen op telefoons.
+- `/over-ons`: het blok "Achtergrond" stak 32px buiten beeld door het woord
+  "vastgoedfinancieringen". Kop ingekort, en de rasterkolommen op mobiel
+  zijn `minmax(0, 1fr)` zodat een lang woord de kolom niet meer oprekt.
+- Homepage: de vergelijkingstabel moest zijwaarts geschoven worden en de
+  kolom "Direct via VDN" viel buiten beeld. Op telefoons is elke rij nu een
+  blok met regulier en direct naast elkaar.
+
+
 ## 5.6.6
 
 `reviewData.writeReviewUrl` is gevuld met de directe reviewlink uit het

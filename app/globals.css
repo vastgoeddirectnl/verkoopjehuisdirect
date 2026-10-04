@@ -660,7 +660,9 @@ textarea.field { min-height: 82px; resize: vertical; }
   .home-hero-copy > .hero-image-card { order: 7; }
   .hero-image-card { min-height: 250px; }
   .form-context { margin-inline: 12px; }
-  .positioning-grid, .proposal-grid, .region-grid, .faq-layout, .seo-faq .faq-layout, .split-heading, .seo-intro-grid { grid-template-columns: 1fr; gap: 30px; }
+  /* minmax(0, 1fr): een lang woord in een kop mag de kolom niet breder
+     maken dan het scherm (gebeurde op /over-ons). */
+  .positioning-grid, .proposal-grid, .region-grid, .faq-layout, .seo-faq .faq-layout, .split-heading, .seo-intro-grid { grid-template-columns: minmax(0, 1fr); gap: 30px; }
   .section-shell { padding: 66px 0; }
   .situation-grid { grid-template-columns: 1fr; }
   .situation-card { min-height: 0; }
@@ -736,6 +738,17 @@ textarea.field { min-height: 82px; resize: vertical; }
   .cookie-consent-more { display: inline-block; }
   .cookie-consent-actions { display: grid; grid-template-columns: 1fr 1fr; }
   .cookie-consent-actions .button { width: 100%; min-width: 0; min-height: 44px; padding-inline: 12px; }
+  /* Lange Nederlandse woorden ("Verkoopmogelijkheden", "Privacyverklaring")
+     pasten niet; de pagina werd breder dan het scherm en de vaste balk
+     onderaan rekte mee. */
+  .overview-hero h1 { font-size: clamp(24px, 7.9vw, 38px); }
+  /* Vergelijkingstabel: per onderwerp een blok met regulier en direct naast
+     elkaar, in plaats van een tabel die je zijwaarts moet schuiven. */
+  .comparison-table { overflow-x: visible; }
+  .comparison-row { min-width: 0; grid-template-columns: 1fr 1fr; }
+  .comparison-row > * { min-height: 0; padding: 12px 14px; }
+  .comparison-row > strong:first-child { grid-column: 1 / -1; padding-bottom: 2px; border-right: 0; border-bottom: 0; color: var(--orange-100); font-size: 14px; }
+  .comparison-head > strong:first-child { display: none; }
 }
 
 @media print {

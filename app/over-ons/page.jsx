@@ -115,7 +115,7 @@ export default function OverOnsPage() {
         <div className="site-container positioning-grid">
           <div>
             <p className="section-eyebrow">Achtergrond</p>
-            <h2>Ervaring in vastgoed en vastgoedfinancieringen.</h2>
+            <h2>Ervaring in vastgoed en financiering.</h2>
           </div>
           <div className="positioning-copy">
             <p>

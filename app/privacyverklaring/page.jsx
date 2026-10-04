@@ -19,7 +19,7 @@ export default function Privacyverklaring() {
           Privacy
         </p>
 
-        <h1 style={{ fontSize: "48px", lineHeight: "1.05", marginBottom: "18px" }}>
+        <h1 style={{ fontSize: "clamp(28px, 9vw, 48px)", lineHeight: "1.05", marginBottom: "18px" }}>
           Privacyverklaring
         </h1>
 
@@ -149,10 +149,11 @@ export default function Privacyverklaring() {
         <div
           style={{
             marginTop: "25px",
-            padding: "28px",
+            padding: "clamp(18px, 6vw, 28px)",
             background: "#fff",
             border: "1px solid #e6e2db",
             borderRadius: "24px",
+            overflowWrap: "anywhere",
           }}
         >
           <p><strong>Vastgoed Direct Nederland</strong></p>
