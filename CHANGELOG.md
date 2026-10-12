@@ -4,6 +4,13 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.6.10
+
+- Contrast (PageSpeed-toegankelijkheid): het oranje kopje in het donkere
+  blok "Waarom deze aanpak anders is" is lichter; de decoratieve nummers 01-06
+  op de situatiekaarten zijn verborgen voor schermlezers.
+
+
 ## 5.6.9
 
 - `/huis-verkopen-zonder-opknappen` herschreven als keuzehulp: loont opknappen

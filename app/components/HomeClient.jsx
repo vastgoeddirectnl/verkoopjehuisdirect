@@ -225,7 +225,7 @@ export default function HomeClient() {
           <div className="situation-grid">
             {situationCards.map((card, index) => (
               <a href={card.href} className="situation-card" key={card.href}>
-                <span className="situation-index">0{index + 1}</span>
+                <span className="situation-index" aria-hidden="true">0{index + 1}</span>
                 <span className="situation-kicker">{card.kicker}</span>
                 <h3>{card.title}</h3>
                 <p>{card.text}</p>

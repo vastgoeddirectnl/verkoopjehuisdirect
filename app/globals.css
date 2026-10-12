@@ -339,6 +339,7 @@ textarea.field { min-height: 82px; resize: vertical; }
 .centered-heading { max-width: 760px; margin-inline: auto; text-align: center; }
 
 .positioning-section { background: var(--navy-900); color: #fff; }
+.positioning-section .section-eyebrow { color: #f3a46f; } /* oranje-600 is te donker op navy (contrast) */
 .positioning-grid { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 78px; align-items: start; }
 .positioning-grid h2 { color: #fff; }
 .positioning-copy > p { color: #dbe4ec; font-size: 18px; line-height: 1.7; }
