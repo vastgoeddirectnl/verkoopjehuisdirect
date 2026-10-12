@@ -4,6 +4,13 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.6.11
+
+- CSP: `googleads.g.doubleclick.net` in connect-src. Sentry meldde bij de aanvraag
+  van 7 oktober twee geblokkeerde verzoeken van de Google Ads-conversie (CSP is
+  nog report-only, dus de meting werkte wel; bij afdwingen zou hij breken).
+
+
 ## 5.6.10
 
 - Contrast (PageSpeed-toegankelijkheid): het oranje kopje in het donkere

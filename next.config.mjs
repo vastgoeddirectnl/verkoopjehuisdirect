@@ -46,7 +46,9 @@ const contentSecurityPolicy = [
   // dus de browser praat alleen met onze eigen server.
   // googleadservices.com en ad.doubleclick.net: de Google Ads-meting
   // (set_partitioned_cookie, ccm/collect), gezien in de CSP-meldingen in Sentry.
-  `connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://www.google.com https://www.googleadservices.com https://ad.doubleclick.net https://www.facebook.com${sentryOrigin ? ` ${sentryOrigin}` : ""}`,
+  // googleads.g.doubleclick.net: de conversie bij een aanvraag (okt 2026); die
+  // stuurt door naar www.google.com/pagead/1p-conversion, dus Sentry meldde beide.
+  `connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://www.google.com https://www.googleadservices.com https://ad.doubleclick.net https://googleads.g.doubleclick.net https://www.facebook.com${sentryOrigin ? ` ${sentryOrigin}` : ""}`,
   // default-src geldt ook als frame-src; de Meta-pixel en conversion linking
   // gebruiken een iframe, dus die hosts staan hier expliciet.
   "frame-src https://www.facebook.com https://td.doubleclick.net",
