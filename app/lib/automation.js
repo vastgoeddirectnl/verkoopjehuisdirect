@@ -1,15 +1,45 @@
 import { query, queryOne, SQL_TODAY_NL } from "./neonDb.js";
 import { addDaysAmsterdam } from "./date.js";
 import { ARCHIVE_LEAD_STATUSES as INACTIVE_LEAD_STATUSES } from "./leadStatus.js";
+import { isInWerkgebied, normalizeProvince } from "./address.js";
 
-const HIGH_VALUE_REGIONS = ["groningen", "drenthe", "friesland", "overijssel", "borger", "stadskanaal", "assen", "emmen", "veendam", "winschoten", "musselkanaal"];
+// Woorden die alleen meetellen als de klant ze zelf invulde (situatie, termijn,
+// toelichting, notitie). Tot 5.7.0 werd ook het bron- en paginaveld doorzocht;
+// daar staat bijna altijd "direct" (geen bekende bron, of /huis-direct-verkopen)
+// en dat leverde iedere lead "duidelijke behoefte aan snelheid" op.
+const SPEED_WORDS = ["snel", "zo snel mogelijk", "binnen 24", "binnen 1 week", "binnen 1 maand", "spoed", "duidelijkheid"];
+const MOTIVATION_WORDS = ["leegstand", "leegstaand", "staat leeg", "erfenis", "nalatenschap", "scheiding", "financieel", "financiële", "financiele", "dubbele lasten", "verhuurd", "huur"];
+const CONDITION_WORDS = ["achterstallig", "onderhoud", "opknap", "renovatie", "schade", "slechte staat", "niet verkoopklaar", "vol spullen", "leeggehaald"];
+const ORIENTING_WORDS = ["oriënteer", "orienteer", "later dit jaar"];
 
-function clean(value) {
-  return String(value || "").trim();
-}
+// Alleen als terugval wanneer de provincie (nog) onbekend is.
+const WERKGEBIED_WORDS = [
+  "groningen", "drenthe", "friesland", "fryslân", "overijssel", "flevoland",
+  "borger", "stadskanaal", "assen", "emmen", "veendam", "winschoten", "musselkanaal",
+  "almere", "lelystad", "dronten", "zeewolde", "emmeloord", "urk",
+];
+
+const RELEVANT_CHANNEL_WORDS = ["google", "huis-direct", "huis-snel", "zonder-makelaar", "achterstallig", "leegstaand", "erfenis", "scheiding"];
+
+// Opvolging (5.7.0). Tot nu toe rekende de opvolgdatum vanaf vandaag en werd
+// hij elke ochtend opnieuw berekend: "Voorstel bekeken" stond daardoor
+// maandenlang dagelijks op vandaag, en "Voorstel verzonden" (+2) of "In
+// behandeling" (+1) schoof elke dag mee en kwam nooit aan de beurt. Nu telt
+// de datum vanaf het laatste contact of de laatste keer dat de klant het
+// voorstel bekeek. Zonder enige activiteit in 30 dagen is een lead
+// "stilgevallen": geen dagelijkse opvolging meer, maar één taak om te beslissen.
+export const STALE_AFTER_DAYS = 30;
+
+const NEW_STATUSES = ["Nieuw", "Nieuwe aanvraag"];
+const WORKING_STATUSES = ["Contact opgenomen", "In behandeling", "In beoordeling", "Eerste bod gedaan", "Beoordeling gepland", "Voorstel opgesteld"];
+const PROPOSAL_STATUSES = ["Voorstel verzonden", "Voorstel bekeken", "In onderhandeling"];
 
 function todayPlus(days = 0) {
   return addDaysAmsterdam(days);
+}
+
+function clean(value) {
+  return String(value || "").trim();
 }
 
 function containsAny(text, words) {
@@ -17,27 +47,78 @@ function containsAny(text, words) {
   return words.some((word) => haystack.includes(word));
 }
 
-function leadText(lead = {}) {
-  return [
-    lead.naam,
-    lead.email,
-    lead.telefoon,
-    lead.postcode,
-    lead.huisnummer,
-    lead.woningtype,
-    lead.staat,
-    lead.reden,
-    lead.pagina,
-    lead.bron,
-    lead.notitie,
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
+/** Wat de klant zelf heeft ingevuld, zonder de technische delen van `reden`. */
+function customerText(lead = {}) {
+  const reden = clean(lead.reden)
+    .split(" | ")
+    .filter((part) => !/^(Campagne landingspagina|Adrescontrole):/i.test(part.trim()))
+    .join(" ");
+  return [lead.woningtype, lead.staat, reden, lead.notitie].filter(Boolean).join(" ").toLowerCase();
 }
 
-export function calculateLeadAutomation(lead = {}) {
-  const text = leadText(lead);
+function channelText(lead = {}) {
+  return [lead.pagina, lead.bron].filter(Boolean).join(" ").toLowerCase();
+}
+
+function toDate(value) {
+  if (!value) return null;
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function latest(...values) {
+  const dates = values.map(toDate).filter(Boolean);
+  return dates.length ? new Date(Math.max(...dates.map((d) => d.getTime()))) : null;
+}
+
+/**
+ * Wanneer moet deze lead weer opgevolgd worden? Een datum in het verleden is
+ * bewust: die blijft "vandaag of eerder" tot er contact is vastgelegd.
+ */
+export function followUpPlan(lead = {}, { now = new Date(), priority = "Normaal" } = {}) {
+  const status = clean(lead.status) || "Nieuw";
+  if (INACTIVE_LEAD_STATUSES.includes(status)) return { nextFollowUpAt: null, stale: false, lastActivity: null };
+
+  const created = toDate(lead.created_at) || now;
+  const contact = toDate(lead.last_contact_at);
+  const view = latest(lead.last_proposal_view_at, lead.proposal_viewed_at);
+  // Een reactie op de voorstelpagina (akkoord, bespreken, vraag) is ook activiteit.
+  const reaction = toDate(lead.last_customer_reaction_at);
+  const lastActivity = latest(created, contact, view, reaction) || now;
+  const silentDays = (now.getTime() - lastActivity.getTime()) / 86_400_000;
+
+  if (NEW_STATUSES.includes(status)) {
+    return { nextFollowUpAt: addDaysAmsterdam(0, created), stale: false, lastActivity };
+  }
+
+  if ((WORKING_STATUSES.includes(status) || PROPOSAL_STATUSES.includes(status)) && silentDays > STALE_AFTER_DAYS) {
+    return { nextFollowUpAt: null, stale: true, lastActivity };
+  }
+
+  if (status === "Voorstel bekeken") {
+    // Opnieuw bekeken na het laatste contact: dat is het moment om te bellen.
+    if (view && (!contact || view > contact)) return { nextFollowUpAt: addDaysAmsterdam(0, view), stale: false, lastActivity };
+    return { nextFollowUpAt: addDaysAmsterdam(3, contact || created), stale: false, lastActivity };
+  }
+
+  if (status === "Voorstel verzonden" || status === "In onderhandeling") {
+    return { nextFollowUpAt: addDaysAmsterdam(2, lastActivity), stale: false, lastActivity };
+  }
+
+  if (WORKING_STATUSES.includes(status)) {
+    return { nextFollowUpAt: addDaysAmsterdam(1, latest(created, contact)), stale: false, lastActivity };
+  }
+
+  if (priority === "Hoog") {
+    return { nextFollowUpAt: addDaysAmsterdam(0, lastActivity), stale: false, lastActivity };
+  }
+
+  return { nextFollowUpAt: null, stale: false, lastActivity };
+}
+
+export function calculateLeadAutomation(lead = {}, { now = new Date() } = {}) {
+  const klant = customerText(lead);
+  const kanaal = channelText(lead);
   const reasons = [];
   let score = 0;
 
@@ -56,27 +137,39 @@ export function calculateLeadAutomation(lead = {}) {
     reasons.push("adresgegevens aanwezig");
   }
 
-  if (containsAny(text, ["snel", "direct", "binnen 24", "binnen 1 week", "spoed", "duidelijkheid"])) {
+  if (containsAny(klant, SPEED_WORDS)) {
     score += 3;
     reasons.push("duidelijke behoefte aan snelheid/duidelijkheid");
   }
 
-  if (containsAny(text, ["leegstand", "leegstaand", "erfenis", "scheiding", "financieel", "financiële", "financiele", "verhuurd", "huur"])) {
+  if (containsAny(klant, MOTIVATION_WORDS)) {
     score += 3;
     reasons.push("situatie met verhoogde verkoopmotivatie");
   }
 
-  if (containsAny(text, ["achterstallig", "onderhoud", "opknap", "renovatie", "schade", "slechte staat"])) {
+  if (containsAny(klant, CONDITION_WORDS)) {
     score += 2;
     reasons.push("woning mogelijk passend voor directe verkoopoplossing");
   }
 
-  if (containsAny(text, HIGH_VALUE_REGIONS)) {
+  if (containsAny(klant, ORIENTING_WORDS)) {
+    score -= 1;
+    reasons.push("oriënteert zich nog");
+  }
+
+  const werkgebied = isInWerkgebied(lead.provincie);
+  if (werkgebied === true) {
+    score += 1;
+    reasons.push(`woning ligt in het werkgebied (${normalizeProvince(lead.provincie)})`);
+  } else if (werkgebied === false) {
+    score -= 2;
+    reasons.push(`woning ligt buiten het werkgebied (${normalizeProvince(lead.provincie)})`);
+  } else if (containsAny(`${klant} ${kanaal}`, WERKGEBIED_WORDS)) {
     score += 1;
     reasons.push("regio sluit goed aan bij werkgebied");
   }
 
-  if (containsAny(text, ["google", "seo", "huis-direct", "huis-snel", "zonder-makelaar", "achterstallig", "leegstaand"])) {
+  if (containsAny(kanaal, RELEVANT_CHANNEL_WORDS)) {
     score += 1;
     reasons.push("binnengekomen via relevante pagina/bron");
   }
@@ -92,21 +185,17 @@ export function calculateLeadAutomation(lead = {}) {
   if (score >= 8) priority = "Hoog";
   if (score <= 3) priority = "Laag";
 
-  let nextFollowUpAt = null;
-  const status = clean(lead.status) || "Nieuw";
-
-  if (status === "Nieuw" || status === "Nieuwe aanvraag") nextFollowUpAt = todayPlus(0);
-  else if (["Contact opgenomen", "In behandeling", "In beoordeling", "Eerste bod gedaan", "Beoordeling gepland", "Voorstel opgesteld"].includes(status)) nextFollowUpAt = todayPlus(1);
-  else if (status === "Voorstel bekeken") nextFollowUpAt = todayPlus(0);
-  else if (status === "Voorstel verzonden" || status === "In onderhandeling") nextFollowUpAt = todayPlus(2);
-  else if (priority === "Hoog" && !INACTIVE_LEAD_STATUSES.includes(status)) nextFollowUpAt = todayPlus(0);
+  const plan = followUpPlan(lead, { now, priority });
+  if (plan.stale) reasons.push(`stilgevallen: ${STALE_AFTER_DAYS}+ dagen geen contact of activiteit`);
 
   return {
     score,
     priority,
     reasons,
     note: reasons.length ? reasons.join(" · ") : "Geen automatische signalen.",
-    nextFollowUpAt,
+    nextFollowUpAt: plan.nextFollowUpAt,
+    stale: plan.stale,
+    lastActivity: plan.lastActivity || null,
   };
 }
 
@@ -186,6 +275,29 @@ export const AUTOMATION_TASK_CLOSE_RULES = [
     where: () => "t.automation_key = 'auto-new-lead' and coalesce(l.status, 'Nieuw') not in ('Nieuw','Nieuwe aanvraag')",
   },
   {
+    key: "weer-actief",
+    reason: "de klant heeft het voorstel opnieuw bekeken of erop gereageerd",
+    where: () => `t.automation_key like 'auto-stilgevallen-%'
+      and exists (
+        select 1 from proposals p
+        where p.lead_id = t.lead_id
+          and (p.public_last_viewed_at >= t.created_at or p.interest_at >= t.created_at)
+      )`,
+  },
+  {
+    // Eén beslistaak in plaats van een stapel oude "nabellen"-taken.
+    key: "vervangen-door-stilgevallen",
+    reason: "de lead is stilgevallen; zie de taak 'Stilgevallen: nog interesse?'",
+    where: () => `t.automation_key not like 'auto-stilgevallen-%'
+      and exists (
+        select 1 from tasks s
+        where s.lead_id = t.lead_id
+          and s.automation_key like 'auto-stilgevallen-%'
+          and s.status <> 'Afgerond'
+          and s.created_at > t.created_at
+      )`,
+  },
+  {
     key: "voorstel-bekeken",
     reason: "de klant heeft het voorstel inmiddels bekeken",
     where: () => `t.automation_key like 'auto-proposal-sent-%'
@@ -245,7 +357,17 @@ export async function refreshLeadAutomation(inputLead) {
     const fresh = await queryOne("select * from leads where id = $1", [inputLead.id]);
     if (!fresh) return inputLead;
 
-    const automation = calculateLeadAutomation(fresh);
+    // De laatste keer dat de klant een voorstel bekeek of erop reageerde; dat
+    // staat niet op de lead zelf (proposal_viewed_at is alleen de eerste keer).
+    const viewRow = await queryOne(
+      "select max(public_last_viewed_at) as last_view, max(interest_at) as last_reaction from proposals where lead_id = $1",
+      [fresh.id]
+    ).catch(() => null);
+    const automation = calculateLeadAutomation({
+      ...fresh,
+      last_proposal_view_at: viewRow?.last_view || null,
+      last_customer_reaction_at: viewRow?.last_reaction || null,
+    });
 
     let lead = await queryOne(
       `update leads
@@ -280,6 +402,20 @@ export async function refreshLeadAutomation(inputLead) {
         title: kansrijk ? "Kansrijke nieuwe aanvraag: vandaag bellen" : "Nieuwe aanvraag opvolgen",
         dueDate: todayPlus(0),
         note: `Automatisch aangemaakt. Leadscore ${automation.score}/12. ${automation.note}`,
+      });
+    }
+
+    // Stilgevallen: geen dagelijkse opvolging meer, wel één taak om te
+    // beslissen. De sleutel bevat de datum van de laatste activiteit, zodat een
+    // lead die later opnieuw stilvalt weer een nieuwe taak krijgt.
+    if (automation.stale && automation.lastActivity) {
+      const sinds = addDaysAmsterdam(0, automation.lastActivity);
+      await upsertAutomationTask({
+        lead,
+        key: `auto-stilgevallen-${sinds}`,
+        title: "Stilgevallen: nog interesse? Bellen of archiveren",
+        dueDate: addDaysAmsterdam(STALE_AFTER_DAYS, automation.lastActivity),
+        note: `Automatisch aangemaakt. Sinds ${sinds} geen contact of activiteit. Bel nog één keer of zet de lead op Afgerond / Gearchiveerd; daarna verdwijnt hij uit de dagelijkse opvolging.`,
       });
     }
 
