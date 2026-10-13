@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { queryOne } from "../../../../lib/neonDb";
 import { isUuid, enforceRateLimit } from "../../../../lib/requestSecurity";
 import { markProposalViewed } from "../../../../lib/automation";
 import { isExpiredAmsterdam } from "../../../../lib/date";
+import { sendProposalAlert } from "../../../../lib/customerAlerts.js";
 
 export const runtime = "nodejs";
 
@@ -35,7 +36,7 @@ export async function POST(request, { params }) {
     }
 
     const proposal = await queryOne(
-      `select id, lead_id, lead_naam, status, validity_date
+      `select id, lead_id, lead_naam, status, validity_date, public_viewed_at
        from proposals
        where public_token = $1::uuid`,
       [token]
@@ -71,6 +72,11 @@ export async function POST(request, { params }) {
       const active = ["verzonden", "bekeken"].includes(status) && !isExpiredAmsterdam(proposal.validity_date);
       if (active) {
         await markProposalViewed(proposal);
+        // Eerste keer geopend: direct melden (5.7.0). Latere keren niet, anders
+        // wordt het een stroom mails bij een klant die vaak terugkijkt.
+        if (!proposal.public_viewed_at) {
+          after(() => sendProposalAlert({ kind: "first_view", proposalId: proposal.id }));
+        }
       }
     }
 

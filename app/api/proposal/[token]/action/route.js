@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { queryOne, query, SQL_TODAY_NL } from "../../../../lib/neonDb";
 import { isUuid, enforceRateLimit } from "../../../../lib/requestSecurity";
 import { isExpiredAmsterdam } from "../../../../lib/date";
+import { sendProposalAlert } from "../../../../lib/customerAlerts.js";
 
 export const runtime = "nodejs";
 
@@ -100,6 +101,9 @@ export async function POST(request, { params }) {
         );
       }
     }
+
+    // Directe melding (5.7.0): voorheen pas in de ochtendmail van de volgende dag.
+    after(() => sendProposalAlert({ kind: action, proposalId: proposal.id, message }));
 
     return NextResponse.json({ ok: true, status: label });
   } catch (error) {
