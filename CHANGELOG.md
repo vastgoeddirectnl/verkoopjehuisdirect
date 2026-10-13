@@ -4,6 +4,63 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.7.0
+
+Verbeteringen uit de codereview van 13 oktober 2026, plus Flevoland als
+werkgebied.
+
+**Database:** voer `neon/v5_7_upgrade.sql` uit (plaats, gemeente, provincie en
+address_lookup_at op `leads`). Zonder migratie werkt alles, maar worden plaats
+en provincie niet bewaard.
+
+### Meldingen
+- Directe mail bij een reactie op de voorstelpagina (akkoord, bespreken,
+  vraag) en bij de eerste keer dat de klant het voorstel opent. Voorheen
+  alleen een taak, en een melding pas in de ochtendmail van de volgende dag.
+  Zie `app/lib/customerAlerts.js` en `app/lib/proposalAlertContent.js`.
+- Interne melding bij een nieuwe aanvraag: onderwerp met plaats, werkgebied,
+  situatie en kanaal (`app/lib/leadSummary.js`), en een directe link naar de
+  lead.
+
+### Aanvraag en herkomst
+- De toelichting van de klant werd ongemerkt afgekapt: `reden` (termijn,
+  toelichting en adrescontrole samen) mocht maar 180 tekens zijn. Nu 2000, met
+  een teller bij het tekstvak (max. 1500).
+- Herkomst per bezoek (`app/lib/attribution.js`, `LandingAttribution` in de
+  layout): bij de eerste paginalading wordt in sessionStorage onthouden waar de
+  bezoeker vandaan kwam. Wie via Google of een advertentie binnenkwam en
+  doorklikte, telde voorheen als "Direct". Het bronveld bevat nu ook
+  `landing=…`; het beheer toont "Binnengekomen op". Privacyverklaring
+  aangevuld.
+- Plaats, gemeente en provincie via PDOK bij elke aanvraag, ook via
+  landingspagina's en handmatige leads (`app/lib/address.js`). De dagelijkse
+  run vult oudere leads aan (25 per dag).
+- Ongeldige JSON op `/api/leads` geeft een 400 in plaats van een
+  storingsmelding "aanvraag niet opgeslagen".
+
+### Score en opvolging (`app/lib/automation.js`)
+- De score doorzocht ook het bron- en paginaveld; daar staat bijna altijd
+  "direct", dus iedere lead kreeg "duidelijke behoefte aan snelheid" (+3). Nu
+  tellen alleen wat de klant zelf invulde. "Ik oriënteer mij alleen" telt −1.
+- Werkgebied op basis van de provincie: +1 binnen, −2 buiten.
+- Opvolging rekent vanaf het laatste contact, de laatste keer bekijken of de
+  laatste reactie op het voorstel, niet meer vanaf vandaag. "Voorstel bekeken"
+  stond daardoor maandenlang dagelijks op vandaag, en "Voorstel verzonden"
+  (+2) en "In behandeling" (+1) schoven elke dag op. Na 30 dagen zonder
+  activiteit is een lead stilgevallen: geen dagelijkse opvolging meer, wel één
+  taak "nog interesse? Bellen of archiveren". Die sluit vanzelf bij contact,
+  archiveren, of als de klant het voorstel weer bekijkt. Oudere automatische
+  nabeltaken van die lead worden dan gesloten.
+
+### Flevoland
+- Flevoland hoort bij het werkgebied: nieuwe pagina's
+  `/woning-verkopen-flevoland`, `/huis-verkopen-almere` en
+  `/huis-verkopen-lelystad`; regio-overzicht, homepage, footer,
+  LocalBusiness-data en de deelafbeelding (`og.png`) bijgewerkt.
+
+Tests: 221 → 242 (`test/verbeteringen570.test.js`).
+
+
 ## 5.6.11
 
 - CSP: `googleads.g.doubleclick.net` in connect-src. Sentry meldde bij de aanvraag

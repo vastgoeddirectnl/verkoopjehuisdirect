@@ -1,6 +1,6 @@
 # vastgoeddirectnederland.nl
 
-Versie: 5.6.11
+Versie: 5.7.0
 
 Next.js 15 (App Router) met Neon Postgres en Resend, gedeployd via GitHub naar
 Vercel. De publieke site vangt aanvragen op; de adminomgeving op `/admin` bevat
@@ -49,9 +49,11 @@ als fout gelogd.
 ## Database
 
 Voor een **nieuwe** database: voer `neon/v3_2_full_setup.sql` in één keer uit in
-Neon Console → SQL Editor. Voor een bestaande database: gebruik de losse
-migraties in `neon/` in volgorde. Staat de live database al op V3.2, dan is voor
-deze versie geen extra migratie nodig.
+Neon Console → SQL Editor, en daarna `neon/v5_7_upgrade.sql`. Voor een
+bestaande database: gebruik de losse migraties in `neon/` in volgorde. Staat de
+live database al op V3.2, dan is voor 5.7.0 alleen `neon/v5_7_upgrade.sql`
+nodig (plaats, gemeente en provincie bij leads). Zonder die migratie blijft de
+site werken; plaats en provincie worden dan alleen niet bewaard.
 
 ## Commando's
 

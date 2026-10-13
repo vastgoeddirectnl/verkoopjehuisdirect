@@ -5,7 +5,8 @@ Alle zeventien bevindingen uit de codereview van 5.1.1 zijn opgelost: elf in
 LINT-01, MON-01 en TEST-01 zijn in 5.5.0 opgelost (zie CHANGELOG.md); dat
 gold ook voor het gedeelde `ADMIN_PASSWORD` zonder tweede factor, met TOTP
 erbovenop. De review van oktober 2026 is in 5.6.0 verwerkt (DATA-01, TASK-01,
-SRC-01, ARCH-07, ADM-01, UI-01, VST-01, SEO-02, SEC-01, CRON-01). Wat hieronder
+SRC-01, ARCH-07, ADM-01, UI-01, VST-01, SEO-02, SEC-01, CRON-01), de review van
+13 oktober 2026 in 5.7.0 (zie CHANGELOG.md). Wat hieronder
 staat zijn de punten die daarna nog openstaan.
 
 ## Werkafspraken
@@ -71,6 +72,14 @@ staat zijn de punten die daarna nog openstaan.
   Een nieuwe pagina hoort daar ook in; `test/sitePages.test.js` faalt anders.
 - `/api/cron/daily` weigert zonder `CRON_SECRET` (CRON-01). Niet "tijdelijk"
   openzetten: dan kan iedereen de ochtendmail laten versturen.
+- `WERKGEBIED_PROVINCIES` in `app/lib/address.js` is het werkgebied (5.7.0).
+  Score, meldingen en `areaServed` horen daarmee overeen te komen.
+- De score in `calculateLeadAutomation` kijkt voor klantwensen alleen naar wat
+  de klant zelf invulde, nooit naar `bron`/`pagina` (daar staat bijna altijd
+  "direct"). Opvolging rekent vanaf de laatste activiteit, niet vanaf vandaag:
+  de dagelijkse run herberekent alles, dus "vandaag + n" schuift eindeloos op.
+- Meldingen na een aanvraag of klantreactie gaan via `after()`; ze mogen de
+  bezoeker niet laten wachten en nooit een aanvraag kosten.
 
 ---
 
@@ -100,6 +109,10 @@ moeten, hangt af van wat er per pagina in Google Search Console binnenkomt.
 Een nieuwe samenvoeging is één regel in `MERGED_PAGES`.
 
 ## Ook opgemerkt, jouw keuze
+
+- `app/sitemap.js` geeft elke pagina bij elke build de datum van vandaag als
+  `lastModified`. Google gaat die datum dan negeren; beter per pagina een vaste
+  datum of het veld weglaten.
 
 - De CSP in `next.config.mjs` staat in report-only. Sinds 5.6.0 komen de
   meldingen in Sentry binnen. Zet hem om naar `Content-Security-Policy`
