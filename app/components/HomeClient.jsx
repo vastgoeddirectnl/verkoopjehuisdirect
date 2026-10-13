@@ -17,7 +17,8 @@ const localBusinessSchema = {
   email: "info@vastgoeddirectnederland.nl",
   description:
     "Vastgoed Direct Nederland koopt woningen en objecten rechtstreeks aan, met een vrijblijvend schriftelijk voorstel en notariële afwikkeling.",
-  areaServed: ["Groningen", "Drenthe", "Friesland", "Overijssel"].map((name) => ({ "@type": "AdministrativeArea", name })),
+  // Werkgebied, gelijk aan WERKGEBIED_PROVINCIES in app/lib/address.js.
+  areaServed: ["Groningen", "Drenthe", "Friesland", "Overijssel", "Flevoland"].map((name) => ({ "@type": "AdministrativeArea", name })),
   // Koppelt de site aan het Google-bedrijfsprofiel en de Facebookpagina.
   // Krijgt de Facebookpagina een eigen gebruikersnaam, pas deze URL dan aan.
   sameAs: [
@@ -124,10 +125,13 @@ const regionLinks = [
   ["/woning-verkopen-drenthe", "Drenthe"],
   ["/woning-verkopen-friesland", "Friesland"],
   ["/woning-verkopen-overijssel", "Overijssel"],
+  ["/woning-verkopen-flevoland", "Flevoland"],
   ["/huis-verkopen-assen", "Assen"],
   ["/huis-verkopen-emmen", "Emmen"],
   ["/huis-verkopen-stadskanaal", "Stadskanaal"],
   ["/huis-verkopen-veendam", "Veendam"],
+  ["/huis-verkopen-almere", "Almere"],
+  ["/huis-verkopen-lelystad", "Lelystad"],
 ];
 
 export default function HomeClient() {
@@ -336,7 +340,7 @@ export default function HomeClient() {
       <section className="section-shell region-section">
         <div className="site-container region-grid">
           <div>
-            <p className="section-eyebrow">Noord- en Oost-Nederland</p>
+            <p className="section-eyebrow">Noord-Nederland, Overijssel en Flevoland</p>
             <h2>Lokale beoordeling, ook buiten de grote steden.</h2>
             <p>
               Wij kijken naar woningen in steden, dorpen en buitengebieden. De ligging is belangrijk, maar de staat,

@@ -84,6 +84,7 @@ export const SITE_PAGES = [
   { path: "/woning-verkopen-friesland", priority: 0.75, changeFrequency: "monthly" },
   { path: "/woning-verkopen-drenthe", priority: 0.75, changeFrequency: "monthly" },
   { path: "/woning-verkopen-overijssel", priority: 0.75, changeFrequency: "monthly" },
+  { path: "/woning-verkopen-flevoland", priority: 0.75, changeFrequency: "monthly" },
   { path: "/huis-verkopen-assen", priority: 0.7, changeFrequency: "monthly" },
   { path: "/huis-verkopen-borger", priority: 0.7, changeFrequency: "monthly" },
   { path: "/huis-verkopen-emmen", priority: 0.7, changeFrequency: "monthly" },
@@ -91,6 +92,8 @@ export const SITE_PAGES = [
   { path: "/huis-verkopen-stadskanaal", priority: 0.7, changeFrequency: "monthly" },
   { path: "/huis-verkopen-veendam", priority: 0.7, changeFrequency: "monthly" },
   { path: "/huis-verkopen-winschoten", priority: 0.7, changeFrequency: "monthly" },
+  { path: "/huis-verkopen-almere", priority: 0.7, changeFrequency: "monthly" },
+  { path: "/huis-verkopen-lelystad", priority: 0.7, changeFrequency: "monthly" },
 
   // Kennisbank
   { path: "/kennisbank", priority: 0.7, changeFrequency: "monthly" },

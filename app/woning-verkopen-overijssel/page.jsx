@@ -176,6 +176,10 @@ const page = {
   ],
   "relatedLinks": [
     [
+      "/woning-verkopen-flevoland",
+      "Woning verkopen in Flevoland"
+    ],
+    [
       "/opknapwoning-verkopen",
       "Opknapwoning verkopen"
     ],

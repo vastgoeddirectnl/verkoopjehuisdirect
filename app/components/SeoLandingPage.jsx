@@ -24,6 +24,7 @@ const internalLinks = [
   ["/woning-verkopen-drenthe", "Woning verkopen in Drenthe"],
   ["/woning-verkopen-friesland", "Woning verkopen in Friesland"],
   ["/woning-verkopen-overijssel", "Woning verkopen in Overijssel"],
+  ["/woning-verkopen-flevoland", "Woning verkopen in Flevoland"],
 ];
 
 const linkDescriptions = {
@@ -49,6 +50,9 @@ const linkDescriptions = {
   "/woning-verkopen-drenthe": "Voor woningen in Drenthe, dorpen en buitengebieden.",
   "/woning-verkopen-friesland": "Een duidelijke verkooproute voor woningen in Friesland.",
   "/woning-verkopen-overijssel": "Directe verkoopmogelijkheden in Overijssel.",
+  "/woning-verkopen-flevoland": "Voor woningen in Almere, Lelystad en de Flevolandse polders.",
+  "/huis-verkopen-almere": "Voor verkoopvragen in alle stadsdelen van Almere.",
+  "/huis-verkopen-lelystad": "Voor woningen in Lelystad en Lelystad-Haven.",
   "/huis-verkopen-stadskanaal": "Lokale verkoopmogelijkheden in en rond Stadskanaal.",
   "/huis-verkopen-veendam": "Voor verkoopvragen in Veendam en omgeving.",
   "/huis-verkopen-winschoten": "Rustig inzicht in verkoopmogelijkheden rond Winschoten.",

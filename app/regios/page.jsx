@@ -5,6 +5,7 @@ const regionLinks = [
   ["/woning-verkopen-drenthe", "Drenthe", "Voor woningen in Drenthe, waaronder Assen, Emmen, Borger en Gieten."],
   ["/woning-verkopen-friesland", "Friesland", "Voor woningeigenaren in Friesland die rustig duidelijkheid willen."],
   ["/woning-verkopen-overijssel", "Overijssel", "Voor situaties waarin snelheid, zekerheid of privacy belangrijk zijn."],
+  ["/woning-verkopen-flevoland", "Flevoland", "Voor woningen in Almere, Lelystad, Dronten, Zeewolde, de Noordoostpolder en Urk."],
   ["/huis-verkopen-stadskanaal", "Stadskanaal", "Lokale pagina voor verkoopmogelijkheden in en rond Stadskanaal."],
   ["/huis-verkopen-veendam", "Veendam", "Voor woningeigenaren die alternatieven voor reguliere verkoop willen bekijken."],
   ["/huis-verkopen-winschoten", "Winschoten", "Rustig inzicht krijgen in de verkoopmogelijkheden."],
@@ -12,15 +13,17 @@ const regionLinks = [
   ["/huis-verkopen-emmen", "Emmen", "Voor woningen in Emmen en omliggende dorpen."],
   ["/huis-verkopen-borger", "Borger", "Voor woningeigenaren in Borger en de Hondsrug-regio."],
   ["/huis-verkopen-gieten", "Gieten", "Voor verkoopvragen in Gieten en omgeving."],
+  ["/huis-verkopen-almere", "Almere", "Voor woningen in alle stadsdelen van Almere, van Haven tot Poort."],
+  ["/huis-verkopen-lelystad", "Lelystad", "Voor verkoopvragen in Lelystad, van Lelystad-Haven tot Warande."],
 ];
 
 export const metadata = {
   title: "Verkoopinformatie per regio",
-  description: "Bekijk verkoopmogelijkheden per regio, waaronder Groningen, Drenthe, Friesland, Overijssel en verschillende plaatsen in Noord- en Oost-Nederland.",
+  description: "Bekijk verkoopmogelijkheden per regio: Groningen, Drenthe, Friesland, Overijssel en Flevoland, met pagina’s voor onder meer Assen, Emmen, Almere en Lelystad.",
   alternates: { canonical: "/regios" },
   openGraph: {
     title: "Verkoopinformatie per regio",
-    description: "Bekijk verkoopmogelijkheden per regio, waaronder Groningen, Drenthe, Friesland en Overijssel.",
+    description: "Bekijk verkoopmogelijkheden per regio: Groningen, Drenthe, Friesland, Overijssel en Flevoland.",
     url: "https://www.vastgoeddirectnederland.nl/regios",
     siteName: "Vastgoed Direct Nederland",
     locale: "nl_NL",
@@ -38,7 +41,7 @@ export default function RegiosPage() {
           <p className="eyebrow">Regio’s</p>
           <h1>Verkoopmogelijkheden per regio</h1>
           <p>
-            Vastgoed Direct Nederland is actief in meerdere regio’s in Noord- en Oost-Nederland.
+            Vastgoed Direct Nederland is actief in Groningen, Friesland, Drenthe, Overijssel en Flevoland.
             Bekijk rustig welke regiopagina het beste aansluit.
           </p>
         </div>

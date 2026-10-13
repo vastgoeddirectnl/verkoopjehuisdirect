@@ -116,7 +116,7 @@ export function MarketingFooter({ requestHref = "#aanvraag" } = {}) {
               Persoonlijke verkoopoplossingen voor woningeigenaren die eerst duidelijkheid willen over prijs,
               planning en voorwaarden.
             </p>
-            <p className="footer-small">Actief in Noord- en Oost-Nederland.</p>
+            <p className="footer-small">Actief in Groningen, Friesland, Drenthe, Overijssel en Flevoland.</p>
           </div>
 
           <div>
@@ -148,6 +148,7 @@ export function MarketingFooter({ requestHref = "#aanvraag" } = {}) {
             <p><a href="/woning-verkopen-drenthe">Drenthe</a></p>
             <p><a href="/woning-verkopen-friesland">Friesland</a></p>
             <p><a href="/woning-verkopen-overijssel">Overijssel</a></p>
+            <p><a href="/woning-verkopen-flevoland">Flevoland</a></p>
           </div>
         </div>
         <div className="site-container footer-bottom">
