@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { query, SQL_TODAY_NL } from "../../../lib/neonDb";
 import { refreshAllLeadAutomation } from "../../../lib/automation";
+import { backfillLeadAddresses } from "../../../lib/leads";
 import { sendResendMail, hasMailConfig } from "../../../lib/mail";
 import { reportError } from "../../../lib/reportError.js";
 import { buildDailyDigest } from "../../../lib/admin/dailyDigest.js";
@@ -44,6 +45,9 @@ export async function GET(request) {
   }
 
   try {
+    // Eerst oudere leads aanvullen met plaats en provincie, zodat de score
+    // hieronder daar meteen mee rekent.
+    const addresses = await backfillLeadAddresses(25);
     const automation = await refreshAllLeadAutomation(200, 30000);
 
     const [followUps, newLeads, viewedProposals, customerActions] = await Promise.all([
@@ -100,7 +104,7 @@ export async function GET(request) {
       });
     }
 
-    return NextResponse.json({ ok: true, automation, digestItems: digest.total, mailSkipped: Boolean(mail?.skipped) });
+    return NextResponse.json({ ok: true, addresses, automation, digestItems: digest.total, mailSkipped: Boolean(mail?.skipped) });
   } catch (error) {
     await reportError({ scope: "cron/daily", error, severity: "critical" });
     return NextResponse.json({ error: "Dagelijkse run mislukt." }, { status: 500 });

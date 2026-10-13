@@ -10,6 +10,7 @@
 // app/lib/leads.js. Dat bestand levert de echte implementaties aan.
 
 import { normalizeLead, validateLead } from "./leadValidation.js";
+import { internalLeadSubject } from "./leadSummary.js";
 
 /**
  * Valideren → dubbele aanvraag afvangen → opslaan → automatisering →
@@ -72,7 +73,7 @@ export async function runSendLeadMails(lead, deps = {}) {
     applicant: { skipped: true },
   };
 
-  const onderwerpIntern = `Nieuwe aanvraag verkoopvoorstel${lead?.postcode ? ` - ${lead.postcode}` : ""}`;
+  const onderwerpIntern = internalLeadSubject(lead || {});
 
   try {
     mail.internal = await sendInternal(lead);

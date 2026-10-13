@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { enforceRateLimit } from "../../lib/requestSecurity";
+import { lookupAddress } from "../../lib/address.js";
 
 export const runtime = "nodejs";
 
@@ -30,38 +31,19 @@ export async function GET(request) {
       return NextResponse.json({ error: "Vul een geldige postcode en huisnummer in." }, { status: 400 });
     }
 
-    const url = new URL("https://api.pdok.nl/bzk/locatieserver/search/v3_1/free");
-    url.searchParams.set("q", `${postcode} ${huisnummer}`);
-    url.searchParams.set("fq", "type:adres");
-    url.searchParams.set("rows", "1");
-
-    const response = await fetch(url, {
-      headers: { Accept: "application/json" },
-      next: { revalidate: 86400 },
-    });
-
-    if (!response.ok) {
-      return NextResponse.json({ found: false }, { status: 200 });
-    }
-
-    const data = await response.json().catch(() => ({}));
-    const doc = data?.response?.docs?.[0];
-    if (!doc) return NextResponse.json({ found: false });
-
-    const house = [
-      doc.huisnummer,
-      doc.huisletter,
-      doc.huisnummertoevoeging,
-    ].filter(Boolean).join("");
+    // De opzoeking zelf staat in app/lib/address.js, zodat de server bij elke
+    // aanvraag dezelfde controle doet.
+    const address = await lookupAddress(postcode, huisnummer, { timeoutMs: 5000 });
+    if (!address) return NextResponse.json({ found: false });
 
     return NextResponse.json({
       found: true,
       address: {
-        street: doc.straatnaam || "",
-        houseNumber: house || huisnummer,
-        postcode: doc.postcode || postcode,
-        city: doc.woonplaatsnaam || "",
-        display: doc.weergavenaam || [doc.straatnaam, house, doc.postcode, doc.woonplaatsnaam].filter(Boolean).join(" "),
+        street: address.street,
+        houseNumber: address.houseNumber,
+        postcode: address.postcode,
+        city: address.city,
+        display: address.display,
       },
     });
   } catch (error) {

@@ -3,6 +3,7 @@ import CookieConsent from "./components/CookieConsent";
 import GoogleAdsTag from "./components/GoogleAdsTag";
 import GoogleAdsClickTracker from "./components/GoogleAdsClickTracker";
 import MetaPixelTag from "./components/MetaPixelTag";
+import LandingAttribution from "./components/LandingAttribution";
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.vastgoeddirectnederland.nl").replace(/\/$/, "");
 
@@ -55,6 +56,7 @@ export default function RootLayout({ children }) {
         <GoogleAdsTag />
         <MetaPixelTag />
         <GoogleAdsClickTracker />
+        <LandingAttribution />
         {children}
         <CookieConsent />
       </body>

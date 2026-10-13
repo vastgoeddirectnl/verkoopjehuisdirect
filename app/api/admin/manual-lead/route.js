@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { isAdminAuthenticated } from "../../../lib/adminAuth";
 import { queryOne } from "../../../lib/neonDb";
 import { refreshLeadAutomation } from "../../../lib/automation";
+import { enrichLeadAddress } from "../../../lib/leads";
 
 export const runtime = "nodejs";
 
@@ -71,6 +72,12 @@ export async function POST(request) {
     );
 
     const automatedLead = await refreshLeadAutomation(lead);
+
+    // Plaats en provincie via PDOK, net als bij aanvragen via de site.
+    after(async () => {
+      const enriched = await enrichLeadAddress(lead).catch(() => null);
+      if (enriched?.provincie) await refreshLeadAutomation(enriched);
+    });
 
     return NextResponse.json({ lead: automatedLead || lead });
   } catch (error) {

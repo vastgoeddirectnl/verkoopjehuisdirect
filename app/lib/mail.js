@@ -1,3 +1,6 @@
+import { internalLeadSubject, werkgebiedLabel } from "./leadSummary.js";
+import { leadChannel } from "./sourceParser.js";
+
 const DEFAULT_TO = "info@vastgoeddirectnederland.nl";
 
 export function escapeHtml(value = "") {
@@ -55,7 +58,9 @@ export async function sendResendMail({ to, subject, html, replyTo }) {
 
 export async function sendLeadNotification(lead) {
   const to = process.env.LEAD_TO_EMAIL || DEFAULT_TO;
-  const subject = `Nieuwe aanvraag verkoopvoorstel${lead.postcode ? ` - ${lead.postcode}` : ""}`;
+  const subject = internalLeadSubject(lead);
+  const plaats = [lead.plaats, werkgebiedLabel(lead)].filter(Boolean).join(" – ");
+  const leadUrl = lead.id ? `https://www.vastgoeddirectnederland.nl/admin/leads/${lead.id}` : "https://www.vastgoeddirectnederland.nl/admin";
 
   const html = `
     <div style="font-family:Arial,sans-serif;font-size:15px;color:#0b2341;line-height:1.5;">
@@ -65,13 +70,15 @@ export async function sendLeadNotification(lead) {
         <tr><td><strong>E-mail</strong></td><td>${escapeHtml(lead.email)}</td></tr>
         <tr><td><strong>Telefoon</strong></td><td>${escapeHtml(lead.telefoon)}</td></tr>
         <tr><td><strong>Adres</strong></td><td>${escapeHtml(`${lead.postcode || ""} ${lead.huisnummer || ""}`.trim())}</td></tr>
+        ${plaats ? `<tr><td><strong>Plaats</strong></td><td>${escapeHtml(plaats)}</td></tr>` : ""}
+        <tr><td><strong>Kanaal</strong></td><td>${escapeHtml(leadChannel(lead))}</td></tr>
         <tr><td><strong>Woningtype</strong></td><td>${escapeHtml(lead.woningtype)}</td></tr>
         <tr><td><strong>Staat</strong></td><td>${escapeHtml(lead.staat)}</td></tr>
         <tr><td><strong>Reden</strong></td><td>${escapeHtml(lead.reden)}</td></tr>
         <tr><td><strong>Pagina</strong></td><td>${escapeHtml(lead.pagina)}</td></tr>
         <tr><td><strong>Bron</strong></td><td>${escapeHtml(lead.bron)}</td></tr>
       </table>
-      <p>Bekijk de lead in het interne dashboard: <a href="https://www.vastgoeddirectnederland.nl/admin">/admin</a></p>
+      <p><a href="${leadUrl}">Open deze lead in het dashboard</a></p>
     </div>
   `;
 

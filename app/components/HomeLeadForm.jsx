@@ -22,6 +22,10 @@ const verkoopSituaties = [
   "Snel duidelijkheid gewenst","Anders",
 ];
 
+// Ruim binnen de 2000 tekens die het bronveld `reden` aankan (termijn en
+// adrescontrole komen er nog bij).
+const TOELICHTING_MAX = 1500;
+
 const termijnen = [
   "Zo snel mogelijk","Binnen 1 maand","Binnen 3 maanden","Binnen 6 maanden",
   "Later dit jaar","Ik oriënteer mij alleen","Anders",
@@ -232,7 +236,12 @@ export default function HomeLeadForm() {
                 <option value="">Gewenste termijn (optioneel)</option>
                 {termijnen.map((termijn) => <option key={termijn}>{termijn}</option>)}
               </select>
-              <textarea name="toelichting" value={form.toelichting} onChange={updateForm} placeholder="Korte toelichting (optioneel)" className="field" />
+              <label className="input-group">
+                <textarea name="toelichting" value={form.toelichting} onChange={updateForm} placeholder="Korte toelichting (optioneel)" className="field" maxLength={TOELICHTING_MAX} aria-describedby="toelichting-teller" />
+                {form.toelichting.length > TOELICHTING_MAX - 150 ? (
+                  <small id="toelichting-teller" className="field-hint">{TOELICHTING_MAX - form.toelichting.length} tekens over</small>
+                ) : null}
+              </label>
               <div className="form-actions">
                 <button type="button" onClick={() => setStep(1)} className="btn btn-light">Terug</button>
                 <button type="button" onClick={nextStep} className="btn btn-blue">Naar laatste stap</button>

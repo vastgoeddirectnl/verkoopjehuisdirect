@@ -93,6 +93,9 @@ export function parseLeadSourceDetails(lead) {
     adSource: params.gad_source || pageParams.get("gad_source") || "",
     fbclid: params.fbclid || pageParams.get("fbclid") || "",
     referrer: params.referrer || bareReferrer || "",
+    // Eerste pagina van het bezoek, als dat een andere was dan de
+    // formulierpagina (sinds 5.7.0, zie app/lib/attribution.js).
+    entryPath: params.landing || "",
   };
 }
 

@@ -54,6 +54,12 @@ export default function Privacyverklaring() {
           <li>Postcode en huisnummer</li>
           <li>Informatie over uw woning en situatie</li>
           <li>Overige gegevens die u zelf met ons deelt via formulier, e-mail, telefoon of WhatsApp</li>
+          <li>
+            De herkomst van uw bezoek, zoals de zoekmachine, advertentie of website waarvandaan u
+            kwam en de eerste pagina die u bekeek. Dit bewaren wij tijdens uw bezoek alleen in uw
+            eigen browser (tot u het tabblad sluit) en het wordt alleen meegestuurd als u een
+            aanvraag indient.
+          </li>
         </ul>
 
         <h2>3. Waarom verwerken wij deze gegevens?</h2>

@@ -15,9 +15,14 @@ const TEXT_LIMITS = {
   huisnummer: 40,
   woningtype: 120,
   staat: 160,
-  reden: 180,
+  // Termijn, de vrije toelichting van de klant en de adrescontrole staan samen
+  // in dit veld. Bij 180 tekens viel een gewone toelichting ongemerkt half weg
+  // (en de adrescontrole er helemaal achter). De kolom is `text`.
+  reden: 2000,
   pagina: 260,
-  bron: 300,
+  // Ruimer sinds de herkomst per bezoek wordt onthouden (landingspagina en de
+  // oorspronkelijke verwijzer komen erbij); zie app/lib/attribution.js.
+  bron: 600,
 };
 
 export function cleanText(value, max = 300) {

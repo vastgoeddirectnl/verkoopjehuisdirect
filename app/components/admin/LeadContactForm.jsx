@@ -35,7 +35,8 @@ function SourceDetails({ lead }) {
         <span className="source-pill">{channel}</span>
       </div>
       <div className="source-summary-row">
-        <span>Landingspagina: {details.pagePath || "onbekend"}</span>
+        <span>Formulier op: {details.pagePath || "onbekend"}</span>
+        {details.entryPath ? <span>Binnengekomen op: {details.entryPath}</span> : null}
         {details.campaign ? <span>Campagne: {details.campaign}</span> : null}
         {details.term ? <span>Zoekterm: {details.term}</span> : null}
       </div>

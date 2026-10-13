@@ -1,5 +1,5 @@
 import { NextResponse, after } from "next/server";
-import { createLead, sendLeadMails } from "../../lib/leads";
+import { createLead, processNewLead } from "../../lib/leads";
 import { enforceRateLimit, isLikelyBotSubmission, publicError } from "../../lib/requestSecurity";
 import { reportError } from "../../lib/reportError.js";
 
@@ -20,7 +20,12 @@ export async function POST(request) {
       );
     }
 
-    const body = await request.json();
+    // Geen geldige JSON is een kapot of geautomatiseerd verzoek, geen storing:
+    // een 400, zodat het geen "aanvraag niet opgeslagen"-alarm wordt.
+    const body = await request.json().catch(() => null);
+    if (!body || typeof body !== "object") {
+      return NextResponse.json({ ok: false, error: "Ongeldige aanvraag." }, { status: 400 });
+    }
 
     // Honeypot: echte bezoekers vullen deze verborgen velden nooit in.
     if (isLikelyBotSubmission(body)) {
@@ -30,9 +35,10 @@ export async function POST(request) {
     const result = await createLead(body, { sendMail: false });
 
     // Duplicaten (dubbelklik/retry) kregen ook vóór deze wijziging nooit mail.
+    // Adres opzoeken, score herberekenen en mailen gebeurt ná de response.
     if (!result.mail?.duplicate) {
       after(async () => {
-        await sendLeadMails(result.lead);
+        await processNewLead(result.lead);
       });
     }
 

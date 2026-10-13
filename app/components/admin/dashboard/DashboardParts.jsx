@@ -91,7 +91,8 @@ export function SourceDetails({ lead }) {
         <h3>Herkomst</h3>
         <ChannelPill lead={lead} />
       </div>
-      <p className="source-line">Landingspagina: <strong>{details.pagePath || "-"}</strong>{details.pageTitle ? ` · ${details.pageTitle}` : ""}</p>
+      <p className="source-line">Formulier op: <strong>{details.pagePath || "-"}</strong>{details.pageTitle ? ` · ${details.pageTitle}` : ""}</p>
+      {details.entryPath ? <p className="source-line">Binnengekomen op: <strong>{details.entryPath}</strong></p> : null}
       {details.campaign ? <p className="source-line">Campagne: <strong>{details.campaign}</strong></p> : null}
       {rows.length ? (
         <details className="tech-details">
