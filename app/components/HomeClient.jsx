@@ -20,10 +20,9 @@ const localBusinessSchema = {
   // Werkgebied, gelijk aan WERKGEBIED_PROVINCIES in app/lib/address.js.
   areaServed: ["Groningen", "Drenthe", "Friesland", "Overijssel", "Flevoland"].map((name) => ({ "@type": "AdministrativeArea", name })),
   // Koppelt de site aan het Google-bedrijfsprofiel en de Facebookpagina.
-  // Krijgt de Facebookpagina een eigen gebruikersnaam, pas deze URL dan aan.
   sameAs: [
     "https://maps.google.com/?cid=8485707078036114537",
-    "https://www.facebook.com/profile.php?id=61590760926991",
+    "https://www.facebook.com/vastgoeddirectnederland",
   ],
 };
 

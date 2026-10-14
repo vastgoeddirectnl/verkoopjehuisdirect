@@ -4,6 +4,12 @@ Vanaf 5.2.0 wordt alles in dit ene bestand bijgehouden. De losse
 `README_*`-bestanden van eerdere patches staan in `docs/changelog/`.
 
 
+## 5.7.1
+
+- De Facebookpagina heeft een gebruikersnaam: `sameAs` in de LocalBusiness-data
+  wijst nu naar facebook.com/vastgoeddirectnederland.
+
+
 ## 5.7.0
 
 Verbeteringen uit de codereview van 13 oktober 2026, plus Flevoland als

@@ -118,5 +118,3 @@ Een nieuwe samenvoeging is één regel in `MERGED_PAGES`.
   meldingen in Sentry binnen. Zet hem om naar `Content-Security-Policy`
   zodra daar enkele weken geen meldingen meer verschijnen, en pas de hostlijst
   aan op wat je in die periode daadwerkelijk hebt zien blokkeren.
-- Krijgt de Facebookpagina een gebruikersnaam, pas dan de `sameAs`-URL in
-  `app/components/HomeClient.jsx` aan (nu `profile.php?id=61590760926991`).
